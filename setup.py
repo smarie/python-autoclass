@@ -12,13 +12,12 @@ from setuptools_scm import get_version
 here = path.abspath(path.dirname(__file__))
 
 # ************** ID card *****************
-DISTNAME = 'autocode-classes'
+DISTNAME = 'classtools_autocode'
 DESCRIPTION = 'A python 3 library providing functions and decorators to automatically generate class code such as ' \
-              'constructor body or properties getters/setters with PyContract contracts. Its objective is to reduce ' \
-              'the amount of copy/paste code in your classes - and hence to help reducing human mistakes :).'
+              'constructor body or properties getters/setters along with PyContract contracts.'
 MAINTAINER = 'Sylvain Marié'
 MAINTAINER_EMAIL = '"Sylvain Marié" <sylvain.marie@schneider-electric.com>'
-URL = 'https://github.com/smarie/python-autocode-classes'
+URL = 'https://github.com/smarie/python-classtools-autocode'
 LICENSE = 'BSD 3-Clause'
 LICENSE_LONG = 'License :: OSI Approved :: BSD License'
 
@@ -95,7 +94,7 @@ setup(
 
     # You can just specify the packages manually here if your project is
     # simple. Or you can use find_packages().
-    packages=['autocode_cl'], #find_packages(exclude=['contrib', 'docs', 'tests']),
+    packages=['classtools_autocode'], #find_packages(exclude=['contrib', 'docs', 'tests']),
 
     # Alternatively, if you want to distribute just a my_module.py, uncomment
     # this:

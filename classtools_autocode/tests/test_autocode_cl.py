@@ -1,7 +1,7 @@
 from typing import List
 from unittest import TestCase
 
-from autocode_cl.class_utils import autoargs, autoprops
+from classtools_autocode.class_utils import autoargs, autoprops
 
 
 class TestAutoCode(TestCase):
@@ -110,3 +110,22 @@ class TestAutoCode(TestCase):
         self.assertRaises(ContractNotRespected, setattr, t, 'b', ['r',''])
         t.b=['r']
         self.assertTrue(t.b[0] == 'r')
+
+
+    def test_autoprops_include(self):
+
+        from contracts import ContractNotRespected
+        from contracts import contract
+
+        @autoprops(include='a')
+        class FooConfig(object):
+
+            @autoargs
+            @contract(a='str[>0]', b='list[>0](str[>0])')
+            def __init__(self, a: str, b: List[str]):
+                pass
+
+        t = FooConfig('rhubarb', ['pie', 'pie2'])
+        self.assertRaises(ContractNotRespected, setattr, t, 'a', '')
+        t.b=[''] # we can because there is no property
+        self.assertTrue(t.b[0] == '')
