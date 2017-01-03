@@ -1,3 +1,4 @@
-from classtools_autocode.class_utils import *
+from classtools_autocode.autoargs import *
+from classtools_autocode.autoprops import *
 
-__all__ = ['class_utils']
+__all__ = ['autoargs', 'autoprops']

@@ -1,7 +1,7 @@
 from typing import List
 from unittest import TestCase
 
-from classtools_autocode.class_utils import autoargs, autoprops, getter_override, setter_override, \
+from classtools_autocode import autoargs, autoprops, getter_override, setter_override, \
     IllegalSetterSignatureException, DuplicateOverrideError
 
 
