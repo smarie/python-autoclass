@@ -410,10 +410,11 @@ them with `@getter_override` or `@setter_override`. Note that the contract will 
 
 * [PyContracts](https://andreacensi.github.io/contracts/index.html)
 
+* [decorator](http://pythonhosted.org/decorator/) library, which provides everything one needs to create complex decorators easily (signature and annotations-preserving decorators, decorators with class factory) as well as provides some useful decorators (`@contextmanager`, `@blocking`, `@dispatch_on`). We use it to preserve the signature of class constructors and overriden setter methods.
+
 * When came the time to find a name for this library I was stuck for a while. In my quest for finding an explicit name that was not already used, I found many interesting libraries on [PyPI](http://pypi.python.org/). I did not test them all but found them 'good to know':
     
-    * The extremely good [decorator](http://pythonhosted.org/decorator/) library, which provides everything one needs to create complex decorators easily (signature and annotations-preserving decorators, decorators with class factory) as well as provides useful decorators (contextmanager, ) 
-    * [decorator-args](https://pypi.python.org/pypi/decorator-args/1.1) : very good library to understand decorators :)
+    * [decorator-args](https://pypi.python.org/pypi/decorator-args/1.1)
     * [classtools](https://github.com/eevee/classtools)
     * [classutils](https://pypi.python.org/pypi/classutils)
     * [python-utils](https://pypi.python.org/pypi/python-utils)

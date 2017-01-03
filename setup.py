@@ -40,7 +40,7 @@ LONG_DESCRIPTION = pypandoc.convert(path.join(here, 'README.md'), 'rst').replace
 # with open(path.join(here, 'VERSION')) as version_file:
 #    VERSION = version_file.read().strip()
 
-INSTALL_REQUIRES = []
+INSTALL_REQUIRES = ['decorator']
 DEPENDENCY_LINKS = []
 SETUP_REQUIRES = ['setuptools_scm','pypandoc']
 TESTS_REQUIRE = ['nose','PyContracts']

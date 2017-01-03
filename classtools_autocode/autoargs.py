@@ -1,8 +1,9 @@
-import functools
 from inspect import getfullargspec, Parameter, ismethod, getmro, isfunction, getmodule, signature, getmembers, isclass
-from typing import Tuple, Type, Any, Callable
+from typing import Tuple, Type, Any, Callable, Union
 
-from classtools_autocode import check_var, Union
+from decorator import decorate
+
+from classtools_autocode.var_checker import check_var
 
 
 def _call_decorator_with_or_without_args(manual_decorator_function: Callable, objectIsFunction: bool,
@@ -94,8 +95,13 @@ def autoargs_decorate(func: Callable, include:Union[str, Tuple[str]]=None, exclu
     def sieve(attr):
         return _sieve(attr, include=include, exclude=exclude)
 
-    @functools.wraps(func)  # to make the wrapper function look like the wrapped function
-    def wrapper(self, *args, **kwargs):
+    # old:
+    # @functools.wraps(func) -> to make the wrapper function look like the wrapped function
+    # def wrapper(self, *args, **kwargs):
+
+    # new:
+    # we now use 'decorate' to have a wrapper that has the same signature, see below
+    def wrapper(func, self, *args, **kwargs):
 
         # handle default values and kw arguments
         for attr,val in zip(reversed(signature_attrs),reversed(signature_defaults or [])):
@@ -117,9 +123,6 @@ def autoargs_decorate(func: Callable, include:Union[str, Tuple[str]]=None, exclu
 
         # handle varkw : since we know their names, store them directly
         if signature_varkw:
-            #for attr,val in signature_varkw.iteritems():
-            #    if sieve(attr):
-            #        setattr(self,attr,val)
             for attr, val in kwargs.items():
                 if sieve(signature_varkw) or sieve(attr):
                     setattr(self, attr, val)
@@ -127,7 +130,8 @@ def autoargs_decorate(func: Callable, include:Union[str, Tuple[str]]=None, exclu
         # finally execute
         return func(self,*args,**kwargs)
 
-    return wrapper
+    #return wrapper
+    return decorate(func, wrapper)
 
 
 def _sieve(attr, include:Union[str, Tuple[str]]=None, exclude:Union[str, Tuple[str]]=None):

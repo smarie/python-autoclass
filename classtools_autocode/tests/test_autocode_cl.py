@@ -23,6 +23,17 @@ class TestAutoArgs(TestCase):
         self.assertTrue(a.path == 'pie')
         self.assertTrue(a.debug == True)
 
+    def test_autoargs_signature_preserving(self):
+        # -- Advanced: check that the constructor still has the correct signature
+        class A(object):
+            @autoargs
+            def __init__(self, foo, path, debug=False):
+                pass
+        try:
+            A()
+        except TypeError as e:
+            self.assertTrue(e.args[0] == "__init__() missing 2 required positional arguments: 'foo' and 'path'")
+
     def test_autoargs_varargs(self):
 
         # Basic functionality, with special case of variable arguments *args.
@@ -320,7 +331,7 @@ class TestAutoProps(TestCase):
                 def another(self):
                     return self._b
 
-    def test_manual(self):
+    def test_autoprops_manual(self):
 
         from contracts import ContractNotRespected
         from contracts import contract
@@ -345,6 +356,25 @@ class TestAutoProps(TestCase):
         t.b = ['r']
         self.assertTrue(t.b[0] == 'r')
 
+    def test_autoprops_signature_preserving(self):
+        # -- Advanced: check that the constructor still has the correct signature
+        @autoprops
+        class FooConfigD(object):
+            @autoargs
+            def __init__(self, a: str, b: List[str]):
+                pass
+
+        t = FooConfigD('rhubarb', ['pie', 'pie2'])
+        try:
+            getattr(FooConfigD, 'a').fset(t)
+        except TypeError as e:
+            self.assertTrue(e.args[0] == "generated_setter_fun() missing 1 required positional argument: 'val'")
+
+        try:
+            getattr(FooConfigD, 'a').fget()
+        except TypeError as e:
+            # yes ; right now it is still a lambda, since using a named method does not seem to work :(
+            self.assertTrue(e.args[0] == "<lambda>() missing 1 required positional argument: 'self'")
 
 class TestReadMe(TestCase):
     """

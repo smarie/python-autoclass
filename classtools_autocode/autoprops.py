@@ -1,7 +1,8 @@
-import functools
 from inspect import getmembers, signature
 from typing import Type, Any, Tuple, Callable, Union
 from warnings import warn
+
+from decorator import decorate
 
 from classtools_autocode.autoargs import get_constructor, _sieve, _call_func_decorator_with_or_without_args, \
     _call_class_decorator_with_or_without_args
@@ -171,43 +172,98 @@ def add_property(object_type:Type[Any], property_name:str, property_contract:Any
     :return:
     """
 
-    # 0. check that we can import contracts
-    try:
-        # noinspection PyUnresolvedReferences
-        from contracts import ContractNotRespected, contract
-    except ImportError as e:
-        raise Exception(
-            'Use of @autoprops requires that PyContract library is installed. Check that you can \'import contracts\'')
-
-    # 1. create the private field name , e.g. '__foobar'
+    # 1. create the private field name , e.g. '_foobar'
     private_property_name = '_' + property_name
 
     # 2. property getter (@property)
+    getter_fun = _get_getter_fun(object_type, property_name, private_property_name)
+
+    # 3. property setter (@property_name.setter)
+    setter_fun, var_name = _get_setter_fun(object_type, property_name, private_property_name)
+
+    # 4. add the contract to the setter, if any
+    if property_contract:
+        setter_fun_with_possible_contract = add_contract_to_setter(setter_fun, var_name, property_contract,
+                                                                   property_name)
+    else:
+        setter_fun_with_possible_contract = setter_fun
+
+    # 5. change the function name to make it look nice
+    setter_fun_with_possible_contract.__name__ = property_name
+    setter_fun_with_possible_contract.__module__ = object_type.__module__
+    setter_fun_with_possible_contract.__qualname__ = object_type.__name__ + '.' + property_name
+    #__annotations__
+    #__doc__
+    #__dict__
+
+
+    # 6. Finally add the property to the class
+    # WARNING : property_obj.setter(f) does absolutely nothing :) > we have to assign the result
+    # setattr(object_type, property_name, property_obj.setter(f))
+    setattr(object_type, property_name, property(fget=getter_fun, fset=setter_fun_with_possible_contract))
+
+    return
+
+
+def _get_getter_fun(object_type, property_name, private_property_name):
+    """
+    Utility method to find the overriden getter function for a given property, or generate a new one
+
+    :param object_type:
+    :param property_name:
+    :param private_property_name:
+    :return:
+    """
+
     # -- check overriden getter for this property name
     overriden_getters = getmembers(object_type, predicate=(lambda fun: callable(fun)
                                                                        and hasattr(fun, __GETTER_OVERRIDE_ANNOTATION)
-                                                                       and getattr(fun, __GETTER_OVERRIDE_ANNOTATION) is property_name))
+                                                                       and getattr(fun,
+                                                                                   __GETTER_OVERRIDE_ANNOTATION) is property_name))
     if len(overriden_getters) > 0:
         if len(overriden_getters) > 1:
             raise DuplicateOverrideError('Getter is overriden more than once for attribute name : ' + property_name)
 
-        # --check the signature of the overriden getter
+        # --use the overriden getter
         getter_fun = overriden_getters[0][1]
+
+        # --check its signature
         s = signature(getter_fun)
         if not ('self' in s.parameters.keys() and len(s.parameters.keys()) == 1):
             raise IllegalGetterSignatureException('Overriden getter must only have a self parameter, found ' +
-                             str(len(s.parameters.items()) - 1) + ' for function ' + str(getter_fun.__qualname__))
+                                                  str(len(s.parameters.items()) - 1) + ' for function ' + str(
+                getter_fun.__qualname__))
 
         # --use the overriden getter
         property_obj = property(getter_fun)
     else:
-        # -- create the getter :
+        # -- generate the getter :
         # @property
         # def foobar(self):
         #     return self.__foobar
-        property_obj = property(lambda self: getattr(self, private_property_name))
 
-    # 3. property setter (@property_name.setter)
+        # --for some reason, this does not work, but the lambda function works !
+        # def generated_getter_fun(self):
+        #     getattr(self, private_property_name)
+        #
+        # # -- use the generated getter
+        # getter_fun = generated_getter_fun
+
+        getter_fun = lambda self: getattr(self, private_property_name)
+
+    return getter_fun
+
+
+def _get_setter_fun(object_type, property_name, private_property_name):
+    """
+    Utility method to find the overriden setter function for a given property, or generate a new one
+
+    :param object_type:
+    :param property_name:
+    :param private_property_name:
+    :return:
+    """
+
     overriden_setters = getmembers(object_type, predicate=(lambda fun: callable(fun)
                                                                        and hasattr(fun, __SETTER_OVERRIDE_ANNOTATION)
                                                                        and getattr(fun,
@@ -218,69 +274,65 @@ def add_property(object_type:Type[Any], property_name:str, property_contract:Any
 
         # --use the overriden setter
         setter_fun = overriden_setters[0][1]
-        # find the parameter name and check the signature
+        # --find the parameter name and check the signature
         s = signature(setter_fun)
         p = [attribute_name for attribute_name, param in s.parameters.items() if attribute_name is not 'self']
-        if len(p) != 1 :
+        if len(p) != 1:
             raise IllegalSetterSignatureException('Overriden setter must have only 1 non-self argument, found ' +
-                             str(len(s.parameters.items()) - 1) + ' for function ' + str(setter_fun.__qualname__))
+                                                  str(len(s.parameters.items()) - 1) + ' for function ' + str(
+                setter_fun.__qualname__))
         var_name = p[0]
     else:
         # --create the setter :
         # @foobar.setter
         # def foobar(self, foobar):
         #     self.__foobar = foobar
-        def setter_fun(self, val):
+        def generated_setter_fun(self, val):
             setattr(self, private_property_name, val)
 
         # remember the parameter name
         var_name = 'val'
+        setter_fun = generated_setter_fun
 
-    # 4. add the contract to the setter, if any
-    if property_contract:
-        # -- check if a contract already exists on the function
-        if hasattr(setter_fun, '__contracts__'):
-            msg = 'Overriden setter for attribute ' + property_name + ' implemented by function ' \
-                  + str(setter_fun.__qualname__) + ' has a contract while there is a contract already defined ' \
-                  'for this property in the __init__ constructor. This will lead to double-contract in the final ' \
-                  'setter, please remove the one on the overriden setter.'
-            warn(msg)
-
-        # -- add the generated contract
-        f = contract(setter_fun, **{var_name: property_contract})
-
-        # the only thing we can't do is to replace the function's parameter name dynamically
-        # so we wrap the function again to catch the potential pycontracts error :(
-        def _contracts_parser_interceptor(func):
-            @functools.wraps(func)  # to make the wrapper function look like the wrapped function
-            def wrapper(self, *args, **kwargs):
-                try:
-                    return func(self, *args, **kwargs)
-                except ContractNotRespected as e:
-                    e.error = e.error.replace('\'val\'', '\'' + property_name + '\'')
-                    raise e
-
-            return wrapper
-
-        f = _contracts_parser_interceptor(f)
-
-    else:
-        f = setter_fun
-
-    # change the function name to make it look nice
-    f.__name__ = property_name
-    f.__module__ = object_type.__module__
-    f.__qualname__ = object_type.__name__ + '.' + property_name
-    #__annotations__
-    #__doc__
-    #__dict__
+    return setter_fun, var_name
 
 
-    # WARNING : this does absolutely nothing :)
-    # property_obj.setter(f)
+def add_contract_to_setter(setter_fun, var_name, property_contract, property_name):
 
-    # Add the property's setter (and getter) to the class
-    setattr(object_type, property_name, property_obj.setter(f))
+    # 0. check that we can import contracts
+    try:
+        # noinspection PyUnresolvedReferences
+        from contracts import ContractNotRespected, contract
+    except ImportError as e:
+        raise Exception(
+            'Use of add_contract_to_setter requires that PyContract library is installed. Check that you can \'import contracts\'')
 
-    return
+    # -- check if a contract already exists on the function
+    if hasattr(setter_fun, '__contracts__'):
+        msg = 'Overriden setter for attribute ' + property_name + ' implemented by function ' \
+              + str(setter_fun.__qualname__) + ' has a contract while there is a contract already defined ' \
+                                               'for this property in the __init__ constructor. This will lead to double-contract in the final ' \
+                                               'setter, please remove the one on the overriden setter.'
+        warn(msg)
+
+    # -- add the generated contract
+    setter_fun_with_possible_contract = contract(setter_fun, **{var_name: property_contract})
+
+    # the only thing we can't do is to replace the function's parameter name dynamically
+    # so we wrap the function again to catch the potential pycontracts error :(
+    # old:
+    # @functools.wraps(func) -> to make the wrapper function look like the wrapped function
+    # def wrapper(self, *args, **kwargs):
+    # new:
+    # we now use 'decorate' to have a wrapper that has the same signature, see below
+    def _contracts_parser_interceptor(func, self, *args, **kwargs):
+        try:
+            return func(self, *args, **kwargs)
+        except ContractNotRespected as e:
+            e.error = e.error.replace('\'val\'', '\'' + property_name + '\'')
+            raise e
+
+    # f = _contracts_parser_interceptor(f)
+    setter_fun_with_possible_contract = decorate(setter_fun_with_possible_contract, _contracts_parser_interceptor)
+    return setter_fun_with_possible_contract
 
