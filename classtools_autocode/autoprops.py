@@ -1,6 +1,6 @@
 import functools
 from inspect import getmembers, signature
-from typing import Type, Any, Tuple, Callable
+from typing import Type, Any, Tuple, Callable, Union
 from warnings import warn
 
 from classtools_autocode.autoargs import get_constructor, _sieve, _call_func_decorator_with_or_without_args, \
@@ -73,14 +73,14 @@ def autoprops_override_decorate(func: Callable, attribute:str = None, getter:boo
     return func
 
 
-def autoprops(include:Tuple[str]=None, exclude:Tuple[str]=None):
+def autoprops(include:Union[str, Tuple[str]]=None, exclude:Union[str, Tuple[str]]=None):
     """
     A decorator to automatically generate all properties getters and setters from the class constructor.
     * if a @contract annotation exist on the __init__ method, mentioning a contract for a given parameter, the
     parameter contract will be added on the generated setter method
     * The user may override the generated getter and/or setter by creating them explicitly in the class and annotating
-    them with @getter_override or @setter_override. Note that if the overriden setter has no @contract, the contract
-    will still be dynamically added
+    them with @getter_override or @setter_override. Note that the contract will still be dynamically added on the
+    setter, even if the setter already has one (in such case a `UserWarning` will be issued)
 
     :param include: a named tuple of explicit attributes to include (None means all)
     :param exclude: a named tuple of explicit attributes to exclude. In such case, include should be None.
@@ -89,15 +89,16 @@ def autoprops(include:Tuple[str]=None, exclude:Tuple[str]=None):
     return _call_class_decorator_with_or_without_args(autoprops_decorate, include, exclude=exclude)
 
 
-def autoprops_decorate(cls: Type[Any], include: Tuple[str] = None, exclude: Tuple[str] = None) -> Type[Any]:
+def autoprops_decorate(cls: Type[Any], include: Union[str, Tuple[str]] = None,
+                       exclude: Union[str, Tuple[str]] = None) -> Type[Any]:
     """
     To automatically generate all properties getters and setters from the class constructor manually, without using
     @autoprops decorator.
     * if a @contract annotation exist on the __init__ method, mentioning a contract for a given parameter, the
     parameter contract will be added on the generated setter method
     * The user may override the generated getter and/or setter by creating them explicitly in the class and annotating
-    them with @getter_override or @setter_override. Note that if the overriden setter has no @contract, the contract
-    will still be dynamically added
+    them with @getter_override or @setter_override. Note that the contract will still be dynamically added on the
+    setter, even if the setter already has one (in such case a `UserWarning` will be issued)
 
     :param cls: the class on which to execute. Note that it won't be wrapped.
     :param include: a named tuple of explicit attributes to include (None means all)
@@ -118,7 +119,8 @@ def autoprops_decorate(cls: Type[Any], include: Tuple[str] = None, exclude: Tupl
     return cls
 
 
-def _execute_autoprops_on_class(object_type: Type[Any], include:Tuple[str]=None, exclude:Tuple[str]=None):
+def _execute_autoprops_on_class(object_type: Type[Any], include:Union[str, Tuple[str]]=None,
+                                exclude:Union[str, Tuple[str]]=None):
     """
     This method will automatically add one getter and one setter for each constructor argument, except for those
     overriden using autoprops_override_decorate(), @getter_override or @setter_override.
@@ -130,7 +132,7 @@ def _execute_autoprops_on_class(object_type: Type[Any], include:Tuple[str]=None,
     :return:
     """
 
-    if include and exclude:
+    if include is not None and exclude is not None:
         raise ValueError('Only one of \'include\' or \'exclude\' argument should be provided.')
 
     # 1. Find the __init__ constructor signature and possible pycontracts @contract
@@ -271,6 +273,7 @@ def add_property(object_type:Type[Any], property_name:str, property_contract:Any
     f.__qualname__ = object_type.__name__ + '.' + property_name
     #__annotations__
     #__doc__
+    #__dict__
 
 
     # WARNING : this does absolutely nothing :)

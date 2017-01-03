@@ -2,6 +2,8 @@ import functools
 from inspect import getfullargspec, Parameter, ismethod, getmro, isfunction, getmodule, signature, getmembers, isclass
 from typing import Tuple, Type, Any, Callable
 
+from classtools_autocode import check_var, Union
+
 
 def _call_decorator_with_or_without_args(manual_decorator_function: Callable, objectIsFunction: bool,
                                          first_arg, *remaining_args, **kwargs):
@@ -32,7 +34,7 @@ def _call_class_decorator_with_or_without_args(manual_decorator_function: Callab
     return _call_decorator_with_or_without_args(manual_decorator_function, False, first_arg, *remaining_args, **kwargs)
 
 
-def autoargs(include:Tuple[str]=None,exclude:Tuple[str]=None):
+def autoargs(include:Union[str, Tuple[str]]=None,exclude:Union[str, Tuple[str]]=None):
     """
     Defines a decorator with parameters, to automatically affect the contents of a function to self.
     Initial code from http://stackoverflow.com/questions/3652851/what-is-the-best-way-to-do-automatic-attribute-assignment-in-python-and-is-it-a#answer-3653049
@@ -45,7 +47,7 @@ def autoargs(include:Tuple[str]=None,exclude:Tuple[str]=None):
     return _call_func_decorator_with_or_without_args(autoargs_decorate, include, exclude=exclude)
 
 
-def autoargs_decorate(func, include:Tuple[str]=None, exclude:Tuple[str]=None):
+def autoargs_decorate(func: Callable, include:Union[str, Tuple[str]]=None, exclude:Union[str, Tuple[str]]=None) -> Callable:
     """
     Creates a function wrapper to automatically affect the contents of a function to self.
 
@@ -56,7 +58,7 @@ def autoargs_decorate(func, include:Tuple[str]=None, exclude:Tuple[str]=None):
     :return:
     """
 
-    if include and exclude:
+    if include is not None and exclude is not None:
         raise ValueError('Only one of \'include\' or \'exclude\' argument should be provided.')
 
     #if not callable(func):
@@ -128,11 +130,14 @@ def autoargs_decorate(func, include:Tuple[str]=None, exclude:Tuple[str]=None):
     return wrapper
 
 
-def _sieve(attr, include:Tuple[str]=None, exclude:Tuple[str]=None):
+def _sieve(attr, include:Union[str, Tuple[str]]=None, exclude:Union[str, Tuple[str]]=None):
     """decide whether an action has to be performed on the attribute or not, based on its name"""
 
-    if include and exclude:
+    if include is not None and exclude is not None:
         raise ValueError('Only one of \'include\' or \'exclude\' argument should be provided.')
+
+    check_var(include, var_name='include', var_types=[str, tuple], enforce_not_none=False)
+    check_var(exclude, var_name='exclude', var_types=[str, tuple], enforce_not_none=False)
 
     if attr is 'self':
         return False
