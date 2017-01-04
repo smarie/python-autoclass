@@ -107,7 +107,8 @@ class TestAutoArgs(TestCase):
         self.assertTrue(a.baz == 1)
         self.assertTrue(a.verbose == False)
         # -- check that a non-included field does not exist
-        self.assertRaises(AttributeError, getattr, a, 'foo')
+        with self.assertRaises(AttributeError):
+            print(a.foo)
 
     def test_autoargs_exclude(self):
 
@@ -123,9 +124,12 @@ class TestAutoArgs(TestCase):
         # -- check that the fields exist and have the correct value
         self.assertTrue(a.foo == 'rhubarb')
         # -- check that the non-included fields do not exist
-        self.assertRaises(AttributeError, getattr, a, 'bar')
-        self.assertRaises(AttributeError, getattr, a, 'baz')
-        self.assertRaises(AttributeError, getattr, a, 'verbose')
+        with self.assertRaises(AttributeError):
+            print(a.bar)
+        with self.assertRaises(AttributeError):
+            print(a.baz)
+        with self.assertRaises(AttributeError):
+            print(a.verbose)
 
     def test_autoargs_include_exclude(self):
         # you can't use both at the same time
@@ -168,6 +172,15 @@ class TestAutoProps(TestCase):
         self.assertTrue(t.a == '')
         self.assertTrue(t.b[0] == 'r')
 
+    def test_autoprop_contract_slow(self):
+
+        # TODO : loading PyContracts is extremely slow !!! is there a way to improve ?
+        import cProfile
+        #cProfile.run('from contracts.syntax import ParseException')
+        cProfile.run('from contracts import ContractNotRespected, contract')
+
+        print('this is extremely slow !!!')
+
     def test_autoprops(self):
 
         # Basic functionality with PyContracts - if a `@contract` annotation exist on the `__init__` method, mentioning
@@ -185,8 +198,10 @@ class TestAutoProps(TestCase):
         t = FooConfigA('rhubarb', ['pie', 'pie2'])
 
         # check that there are contracts on the generated setters
-        self.assertRaises(ContractNotRespected, setattr, t, 'a', '')
-        self.assertRaises(ContractNotRespected, setattr, t, 'b', ['r',''])
+        with self.assertRaises(ContractNotRespected):
+            t.a = ''
+        with self.assertRaises(ContractNotRespected):
+            t.b = ['r','']
 
         # check that the generated getters work
         t.b=['r']
@@ -208,7 +223,8 @@ class TestAutoProps(TestCase):
         t = FooConfigB('rhubarb', ['pie', 'pie2'])
 
         # check that there is a contract on the generated setter
-        self.assertRaises(ContractNotRespected, setattr, t, 'a', '')
+        with self.assertRaises(ContractNotRespected):
+            t.a = ''
 
         # check that no setter was generated for 'b'
         t.b=[''] # we can because there is no setter, hence no contract
@@ -230,7 +246,8 @@ class TestAutoProps(TestCase):
         t = FooConfigB('rhubarb', ['pie', 'pie2'])
 
         # check that there is a contract on the generated setter
-        self.assertRaises(ContractNotRespected, setattr, t, 'a', '')
+        with self.assertRaises(ContractNotRespected):
+            t.a = ''
 
         # check that no setter was generated for 'b'
         t.b=[''] # we can because there is no setter, hence no contract
@@ -349,8 +366,10 @@ class TestAutoProps(TestCase):
         t = FooConfigA('rhubarb', ['pie', 'pie2'])
 
         # check that there are contracts on the generated setters
-        self.assertRaises(ContractNotRespected, setattr, t, 'a', '')
-        self.assertRaises(ContractNotRespected, setattr, t, 'b', ['r', ''])
+        with self.assertRaises(ContractNotRespected):
+            t.a = ''
+        with self.assertRaises(ContractNotRespected):
+            t.b = ['r', '']
 
         # check that the generated getters work
         t.b = ['r']

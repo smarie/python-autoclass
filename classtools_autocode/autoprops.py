@@ -32,7 +32,7 @@ def getter_override(attribute:str = None):
     :param attribute: the attribute name for which the decorated function is an overriden getter
     :return:
     """
-    return _call_func_decorator_with_or_without_args(autoprops_override_decorate, attribute, getter=True)
+    return _call_func_decorator_with_or_without_args(autoprops_override_decorate, attribute, is_getter=True)
 
 
 def setter_override(attribute:str = None):
@@ -43,10 +43,10 @@ def setter_override(attribute:str = None):
     :param attribute: the attribute name for which the decorated function is an overriden setter
     :return:
     """
-    return _call_func_decorator_with_or_without_args(autoprops_override_decorate, attribute, getter=False)
+    return _call_func_decorator_with_or_without_args(autoprops_override_decorate, attribute, is_getter=False)
 
 
-def autoprops_override_decorate(func: Callable, attribute:str = None, getter:bool = True) -> Callable:
+def autoprops_override_decorate(func: Callable, attribute:str = None, is_getter:bool = True) -> Callable:
     """
     Used to decorate a function as an overriden getter or setter, without using the @getter_override or
     @setter_override annotations. If the overriden setter has no @contract, the contract will still be
@@ -54,13 +54,13 @@ def autoprops_override_decorate(func: Callable, attribute:str = None, getter:boo
 
     :param func: the function on which to execute. Note that it won't be wrapped but simply annotated.
     :param attribute: the attribute name. If None, the function name will be used
-    :param getter: True for a getter override, False for a setter override.
+    :param is_getter: True for a getter override, False for a setter override.
     :return:
     """
 
     # Simply annotate the fact that this is a function
     attr_name = attribute or func.__name__
-    if getter:
+    if is_getter:
         if hasattr(func, __GETTER_OVERRIDE_ANNOTATION):
             raise DuplicateOverrideError('Getter is overriden twice for attribute name : ' + attr_name)
         else:
