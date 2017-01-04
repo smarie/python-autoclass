@@ -14,7 +14,8 @@ here = path.abspath(path.dirname(__file__))
 # ************** ID card *****************
 DISTNAME = 'classtools_autocode'
 DESCRIPTION = 'A python 3 library providing functions and decorators to automatically generate class code such as ' \
-              'constructor body or properties getters/setters along with PyContract contracts.'
+              'constructor body or properties getters/setters along with optional support of validation contracts on ' \
+              'the generated setters.'
 MAINTAINER = 'Sylvain Marié'
 MAINTAINER_EMAIL = '"Sylvain Marié" <sylvain.marie@schneider-electric.com>'
 URL = 'https://github.com/smarie/python-classtools-autocode'

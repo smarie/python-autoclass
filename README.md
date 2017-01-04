@@ -7,7 +7,7 @@ The objective of this library is to reduce the amount of redundancy by automatic
 
 ## Why ?
 
-Python's primitive types and dynamic typing system make it extremely powerful, to the point that it is often more convenient for developers to use primitive types or generic dynamic objects such as [Munch](https://github.com/Infinidat/munch).
+Python's primitive types (in particular `dict` and `tuple`) and it's dynamic typing system make it extremely powerful, to the point that it is often more convenient for developers to use primitive types or generic dynamic objects such as [Munch](https://github.com/Infinidat/munch).
 
 However there are certain cases where developers still want to define their own classes, for example to provide strongly-typed APIs to their clients. In such case, *separation of concerns* will typically lead developers to enforce attribute value validation directly in the class, rather than in the code using the object. Eventually developers end up with big classes like this one:
 
@@ -97,6 +97,7 @@ class HouseConfiguration(object):
 ```
 
 As you can see, now all information is present only once: 
+
 * all object attributes (mandatory and optional with their default value) are declared in the `__init__` signature along with their optional [PEP 484 type hints](https://docs.python.org/3.5/library/typing.html)
 * all attribute validation contracts are declared once in the `@contract` annotation of `__init__`
 * it is still possible to implement custom logic in a getter or a setter, without having to repeat the `@contract`
@@ -437,6 +438,7 @@ them with `@getter_override` or `@setter_override`. Note that the contract will 
 Contributions are welcome ! Simply Fork this project on github, commit your contributions, and create pull requests.
 
 Here is a non-exhaustive list of interesting open topics:
+
 * Python 2 and < 3.5 compatibility
 * Initial import of PyContract is extremely slow (750ms on my machine). How to solve that ?
 * New annotations `@getters_wrapper(include, exclude)` and `@setters_wrapper(include, exclude)`, that would use `@contextmanager` or directly extend `GeneratorContextManager` in order to help users wrap all or part of the getters/setters with one function containing `yield`
