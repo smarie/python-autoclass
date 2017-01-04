@@ -139,6 +139,14 @@ This package is available on `PyPI`. You may therefore use `pip` to install from
 > pip install classtools_autocode
 ```
 
+### Installation (optional)
+
+You may wish to also install PyContracts in order to use the `@contract` annotation
+
+```bash
+> pip install PyContracts
+```
+
 ### Uninstalling
 
 As usual : 

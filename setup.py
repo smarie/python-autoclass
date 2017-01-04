@@ -45,7 +45,7 @@ INSTALL_REQUIRES = ['decorator']
 DEPENDENCY_LINKS = []
 SETUP_REQUIRES = ['setuptools_scm','pypandoc']
 TESTS_REQUIRE = ['nose','PyContracts']
-EXTRAS_REQUIRE = {'autoprops': ['PyContracts']}
+EXTRAS_REQUIRE = {'contracts': ['PyContracts']}
 
 setup(
     name=DISTNAME,
