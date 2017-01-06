@@ -29,11 +29,14 @@ KEYWORDS = 'auto code generator decorator properties fields attributes contract 
 # --Get the long description from the README file
 #with open(path.join(here, 'README.md'), encoding='utf-8') as f:
 #    LONG_DESCRIPTION = f.read()
-#try:
-import pypandoc
-LONG_DESCRIPTION = pypandoc.convert(path.join(here, 'README.md'), 'rst').replace('\r', '')
-#except(IOError, ImportError):
-#    LONG_DESCRIPTION = open('README.md').read()
+try:
+    import pypandoc
+    LONG_DESCRIPTION = pypandoc.convert(path.join(here, 'README.md'), 'rst').replace('\r', '')
+except(ImportError):
+    from warnings import warn
+    warn('WARNING pypandoc could not be imported - we recommend that you install it in order to package the '
+         'documentation correctly')
+    LONG_DESCRIPTION = open('README.md').read()
 
 # ************* VERSION AND DEPENDENCIES **************
 # --Get the Version number from VERSION file, see https://packaging.python.org/single_source_version/ option 4.
