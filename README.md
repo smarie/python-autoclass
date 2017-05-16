@@ -504,3 +504,12 @@ Here is a non-exhaustive list of interesting open topics:
 * Python 2 and < 3.5 compatibility
 * Initial import of PyContract is quite slow (300ms on my machine). How to solve that, if that matters ?
 * New annotations `@getters_wrapper(include, exclude)` and `@setters_wrapper(include, exclude)`, that would use `@contextmanager` or directly extend `GeneratorContextManager` in order to help users wrap all or part of the getters/setters with one function containing `yield`
+
+
+## *Packaging*
+
+This project uses `setuptools_scm` to synchronise the version number. Therefore the following command should be used for development snapshots as well as official releases: 
+
+```bash
+python setup.py egg_info bdist_wheel rotate -m.whl -k3
+```
