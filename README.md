@@ -2,7 +2,24 @@
 
 A python 3 library providing functions and decorators to automatically generate class code, such as **constructor body** or **properties getters/setters** along with optional support of **validation contracts** on the generated setters. 
 
-The objective of this library is to reduce the amount of redundancy by automatically generatic parts of the code from the information already available somewhere else (typically, in the constructor signature).
+The objective of this library is to reduce the amount of redundancy by automatically generatic parts of the code from the information already available somewhere else (typically, in the constructor signature). The intent is similar to [attrs](https://github.com/python-attrs/attrs): remove boilerplate.
+
+## Contents
+
+ * [Why ?](#why-)
+ * [Main features](#main-features)
+ * [Installation](#installation)
+    * [Recommended : create a clean virtual environment](#recommended--create-a-clean-virtual-environment)
+    * [Installation steps](#installation-steps)
+    * [Installation (optional)](#installation-optional)
+    * [Uninstalling](#uninstalling)
+ * [Usage details](#usage-details)
+    * [@autoargs](#autoargs)
+    * [@autoprops](#autoprops)
+ * [See Also](#see-also)
+ * [Want to contribute ?](#want-to-contribute-)
+
+*ToC created by [gh-md-toc](https://github.com/ekalinin/github-markdown-toc)*
 
 
 ## Why ?
@@ -13,11 +30,12 @@ However there are certain cases where developers still want to define their own 
 
 ```python
 from classtools_autocode import check_var
+from typing import Optional, Union
 from warnings import warn
 
 class HouseConfiguration(object):
 
-    def __init__(self, name: str, surface: float, nb_floors: int, with_windows: bool = False):
+    def __init__(self, name: str, surface: Union[int, float], nb_floors: Optional[int], with_windows: bool = False):
         self.name = name
         self.surface = surface
         self.nb_floors = nb_floors
@@ -29,48 +47,49 @@ class HouseConfiguration(object):
         return self._name
 
     @name.setter
-    def name(self, name):
+    def name(self, name: str):
         check_var(name, var_name='name', var_types=str)
         self._name = name
     
     # --surface
     @property
-    def surface(self):
+    def surface(self) -> Union[int, float]:
         return self._surface
 
     @surface.setter
-    def surface(self, surface):
+    def surface(self, surface: Union[int, float]):
         check_var(surface, var_name='surface', var_types=[int,float], min_value=0)
         warn('You should really not do that..')
         self._surface = surface
     
     # --nb_floors
     @property
-    def nb_floors(self):
+    def nb_floors(self) -> Optional[int]:
         return self._nb_floors
 
     @nb_floors.setter
-    def nb_floors(self, nb_floors):
-        check_var(nb_floors, var_name='nb_floors', var_types=int, min_value=0)
+    def nb_floors(self, nb_floors: Optional[int]):
+        check_var(nb_floors, var_name='nb_floors', var_types=int, min_value=0, enforce_not_none=False)
         self._surface = nb_floors #
         
     # --with_windows
     @property
-    def with_windows(self):
+    def with_windows(self) -> bool:
         return self._with_windows
 
     @with_windows.setter
-    def with_windows(self, with_windows):
+    def with_windows(self, with_windows: bool):
         check_var(with_windows, var_name='with_windows', var_types=bool)
         self._with_windows = with_windows
 ```
 
 Now that's **a lot of code** - and only for 4 attributes ! Not mentioning the code for `check_var` that was not included here for the sake of readability (I include it in the library, for reference).  And guess what - it is still highly prone to **human mistakes**. For example I made a mistake in the setter for `nb_floors`, did you spot it ? Also it makes the code **less readable**: did you spot that the setter for the surface property is different from the others?
 
-Really, *"there must be a better way"* : yes there is, and that's what this library provides - it can be used alone, or in combination with [PyContracts](https://andreacensi.github.io/contracts/index.html) in order to generate all the repetitive code for you :
+Really, *"there must be a better way"* : yes there is, and that's what this library provides - it can be used alone, or in combination with [PyContracts](https://andreacensi.github.io/contracts/index.html) and/or any PEP484-based checker such as [enforce](https://github.com/RussBaz/enforce), [typeguard](https://github.com/agronholm/typeguard), [typecheck-decorator](https://github.com/prechelt/typecheck-decorator), etc. in order to generate all the repetitive code for you :
 
 ```python
 from classtools_autocode import autoprops, autoargs, setter_override
+from typing import Optional, Union
 from contracts import contract
 from warnings import warn
 
@@ -80,18 +99,18 @@ class HouseConfiguration(object):
     @autoargs
     @contract(name='str[>0]', 
               surface='(int|float),>=0',
-              nb_floors='int,>=0',
+              nb_floors='None|int,>=0',
               with_windows='bool')
     def __init__(self, 
                  name: str, 
-                 surface: float, 
-                 nb_floors: int, 
+                 surface: Union[int, float], 
+                 nb_floors: Optional[int], 
                  with_windows: bool = False):
         pass
     
     # -- overriden setter for surface - no need to repeat the @contract
     @setter_override
-    def surface(self, surface):
+    def surface(self, surface: Union[int, float]):
         warn('You should really not do that..')
         self._surface = surface
 ```
@@ -102,13 +121,39 @@ As you can see, now all information is present only once:
 * all attribute validation contracts are declared once in the `@contract` annotation of `__init__`
 * it is still possible to implement custom logic in a getter or a setter, without having to repeat the `@contract`
 
+Note: actually one might argue that the type information is duplicated. This is true if you use PyContracts, but not if you use type checkers relying on PEP484 directly such as [enforce](https://github.com/RussBaz/enforce):
+ 
+ ```python
+from classtools_autocode import autoprops, autoargs, setter_override
+from typing import Optional, Union
+from enforce import runtime_validation
+from warnings import warn
+
+@runtime_validation
+@autoprops
+class HouseConfiguration(object):
+
+    @autoargs
+    def __init__(self, 
+                 name: str, 
+                 surface: Union[int, float], 
+                 nb_floors: Optional[int], 
+                 with_windows: bool = False):
+        pass
+    
+    # -- overriden setter for surface - need to repeat the PEP484 type hints
+    @setter_override
+    def surface(self, surface: Union[int, float]):
+        warn('You should really not do that..')
+        self._surface = surface
+```
 
 
 ## Main features
 
 * **`@autoargs`** is a decorator for the `__init__` method of a `class`. It automatically assigns all of the `__init__` method's parameters to `self`. For more fine-grain tuning, explicit inclusion and exclusion lists are supported, too. *Note: the original @autoargs idea and code come from [this answer from utnubu](http://stackoverflow.com/questions/3652851/what-is-the-best-way-to-do-automatic-attribute-assignment-in-python-and-is-it-a#answer-3653049)*
 
-* **`@autoprops`** is a decorator for a whole`class`. It automatically generates properties getters and setters for all attributes. As for `@autoargs`, the default list of attributes is the list of parameters of the `__init__` method, and explicit inclusion and exclusion lists are supported. 
+* **`@autoprops`** is a decorator for a whole`class`. It automatically generates properties getters and setters for all attributes, with the correct PEP484 type hints. As for `@autoargs`, the default list of attributes is the list of parameters of the `__init__` method, and explicit inclusion and exclusion lists are supported. 
 
 * **`@autoprops`** automatically adds *PyContracts* `@contract` on the generated setters if a `@contract` exist for that property on the `__init__` method.
 
@@ -139,13 +184,15 @@ This package is available on `PyPI`. You may therefore use `pip` to install from
 > pip install classtools_autocode
 ```
 
-### Installation (optional)
+### Checkers installation (optional)
 
-You may wish to also install PyContracts in order to use the `@contract` annotation
+You may wish to also install [PyContracts](https://andreacensi.github.io/contracts/index.html) or [enforce](https://github.com/RussBaz/enforce) in order to use the `@contract` and `@runtime_validation` annotations respectively.
 
 ```bash
 > pip install PyContracts
+> pip install enforce
 ```
+
 
 ### Uninstalling
 
@@ -427,6 +474,13 @@ them with `@getter_override` or `@setter_override`. Note that the contract will 
 
 * [PyContracts](https://andreacensi.github.io/contracts/index.html)
 
+* PEP484-based checkers: 
+    * [enforce](https://github.com/RussBaz/enforce)
+    * [typeguard](https://github.com/agronholm/typeguard)
+    * [typecheck-decorator](https://github.com/prechelt/typecheck-decorator)
+
+* [attrs](https://github.com/python-attrs/attrs)
+
 * [decorator](http://pythonhosted.org/decorator/) library, which provides everything one needs to create complex decorators easily (signature and annotations-preserving decorators, decorators with class factory) as well as provides some useful decorators (`@contextmanager`, `@blocking`, `@dispatch_on`). We use it to preserve the signature of class constructors and overriden setter methods.
 
 * When came the time to find a name for this library I was stuck for a while. In my quest for finding an explicit name that was not already used, I found many interesting libraries on [PyPI](http://pypi.python.org/). I did not test them all but found them 'good to know':
@@ -448,5 +502,5 @@ Contributions are welcome ! Simply Fork this project on github, commit your cont
 Here is a non-exhaustive list of interesting open topics:
 
 * Python 2 and < 3.5 compatibility
-* Initial import of PyContract is extremely slow (750ms on my machine). How to solve that ?
+* Initial import of PyContract is quite slow (300ms on my machine). How to solve that, if that matters ?
 * New annotations `@getters_wrapper(include, exclude)` and `@setters_wrapper(include, exclude)`, that would use `@contextmanager` or directly extend `GeneratorContextManager` in order to help users wrap all or part of the getters/setters with one function containing `yield`

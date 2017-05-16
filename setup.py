@@ -47,8 +47,9 @@ except(ImportError):
 INSTALL_REQUIRES = ['decorator']
 DEPENDENCY_LINKS = []
 SETUP_REQUIRES = ['setuptools_scm','pypandoc']
-TESTS_REQUIRE = ['nose','PyContracts']
-EXTRAS_REQUIRE = {'contracts': ['PyContracts']}
+TESTS_REQUIRE = ['nose','PyContracts','enforce']
+EXTRAS_REQUIRE = {'contracts': ['PyContracts'],
+                  'enforce': ['enforce']}
 
 setup(
     name=DISTNAME,
