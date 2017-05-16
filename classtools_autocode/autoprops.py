@@ -1,5 +1,5 @@
 from inspect import getmembers, signature
-from typing import Type, Any, Tuple, Callable, Union
+from typing import Type, Any, Tuple, Callable, Union, Optional
 from warnings import warn
 
 from decorator import decorate
@@ -146,7 +146,9 @@ def _execute_autoprops_on_class(object_type: Type[Any], include:Union[str, Tuple
     for attr_name in s.parameters.keys():
         if _sieve(attr_name, include=include, exclude=exclude):
             added += attr_name
-            add_property(object_type, attr_name, contracts_dict[attr_name] if attr_name in contracts_dict.keys() else None)
+            attr_type = s.parameters[attr_name]._annotation
+            add_property(object_type, attr_name, attr_type,
+                         contracts_dict[attr_name] if attr_name in contracts_dict.keys() else None)
 
     # 3. Finally check that there is no overriden setter or getter that does not correspond to an attribute
     extra_overrides = getmembers(object_type, predicate=(lambda fun: callable(fun) and
@@ -161,13 +163,14 @@ def _execute_autoprops_on_class(object_type: Type[Any], include:Union[str, Tuple
                                                     'getter/setter can not be overriden by function ' + extra_overrides[0][1].__qualname__)
 
 
-def add_property(object_type:Type[Any], property_name:str, property_contract:Any = None):
+def add_property(object_type: Type[Any], property_name: str, property_type: type, property_contract: Any = None):
     """
     A method to dynamically add a property to a class with the given contract. If the property getter and/or setter
     has been overriden, it is taken into account too.
 
     :param object_type: the class on which to execute.
     :param property_name:
+    :param property_type:
     :param property_contract:
     :return:
     """
@@ -176,10 +179,10 @@ def add_property(object_type:Type[Any], property_name:str, property_contract:Any
     private_property_name = '_' + property_name
 
     # 2. property getter (@property)
-    getter_fun = _get_getter_fun(object_type, property_name, private_property_name)
+    getter_fun = _get_getter_fun(object_type, property_name, property_type, private_property_name)
 
     # 3. property setter (@property_name.setter)
-    setter_fun, var_name = _get_setter_fun(object_type, property_name, private_property_name)
+    setter_fun, var_name = _get_setter_fun(object_type, property_name, property_type, private_property_name)
 
     # 4. add the contract to the setter, if any
     if property_contract:
@@ -205,7 +208,7 @@ def add_property(object_type:Type[Any], property_name:str, property_contract:Any
     return
 
 
-def _get_getter_fun(object_type, property_name, private_property_name):
+def _get_getter_fun(object_type: Type, property_name: str, property_type: Optional[Type], private_property_name: str):
     """
     Utility method to find the overriden getter function for a given property, or generate a new one
 
@@ -250,16 +253,18 @@ def _get_getter_fun(object_type, property_name, private_property_name):
         # getter_fun = generated_getter_fun
 
         getter_fun = lambda self: getattr(self, private_property_name)
+        getter_fun.__annotations__['return'] = property_type  # declare that we return a <type>
 
     return getter_fun
 
 
-def _get_setter_fun(object_type, property_name, private_property_name):
+def _get_setter_fun(object_type: Type, property_name: str, property_type: Optional[Type], private_property_name: str):
     """
     Utility method to find the overriden setter function for a given property, or generate a new one
 
     :param object_type:
     :param property_name:
+    :param property_type:
     :param private_property_name:
     :return:
     """
@@ -288,7 +293,12 @@ def _get_setter_fun(object_type, property_name, private_property_name):
         # def foobar(self, foobar):
         #     self.__foobar = foobar
         def generated_setter_fun(self, val):
-            setattr(self, private_property_name, val)
+            return setattr(self, private_property_name, val)
+        generated_setter_fun.__annotations__['val'] = property_type  # declare that we need a <type> as input
+
+        # other options (more complex) to fiddle with the signature :
+        # http://stackoverflow.com/questions/18625510/how-can-i-programmatically-change-the-argspec-of-a-function-not-in-a-python-de
+        # http://stackoverflow.com/questions/10303248/true-dynamic-and-anonymous-functions-possible-in-python
 
         # remember the parameter name
         var_name = 'val'

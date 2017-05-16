@@ -1,4 +1,4 @@
-from typing import List
+from typing import List, Union
 from unittest import TestCase
 
 from classtools_autocode import autoargs, autoprops, getter_override, setter_override, \
@@ -402,10 +402,11 @@ class TestReadMe(TestCase):
 
     def test_readme(self):
 
+        from typing import Optional
         from warnings import warn
 
         class HouseConfiguration(object):
-            def __init__(self, name: str, surface: float, nb_floors: int, with_windows: bool = False):
+            def __init__(self, name: str, surface: float, nb_floors: Optional[int], with_windows: bool = False):
                 self.name = name
                 self.surface = surface
                 self.nb_floors = nb_floors
@@ -439,7 +440,7 @@ class TestReadMe(TestCase):
 
             @nb_floors.setter
             def nb_floors(self, nb_floors):
-                check_var(nb_floors, var_name='nb_floors', var_types=int, min_value=0)
+                check_var(nb_floors, var_name='nb_floors', var_types=int, min_value=0, enforce_not_none=False)
                 self._surface = nb_floors  # explicit error here :)
 
             # --with_windows
@@ -461,12 +462,12 @@ class TestReadMe(TestCase):
             @autoargs
             @contract(name='str[>0]',
                       surface='(int|float),>=0',
-                      nb_floors='int,>=0',
+                      nb_floors='None|int,>=0',
                       with_windows='bool')
             def __init__(self,
                          name: str,
-                         surface: float,
-                         nb_floors: int,
+                         surface: Union[int, float],
+                         nb_floors: Optional[int],
                          with_windows: bool = False):
                 pass
 
@@ -477,5 +478,35 @@ class TestReadMe(TestCase):
                 self._surface = surface
 
         t = HouseConfiguration('test', 0, 0)
+        t.nb_floors = None
+        with self.assertRaises(ContractNotRespected):
+            t.nb_floors = -1
         with self.assertRaises(ContractNotRespected):
             t.surface = -1
+
+
+        from enforce import runtime_validation
+        from enforce.exceptions import RuntimeTypeError
+
+        @runtime_validation
+        @autoprops
+        class HouseConfiguration(object):
+            @autoargs
+            def __init__(self,
+                         name: str,
+                         surface: Union[int, float],
+                         nb_floors: Optional[int],
+                         with_windows: bool = False):
+                pass
+
+            # -- overriden setter for surface - no need to repeat the @contract
+            @setter_override
+            def surface(self, surface):
+                warn('You should really not do that..')
+                self._surface = surface
+
+
+        t = HouseConfiguration('test', 0, 0)
+        t.nb_floors = None
+        with self.assertRaises(RuntimeTypeError):
+            t.nb_floors = ''
