@@ -4,7 +4,7 @@
 
 The objective of this library is to reduce the amount of redundancy by automatically generatic parts of the code from the information already available somewhere else (typically, in the constructor signature). The intent is similar to [attrs](https://github.com/python-attrs/attrs): remove boilerplate.
 
-Github page : (https://github.com/smarie/python-classtools-autocode) 
+Github page : [https://github.com/smarie/python-classtools-autocode](https://github.com/smarie/python-classtools-autocode) 
 
 ## Why ?
 
