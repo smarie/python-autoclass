@@ -10,11 +10,11 @@ Project page : [official](http://classtools-autocode.readthedocs.io), [backup](h
 
 ## Want to contribute ?
 
-Contributions are welcome ! Simply Fork this project on github, commit your contributions, and create pull requests.
+Contributions are welcome ! Simply fork this project on github, commit your contributions, and create pull requests.
 
-Here is a non-exhaustive list of interesting open topics: https://github.com/smarie/python-classtools-autocode/issues to reference new features or bugfixes.
+Here is a non-exhaustive list of interesting open topics: https://github.com/smarie/python-classtools-autocode/issues
 
-## *Packaging*
+## Packaging
 
 This project uses `setuptools_scm` to synchronise the version number. Therefore the following command should be used for development snapshots as well as official releases: 
 
