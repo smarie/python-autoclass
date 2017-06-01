@@ -1,3 +1,5 @@
+[![Documentation Status](https://readthedocs.org/projects/classtools-autocode/badge/?version=latest)](http://classtools-autocode.readthedocs.io/en/latest/?badge=latest)
+
 # python-classtools-autocode
 
 Project page : [official](http://classtools-autocode.readthedocs.io), [backup](https://smarie.github.io/python-classtools-autocode/)
