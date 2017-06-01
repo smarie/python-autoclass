@@ -90,3 +90,6 @@ ENV/
 
 # Pycharm
 .idea/
+
+# Mkdocs
+site/
