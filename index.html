@@ -68,8 +68,6 @@
         
             <li><a class="toctree-l3" href="#want-to-contribute">Want to contribute ?</a></li>
         
-            <li><a class="toctree-l3" href="#packaging">Packaging</a></li>
-        
         </ul>
     
 
@@ -101,6 +99,9 @@
     <li>Home</li>
     <li class="wy-breadcrumbs-aside">
       
+        <a href="https://github.com/smarie/python-classtools-autocode/edit/master/docs/index.md"
+          class="icon icon-github"> Edit on GitHub</a>
+      
     </li>
   </ul>
   <hr/>
@@ -109,8 +110,9 @@
             <div class="section">
               
                 <h1 id="python-classtools-autocode">python-classtools-autocode</h1>
-<p>A python 3 library providing functions and decorators to automatically generate class code, such as <strong>constructor body</strong> or <strong>properties getters/setters</strong> along with optional support of <strong>validation contracts</strong> on the generated setters. </p>
+<p><code>classtools-autocode</code> provides tools to automatically generate python 3.5 classes code, such as <strong>constructor body</strong> or <strong>properties getters/setters</strong>, along with optional support of <strong>validation contracts</strong>.</p>
 <p>The objective of this library is to reduce the amount of redundancy by automatically generatic parts of the code from the information already available somewhere else (typically, in the constructor signature). The intent is similar to <a href="https://github.com/python-attrs/attrs">attrs</a>: remove boilerplate.</p>
+<p>Github page : https://github.com/smarie/python-classtools-autocode </p>
 <h2 id="why">Why ?</h2>
 <p>Python's primitive types (in particular <code>dict</code> and <code>tuple</code>) and it's dynamic typing system make it extremely powerful, to the point that it is often more convenient for developers to use primitive types or generic dynamic objects such as <a href="https://github.com/Infinidat/munch">Munch</a>.</p>
 <p>However there are certain cases where developers still want to define their own classes, for example to provide strongly-typed APIs to their clients. In such case, <em>separation of concerns</em> will typically lead developers to enforce attribute value validation directly in the class, rather than in the code using the object. Eventually developers end up with big classes like this one:</p>
@@ -570,17 +572,7 @@ self.assertTrue(t.b[0] == 'r')
 </ul>
 <p><em>Do you like this library ? You might also like <a href="https://github.com/smarie?utf8=%E2%9C%93&amp;tab=repositories&amp;q=&amp;type=&amp;language=python">these</a></em> </p>
 <h2 id="want-to-contribute">Want to contribute ?</h2>
-<p>Contributions are welcome ! Simply Fork this project on github, commit your contributions, and create pull requests.</p>
-<p>Here is a non-exhaustive list of interesting open topics:</p>
-<ul>
-<li>Python 2 and &lt; 3.5 compatibility</li>
-<li>Initial import of PyContract is quite slow (300ms on my machine). How to solve that, if that matters ?</li>
-<li>New annotations <code>@getters_wrapper(include, exclude)</code> and <code>@setters_wrapper(include, exclude)</code>, that would use <code>@contextmanager</code> or directly extend <code>GeneratorContextManager</code> in order to help users wrap all or part of the getters/setters with one function containing <code>yield</code></li>
-</ul>
-<h2 id="packaging"><em>Packaging</em></h2>
-<p>This project uses <code>setuptools_scm</code> to synchronise the version number. Therefore the following command should be used for development snapshots as well as official releases: </p>
-<pre><code class="bash">python setup.py egg_info bdist_wheel rotate -m.whl -k3
-</code></pre>
+<p>Details on the github page: https://github.com/smarie/python-classtools-autocode </p>
               
             </div>
           </div>
@@ -607,6 +599,8 @@ self.assertTrue(t.b[0] == 'r')
   <div class="rst-versions" role="note" style="cursor: pointer">
     <span class="rst-current-version" data-toggle="rst-current-version">
       
+          <a href="https://github.com/smarie/python-classtools-autocode" class="fa fa-github" style="float: left; color: #fcfcfc"> GitHub</a>
+      
       
       
     </span>
@@ -618,5 +612,5 @@ self.assertTrue(t.b[0] == 'r')
 
 <!--
 MkDocs version : 0.16.3
-Build Date UTC : 2017-06-01 11:36:35
+Build Date UTC : 2017-06-01 12:45:13
 -->
