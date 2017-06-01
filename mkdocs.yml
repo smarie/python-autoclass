@@ -1,4 +1,5 @@
 site_name: classtools-autocode
+repo_url: https://github.com/smarie/python-classtools-autocode
 pages:
     - Home: index.md
 theme: readthedocs
