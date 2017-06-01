@@ -1,0 +1,622 @@
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="None">
+  
+  <link rel="shortcut icon" href="./img/favicon.ico">
+  <title>Home - classtools-autocode</title>
+  <link href='https://fonts.googleapis.com/css?family=Lato:400,700|Roboto+Slab:400,700|Inconsolata:400,700' rel='stylesheet' type='text/css'>
+
+  <link rel="stylesheet" href="./css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="./css/theme_extra.css" type="text/css" />
+  <link rel="stylesheet" href="./css/highlight.css">
+  
+  <script>
+    // Current page data
+    var mkdocs_page_name = "Home";
+    var mkdocs_page_input_path = "index.md";
+    var mkdocs_page_url = "/";
+  </script>
+  
+  <script src="./js/jquery-2.1.1.min.js"></script>
+  <script src="./js/modernizr-2.8.3.min.js"></script>
+  <script type="text/javascript" src="./js/highlight.pack.js"></script> 
+  
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side stickynav">
+      <div class="wy-side-nav-search">
+        <a href="." class="icon icon-home"> classtools-autocode</a>
+        <div role="search">
+  <form id ="rtd-search-form" class="wy-form" action="./search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+  </form>
+</div>
+      </div>
+
+      <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+	<ul class="current">
+	  
+          
+            <li class="toctree-l1 current">
+		
+    <a class="current" href=".">Home</a>
+    <ul class="subnav">
+            
+    <li class="toctree-l2"><a href="#python-classtools-autocode">python-classtools-autocode</a></li>
+    
+        <ul>
+        
+            <li><a class="toctree-l3" href="#why">Why ?</a></li>
+        
+            <li><a class="toctree-l3" href="#main-features">Main features</a></li>
+        
+            <li><a class="toctree-l3" href="#installation">Installation</a></li>
+        
+            <li><a class="toctree-l3" href="#usage-details">Usage details</a></li>
+        
+            <li><a class="toctree-l3" href="#see-also">See Also</a></li>
+        
+            <li><a class="toctree-l3" href="#want-to-contribute">Want to contribute ?</a></li>
+        
+            <li><a class="toctree-l3" href="#packaging">Packaging</a></li>
+        
+        </ul>
+    
+
+    </ul>
+	    </li>
+          
+        </ul>
+      </div>
+      &nbsp;
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+        <a href=".">classtools-autocode</a>
+      </nav>
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href=".">Docs</a> &raquo;</li>
+    
+      
+    
+    <li>Home</li>
+    <li class="wy-breadcrumbs-aside">
+      
+    </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main">
+            <div class="section">
+              
+                <h1 id="python-classtools-autocode">python-classtools-autocode</h1>
+<p>A python 3 library providing functions and decorators to automatically generate class code, such as <strong>constructor body</strong> or <strong>properties getters/setters</strong> along with optional support of <strong>validation contracts</strong> on the generated setters. </p>
+<p>The objective of this library is to reduce the amount of redundancy by automatically generatic parts of the code from the information already available somewhere else (typically, in the constructor signature). The intent is similar to <a href="https://github.com/python-attrs/attrs">attrs</a>: remove boilerplate.</p>
+<h2 id="why">Why ?</h2>
+<p>Python's primitive types (in particular <code>dict</code> and <code>tuple</code>) and it's dynamic typing system make it extremely powerful, to the point that it is often more convenient for developers to use primitive types or generic dynamic objects such as <a href="https://github.com/Infinidat/munch">Munch</a>.</p>
+<p>However there are certain cases where developers still want to define their own classes, for example to provide strongly-typed APIs to their clients. In such case, <em>separation of concerns</em> will typically lead developers to enforce attribute value validation directly in the class, rather than in the code using the object. Eventually developers end up with big classes like this one:</p>
+<pre><code class="python">from classtools_autocode import check_var
+from typing import Optional, Union
+from warnings import warn
+
+class HouseConfiguration(object):
+
+    def __init__(self, name: str, surface: Union[int, float], nb_floors: Optional[int], 
+    with_windows: bool = False):
+        self.name = name
+        self.surface = surface
+        self.nb_floors = nb_floors
+        self.with_windows = with_windows
+
+    # --name
+    @property
+    def name(self):
+        return self._name
+
+    @name.setter
+    def name(self, name: str):
+        check_var(name, var_name='name', var_types=str)
+        self._name = name
+
+    # --surface
+    @property
+    def surface(self) -&gt; Union[int, float]:
+        return self._surface
+
+    @surface.setter
+    def surface(self, surface: Union[int, float]):
+        check_var(surface, var_name='surface', var_types=[int,float], min_value=0)
+        warn('You should really not do that..')
+        self._surface = surface
+
+    # --nb_floors
+    @property
+    def nb_floors(self) -&gt; Optional[int]:
+        return self._nb_floors
+
+    @nb_floors.setter
+    def nb_floors(self, nb_floors: Optional[int]):
+        check_var(nb_floors, var_name='nb_floors', var_types=int, min_value=0, enforce_not_none=False)
+        self._surface = nb_floors #
+
+    # --with_windows
+    @property
+    def with_windows(self) -&gt; bool:
+        return self._with_windows
+
+    @with_windows.setter
+    def with_windows(self, with_windows: bool):
+        check_var(with_windows, var_name='with_windows', var_types=bool)
+        self._with_windows = with_windows
+</code></pre>
+
+<p>Now that's <strong>a lot of code</strong> - and only for 4 attributes ! Not mentioning the code for <code>check_var</code> that was not included here for the sake of readability (I include it in the library, for reference).  And guess what - it is still highly prone to <strong>human mistakes</strong>. For example I made a mistake in the setter for <code>nb_floors</code>, did you spot it ? Also it makes the code <strong>less readable</strong>: did you spot that the setter for the surface property is different from the others?</p>
+<p>Really, <em>"there must be a better way"</em> : yes there is, and that's what this library provides - it can be used alone, or in combination with <a href="https://andreacensi.github.io/contracts/index.html">PyContracts</a> and/or any PEP484-based checker such as <a href="https://github.com/RussBaz/enforce">enforce</a>, <a href="https://github.com/agronholm/typeguard">typeguard</a>, <a href="https://github.com/prechelt/typecheck-decorator">typecheck-decorator</a>, etc. in order to generate all the repetitive code for you :</p>
+<pre><code class="python">from classtools_autocode import autoprops, autoargs, setter_override
+from typing import Optional, Union
+from contracts import contract
+from warnings import warn
+
+@autoprops
+class HouseConfiguration(object):
+
+    @autoargs
+    @contract(name='str[&gt;0]', 
+              surface='(int|float),&gt;=0',
+              nb_floors='None|int,&gt;=0',
+              with_windows='bool')
+    def __init__(self, 
+                 name: str, 
+                 surface: Union[int, float], 
+                 nb_floors: Optional[int], 
+                 with_windows: bool = False):
+        pass
+
+    # -- overriden setter for surface - no need to repeat the @contract
+    @setter_override
+    def surface(self, surface: Union[int, float]):
+        warn('You should really not do that..')
+        self._surface = surface
+</code></pre>
+
+<p>As you can see, now all information is present only once: </p>
+<ul>
+<li>all object attributes (mandatory and optional with their default value) are declared in the <code>__init__</code> signature along with their optional <a href="https://docs.python.org/3.5/library/typing.html">PEP 484 type hints</a></li>
+<li>all attribute validation contracts are declared once in the <code>@contract</code> annotation of <code>__init__</code></li>
+<li>it is still possible to implement custom logic in a getter or a setter, without having to repeat the <code>@contract</code></li>
+</ul>
+<p>Note: actually one might argue that the type information is duplicated. This is true if you use PyContracts, but not if you use type checkers relying on PEP484 directly such as <a href="https://github.com/RussBaz/enforce">enforce</a>:</p>
+<pre><code class="python">from classtools_autocode import autoprops, autoargs, setter_override
+from typing import Optional, Union
+from enforce import runtime_validation
+from warnings import warn
+
+@runtime_validation
+@autoprops
+class HouseConfiguration(object):
+
+    @autoargs
+    def __init__(self, 
+                 name: str, 
+                 surface: Union[int, float], 
+                 nb_floors: Optional[int], 
+                 with_windows: bool = False):
+        pass
+
+    # -- overriden setter for surface - need to repeat the PEP484 type hints
+    @setter_override
+    def surface(self, surface: Union[int, float]):
+        warn('You should really not do that..')
+        self._surface = surface
+</code></pre>
+
+<h2 id="main-features">Main features</h2>
+<ul>
+<li>
+<p><strong><code>@autoargs</code></strong> is a decorator for the <code>__init__</code> method of a class. It automatically assigns all of the <code>__init__</code> method's parameters to <code>self</code>. For more fine-grain tuning, explicit inclusion and exclusion lists are supported, too. <em>Note: the original @autoargs idea and code come from <a href="http://stackoverflow.com/questions/3652851/what-is-the-best-way-to-do-automatic-attribute-assignment-in-python-and-is-it-a#answer-3653049">this answer from utnubu</a></em></p>
+</li>
+<li>
+<p><strong><code>@autoprops</code></strong> is a decorator for a whole class. It automatically generates properties getters and setters for all attributes, with the correct PEP484 type hints. As for <code>@autoargs</code>, the default list of attributes is the list of parameters of the <code>__init__</code> method, and explicit inclusion and exclusion lists are supported. </p>
+</li>
+<li>
+<p><strong><code>@autoprops</code></strong> automatically adds <em>PyContracts</em> <code>@contract</code> on the generated setters if a <code>@contract</code> exist for that property on the <code>__init__</code> method.</p>
+</li>
+<li>
+<p><strong><code>@autoprops</code></strong>-generated getters and setters are fully PEP484 decorated so that type checkers like <em>enforce</em>'s <code>@runtime_validation</code> automatically apply to generated methods when used to decorate the whole class.</p>
+</li>
+<li>
+<p>You may override the getter or setter generated by <code>@autoprops</code> using <strong><code>@getter_override</code></strong> and <strong><code>@setter_override</code></strong>. Note that the <code>@contract</code> will still be added on your custom setter if present on <code>__init__</code>.</p>
+</li>
+<li>
+<p>Equivalent manual wrapper methods are provided for all decorators in this library: <code>autoargs_decorate(init_func, include, exclude)</code>, <code>autoprops_decorate(cls, include, exclude)</code>, <code>autoprops_override_decorate(func, attribute, is_getter)</code>. </p>
+</li>
+</ul>
+<h2 id="installation">Installation</h2>
+<h3 id="recommended-create-a-clean-virtual-environment">Recommended : create a clean virtual environment</h3>
+<p>We strongly recommend that you use conda <em>environment</em> or pip <em>virtualenv</em>/<em>venv</em> in order to better manage packages. Once you are in your virtual environment, open a terminal and check that the python interpreter is correct:</p>
+<pre><code class="bash">(Windows)&gt;  where python
+(Linux)  &gt;  which python
+</code></pre>
+
+<p>The first executable that should show up should be the one from the virtual environment.</p>
+<h3 id="installation-steps">Installation steps</h3>
+<p>This package is available on <code>PyPI</code>. You may therefore use <code>pip</code> to install from a release</p>
+<pre><code class="bash">&gt; pip install classtools_autocode
+</code></pre>
+
+<h3 id="checkers-installation-optional">Checkers installation (optional)</h3>
+<p>You may wish to also install <a href="https://andreacensi.github.io/contracts/index.html">PyContracts</a> or <a href="https://github.com/RussBaz/enforce">enforce</a> in order to use the <code>@contract</code> and <code>@runtime_validation</code> annotations respectively.</p>
+<pre><code class="bash">&gt; pip install PyContracts
+&gt; pip install enforce
+</code></pre>
+
+<h3 id="uninstalling">Uninstalling</h3>
+<p>As usual : </p>
+<pre><code class="bash">&gt; pip uninstall classtools_autocode
+</code></pre>
+
+<h2 id="usage-details">Usage details</h2>
+<h3 id="autoargs">@autoargs</h3>
+<p>Automatically affects the contents of a function to self. Initial code and test examples from <a href="http://stackoverflow.com/questions/3652851/what-is-the-best-way-to-do-automatic-attribute-assignment-in-python-and-is-it-a#answer-3653049">this answer from utnubu</a>.</p>
+<p>A few illustrative examples can be found in the unit tests below.</p>
+<ul>
+<li>
+<p>Basic functionality, no customization - all constructor arguments are auto-assigned: </p>
+<p>```python
+from classtools_autocode import autoargs
+def test_autoargs_simple(self):</p>
+<pre><code># Basic functionality, no customization - all constructor arguments are auto-assigned
+class A(object):
+    @autoargs
+    def __init__(self, foo, path, debug=False):
+        pass
+
+# Test : 
+# -- create an instance
+a = A('rhubarb', 'pie', debug=True)
+# -- check that the fields exist and have the correct value
+self.assertTrue(a.foo == 'rhubarb')
+self.assertTrue(a.path == 'pie')
+self.assertTrue(a.debug == True)
+</code></pre>
+<p>```</p>
+</li>
+<li>
+<p>Basic functionality, with special case of variable arguments <code>*args</code>. Note that the variable arguments are stored in a single attribute: </p>
+<p>```python
+def test_autoargs_varargs(self):</p>
+<pre><code># Basic functionality, with special case of variable arguments *args.
+# -- note that the variable arguments are stored in a single attribute
+class B(object):
+    @autoargs
+    def __init__(self, foo, path, debug=False, *args):
+        pass
+
+# Test : 
+# -- create an instance
+a = B('rhubarb', 'pie', True, 100, 101)
+# -- check that the fields exist and have the correct value
+self.assertTrue(a.foo == 'rhubarb')
+self.assertTrue(a.path == 'pie')
+self.assertTrue(a.debug == True)
+# -- *args is in a single attribute
+self.assertTrue(a.args == (100, 101))
+</code></pre>
+<p>```</p>
+</li>
+<li>
+<p>Basic functionality, with special case of variable arguments <code>*args</code> and keyword arguments <code>**kw</code>. Note that <code>*args</code> are stored in a single attribute while <code>**kw</code> are stored in several attributes</p>
+<p>```python
+def test_autoargs_varargs_kwvarargs(self):</p>
+<pre><code># Basic functionality, with special case of variable arguments *args and keyword arguments **kw
+# -- note that *args are stored in a single attribute while **kw are stored in several attributes
+class C(object):
+    @autoargs
+    def __init__(self, foo, path, debug=False, *args, **kw):
+        pass
+
+# Test : 
+# -- create an instance
+a = C('rhubarb', 'pie', True, 100, 101, verbose=True, bar='bar')
+# -- check that the fields exist and have the correct value
+self.assertTrue(a.foo == 'rhubarb')
+self.assertTrue(a.path == 'pie')
+self.assertTrue(a.debug == True)
+# -- *args is in a single attribute
+self.assertTrue(a.args == (100, 101))
+# -- **kw is dispatched in several attributes
+self.assertTrue(a.verbose == True)
+self.assertTrue(a.bar == 'bar')
+</code></pre>
+<p>```</p>
+</li>
+<li>
+<p>Explicit list of names to include:</p>
+<p>```python
+def test_autoargs_include(self):</p>
+<pre><code># Explicit list of names to include
+class C(object):
+    @autoargs(include=('bar', 'baz', 'verbose'))
+    def __init__(self, foo, bar, baz, verbose=False):
+        pass
+
+# Test : 
+# -- create an instance
+a = C('rhubarb', 'pie', 1)
+# -- check that the fields exist and have the correct value
+self.assertTrue(a.bar == 'pie')
+self.assertTrue(a.baz == 1)
+self.assertTrue(a.verbose == False)
+# -- check that a non-included field does not exist
+with self.assertRaises(AttributeError):
+    print(a.foo)
+</code></pre>
+<p>```</p>
+</li>
+<li>
+<p>Explicit list of names to exclude:</p>
+<p>```python
+def test_autoargs_exclude(self):</p>
+<pre><code># Explicit list of names to exclude
+class C(object):
+    @autoargs(exclude=('bar', 'baz', 'verbose'))
+    def __init__(self, foo, bar, baz, verbose=False):
+        pass
+
+# Test : 
+# -- create an instance
+a = C('rhubarb', 'pie', 1)
+# -- check that the fields exist and have the correct value
+self.assertTrue(a.foo == 'rhubarb')
+# -- check that the non-included fields do not exist
+with self.assertRaises(AttributeError):
+    print(a.bar)
+with self.assertRaises(AttributeError):
+    print(a.baz)
+with self.assertRaises(AttributeError):
+    print(a.verbose)
+</code></pre>
+<p>```</p>
+</li>
+</ul>
+<h3 id="autoprops">@autoprops</h3>
+<p>Automatically generates all properties getters and setters from the class constructor.</p>
+<ul>
+<li>
+<p>Basic functionality, no customization - all constructor arguments become properties: </p>
+<p>```python
+def test_autoprops_no_contract(self):</p>
+<pre><code># Basic functionality, no customization - all constructor arguments become properties
+@autoprops
+class FooConfigA(object):
+
+    @autoargs
+    def __init__(self, a: str, b: List[str]):
+        pass
+
+t = FooConfigA('rhubarb', ['pie', 'pie2'])
+
+# there are no contracts on the generated setters
+t.a=''
+t.b=['r','']
+# check that the generated getters work
+self.assertTrue(t.a == '')
+self.assertTrue(t.b[0] == 'r')
+</code></pre>
+<p>```</p>
+</li>
+<li>
+<p>if a <strong><a href="https://andreacensi.github.io/contracts/index.html">PyContracts</a></strong> <code>@contract</code> annotation exist on the <code>__init__</code> method, mentioning a contract for a given parameter, the
+parameter contract will be added on the generated setter method:</p>
+<p>```python
+def test_autoprops(self):</p>
+<pre><code># Basic functionality with PyContracts - if a `@contract` annotation exist on the `__init__` method, mentioning
+# a contract for a given parameter, the parameter contract will be added on the generated setter method
+from contracts import ContractNotRespected, contract
+
+@autoprops
+class FooConfigA(object):
+
+    @autoargs
+    @contract(a='str[&gt;0]', b='list[&gt;0](str[&gt;0])')
+    def __init__(self, a: str, b: List[str]):
+        pass
+
+t = FooConfigA('rhubarb', ['pie', 'pie2'])
+
+# check that there are contracts on the generated setters
+with self.assertRaises(ContractNotRespected):
+    t.a = ''
+with self.assertRaises(ContractNotRespected):
+    t.b = ['r','']
+
+# check that the generated getters work
+t.b=['r']
+self.assertTrue(t.b[0] == 'r')
+</code></pre>
+<p>```</p>
+</li>
+<li>
+<p>The user may override the generated getter and/or setter by creating them explicitly in the class and annotating
+them with <code>@getter_override</code> or <code>@setter_override</code>. Note that the contract will still be dynamically added on the setter, even if the setter already has one (in such case a <code>UserWarning</code> will be issued)</p>
+<p>```python
+def test_autoprops_override(self):
+    from contracts import ContractNotRespected, contract</p>
+<pre><code>@autoprops
+class FooConfigC(object):
+
+    @autoargs
+    @contract(a='str[&gt;0]', b='list[&gt;0](str[&gt;0])')
+    def __init__(self, a: str, b: List[str]):
+        pass
+
+    @getter_override
+    def a(self):
+        # in addition to getting the fields we'd like to print something
+        print('a is being read. Its value is \'' + str(self._a) + '\'')
+        return self._a
+
+    @setter_override(attribute='b')
+    def another_name(self, toto: List[str]):
+        # in addition to setting the fields we'd like to print something
+        print('Property \'b\' was set to \'' + str(toto) + '\'')
+        self._b = toto
+
+t = FooConfigC('rhubarb', ['pie', 'pie2'])
+
+# check that we can still read a's value
+self.assertTrue(t.a == 'rhubarb')
+
+# check that 'a' still has a contract on its setter
+with self.assertRaises(ContractNotRespected):
+    t.a = ''
+
+# check that 'b' still has a contract on its setter
+with self.assertRaises(ContractNotRespected):
+    t.b=[''] # we can not
+
+# check that 'b' still has a getter generated
+t.b = ['eh', 'oh']
+self.assertTrue(t.b == ['eh', 'oh'])
+</code></pre>
+<p>```</p>
+</li>
+<li>
+<p>Note: you may also perform the same action without decorator, using <code>autoprops_decorate(cls)</code>.</p>
+<p>```python
+def test_manual(self):</p>
+<pre><code>from contracts import ContractNotRespected
+from contracts import contract
+
+# we don't use @autoprops here
+class FooConfigA(object):
+    @autoargs
+    @contract(a='str[&gt;0]', b='list[&gt;0](str[&gt;0])')
+    def __init__(self, a: str, b: List[str]):
+        pass
+
+# we execute it here
+autoprops_decorate(FooConfigA)
+
+t = FooConfigA('rhubarb', ['pie', 'pie2'])
+
+# check that there are contracts on the generated setters
+with self.assertRaises(ContractNotRespected):
+    t.a = ''
+with self.assertRaises(ContractNotRespected):
+    t.b = ['r','']
+
+# check that the generated getters work
+t.b = ['r']
+self.assertTrue(t.b[0] == 'r')
+</code></pre>
+<p>```</p>
+</li>
+</ul>
+<h2 id="see-also">See Also</h2>
+<ul>
+<li>
+<p>Initial idea of autoargs : <a href="http://stackoverflow.com/questions/3652851/what-is-the-best-way-to-do-automatic-attribute-assignment-in-python-and-is-it-a#answer-3653049">this answer from utnubu</a></p>
+</li>
+<li>
+<p>On properties in Python and why you should only use them if you really need to (for example, to perform validation by contract): <a href="http://dirtsimple.org/2004/12/python-is-not-java.html">Python is not java</a> and the follow up article <a href="http://2ndscale.com/rtomayko/2005/getters-setters-fuxors">Getters/Setters/Fuxors</a></p>
+</li>
+<li>
+<p><a href="https://andreacensi.github.io/contracts/index.html">PyContracts</a></p>
+</li>
+<li>
+<p>PEP484-based checkers: </p>
+<ul>
+<li><a href="https://github.com/RussBaz/enforce">enforce</a></li>
+<li><a href="https://github.com/agronholm/typeguard">typeguard</a></li>
+<li><a href="https://github.com/prechelt/typecheck-decorator">typecheck-decorator</a></li>
+</ul>
+</li>
+<li>
+<p><a href="https://github.com/python-attrs/attrs">attrs</a></p>
+</li>
+<li>
+<p><a href="http://pythonhosted.org/decorator/">decorator</a> library, which provides everything one needs to create complex decorators easily (signature and annotations-preserving decorators, decorators with class factory) as well as provides some useful decorators (<code>@contextmanager</code>, <code>@blocking</code>, <code>@dispatch_on</code>). We use it to preserve the signature of class constructors and overriden setter methods.</p>
+</li>
+<li>
+<p>When came the time to find a name for this library I was stuck for a while. In my quest for finding an explicit name that was not already used, I found many interesting libraries on <a href="http://pypi.python.org/">PyPI</a>. I did not test them all but found them 'good to know':</p>
+<ul>
+<li><a href="https://pypi.python.org/pypi/decorator-args/1.1">decorator-args</a></li>
+<li><a href="https://github.com/eevee/classtools">classtools</a></li>
+<li><a href="https://pypi.python.org/pypi/classutils">classutils</a></li>
+<li><a href="https://pypi.python.org/pypi/python-utils">python-utils</a></li>
+<li><a href="https://pypi.python.org/pypi/utils/0.9.0">utils</a></li>
+</ul>
+</li>
+</ul>
+<p><em>Do you like this library ? You might also like <a href="https://github.com/smarie?utf8=%E2%9C%93&amp;tab=repositories&amp;q=&amp;type=&amp;language=python">these</a></em> </p>
+<h2 id="want-to-contribute">Want to contribute ?</h2>
+<p>Contributions are welcome ! Simply Fork this project on github, commit your contributions, and create pull requests.</p>
+<p>Here is a non-exhaustive list of interesting open topics:</p>
+<ul>
+<li>Python 2 and &lt; 3.5 compatibility</li>
+<li>Initial import of PyContract is quite slow (300ms on my machine). How to solve that, if that matters ?</li>
+<li>New annotations <code>@getters_wrapper(include, exclude)</code> and <code>@setters_wrapper(include, exclude)</code>, that would use <code>@contextmanager</code> or directly extend <code>GeneratorContextManager</code> in order to help users wrap all or part of the getters/setters with one function containing <code>yield</code></li>
+</ul>
+<h2 id="packaging"><em>Packaging</em></h2>
+<p>This project uses <code>setuptools_scm</code> to synchronise the version number. Therefore the following command should be used for development snapshots as well as official releases: </p>
+<pre><code class="bash">python setup.py egg_info bdist_wheel rotate -m.whl -k3
+</code></pre>
+              
+            </div>
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <!-- Copyright etc -->
+    
+  </div>
+
+  Built with <a href="http://www.mkdocs.org">MkDocs</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>.
+</footer>
+	  
+        </div>
+      </div>
+
+    </section>
+    
+  </div>
+
+  <div class="rst-versions" role="note" style="cursor: pointer">
+    <span class="rst-current-version" data-toggle="rst-current-version">
+      
+      
+      
+    </span>
+</div>
+    <script src="./js/theme.js"></script>
+
+</body>
+</html>
+
+<!--
+MkDocs version : 0.16.3
+Build Date UTC : 2017-06-01 08:58:19
+-->
