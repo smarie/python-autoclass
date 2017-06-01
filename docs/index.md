@@ -1,6 +1,6 @@
 # python-classtools-autocode
 
-A python 3 library providing functions and decorators to automatically generate class code, such as **constructor body** or **properties getters/setters** along with optional support of **validation contracts** on the generated setters. 
+`classtools-autocode` provides tools to automatically generate python 3.5 classes code, such as **constructor body** or **properties getters/setters**, along with optional support of **validation contracts**.
 
 The objective of this library is to reduce the amount of redundancy by automatically generatic parts of the code from the information already available somewhere else (typically, in the constructor signature). The intent is similar to [attrs](https://github.com/python-attrs/attrs): remove boilerplate.
 
