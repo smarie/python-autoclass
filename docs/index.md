@@ -274,11 +274,7 @@ assert a.bar == 'pie'
 assert a.baz == 1
 assert a.verbose == False
 # -- check that a non-included field does not exist
-try:
-    print(a.foo)
-    assert False
-except AttributeError:
-    pass
+print(a.foo)# raises AttributeError
 ```
 
 * Explicit list of names to exclude:
@@ -295,21 +291,9 @@ a = C('rhubarb', 'pie', 1)
 # -- check that the fields exist and have the correct value
 assert a.foo == 'rhubarb'
 # -- check that the non-included fields do not exist
-try:
-    print(a.bar)
-    assert False
-except AttributeError:
-    pass
-try:
-    print(a.baz)
-    assert False
-except AttributeError:
-    pass
-try:
-    print(a.verbose)
-    assert False
-except AttributeError:
-    pass
+print(a.bar)  # raises AttributeError
+print(a.baz)  # raises AttributeError
+print(a.verbose)  # raises AttributeError
 ```
 
 
@@ -353,21 +337,13 @@ class FooConfigA(object):
 
 t = FooConfigA('rhubarb', ['pie', 'pie2'])
 
-# check that there are contracts on the generated setters
-try:
-    t.a = ''
-    assert False
-except ContractNotRespected:
-    pass
-try:
-    t.b = ['r','']
-    assert False
-except ContractNotRespected:
-    pass
-
 # check that the generated getters work
 t.b=['r']
 assert t.b[0] == 'r'
+
+# check that there are contracts on the generated setters
+t.a = ''  # raises ContractNotRespected
+t.b = ['r','']  # raises ContractNotRespected
 ```
 
 * The user may override the generated getter and/or setter by creating them explicitly in the class and annotating
@@ -394,29 +370,20 @@ class FooConfigC(object):
         print('Property \'b\' was set to \'' + str(toto) + '\'')
         self._b = toto
 
-
 t = FooConfigC('rhubarb', ['pie', 'pie2'])
 
 # check that we can still read a's value
 assert t.a == 'rhubarb'
 
-# check that 'a' still has a contract on its setter
-try:
-    t.a = ''
-    assert False
-except ContractNotRespected:
-    pass
-
-# check that 'b' still has a contract on its setter
-try:
-    t.b=['']
-    assert False
-except ContractNotRespected:
-    pass
-
 # check that 'b' still has a getter generated
 t.b = ['eh', 'oh']
 assert t.b == ['eh', 'oh']
+
+# check that 'a' still has a contract on its setter
+t.a = ''  # raises ContractNotRespected
+
+# check that 'b' still has a contract on its setter
+t.b=['']  # raises ContractNotRespected
 ```
 
 
@@ -435,21 +402,13 @@ autoprops_decorate(FooConfigA)
 
 t = FooConfigA('rhubarb', ['pie', 'pie2'])
 
-# check that there are contracts on the generated setters
-try:
-    t.a = ''
-    assert False
-except ContractNotRespected:
-    pass
-try:
-    t.b = ['r','']
-    assert False
-except ContractNotRespected:
-    pass
-
 # check that the generated getters work
 t.b = ['r']
 assert t.b[0] == 'r'
+
+# check that there are contracts on the generated setters
+t.a = ''  # raises ContractNotRespected
+t.b = ['r','']  # raises ContractNotRespected
 ```
 
 ## See Also
