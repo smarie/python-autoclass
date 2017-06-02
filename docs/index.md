@@ -201,120 +201,116 @@ A few illustrative examples can be found in the unit tests below.
 
 ```python
 from classtools_autocode import autoargs
-def test_autoargs_simple(self):
 
-    # Basic functionality, no customization - all constructor arguments are auto-assigned
-    class A(object):
-        @autoargs
-        def __init__(self, foo, path, debug=False):
-            pass
+class A(object):
+    @autoargs
+    def __init__(self, foo, path, debug=False):
+        pass
 
-    # Test : 
-    # -- create an instance
-    a = A('rhubarb', 'pie', debug=True)
-    # -- check that the fields exist and have the correct value
-    self.assertTrue(a.foo == 'rhubarb')
-    self.assertTrue(a.path == 'pie')
-    self.assertTrue(a.debug == True)
+# Test : 
+# -- create an instance
+a = A('rhubarb', 'pie', debug=True)
+
+# -- check that the fields exist and have the correct value
+assert a.foo == 'rhubarb'
+assert a.path == 'pie'
+assert a.debug == True
 ```
 
 * Basic functionality, with special case of variable arguments `*args`. Note that the variable arguments are stored in a single attribute: 
 
 ```python
-def test_autoargs_varargs(self):
+class B(object):
+    @autoargs
+    def __init__(self, foo, path, debug=False, *args):
+        pass
 
-    # Basic functionality, with special case of variable arguments *args.
-    # -- note that the variable arguments are stored in a single attribute
-    class B(object):
-        @autoargs
-        def __init__(self, foo, path, debug=False, *args):
-            pass
-
-    # Test : 
-    # -- create an instance
-    a = B('rhubarb', 'pie', True, 100, 101)
-    # -- check that the fields exist and have the correct value
-    self.assertTrue(a.foo == 'rhubarb')
-    self.assertTrue(a.path == 'pie')
-    self.assertTrue(a.debug == True)
-    # -- *args is in a single attribute
-    self.assertTrue(a.args == (100, 101))
+# Test : 
+# -- create an instance
+a = B('rhubarb', 'pie', True, 100, 101)
+# -- check that the fields exist and have the correct value
+assert a.foo == 'rhubarb'
+assert a.path == 'pie'
+assert a.debug == True
+# -- *args is in a single attribute
+assert a.args == (100, 101)
 ```
 
 * Basic functionality, with special case of variable arguments `*args` and keyword arguments `**kw`. Note that `*args` are stored in a single attribute while `**kw` are stored in several attributes
 
 ```python
-def test_autoargs_varargs_kwvarargs(self):
+class C(object):
+    @autoargs
+    def __init__(self, foo, path, debug=False, *args, **kw):
+        pass
 
-    # Basic functionality, with special case of variable arguments *args and keyword arguments **kw
-    # -- note that *args are stored in a single attribute while **kw are stored in several attributes
-    class C(object):
-        @autoargs
-        def __init__(self, foo, path, debug=False, *args, **kw):
-            pass
-
-    # Test : 
-    # -- create an instance
-    a = C('rhubarb', 'pie', True, 100, 101, verbose=True, bar='bar')
-    # -- check that the fields exist and have the correct value
-    self.assertTrue(a.foo == 'rhubarb')
-    self.assertTrue(a.path == 'pie')
-    self.assertTrue(a.debug == True)
-    # -- *args is in a single attribute
-    self.assertTrue(a.args == (100, 101))
-    # -- **kw is dispatched in several attributes
-    self.assertTrue(a.verbose == True)
-    self.assertTrue(a.bar == 'bar')
+# Test : 
+# -- create an instance
+a = C('rhubarb', 'pie', True, 100, 101, verbose=True, bar='bar')
+# -- check that the fields exist and have the correct value
+assert a.foo == 'rhubarb'
+assert a.path == 'pie'
+assert a.debug == True
+# -- *args is in a single attribute
+assert a.args == (100, 101)
+# -- **kw is dispatched in several attributes
+assert a.verbose == True
+assert a.bar == 'bar'
 ```
     
 * Explicit list of names to include:
 
 ```python
-def test_autoargs_include(self):
+class C(object):
+    @autoargs(include=('bar', 'baz', 'verbose'))
+    def __init__(self, foo, bar, baz, verbose=False):
+        pass
 
-    # Explicit list of names to include
-    class C(object):
-        @autoargs(include=('bar', 'baz', 'verbose'))
-        def __init__(self, foo, bar, baz, verbose=False):
-            pass
-
-    # Test : 
-    # -- create an instance
-    a = C('rhubarb', 'pie', 1)
-    # -- check that the fields exist and have the correct value
-    self.assertTrue(a.bar == 'pie')
-    self.assertTrue(a.baz == 1)
-    self.assertTrue(a.verbose == False)
-    # -- check that a non-included field does not exist
-    with self.assertRaises(AttributeError):
-        print(a.foo)
+# Test : 
+# -- create an instance
+a = C('rhubarb', 'pie', 1)
+# -- check that the fields exist and have the correct value
+assert a.bar == 'pie'
+assert a.baz == 1
+assert a.verbose == False
+# -- check that a non-included field does not exist
+try:
+    print(a.foo)
+    assert False
+except AttributeError:
+    pass
 ```
 
 * Explicit list of names to exclude:
 
 ```python
-def test_autoargs_exclude(self):
+class C(object):
+    @autoargs(exclude=('bar', 'baz', 'verbose'))
+    def __init__(self, foo, bar, baz, verbose=False):
+        pass
 
-    # Explicit list of names to exclude
-    class C(object):
-        @autoargs(exclude=('bar', 'baz', 'verbose'))
-        def __init__(self, foo, bar, baz, verbose=False):
-            pass
-
-    # Test : 
-    # -- create an instance
-    a = C('rhubarb', 'pie', 1)
-    # -- check that the fields exist and have the correct value
-    self.assertTrue(a.foo == 'rhubarb')
-    # -- check that the non-included fields do not exist
-    with self.assertRaises(AttributeError):
-        print(a.bar)
-    with self.assertRaises(AttributeError):
-        print(a.baz)
-    with self.assertRaises(AttributeError):
-        print(a.verbose)
+# Test : 
+# -- create an instance
+a = C('rhubarb', 'pie', 1)
+# -- check that the fields exist and have the correct value
+assert a.foo == 'rhubarb'
+# -- check that the non-included fields do not exist
+try:
+    print(a.bar)
+    assert False
+except AttributeError:
+    pass
+try:
+    print(a.baz)
+    assert False
+except AttributeError:
+    pass
+try:
+    print(a.verbose)
+    assert False
+except AttributeError:
+    pass
 ```
-
 
 
 ### @autoprops
@@ -324,133 +320,136 @@ Automatically generates all properties getters and setters from the class constr
 * Basic functionality, no customization - all constructor arguments become properties: 
 
 ```python
-def test_autoprops_no_contract(self):
-    
-    # Basic functionality, no customization - all constructor arguments become properties
-    @autoprops
-    class FooConfigA(object):
+@autoprops
+class FooConfigA(object):
 
-        @autoargs
-        def __init__(self, a: str, b: List[str]):
-            pass
+    @autoargs
+    def __init__(self, a: str, b: List[str]):
+        pass
 
-    t = FooConfigA('rhubarb', ['pie', 'pie2'])
+t = FooConfigA('rhubarb', ['pie', 'pie2'])
 
-    # there are no contracts on the generated setters
-    t.a=''
-    t.b=['r','']
-    # check that the generated getters work
-    self.assertTrue(t.a == '')
-    self.assertTrue(t.b[0] == 'r')
+# there are no contracts on the generated setters
+t.a=''
+t.b=['r','']
+# check that the generated getters work
+assert t.a == ''
+assert t.b[0] == 'r'
 ```
 
 * if a **[PyContracts](https://andreacensi.github.io/contracts/index.html)** `@contract` annotation exist on the `__init__` method, mentioning a contract for a given parameter, the
 parameter contract will be added on the generated setter method:
 
 ```python
-def test_autoprops(self):
+from contracts import ContractNotRespected, contract
 
-    # Basic functionality with PyContracts - if a `@contract` annotation exist on the `__init__` method, mentioning
-    # a contract for a given parameter, the parameter contract will be added on the generated setter method
-    from contracts import ContractNotRespected, contract
+@autoprops
+class FooConfigA(object):
 
-    @autoprops
-    class FooConfigA(object):
+    @autoargs
+    @contract(a='str[>0]', b='list[>0](str[>0])')
+    def __init__(self, a: str, b: List[str]):
+        pass
 
-        @autoargs
-        @contract(a='str[>0]', b='list[>0](str[>0])')
-        def __init__(self, a: str, b: List[str]):
-            pass
+t = FooConfigA('rhubarb', ['pie', 'pie2'])
 
-    t = FooConfigA('rhubarb', ['pie', 'pie2'])
+# check that there are contracts on the generated setters
+try:
+    t.a = ''
+    assert False
+except ContractNotRespected:
+    pass
+try:
+    t.b = ['r','']
+    assert False
+except ContractNotRespected:
+    pass
 
-    # check that there are contracts on the generated setters
-    with self.assertRaises(ContractNotRespected):
-        t.a = ''
-    with self.assertRaises(ContractNotRespected):
-        t.b = ['r','']
-
-    # check that the generated getters work
-    t.b=['r']
-    self.assertTrue(t.b[0] == 'r')
+# check that the generated getters work
+t.b=['r']
+assert t.b[0] == 'r'
 ```
 
 * The user may override the generated getter and/or setter by creating them explicitly in the class and annotating
 them with `@getter_override` or `@setter_override`. Note that the contract will still be dynamically added on the setter, even if the setter already has one (in such case a `UserWarning` will be issued)
 
 ```python
-def test_autoprops_override(self):
-    from contracts import ContractNotRespected, contract
-  
-    @autoprops
-    class FooConfigC(object):
-    
-        @autoargs
-        @contract(a='str[>0]', b='list[>0](str[>0])')
-        def __init__(self, a: str, b: List[str]):
-            pass
-    
-        @getter_override
-        def a(self):
-            # in addition to getting the fields we'd like to print something
-            print('a is being read. Its value is \'' + str(self._a) + '\'')
-            return self._a
-    
-        @setter_override(attribute='b')
-        def another_name(self, toto: List[str]):
-            # in addition to setting the fields we'd like to print something
-            print('Property \'b\' was set to \'' + str(toto) + '\'')
-            self._b = toto
-    
-    
-    t = FooConfigC('rhubarb', ['pie', 'pie2'])
-    
-    # check that we can still read a's value
-    self.assertTrue(t.a == 'rhubarb')
-    
-    # check that 'a' still has a contract on its setter
-    with self.assertRaises(ContractNotRespected):
-        t.a = ''
-    
-    # check that 'b' still has a contract on its setter
-    with self.assertRaises(ContractNotRespected):
-        t.b=[''] # we can not
-    
-    # check that 'b' still has a getter generated
-    t.b = ['eh', 'oh']
-    self.assertTrue(t.b == ['eh', 'oh'])
+@autoprops
+class FooConfigC(object):
+
+    @autoargs
+    @contract(a='str[>0]', b='list[>0](str[>0])')
+    def __init__(self, a: str, b: List[str]):
+        pass
+
+    @getter_override
+    def a(self):
+        # in addition to getting the fields we'd like to print something
+        print('a is being read. Its value is \'' + str(self._a) + '\'')
+        return self._a
+
+    @setter_override(attribute='b')
+    def another_name(self, toto: List[str]):
+        # in addition to setting the fields we'd like to print something
+        print('Property \'b\' was set to \'' + str(toto) + '\'')
+        self._b = toto
+
+
+t = FooConfigC('rhubarb', ['pie', 'pie2'])
+
+# check that we can still read a's value
+assert t.a == 'rhubarb'
+
+# check that 'a' still has a contract on its setter
+try:
+    t.a = ''
+    assert False
+except ContractNotRespected:
+    pass
+
+# check that 'b' still has a contract on its setter
+try:
+    t.b=['']
+    assert False
+except ContractNotRespected:
+    pass
+
+# check that 'b' still has a getter generated
+t.b = ['eh', 'oh']
+assert t.b == ['eh', 'oh']
 ```
 
 
 * Note: you may also perform the same action without decorator, using `autoprops_decorate(cls)`.
 
 ```python
-def test_manual(self):
+# we don't use @autoprops here
+class FooConfigA(object):
+    @autoargs
+    @contract(a='str[>0]', b='list[>0](str[>0])')
+    def __init__(self, a: str, b: List[str]):
+        pass
 
-    from contracts import ContractNotRespected
-    from contracts import contract
+# we execute it here
+autoprops_decorate(FooConfigA)
 
-    # we don't use @autoprops here
-    class FooConfigA(object):
-        @autoargs
-        @contract(a='str[>0]', b='list[>0](str[>0])')
-        def __init__(self, a: str, b: List[str]):
-            pass
+t = FooConfigA('rhubarb', ['pie', 'pie2'])
 
-    # we execute it here
-    autoprops_decorate(FooConfigA)
+# check that there are contracts on the generated setters
+try:
+    t.a = ''
+    assert False
+except ContractNotRespected:
+    pass
+try:
+    t.b = ['r','']
+    assert False
+except ContractNotRespected:
+    pass
 
-    t = FooConfigA('rhubarb', ['pie', 'pie2'])
-
-    # check that there are contracts on the generated setters
-    with self.assertRaises(ContractNotRespected):
-        t.a = ''
-    with self.assertRaises(ContractNotRespected):
-        t.b = ['r','']
-
-    # check that the generated getters work
-    t.b = ['r']
-    self.assertTrue(t.b[0] == 'r')
+# check that the generated getters work
+t.b = ['r']
+assert t.b[0] == 'r'
 ```
 
 ## See Also
