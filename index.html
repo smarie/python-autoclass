@@ -1,237 +1,509 @@
+
 <!DOCTYPE html>
-<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
-<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
-<head>
-  <meta charset="utf-8">
-  <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="description" content="None">
-  
-  <link rel="shortcut icon" href="./img/favicon.ico">
-  <title>Home - classtools-autocode</title>
-  <link href='https://fonts.googleapis.com/css?family=Lato:400,700|Roboto+Slab:400,700|Inconsolata:400,700' rel='stylesheet' type='text/css'>
-
-  <link rel="stylesheet" href="./css/theme.css" type="text/css" />
-  <link rel="stylesheet" href="./css/theme_extra.css" type="text/css" />
-  <link rel="stylesheet" href="./css/highlight.css">
-  
-  <script>
-    // Current page data
-    var mkdocs_page_name = "Home";
-    var mkdocs_page_input_path = "index.md";
-    var mkdocs_page_url = "/";
-  </script>
-  
-  <script src="./js/jquery-2.1.1.min.js"></script>
-  <script src="./js/modernizr-2.8.3.min.js"></script>
-  <script type="text/javascript" src="./js/highlight.pack.js"></script> 
-  
-</head>
-
-<body class="wy-body-for-nav" role="document">
-
-  <div class="wy-grid-for-nav">
-
+<html lang="en" class="no-js">
+  <head>
     
-    <nav data-toggle="wy-nav-shift" class="wy-nav-side stickynav">
-      <div class="wy-side-nav-search">
-        <a href="." class="icon icon-home"> classtools-autocode</a>
-        <div role="search">
-  <form id ="rtd-search-form" class="wy-form" action="./search.html" method="get">
-    <input type="text" name="q" placeholder="Search docs" />
-  </form>
-</div>
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      <meta http-equiv="x-ua-compatible" content="ie=edge">
+      
+      
+      
+      
+        <link rel="shortcut icon" href="./assets/images/favicon.png">
+      
+      <meta name="generator" content="mkdocs-0.16.3, mkdocs-material-1.8.0">
+    
+    
+      
+        <title>classtools-autocode</title>
+      
+    
+    
+      <script src="./assets/javascripts/modernizr-1df76c4e58.js"></script>
+    
+    
+      <link rel="stylesheet" href="./assets/stylesheets/application-bfecc7305d.css">
+      
+    
+    
+      
+        
+        
+        
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,400i,700|Roboto+Mono">
+        <style>body,input{font-family:"Roboto","Helvetica Neue",Helvetica,Arial,sans-serif}code,kbd,pre{font-family:"Roboto Mono","Courier New",Courier,monospace}</style>
+      
+      <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+    
+    
+    
+  </head>
+  
+  
+  
+  
+    <body>
+  
+    <svg class="md-svg">
+      <defs>
+        
+        
+          <svg xmlns="http://www.w3.org/2000/svg" width="416" height="448" viewBox="0 0 416 448" id="github"><path fill="currentColor" d="M160 304q0 10-3.125 20.5t-10.75 19T128 352t-18.125-8.5-10.75-19T96 304t3.125-20.5 10.75-19T128 256t18.125 8.5 10.75 19T160 304zm160 0q0 10-3.125 20.5t-10.75 19T288 352t-18.125-8.5-10.75-19T256 304t3.125-20.5 10.75-19T288 256t18.125 8.5 10.75 19T320 304zm40 0q0-30-17.25-51T296 232q-10.25 0-48.75 5.25Q229.5 240 208 240t-39.25-2.75Q130.75 232 120 232q-29.5 0-46.75 21T56 304q0 22 8 38.375t20.25 25.75 30.5 15 35 7.375 37.25 1.75h42q20.5 0 37.25-1.75t35-7.375 30.5-15 20.25-25.75T360 304zm56-44q0 51.75-15.25 82.75-9.5 19.25-26.375 33.25t-35.25 21.5-42.5 11.875-42.875 5.5T212 416q-19.5 0-35.5-.75t-36.875-3.125-38.125-7.5-34.25-12.875T37 371.5t-21.5-28.75Q0 312 0 260q0-59.25 34-99-6.75-20.5-6.75-42.5 0-29 12.75-54.5 27 0 47.5 9.875t47.25 30.875Q171.5 96 212 96q37 0 70 8 26.25-20.5 46.75-30.25T376 64q12.75 25.5 12.75 54.5 0 21.75-6.75 42 34 40 34 99.5z"/></svg>
+        
+      </defs>
+    </svg>
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="drawer">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="search">
+    <label class="md-overlay" data-md-component="overlay" for="drawer"></label>
+    
+      <header class="md-header" data-md-component="header">
+  <nav class="md-header-nav md-grid">
+    <div class="md-flex">
+      <div class="md-flex__cell md-flex__cell--shrink">
+        
+          <a href="." title="classtools-autocode" class="md-icon md-icon--home md-header-nav__button">
+          </a>
+        
       </div>
-
-      <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
-	<ul class="current">
-	  
+      <div class="md-flex__cell md-flex__cell--shrink">
+        <label class="md-icon md-icon--menu md-header-nav__button" for="drawer"></label>
+      </div>
+      <div class="md-flex__cell md-flex__cell--stretch">
+        <span class="md-flex__ellipsis md-header-nav__title">
           
-            <li class="toctree-l1 current">
-		
-    <a class="current" href=".">Home</a>
-    <ul class="subnav">
             
-    <li class="toctree-l2"><a href="#python-classtools-autocode">python-classtools-autocode</a></li>
-    
-        <ul>
-        
-            <li><a class="toctree-l3" href="#why">Why ?</a></li>
-        
-            <li><a class="toctree-l3" href="#main-features">Main features</a></li>
-        
-            <li><a class="toctree-l3" href="#installation">Installation</a></li>
-        
-            <li><a class="toctree-l3" href="#usage-details">Usage details</a></li>
-        
-            <li><a class="toctree-l3" href="#see-also">See Also</a></li>
-        
-            <li><a class="toctree-l3" href="#want-to-contribute">Want to contribute ?</a></li>
-        
-        </ul>
-    
-
-    </ul>
-	    </li>
-          
-        </ul>
-      </div>
-      &nbsp;
-    </nav>
-
-    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
-
-      
-      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
-        <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
-        <a href=".">classtools-autocode</a>
-      </nav>
-
-      
-      <div class="wy-nav-content">
-        <div class="rst-content">
-          <div role="navigation" aria-label="breadcrumbs navigation">
-  <ul class="wy-breadcrumbs">
-    <li><a href=".">Docs</a> &raquo;</li>
-    
-      
-    
-    <li>Home</li>
-    <li class="wy-breadcrumbs-aside">
-      
-        <a href="https://github.com/smarie/python-classtools-autocode/edit/master/docs/index.md"
-          class="icon icon-github"> Edit on GitHub</a>
-      
-    </li>
-  </ul>
-  <hr/>
-</div>
-          <div role="main">
-            <div class="section">
               
-                <h1 id="python-classtools-autocode">python-classtools-autocode</h1>
-<p><code>classtools-autocode</code> provides tools to automatically generate python 3.5 classes code, such as <strong>constructor body</strong> or <strong>properties getters/setters</strong>, along with optional support of <strong>validation contracts</strong>.</p>
-<p>The objective of this library is to reduce the amount of redundancy by automatically generatic parts of the code from the information already available somewhere else (typically, in the constructor signature). The intent is similar to <a href="https://github.com/python-attrs/attrs">attrs</a>: remove boilerplate.</p>
-<p>Github page : <a href="https://github.com/smarie/python-classtools-autocode">https://github.com/smarie/python-classtools-autocode</a> </p>
-<h2 id="why">Why ?</h2>
-<p>Python's primitive types (in particular <code>dict</code> and <code>tuple</code>) and it's dynamic typing system make it extremely powerful, to the point that it is often more convenient for developers to use primitive types or generic dynamic objects such as <a href="https://github.com/Infinidat/munch">Munch</a>.</p>
+            
+            Home
+          
+        </span>
+      </div>
+      <div class="md-flex__cell md-flex__cell--shrink">
+        
+          <label class="md-icon md-icon--search md-header-nav__button" for="search"></label>
+          
+<div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="search"></label>
+  <div class="md-search__inner">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" required placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="query">
+      <label class="md-icon md-search__icon" for="search"></label>
+      <button type="reset" class="md-icon md-search__icon" data-md-component="reset">close</button>
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="result" data-md-lang-search="" data-md-lang-tokenizer="[\s\-]+">
+          <div class="md-search-result__meta" data-md-lang-result-none="No matching documents" data-md-lang-result-one="1 matching document" data-md-lang-result-other="# matching documents">
+            Type to start searching
+          </div>
+          <ol class="md-search-result__list"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+        
+      </div>
+      
+        <div class="md-flex__cell md-flex__cell--shrink">
+          <div class="md-header-nav__source">
+            
+
+
+  
+
+
+  <a href="https://github.com/smarie/python-classtools-autocode" title="Go to repository" class="md-source" data-md-source="github">
+    
+      <div class="md-source__icon">
+        <svg viewBox="0 0 24 24" width="24" height="24">
+          <use xlink:href="#github" width="24" height="24"></use>
+        </svg>
+      </div>
+    
+    <div class="md-source__repository">
+      GitHub
+    </div>
+  </a>
+
+          </div>
+        </div>
+      
+    </div>
+  </nav>
+</header>
+    
+    <div class="md-container">
+      
+      
+      <main class="md-main">
+        <div class="md-main__inner md-grid" data-md-component="container">
+          
+            
+              <div class="md-sidebar md-sidebar--primary" data-md-component="navigation">
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    <nav class="md-nav md-nav--primary" data-md-level="0">
+  <label class="md-nav__title md-nav__title--site" for="drawer">
+    
+      <i class="md-icon md-icon--home md-nav__button"></i>
+    
+    classtools-autocode
+  </label>
+  
+    <div class="md-nav__source">
+      
+
+
+  
+
+
+  <a href="https://github.com/smarie/python-classtools-autocode" title="Go to repository" class="md-source" data-md-source="github">
+    
+      <div class="md-source__icon">
+        <svg viewBox="0 0 24 24" width="24" height="24">
+          <use xlink:href="#github" width="24" height="24"></use>
+        </svg>
+      </div>
+    
+    <div class="md-source__repository">
+      GitHub
+    </div>
+  </a>
+
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+      
+
+  
+
+
+  <li class="md-nav__item md-nav__item--active">
+    
+    <input class="md-toggle md-nav__toggle" data-md-toggle="toc" type="checkbox" id="toc">
+    
+      
+    
+    
+      <label class="md-nav__link md-nav__link--active" for="toc">
+        Home
+      </label>
+    
+    <a href="." title="Home" class="md-nav__link md-nav__link--active">
+      Home
+    </a>
+    
+      
+<nav class="md-nav md-nav--secondary">
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="toc">Table of contents</label>
+    <ul class="md-nav__list" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#installing" title="Installing" class="md-nav__link">
+    Installing
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#example-usage" title="Example usage" class="md-nav__link">
+    Example usage
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#why" title="Why ?" class="md-nav__link">
+    Why ?
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#main-features" title="Main features" class="md-nav__link">
+    Main features
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#see-also" title="See Also" class="md-nav__link">
+    See Also
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#want-to-contribute" title="Want to contribute ?" class="md-nav__link">
+    Want to contribute ?
+  </a>
+  
+</li>
+      
+      
+      
+    </ul>
+  
+</nav>
+    
+  </li>
+
+    
+      
+      
+      
+
+
+  <li class="md-nav__item">
+    <a href="usage/" title="Usage details" class="md-nav__link">
+      Usage details
+    </a>
+  </li>
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="toc">
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+<nav class="md-nav md-nav--secondary">
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="toc">Table of contents</label>
+    <ul class="md-nav__list" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#installing" title="Installing" class="md-nav__link">
+    Installing
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#example-usage" title="Example usage" class="md-nav__link">
+    Example usage
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#why" title="Why ?" class="md-nav__link">
+    Why ?
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#main-features" title="Main features" class="md-nav__link">
+    Main features
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#see-also" title="See Also" class="md-nav__link">
+    See Also
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#want-to-contribute" title="Want to contribute ?" class="md-nav__link">
+    Want to contribute ?
+  </a>
+  
+</li>
+      
+      
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          <div class="md-content">
+            <article class="md-content__inner md-typeset">
+              
+                
+                  <a href="https://github.com/smarie/python-classtools-autocode/edit/master/docs/index.md" title="Edit this page" class="md-icon md-content__icon">edit</a>
+                
+                
+                <h1 id="python-classtools-autocode">python-classtools-autocode<a class="headerlink" href="#python-classtools-autocode" title="Permanent link">&para;</a></h1>
+<p><a href="https://travis-ci.org/smarie/python-classtools-autocode"><img alt="Build Status" src="https://travis-ci.org/smarie/python-classtools-autocode.svg?branch=master" /></a> <a href="https://codecov.io/gh/smarie/python-classtools-autocode"><img alt="codecov" src="https://codecov.io/gh/smarie/python-classtools-autocode/branch/master/graph/badge.svg" /></a> <a href="https://smarie.github.io/python-classtools-autocode/"><img alt="Documentation" src="https://img.shields.io/badge/docs-latest-blue.svg" /></a></p>
+<p><code>classtools-autocode</code> provides tools to automatically generate python 3.5+ classes code, such as <strong>constructor body</strong> or <strong>properties getters/setters</strong>, along with optional support of <strong>validation contracts</strong>.</p>
+<p>The objective of this library is to reduce the amount of redundancy by automatically generating parts of the code from the information already available somewhere else (typically, in the constructor signature). The intent is similar to <a href="https://github.com/python-attrs/attrs">attrs</a>: remove boilerplate.</p>
+<h2 id="installing">Installing<a class="headerlink" href="#installing" title="Permanent link">&para;</a></h2>
+<div class="codehilite"><pre><span></span>&gt; pip install pyoad
+</pre></div>
+
+
+<p>You may wish to also install <a href="https://andreacensi.github.io/contracts/index.html">PyContracts</a> or <a href="https://github.com/RussBaz/enforce">enforce</a> in order to use the <code>@contract</code> or <code>@runtime_validation</code> annotations shown in this documentation.</p>
+<div class="codehilite"><pre><span></span>&gt; pip install PyContracts
+&gt; pip install enforce
+</pre></div>
+
+
+<h2 id="example-usage">Example usage<a class="headerlink" href="#example-usage" title="Permanent link">&para;</a></h2>
+<p>The following snippet shows a <code>HouseConfiguration</code> class with four attributes.
+Each attribute is validated against the expected type everytime you try to set it (constructor AND modifications), and the <code>surface</code> attribute is further validated for positiveness. Notice the size of the resulting code !</p>
+<div class="codehilite"><pre><span></span><span class="kn">from</span> <span class="nn">classtools_autocode</span> <span class="kn">import</span> <span class="n">Boolean</span><span class="p">,</span> <span class="n">autoargs</span><span class="p">,</span> <span class="n">autoprops</span><span class="p">,</span> <span class="n">setter_override</span>
+<span class="kn">from</span> <span class="nn">numbers</span> <span class="kn">import</span> <span class="n">Real</span><span class="p">,</span> <span class="n">Integral</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Optional</span>
+<span class="kn">from</span> <span class="nn">enforce</span> <span class="kn">import</span> <span class="n">runtime_validation</span><span class="p">,</span> <span class="n">config</span>
+
+<span class="n">config</span><span class="p">(</span><span class="nb">dict</span><span class="p">(</span><span class="n">mode</span><span class="o">=</span><span class="s1">&#39;covariant&#39;</span><span class="p">))</span>  <span class="c1"># to accept subclasses in validation</span>
+
+<span class="nd">@runtime_validation</span>
+<span class="nd">@autoprops</span>
+<span class="k">class</span> <span class="nc">HouseConfiguration</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+    <span class="nd">@autoargs</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span>
+                 <span class="n">name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+                 <span class="n">surface</span><span class="p">:</span> <span class="n">Real</span><span class="p">,</span>
+                 <span class="n">nb_floors</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Integral</span><span class="p">]</span> <span class="o">=</span> <span class="mi">1</span><span class="p">,</span>
+                 <span class="n">with_windows</span><span class="p">:</span> <span class="n">Boolean</span> <span class="o">=</span> <span class="bp">False</span><span class="p">):</span>
+        <span class="k">pass</span>
+
+    <span class="c1"># -- overriden setter for surface for custom validation</span>
+    <span class="nd">@setter_override</span>
+    <span class="k">def</span> <span class="nf">surface</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">surface</span><span class="p">):</span>
+        <span class="k">assert</span> <span class="n">surface</span> <span class="o">&gt;</span> <span class="mi">0</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_surface</span> <span class="o">=</span> <span class="n">surface</span>
+</pre></div>
+
+
+<p>We can test that validation works:</p>
+<div class="codehilite"><pre><span></span><span class="c1"># Test</span>
+<span class="n">t</span> <span class="o">=</span> <span class="n">HouseConfiguration</span><span class="p">(</span><span class="s1">&#39;test&#39;</span><span class="p">,</span> <span class="mi">12</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
+<span class="n">t</span><span class="o">.</span><span class="n">nb_floors</span> <span class="o">=</span> <span class="bp">None</span>  <span class="c1"># Declared &#39;Optional&#39;: no error</span>
+<span class="n">t</span><span class="o">.</span><span class="n">nb_floors</span> <span class="o">=</span> <span class="mf">2.2</span>   <span class="c1"># Type validation: enforce raises a RuntimeTypeError</span>
+<span class="n">t</span><span class="o">.</span><span class="n">surface</span> <span class="o">=</span> <span class="mi">0</span>       <span class="c1"># Custom validation: our code raises an AssertionError</span>
+</pre></div>
+
+
+<h2 id="why">Why ?<a class="headerlink" href="#why" title="Permanent link">&para;</a></h2>
+<p>Python's primitive types (in particular <code>dict</code> and <code>tuple</code>) and it's dynamic typing system make it extremely powerful, to the point that it is often more convenient for developers to use primitive types or generic dynamic objects such as <a href="https://github.com/Infinidat/munch">Munch</a>, rather than small custom classes.</p>
 <p>However there are certain cases where developers still want to define their own classes, for example to provide strongly-typed APIs to their clients. In such case, <em>separation of concerns</em> will typically lead developers to enforce attribute value validation directly in the class, rather than in the code using the object. Eventually developers end up with big classes like this one:</p>
-<pre><code class="python">from classtools_autocode import check_var
-from typing import Optional, Union
-from warnings import warn
+<div class="codehilite"><pre><span></span><span class="kn">from</span> <span class="nn">classtools_autocode</span> <span class="kn">import</span> <span class="n">check_var</span><span class="p">,</span> <span class="n">Boolean</span>
+<span class="kn">from</span> <span class="nn">numbers</span> <span class="kn">import</span> <span class="n">Real</span><span class="p">,</span> <span class="n">Integral</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Optional</span><span class="p">,</span> <span class="n">Union</span>
 
-class HouseConfiguration(object):
+<span class="k">class</span> <span class="nc">HouseConfiguration</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
 
-    def __init__(self, name: str, surface: Union[int, float], nb_floors: Optional[int], 
-    with_windows: bool = False):
-        self.name = name
-        self.surface = surface
-        self.nb_floors = nb_floors
-        self.with_windows = with_windows
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span>
+                 <span class="n">name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+                 <span class="n">surface</span><span class="p">:</span> <span class="n">Real</span><span class="p">,</span>
+                 <span class="n">nb_floors</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Integral</span><span class="p">]</span> <span class="o">=</span> <span class="mi">1</span><span class="p">,</span>
+                 <span class="n">with_windows</span><span class="p">:</span> <span class="n">Boolean</span> <span class="o">=</span> <span class="bp">False</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="n">name</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">surface</span> <span class="o">=</span> <span class="n">surface</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">nb_floors</span> <span class="o">=</span> <span class="n">nb_floors</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">with_windows</span> <span class="o">=</span> <span class="n">with_windows</span>
 
-    # --name
-    @property
-    def name(self):
-        return self._name
+    <span class="c1"># --name</span>
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">name</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_name</span>
 
-    @name.setter
-    def name(self, name: str):
-        check_var(name, var_name='name', var_types=str)
-        self._name = name
+    <span class="nd">@name.setter</span>
+    <span class="k">def</span> <span class="nf">name</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">:</span> <span class="nb">str</span><span class="p">):</span>
+        <span class="n">check_var</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">var_name</span><span class="o">=</span><span class="s1">&#39;name&#39;</span><span class="p">,</span> <span class="n">var_types</span><span class="o">=</span><span class="nb">str</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_name</span> <span class="o">=</span> <span class="n">name</span>
 
-    # --surface
-    @property
-    def surface(self) -&gt; Union[int, float]:
-        return self._surface
+    <span class="c1"># --surface</span>
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">surface</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Real</span><span class="p">:</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_surface</span>
 
-    @surface.setter
-    def surface(self, surface: Union[int, float]):
-        check_var(surface, var_name='surface', var_types=[int,float], min_value=0)
-        warn('You should really not do that..')
-        self._surface = surface
+    <span class="nd">@surface.setter</span>
+    <span class="k">def</span> <span class="nf">surface</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">surface</span><span class="p">:</span> <span class="n">Real</span><span class="p">):</span>
+        <span class="n">check_var</span><span class="p">(</span><span class="n">surface</span><span class="p">,</span> <span class="n">var_name</span><span class="o">=</span><span class="s1">&#39;surface&#39;</span><span class="p">,</span> <span class="n">var_types</span><span class="o">=</span><span class="n">Real</span><span class="p">,</span> 
+                  <span class="n">min_value</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">min_strict</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_surface</span> <span class="o">=</span> <span class="n">surface</span>
 
-    # --nb_floors
-    @property
-    def nb_floors(self) -&gt; Optional[int]:
-        return self._nb_floors
+    <span class="c1"># --nb_floors</span>
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">nb_floors</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Integral</span><span class="p">]:</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_nb_floors</span>
 
-    @nb_floors.setter
-    def nb_floors(self, nb_floors: Optional[int]):
-        check_var(nb_floors, var_name='nb_floors', var_types=int, min_value=0, enforce_not_none=False)
-        self._surface = nb_floors #
+    <span class="nd">@nb_floors.setter</span>
+    <span class="k">def</span> <span class="nf">nb_floors</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">nb_floors</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Integral</span><span class="p">]):</span>
+        <span class="n">check_var</span><span class="p">(</span><span class="n">nb_floors</span><span class="p">,</span> <span class="n">var_name</span><span class="o">=</span><span class="s1">&#39;nb_floors&#39;</span><span class="p">,</span> <span class="n">var_types</span><span class="o">=</span><span class="n">Integral</span><span class="p">,</span> 
+                  <span class="n">enforce_not_none</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_surface</span> <span class="o">=</span> <span class="n">nb_floors</span> <span class="c1"># !**</span>
 
-    # --with_windows
-    @property
-    def with_windows(self) -&gt; bool:
-        return self._with_windows
+    <span class="c1"># --with_windows</span>
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">with_windows</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Boolean</span><span class="p">:</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_with_windows</span>
 
-    @with_windows.setter
-    def with_windows(self, with_windows: bool):
-        check_var(with_windows, var_name='with_windows', var_types=bool)
-        self._with_windows = with_windows
-</code></pre>
+    <span class="nd">@with_windows.setter</span>
+    <span class="k">def</span> <span class="nf">with_windows</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">with_windows</span><span class="p">:</span> <span class="n">Boolean</span><span class="p">):</span>
+        <span class="n">check_var</span><span class="p">(</span><span class="n">with_windows</span><span class="p">,</span> <span class="n">var_name</span><span class="o">=</span><span class="s1">&#39;with_windows&#39;</span><span class="p">,</span> <span class="n">var_types</span><span class="o">=</span><span class="n">Boolean</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_with_windows</span> <span class="o">=</span> <span class="n">with_windows</span>
+</pre></div>
 
-<p>Now that's <strong>a lot of code</strong> - and only for 4 attributes ! Not mentioning the code for <code>check_var</code> that was not included here for the sake of readability (I include it in the library, for reference).  And guess what - it is still highly prone to <strong>human mistakes</strong>. For example I made a mistake in the setter for <code>nb_floors</code>, did you spot it ? Also it makes the code <strong>less readable</strong>: did you spot that the setter for the surface property is different from the others?</p>
+
+<p>Now that's <strong>a lot of code</strong> - and only for 4 attributes ! Not mentioning the code for <code>check_var</code> that was not included here for the sake of readability (I include it in the library, for reference). And guess what - it is still highly prone to <strong>human mistakes</strong>. For example I made a mistake in the setter for <code>nb_floors</code>, did you spot it ? Also it makes the code <strong>less readable</strong>: did you spot that the setter for the surface property is different from the others?</p>
 <p>Really, <em>"there must be a better way"</em> : yes there is, and that's what this library provides - it can be used alone, or in combination with <a href="https://andreacensi.github.io/contracts/index.html">PyContracts</a> and/or any PEP484-based checker such as <a href="https://github.com/RussBaz/enforce">enforce</a>, <a href="https://github.com/agronholm/typeguard">typeguard</a>, <a href="https://github.com/prechelt/typecheck-decorator">typecheck-decorator</a>, etc. in order to generate all the repetitive code for you :</p>
-<pre><code class="python">from classtools_autocode import autoprops, autoargs, setter_override
-from typing import Optional, Union
-from contracts import contract
-from warnings import warn
+<div class="codehilite"><pre><span></span><span class="kn">from</span> <span class="nn">classtools_autocode</span> <span class="kn">import</span> <span class="n">Boolean</span><span class="p">,</span> <span class="n">autoprops</span><span class="p">,</span> <span class="n">autoargs</span><span class="p">,</span> <span class="n">setter_override</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Optional</span><span class="p">,</span> <span class="n">Union</span>
+<span class="kn">from</span> <span class="nn">numbers</span> <span class="kn">import</span> <span class="n">Real</span><span class="p">,</span> <span class="n">Integral</span>
+<span class="kn">from</span> <span class="nn">contracts</span> <span class="kn">import</span> <span class="n">contract</span>
 
-@autoprops
-class HouseConfiguration(object):
+<span class="nd">@autoprops</span>
+<span class="k">class</span> <span class="nc">HouseConfiguration</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
 
-    @autoargs
-    @contract(name='str[&gt;0]', 
-              surface='(int|float),&gt;=0',
-              nb_floors='None|int,&gt;=0',
-              with_windows='bool')
-    def __init__(self, 
-                 name: str, 
-                 surface: Union[int, float], 
-                 nb_floors: Optional[int], 
-                 with_windows: bool = False):
-        pass
+    <span class="nd">@autoargs</span>
+    <span class="nd">@contract</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s1">&#39;str[&gt;0]&#39;</span><span class="p">,</span> 
+              <span class="n">surface</span><span class="o">=</span><span class="s1">&#39;(int|float),&gt;=0&#39;</span><span class="p">,</span>
+              <span class="n">nb_floors</span><span class="o">=</span><span class="s1">&#39;None|int&#39;</span><span class="p">,</span>
+              <span class="n">with_windows</span><span class="o">=</span><span class="s1">&#39;bool&#39;</span><span class="p">)</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> 
+                 <span class="n">name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> 
+                 <span class="n">surface</span><span class="p">:</span> <span class="n">Real</span><span class="p">,</span> 
+                 <span class="n">nb_floors</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Integral</span><span class="p">]</span> <span class="o">=</span> <span class="mi">1</span><span class="p">,</span> 
+                 <span class="n">with_windows</span><span class="p">:</span> <span class="n">Boolean</span> <span class="o">=</span> <span class="bp">False</span><span class="p">):</span>
+        <span class="k">pass</span>
 
-    # -- overriden setter for surface - no need to repeat the @contract
-    @setter_override
-    def surface(self, surface: Union[int, float]):
-        warn('You should really not do that..')
-        self._surface = surface
-</code></pre>
+    <span class="c1"># -- overriden setter for surface - no need to repeat the @contract</span>
+    <span class="nd">@setter_override</span>
+    <span class="k">def</span> <span class="nf">surface</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">surface</span><span class="p">:</span> <span class="n">Real</span><span class="p">):</span>
+        <span class="k">assert</span> <span class="n">surface</span> <span class="o">&gt;</span> <span class="mi">0</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_surface</span> <span class="o">=</span> <span class="n">surface</span>
+</pre></div>
 
-<p>As you can see, now all information is present only once: </p>
+
+<p>As you can see, this is more compact: </p>
 <ul>
 <li>all object attributes (mandatory and optional with their default value) are declared in the <code>__init__</code> signature along with their optional <a href="https://docs.python.org/3.5/library/typing.html">PEP 484 type hints</a></li>
 <li>all attribute validation contracts are declared once in the <code>@contract</code> annotation of <code>__init__</code></li>
 <li>it is still possible to implement custom logic in a getter or a setter, without having to repeat the <code>@contract</code></li>
 </ul>
-<p>Note: actually one might argue that the type information is duplicated. This is true if you use PyContracts, but not if you use type checkers relying on PEP484 directly such as <a href="https://github.com/RussBaz/enforce">enforce</a>:</p>
-<pre><code class="python">from classtools_autocode import autoprops, autoargs, setter_override
-from typing import Optional, Union
-from enforce import runtime_validation
-from warnings import warn
-
-@runtime_validation
-@autoprops
-class HouseConfiguration(object):
-
-    @autoargs
-    def __init__(self, 
-                 name: str, 
-                 surface: Union[int, float], 
-                 nb_floors: Optional[int], 
-                 with_windows: bool = False):
-        pass
-
-    # -- overriden setter for surface - need to repeat the PEP484 type hints
-    @setter_override
-    def surface(self, surface: Union[int, float]):
-        warn('You should really not do that..')
-        self._surface = surface
-</code></pre>
-
-<h2 id="main-features">Main features</h2>
+<p>Note: unfortunately with PyContracts the type information is duplicated. However if you use type checkers relying on PEP484 directly such as <a href="https://github.com/RussBaz/enforce">enforce</a>, <a href="https://github.com/agronholm/typeguard">typeguard</a>, <a href="https://github.com/prechelt/typecheck-decorator">typecheck-decorator</a>, etc. this is not the case - as shown in the <a href="#example_usage">initial example with enforce</a>.</p>
+<h2 id="main-features">Main features<a class="headerlink" href="#main-features" title="Permanent link">&para;</a></h2>
 <ul>
 <li>
 <p><strong><code>@autoargs</code></strong> is a decorator for the <code>__init__</code> method of a class. It automatically assigns all of the <code>__init__</code> method's parameters to <code>self</code>. For more fine-grain tuning, explicit inclusion and exclusion lists are supported, too. <em>Note: the original @autoargs idea and code come from <a href="http://stackoverflow.com/questions/3652851/what-is-the-best-way-to-do-automatic-attribute-assignment-in-python-and-is-it-a#answer-3653049">this answer from utnubu</a></em></p>
@@ -252,245 +524,7 @@ class HouseConfiguration(object):
 <p>Equivalent manual wrapper methods are provided for all decorators in this library: <code>autoargs_decorate(init_func, include, exclude)</code>, <code>autoprops_decorate(cls, include, exclude)</code>, <code>autoprops_override_decorate(func, attribute, is_getter)</code>. </p>
 </li>
 </ul>
-<h2 id="installation">Installation</h2>
-<h3 id="recommended-create-a-clean-virtual-environment">Recommended : create a clean virtual environment</h3>
-<p>We strongly recommend that you use conda <em>environment</em> or pip <em>virtualenv</em>/<em>venv</em> in order to better manage packages. Once you are in your virtual environment, open a terminal and check that the python interpreter is correct:</p>
-<pre><code class="bash">(Windows)&gt;  where python
-(Linux)  &gt;  which python
-</code></pre>
-
-<p>The first executable that should show up should be the one from the virtual environment.</p>
-<h3 id="installation-steps">Installation steps</h3>
-<p>This package is available on <code>PyPI</code>. You may therefore use <code>pip</code> to install from a release</p>
-<pre><code class="bash">&gt; pip install classtools_autocode
-</code></pre>
-
-<h3 id="checkers-installation-optional">Checkers installation (optional)</h3>
-<p>You may wish to also install <a href="https://andreacensi.github.io/contracts/index.html">PyContracts</a> or <a href="https://github.com/RussBaz/enforce">enforce</a> in order to use the <code>@contract</code> and <code>@runtime_validation</code> annotations respectively.</p>
-<pre><code class="bash">&gt; pip install PyContracts
-&gt; pip install enforce
-</code></pre>
-
-<h3 id="uninstalling">Uninstalling</h3>
-<p>As usual : </p>
-<pre><code class="bash">&gt; pip uninstall classtools_autocode
-</code></pre>
-
-<h2 id="usage-details">Usage details</h2>
-<h3 id="autoargs">@autoargs</h3>
-<p>Automatically affects the contents of a function to self. Initial code and test examples from <a href="http://stackoverflow.com/questions/3652851/what-is-the-best-way-to-do-automatic-attribute-assignment-in-python-and-is-it-a#answer-3653049">this answer from utnubu</a>.</p>
-<p>A few illustrative examples can be found in the unit tests below.</p>
-<ul>
-<li>Basic functionality, no customization - all constructor arguments are auto-assigned: </li>
-</ul>
-<pre><code class="python">from classtools_autocode import autoargs
-
-class A(object):
-    @autoargs
-    def __init__(self, foo, path, debug=False):
-        pass
-
-# Test : 
-# -- create an instance
-a = A('rhubarb', 'pie', debug=True)
-
-# -- check that the fields exist and have the correct value
-assert a.foo == 'rhubarb'
-assert a.path == 'pie'
-assert a.debug == True
-</code></pre>
-
-<ul>
-<li>Basic functionality, with special case of variable arguments <code>*args</code>. Note that the variable arguments are stored in a single attribute: </li>
-</ul>
-<pre><code class="python">class B(object):
-    @autoargs
-    def __init__(self, foo, path, debug=False, *args):
-        pass
-
-# Test : 
-# -- create an instance
-a = B('rhubarb', 'pie', True, 100, 101)
-# -- check that the fields exist and have the correct value
-assert a.foo == 'rhubarb'
-assert a.path == 'pie'
-assert a.debug == True
-# -- *args is in a single attribute
-assert a.args == (100, 101)
-</code></pre>
-
-<ul>
-<li>Basic functionality, with special case of variable arguments <code>*args</code> and keyword arguments <code>**kw</code>. Note that <code>*args</code> are stored in a single attribute while <code>**kw</code> are stored in several attributes</li>
-</ul>
-<pre><code class="python">class C(object):
-    @autoargs
-    def __init__(self, foo, path, debug=False, *args, **kw):
-        pass
-
-# Test : 
-# -- create an instance
-a = C('rhubarb', 'pie', True, 100, 101, verbose=True, bar='bar')
-# -- check that the fields exist and have the correct value
-assert a.foo == 'rhubarb'
-assert a.path == 'pie'
-assert a.debug == True
-# -- *args is in a single attribute
-assert a.args == (100, 101)
-# -- **kw is dispatched in several attributes
-assert a.verbose == True
-assert a.bar == 'bar'
-</code></pre>
-
-<ul>
-<li>Explicit list of names to include:</li>
-</ul>
-<pre><code class="python">class C(object):
-    @autoargs(include=('bar', 'baz', 'verbose'))
-    def __init__(self, foo, bar, baz, verbose=False):
-        pass
-
-# Test : 
-# -- create an instance
-a = C('rhubarb', 'pie', 1)
-# -- check that the fields exist and have the correct value
-assert a.bar == 'pie'
-assert a.baz == 1
-assert a.verbose == False
-# -- check that a non-included field does not exist
-print(a.foo)# raises AttributeError
-</code></pre>
-
-<ul>
-<li>Explicit list of names to exclude:</li>
-</ul>
-<pre><code class="python">class C(object):
-    @autoargs(exclude=('bar', 'baz', 'verbose'))
-    def __init__(self, foo, bar, baz, verbose=False):
-        pass
-
-# Test : 
-# -- create an instance
-a = C('rhubarb', 'pie', 1)
-# -- check that the fields exist and have the correct value
-assert a.foo == 'rhubarb'
-# -- check that the non-included fields do not exist
-print(a.bar)  # raises AttributeError
-print(a.baz)  # raises AttributeError
-print(a.verbose)  # raises AttributeError
-</code></pre>
-
-<h3 id="autoprops">@autoprops</h3>
-<p>Automatically generates all properties getters and setters from the class constructor.</p>
-<ul>
-<li>Basic functionality, no customization - all constructor arguments become properties: </li>
-</ul>
-<pre><code class="python">@autoprops
-class FooConfigA(object):
-
-    @autoargs
-    def __init__(self, a: str, b: List[str]):
-        pass
-
-t = FooConfigA('rhubarb', ['pie', 'pie2'])
-
-# there are no contracts on the generated setters
-t.a=''
-t.b=['r','']
-# check that the generated getters work
-assert t.a == ''
-assert t.b[0] == 'r'
-</code></pre>
-
-<ul>
-<li>if a <strong><a href="https://andreacensi.github.io/contracts/index.html">PyContracts</a></strong> <code>@contract</code> annotation exist on the <code>__init__</code> method, mentioning a contract for a given parameter, the
-parameter contract will be added on the generated setter method:</li>
-</ul>
-<pre><code class="python">from contracts import ContractNotRespected, contract
-
-@autoprops
-class FooConfigA(object):
-
-    @autoargs
-    @contract(a='str[&gt;0]', b='list[&gt;0](str[&gt;0])')
-    def __init__(self, a: str, b: List[str]):
-        pass
-
-t = FooConfigA('rhubarb', ['pie', 'pie2'])
-
-# check that the generated getters work
-t.b=['r']
-assert t.b[0] == 'r'
-
-# check that there are contracts on the generated setters
-t.a = ''  # raises ContractNotRespected
-t.b = ['r','']  # raises ContractNotRespected
-</code></pre>
-
-<ul>
-<li>The user may override the generated getter and/or setter by creating them explicitly in the class and annotating
-them with <code>@getter_override</code> or <code>@setter_override</code>. Note that the contract will still be dynamically added on the setter, even if the setter already has one (in such case a <code>UserWarning</code> will be issued)</li>
-</ul>
-<pre><code class="python">@autoprops
-class FooConfigC(object):
-
-    @autoargs
-    @contract(a='str[&gt;0]', b='list[&gt;0](str[&gt;0])')
-    def __init__(self, a: str, b: List[str]):
-        pass
-
-    @getter_override
-    def a(self):
-        # in addition to getting the fields we'd like to print something
-        print('a is being read. Its value is \'' + str(self._a) + '\'')
-        return self._a
-
-    @setter_override(attribute='b')
-    def another_name(self, toto: List[str]):
-        # in addition to setting the fields we'd like to print something
-        print('Property \'b\' was set to \'' + str(toto) + '\'')
-        self._b = toto
-
-t = FooConfigC('rhubarb', ['pie', 'pie2'])
-
-# check that we can still read a's value
-assert t.a == 'rhubarb'
-
-# check that 'b' still has a getter generated
-t.b = ['eh', 'oh']
-assert t.b == ['eh', 'oh']
-
-# check that 'a' still has a contract on its setter
-t.a = ''  # raises ContractNotRespected
-
-# check that 'b' still has a contract on its setter
-t.b=['']  # raises ContractNotRespected
-</code></pre>
-
-<ul>
-<li>Note: you may also perform the same action without decorator, using <code>autoprops_decorate(cls)</code>.</li>
-</ul>
-<pre><code class="python"># we don't use @autoprops here
-class FooConfigA(object):
-    @autoargs
-    @contract(a='str[&gt;0]', b='list[&gt;0](str[&gt;0])')
-    def __init__(self, a: str, b: List[str]):
-        pass
-
-# we execute it here
-autoprops_decorate(FooConfigA)
-
-t = FooConfigA('rhubarb', ['pie', 'pie2'])
-
-# check that the generated getters work
-t.b = ['r']
-assert t.b[0] == 'r'
-
-# check that there are contracts on the generated setters
-t.a = ''  # raises ContractNotRespected
-t.b = ['r','']  # raises ContractNotRespected
-</code></pre>
-
-<h2 id="see-also">See Also</h2>
+<h2 id="see-also">See Also<a class="headerlink" href="#see-also" title="Permanent link">&para;</a></h2>
 <ul>
 <li>
 <p>Initial idea of autoargs : <a href="http://stackoverflow.com/questions/3652851/what-is-the-best-way-to-do-automatic-attribute-assignment-in-python-and-is-it-a#answer-3653049">this answer from utnubu</a></p>
@@ -527,46 +561,71 @@ t.b = ['r','']  # raises ContractNotRespected
 </li>
 </ul>
 <p><em>Do you like this library ? You might also like <a href="https://github.com/smarie?utf8=%E2%9C%93&amp;tab=repositories&amp;q=&amp;type=&amp;language=python">these</a></em> </p>
-<h2 id="want-to-contribute">Want to contribute ?</h2>
+<h2 id="want-to-contribute">Want to contribute ?<a class="headerlink" href="#want-to-contribute" title="Permanent link">&para;</a></h2>
 <p>Details on the github page: <a href="https://github.com/smarie/python-classtools-autocode">https://github.com/smarie/python-classtools-autocode</a> </p>
+                
+                  
+                
               
-            </div>
+              
+                
+              
+            </article>
           </div>
-          <footer>
-  
-
-  <hr/>
-
-  <div role="contentinfo">
-    <!-- Copyright etc -->
-    
-  </div>
-
-  Built with <a href="http://www.mkdocs.org">MkDocs</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>.
-</footer>
-	  
         </div>
+      </main>
+      
+        
+<footer class="md-footer">
+  
+    <div class="md-footer-nav">
+      <nav class="md-footer-nav__inner md-grid">
+        
+        
+          <a href="usage/" title="Usage details" class="md-flex md-footer-nav__link md-footer-nav__link--next" rel="next">
+            <div class="md-flex__cell md-flex__cell--stretch md-footer-nav__title">
+              <span class="md-flex__ellipsis">
+                <span class="md-footer-nav__direction">
+                  Next
+                </span>
+                Usage details
+              </span>
+            </div>
+            <div class="md-flex__cell md-flex__cell--shrink">
+              <i class="md-icon md-icon--arrow-forward md-footer-nav__button"></i>
+            </div>
+          </a>
+        
+      </nav>
+    </div>
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-footer-copyright">
+        
+        powered by
+        <a href="http://www.mkdocs.org" title="MkDocs">MkDocs</a>
+        and
+        <a href="http://squidfunk.github.io/mkdocs-material/" title="Material for MkDocs">
+          Material for MkDocs</a>
       </div>
-
-    </section>
-    
+      
+        
+      
+    </div>
   </div>
-
-  <div class="rst-versions" role="note" style="cursor: pointer">
-    <span class="rst-current-version" data-toggle="rst-current-version">
+</footer>
       
-          <a href="https://github.com/smarie/python-classtools-autocode" class="fa fa-github" style="float: left; color: #fcfcfc"> GitHub</a>
+    </div>
+    
+      <script src="./assets/javascripts/application-1d6ee6ee6c.js"></script>
       
       
+      <script>app.initialize({url:{base:"."}})</script>
       
-    </span>
-</div>
-    <script src="./js/theme.js"></script>
-
-</body>
+    
+    
+      
+    
+  </body>
 </html>
-
-<!--
-MkDocs version : 0.16.3
-Build Date UTC : 2017-06-02 08:00:33
--->
