@@ -4,8 +4,9 @@ from warnings import warn
 
 from decorator import decorate
 
-from classtools_autocode.autoargs import get_constructor, _sieve, _call_func_decorator_with_or_without_args, \
-    _call_class_decorator_with_or_without_args
+from classtools_autocode.autoargs import get_constructor, _sieve
+from classtools_autocode.utils import _create_function_decorator__robust_to_args, \
+    _create_class_decorator__robust_to_args
 
 __GETTER_OVERRIDE_ANNOTATION = '__getter_override__'
 __SETTER_OVERRIDE_ANNOTATION = '__setter_override__'
@@ -23,57 +24,6 @@ class DuplicateOverrideError(Exception):
     """ This is raised whenever a getter or setter is overriden twice for the same attribute"""
 
 
-
-def getter_override(attribute:str = None):
-    """
-    A decorator to indicate an overriden getter for a given attribute. If the attribute name is None, the function name
-    will be used as the attribute name.
-
-    :param attribute: the attribute name for which the decorated function is an overriden getter
-    :return:
-    """
-    return _call_func_decorator_with_or_without_args(autoprops_override_decorate, attribute, is_getter=True)
-
-
-def setter_override(attribute:str = None):
-    """
-    A decorator to indicate an overriden setter for a given attribute. If the attribute name is None, the function name
-     will be used as the attribute name. The @contract will still be dynamically added.
-
-    :param attribute: the attribute name for which the decorated function is an overriden setter
-    :return:
-    """
-    return _call_func_decorator_with_or_without_args(autoprops_override_decorate, attribute, is_getter=False)
-
-
-def autoprops_override_decorate(func: Callable, attribute:str = None, is_getter:bool = True) -> Callable:
-    """
-    Used to decorate a function as an overriden getter or setter, without using the @getter_override or
-    @setter_override annotations. If the overriden setter has no @contract, the contract will still be
-     dynamically added. Note: this should be executed BEFORE @autoprops or autoprops_decorate().
-
-    :param func: the function on which to execute. Note that it won't be wrapped but simply annotated.
-    :param attribute: the attribute name. If None, the function name will be used
-    :param is_getter: True for a getter override, False for a setter override.
-    :return:
-    """
-
-    # Simply annotate the fact that this is a function
-    attr_name = attribute or func.__name__
-    if is_getter:
-        if hasattr(func, __GETTER_OVERRIDE_ANNOTATION):
-            raise DuplicateOverrideError('Getter is overriden twice for attribute name : ' + attr_name)
-        else:
-            func.__getter_override__ = attr_name
-    else:
-        if hasattr(func, __SETTER_OVERRIDE_ANNOTATION):
-            raise DuplicateOverrideError('Setter is overriden twice for attribute name : ' + attr_name)
-        else:
-            func.__setter_override__ = attr_name
-
-    return func
-
-
 def autoprops(include:Union[str, Tuple[str]]=None, exclude:Union[str, Tuple[str]]=None):
     """
     A decorator to automatically generate all properties getters and setters from the class constructor.
@@ -87,7 +37,7 @@ def autoprops(include:Union[str, Tuple[str]]=None, exclude:Union[str, Tuple[str]
     :param exclude: a named tuple of explicit attributes to exclude. In such case, include should be None.
     :return:
     """
-    return _call_class_decorator_with_or_without_args(autoprops_decorate, include, exclude=exclude)
+    return _create_class_decorator__robust_to_args(autoprops_decorate, include, exclude=exclude)
 
 
 def autoprops_decorate(cls: Type[Any], include: Union[str, Tuple[str]] = None,
@@ -147,8 +97,8 @@ def _execute_autoprops_on_class(object_type: Type[Any], include:Union[str, Tuple
         if _sieve(attr_name, include=include, exclude=exclude):
             added += attr_name
             attr_type = s.parameters[attr_name]._annotation
-            add_property(object_type, attr_name, attr_type,
-                         contracts_dict[attr_name] if attr_name in contracts_dict.keys() else None)
+            _add_property(object_type, attr_name, attr_type,
+                          contracts_dict[attr_name] if attr_name in contracts_dict.keys() else None)
 
     # 3. Finally check that there is no overriden setter or getter that does not correspond to an attribute
     extra_overrides = getmembers(object_type, predicate=(lambda fun: callable(fun) and
@@ -163,7 +113,7 @@ def _execute_autoprops_on_class(object_type: Type[Any], include:Union[str, Tuple
                                                     'getter/setter can not be overriden by function ' + extra_overrides[0][1].__qualname__)
 
 
-def add_property(object_type: Type[Any], property_name: str, property_type: type, property_contract: Any = None):
+def _add_property(object_type: Type[Any], property_name: str, property_type: type, property_contract: Any = None):
     """
     A method to dynamically add a property to a class with the given contract. If the property getter and/or setter
     has been overriden, it is taken into account too.
@@ -186,8 +136,8 @@ def add_property(object_type: Type[Any], property_name: str, property_type: type
 
     # 4. add the contract to the setter, if any
     if property_contract:
-        setter_fun_with_possible_contract = add_contract_to_setter(setter_fun, var_name, property_contract,
-                                                                   property_name)
+        setter_fun_with_possible_contract = _add_contract_to_setter(setter_fun, var_name, property_contract,
+                                                                    property_name)
     else:
         setter_fun_with_possible_contract = setter_fun
 
@@ -307,7 +257,7 @@ def _get_setter_fun(object_type: Type, property_name: str, property_type: Option
     return setter_fun, var_name
 
 
-def add_contract_to_setter(setter_fun, var_name, property_contract, property_name):
+def _add_contract_to_setter(setter_fun, var_name, property_contract, property_name):
 
     # 0. check that we can import contracts
     try:
@@ -315,7 +265,7 @@ def add_contract_to_setter(setter_fun, var_name, property_contract, property_nam
         from contracts import ContractNotRespected, contract
     except ImportError as e:
         raise Exception(
-            'Use of add_contract_to_setter requires that PyContract library is installed. Check that you can \'import contracts\'')
+            'Use of _add_contract_to_setter requires that PyContract library is installed. Check that you can \'import contracts\'')
 
     # -- check if a contract already exists on the function
     if hasattr(setter_fun, '__contracts__'):
@@ -346,3 +296,52 @@ def add_contract_to_setter(setter_fun, var_name, property_contract, property_nam
     setter_fun_with_possible_contract = decorate(setter_fun_with_possible_contract, _contracts_parser_interceptor)
     return setter_fun_with_possible_contract
 
+
+def getter_override(attribute:str = None):
+    """
+    A decorator to indicate an overriden getter for a given attribute. If the attribute name is None, the function name
+    will be used as the attribute name.
+
+    :param attribute: the attribute name for which the decorated function is an overriden getter
+    :return:
+    """
+    return _create_function_decorator__robust_to_args(autoprops_override_decorate, attribute, is_getter=True)
+
+
+def setter_override(attribute:str = None):
+    """
+    A decorator to indicate an overriden setter for a given attribute. If the attribute name is None, the function name
+     will be used as the attribute name. The @contract will still be dynamically added.
+
+    :param attribute: the attribute name for which the decorated function is an overriden setter
+    :return:
+    """
+    return _create_function_decorator__robust_to_args(autoprops_override_decorate, attribute, is_getter=False)
+
+
+def autoprops_override_decorate(func: Callable, attribute:str = None, is_getter:bool = True) -> Callable:
+    """
+    Used to decorate a function as an overriden getter or setter, without using the @getter_override or
+    @setter_override annotations. If the overriden setter has no @contract, the contract will still be
+     dynamically added. Note: this should be executed BEFORE @autoprops or autoprops_decorate().
+
+    :param func: the function on which to execute. Note that it won't be wrapped but simply annotated.
+    :param attribute: the attribute name. If None, the function name will be used
+    :param is_getter: True for a getter override, False for a setter override.
+    :return:
+    """
+
+    # Simply annotate the fact that this is a function
+    attr_name = attribute or func.__name__
+    if is_getter:
+        if hasattr(func, __GETTER_OVERRIDE_ANNOTATION):
+            raise DuplicateOverrideError('Getter is overriden twice for attribute name : ' + attr_name)
+        else:
+            func.__getter_override__ = attr_name
+    else:
+        if hasattr(func, __SETTER_OVERRIDE_ANNOTATION):
+            raise DuplicateOverrideError('Setter is overriden twice for attribute name : ' + attr_name)
+        else:
+            func.__setter_override__ = attr_name
+
+    return func

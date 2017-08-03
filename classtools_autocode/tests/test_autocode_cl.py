@@ -2,7 +2,7 @@ from typing import List, Union
 from unittest import TestCase
 
 from classtools_autocode import autoargs, autoprops, getter_override, setter_override, \
-    IllegalSetterSignatureException, DuplicateOverrideError, check_var, autoprops_decorate
+    IllegalSetterSignatureException, DuplicateOverrideError, check_var, autoprops_decorate, Boolean
 
 
 class TestAutoArgs(TestCase):
@@ -136,6 +136,20 @@ class TestAutoArgs(TestCase):
         with self.assertRaises(ValueError):
             class Dummy(object):
                 @autoargs(exclude='', include='')
+                def __init__(self, foo, bar, baz, verbose=False):
+                    pass
+
+    def test_autoargs_include_exclude_typos(self):
+
+        with self.assertRaises(ValueError):
+            class Dummy(object):
+                @autoargs(exclude='fo')
+                def __init__(self, foo, bar, baz, verbose=False):
+                    pass
+
+        with self.assertRaises(ValueError):
+            class Dummy(object):
+                @autoargs(include='fo')
                 def __init__(self, foo, bar, baz, verbose=False):
                     pass
 
@@ -281,7 +295,7 @@ class TestAutoProps(TestCase):
                     return self._a
 
                 @setter_override(attribute='b')
-                @contract()
+                @contract(toto='list[>0](str[>0])')
                 def another_name(self, toto: List[str]):
                     # in addition to setting the fields we'd like to print something
                     print('Property \'b\' was set to \'' + str(toto) + '\'')
@@ -395,18 +409,23 @@ class TestAutoProps(TestCase):
             # yes ; right now it is still a lambda, since using a named method does not seem to work :(
             self.assertTrue(e.args[0] == "<lambda>() missing 1 required positional argument: 'self'")
 
+
 class TestReadMe(TestCase):
     """
     just to test that what is written in the readme actually works :)
     """
 
-    def test_readme(self):
-
-        from typing import Optional
-        from warnings import warn
+    def test_readme_old_way(self):
+        from classtools_autocode import check_var, Boolean
+        from numbers import Real, Integral
+        from typing import Optional, Union
 
         class HouseConfiguration(object):
-            def __init__(self, name: str, surface: float, nb_floors: Optional[int], with_windows: bool = False):
+            def __init__(self,
+                         name: str,
+                         surface: Real,
+                         nb_floors: Optional[Integral] = 1,
+                         with_windows: Boolean = False):
                 self.name = name
                 self.surface = surface
                 self.nb_floors = nb_floors
@@ -418,75 +437,80 @@ class TestReadMe(TestCase):
                 return self._name
 
             @name.setter
-            def name(self, name):
+            def name(self, name: str):
                 check_var(name, var_name='name', var_types=str)
                 self._name = name
 
             # --surface
             @property
-            def surface(self):
+            def surface(self) -> Real:
                 return self._surface
 
             @surface.setter
-            def surface(self, surface):
-                check_var(surface, var_name='surface', var_types=[int, float], min_value=0)
-                warn('You should really not do that..')
+            def surface(self, surface: Real):
+                check_var(surface, var_name='surface', var_types=Real, min_value=0, min_strict=True)
                 self._surface = surface
 
             # --nb_floors
             @property
-            def nb_floors(self):
+            def nb_floors(self) -> Optional[Integral]:
                 return self._nb_floors
 
             @nb_floors.setter
-            def nb_floors(self, nb_floors):
-                check_var(nb_floors, var_name='nb_floors', var_types=int, min_value=0, enforce_not_none=False)
-                self._surface = nb_floors  # explicit error here :)
+            def nb_floors(self, nb_floors: Optional[Integral]):
+                check_var(nb_floors, var_name='nb_floors', var_types=Integral, enforce_not_none=False)
+                self._surface = nb_floors  # !**
 
             # --with_windows
             @property
-            def with_windows(self):
+            def with_windows(self) -> Boolean:
                 return self._with_windows
 
             @with_windows.setter
-            def with_windows(self, with_windows):
-                check_var(with_windows, var_name='with_windows', var_types=bool)
+            def with_windows(self, with_windows: Boolean):
+                check_var(with_windows, var_name='with_windows', var_types=Boolean)
                 self._with_windows = with_windows
 
-        HouseConfiguration('test', 0, 0)
+        HouseConfiguration('test', 0.1)
 
+    def test_readme_pycontracts(self):
 
         from contracts import contract, ContractNotRespected
+        from numbers import Real, Integral
+        from typing import Optional, Union
+
         @autoprops
         class HouseConfiguration(object):
             @autoargs
             @contract(name='str[>0]',
                       surface='(int|float),>=0',
-                      nb_floors='None|int,>=0',
+                      nb_floors='None|int',
                       with_windows='bool')
             def __init__(self,
                          name: str,
-                         surface: Union[int, float],
-                         nb_floors: Optional[int],
-                         with_windows: bool = False):
+                         surface: Real,
+                         nb_floors: Optional[Integral] = 1,
+                         with_windows: Boolean = False):
                 pass
 
-            # --overriden setter for surface
+            # -- overriden setter for surface - no need to repeat the @contract
             @setter_override
-            def surface(self, surface):
-                warn('You should really not do that..')
+            def surface(self, surface: Real):
+                assert surface > 0
                 self._surface = surface
 
-        t = HouseConfiguration('test', 0, 0)
+        t = HouseConfiguration('test', 0.1)
         t.nb_floors = None
         with self.assertRaises(ContractNotRespected):
-            t.nb_floors = -1
+            t.nb_floors = 2.2
         with self.assertRaises(ContractNotRespected):
             t.surface = -1
 
-
+        # from classtools_autocode import autoargs, autoprops, Boolean
+        import enforce as en
         from enforce import runtime_validation
-        from enforce.exceptions import RuntimeTypeError
+
+        en.config(dict(mode='covariant'))  # allow subclasses when validating types
 
         @runtime_validation
         @autoprops
@@ -494,19 +518,27 @@ class TestReadMe(TestCase):
             @autoargs
             def __init__(self,
                          name: str,
-                         surface: Union[int, float],
-                         nb_floors: Optional[int],
-                         with_windows: bool = False):
+                         surface: Real,
+                         nb_floors: Optional[Integral] = 1,
+                         with_windows: Boolean = False):
                 pass
 
-            # -- overriden setter for surface - no need to repeat the @contract
+            # -- overriden setter for surface for custom validation
             @setter_override
             def surface(self, surface):
-                warn('You should really not do that..')
+                assert surface > 0
                 self._surface = surface
 
+        t = HouseConfiguration('test', 12, 2)
 
-        t = HouseConfiguration('test', 0, 0)
+        # 'Optional' works
         t.nb_floors = None
+
+        # Type validation works
+        from enforce.exceptions import RuntimeTypeError
         with self.assertRaises(RuntimeTypeError):
-            t.nb_floors = ''
+            t.nb_floors = 2.2
+
+        # Custom validation works
+        with self.assertRaises(AssertionError):
+            t.surface = 0

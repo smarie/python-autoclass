@@ -1,5 +1,12 @@
 site_name: classtools-autocode
+# site_description: 'A short description of my project'
 repo_url: https://github.com/smarie/python-classtools-autocode
 pages:
     - Home: index.md
-theme: readthedocs
+    - Usage details: usage.md
+theme: material  # readthedocs  mkdocs
+
+markdown_extensions:
+  - admonition  # to add notes such as http://squidfunk.github.io/mkdocs-material/extensions/admonition/
+  - codehilite(guess_lang=false)
+  - toc(permalink=true)
