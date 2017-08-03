@@ -6,10 +6,25 @@ https://github.com/pypa/sampleproject
 
 from os import path
 
-from setuptools import setup
-from setuptools_scm import get_version
+from setuptools import setup, find_packages
 
 here = path.abspath(path.dirname(__file__))
+
+# *************** Dependencies *********
+INSTALL_REQUIRES = ['decorator']
+DEPENDENCY_LINKS = []
+SETUP_REQUIRES = ['pytest-runner', 'setuptools_scm', 'pypandoc', 'pandoc']
+TESTS_REQUIRE = ['pytest', 'pytest-logging', 'pytest-cov', 'PyContracts', 'enforce']
+EXTRAS_REQUIRE = {'contracts': ['PyContracts'],
+                  'enforce': ['enforce']}
+
+# simple check
+try:
+    from setuptools_scm import get_version
+except Exception as e:
+    raise Exception('Required packages for setup not found. You may wish you execute '
+                    '"pip install -r requirements-setup.txt" to install them or alternatively install them manually '
+                    'using conda or other system. The list is : ' + str(SETUP_REQUIRES)) from e
 
 # ************** ID card *****************
 DISTNAME = 'classtools_autocode'
@@ -36,18 +51,12 @@ except(ImportError):
          'documentation correctly')
     LONG_DESCRIPTION = open('README.md').read()
 
-# ************* VERSION AND DEPENDENCIES **************
+# ************* VERSION A **************
 # --Get the Version number from VERSION file, see https://packaging.python.org/single_source_version/ option 4.
 # THIS IS DEPRECATED AS WE NOW USE GIT TO MANAGE VERSION
 # with open(path.join(here, 'VERSION')) as version_file:
 #    VERSION = version_file.read().strip()
 
-INSTALL_REQUIRES = ['decorator']
-DEPENDENCY_LINKS = []
-SETUP_REQUIRES = ['setuptools_scm','pypandoc']
-TESTS_REQUIRE = ['nose','PyContracts','enforce']
-EXTRAS_REQUIRE = {'contracts': ['PyContracts'],
-                  'enforce': ['enforce']}
 
 setup(
     name=DISTNAME,
@@ -72,7 +81,7 @@ setup(
         #   3 - Alpha
         #   4 - Beta
         #   5 - Production/Stable
-        'Development Status :: 3 - Alpha',
+        'Development Status :: 5 - Production/Stable',
 
         # Indicate who your project is intended for
         'Intended Audience :: Developers',
@@ -90,6 +99,7 @@ setup(
         #'Programming Language :: Python :: 3.3',
         #'Programming Language :: Python :: 3.4',
         'Programming Language :: Python :: 3.5',
+        'Programming Language :: Python :: 3.6',
     ],
 
     # What does your project relate to?
@@ -97,7 +107,7 @@ setup(
 
     # You can just specify the packages manually here if your project is
     # simple. Or you can use find_packages().
-    packages=['classtools_autocode'], #find_packages(exclude=['contrib', 'docs', 'tests']),
+    packages=find_packages(exclude=['contrib', 'docs', 'tests']),
 
     # Alternatively, if you want to distribute just a my_module.py, uncomment
     # this:
@@ -116,7 +126,7 @@ setup(
     setup_requires=SETUP_REQUIRES,
 
     # test
-    test_suite='nose.collector',
+    # test_suite='nose.collector',
     tests_require=TESTS_REQUIRE,
 
     # List additional groups of dependencies here (e.g. development
