@@ -27,11 +27,11 @@ except Exception as e:
                     'using conda or other system. The list is : ' + str(SETUP_REQUIRES)) from e
 
 # ************** ID card *****************
-DISTNAME = 'classtools_autocode'
+DISTNAME = 'autoclass'
 DESCRIPTION = 'Helps you write compact python classes'
 MAINTAINER = 'Sylvain Marié'
 MAINTAINER_EMAIL = '"Sylvain Marié" <sylvain.marie@schneider-electric.com>'
-URL = 'https://github.com/smarie/python-classtools-autocode'
+URL = 'https://github.com/smarie/python-autoclass'
 LICENSE = 'BSD 3-Clause'
 LICENSE_LONG = 'License :: OSI Approved :: BSD License'
 
@@ -56,7 +56,7 @@ except(ImportError):
 # THIS IS DEPRECATED AS WE NOW USE GIT TO MANAGE VERSION
 # with open(path.join(here, 'VERSION')) as version_file:
 #    VERSION = version_file.read().strip()
-
+OBSOLETES = ['classtools-autocode']
 
 setup(
     name=DISTNAME,
@@ -133,7 +133,9 @@ setup(
     # dependencies). You can install these using the following syntax,
     # for example:
     # $ pip install -e .[dev,test]
-    extras_require=EXTRAS_REQUIRE
+    extras_require=EXTRAS_REQUIRE,
+
+    obsoletes=OBSOLETES
 
     # If there are data files included in your packages that need to be
     # installed, specify them here.  If using Python 2.6 or less, then these

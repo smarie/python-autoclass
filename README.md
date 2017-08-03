@@ -1,8 +1,8 @@
-# python-classtools-autocode
+# python-autoclass
 
-[![Build Status](https://travis-ci.org/smarie/python-classtools-autocode.svg?branch=master)](https://travis-ci.org/smarie/python-classtools-autocode) [![codecov](https://codecov.io/gh/smarie/python-classtools-autocode/branch/master/graph/badge.svg)](https://codecov.io/gh/smarie/python-classtools-autocode) [![Documentation](https://img.shields.io/badge/docs-latest-blue.svg)](https://smarie.github.io/python-classtools-autocode/)
+[![Build Status](https://travis-ci.org/smarie/python-autoclass.svg?branch=master)](https://travis-ci.org/smarie/python-autoclass) [![codecov](https://codecov.io/gh/smarie/python-autoclass/branch/master/graph/badge.svg)](https://codecov.io/gh/smarie/python-autoclass) [![Documentation](https://img.shields.io/badge/docs-latest-blue.svg)](https://smarie.github.io/python-autoclass/)
 
-Project page : [https://smarie.github.io/python-classtools-autocode/](https://smarie.github.io/python-classtools-autocode/)
+Project page : [https://smarie.github.io/python-autoclass/](https://smarie.github.io/python-autoclass/)
 
 ## What's new
 
@@ -14,7 +14,7 @@ Project page : [https://smarie.github.io/python-classtools-autocode/](https://sm
 
 Contributions are welcome ! Simply fork this project on github, commit your contributions, and create pull requests.
 
-Here is a non-exhaustive list of interesting open topics: https://github.com/smarie/python-classtools-autocode/issues
+Here is a non-exhaustive list of interesting open topics: https://github.com/smarie/python-autoclass/issues
 
 ## Packaging
 

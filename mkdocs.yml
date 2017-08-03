@@ -1,6 +1,6 @@
-site_name: classtools-autocode
+site_name: autoclass
 # site_description: 'A short description of my project'
-repo_url: https://github.com/smarie/python-classtools-autocode
+repo_url: https://github.com/smarie/python-autoclass
 pages:
     - Home: index.md
     - Usage details: usage.md

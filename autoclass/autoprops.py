@@ -4,8 +4,8 @@ from warnings import warn
 
 from decorator import decorate
 
-from classtools_autocode.autoargs import get_constructor, _sieve
-from classtools_autocode.utils import _create_function_decorator__robust_to_args, \
+from autoclass.autoargs import get_constructor, _sieve
+from autoclass.utils import _create_function_decorator__robust_to_args, \
     _create_class_decorator__robust_to_args
 
 __GETTER_OVERRIDE_ANNOTATION = '__getter_override__'

@@ -22,7 +22,7 @@ python:
 
 env:
   global:
-  - GH_REF: git@github.com:smarie/python-classtools-autocode.git
+  - GH_REF: git@github.com:smarie/python-autoclass.git
 
 before_install:
   - sudo apt-get install pandoc
@@ -37,7 +37,7 @@ install:
 
 script:
 #  - coverage run tests.py
-  - pytest --cov-report term-missing --cov=./classtools_autocode -v classtools_autocode/tests/
+  - pytest --cov-report term-missing --cov=./autoclass -v autoclass/tests/
 
 after_success:
 # ***reporting***
@@ -55,7 +55,7 @@ after_success:
   - git config user.email "sylvain.marie@schneider-electric.com"
   - git remote add gh-token "${GH_REF}";
   - git fetch gh-token && git fetch gh-token gh-pages:gh-pages;
-  - if [ "${TRAVIS_PULL_REQUEST}" = "false" ]; then echo "Pushing to github"; PYTHONPATH=classtools-autocode/ mkdocs gh-deploy -v --clean --remote-name gh-token; git push gh-token gh-pages; fi;
+  - if [ "${TRAVIS_PULL_REQUEST}" = "false" ]; then echo "Pushing to github"; PYTHONPATH=autoclass/ mkdocs gh-deploy -v --clean --remote-name gh-token; git push gh-token gh-pages; fi;
 
 #matrix:
 #    fast_finish: true

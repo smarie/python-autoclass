@@ -3,8 +3,8 @@ from typing import Tuple, Type, Any, Callable, Union
 
 from decorator import decorate
 
-from classtools_autocode.utils import _create_function_decorator__robust_to_args
-from classtools_autocode.var_checker import check_var
+from autoclass.utils import _create_function_decorator__robust_to_args
+from autoclass.var_checker import check_var
 
 
 def autoargs(include:Union[str, Tuple[str]]=None,exclude:Union[str, Tuple[str]]=None):

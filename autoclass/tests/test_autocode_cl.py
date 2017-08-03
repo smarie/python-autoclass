@@ -1,7 +1,7 @@
 from typing import List, Union
 from unittest import TestCase
 
-from classtools_autocode import autoargs, autoprops, getter_override, setter_override, \
+from autoclass import autoargs, autoprops, getter_override, setter_override, \
     IllegalSetterSignatureException, DuplicateOverrideError, check_var, autoprops_decorate, Boolean
 
 
@@ -416,7 +416,7 @@ class TestReadMe(TestCase):
     """
 
     def test_readme_old_way(self):
-        from classtools_autocode import check_var, Boolean
+        from autoclass import check_var, Boolean
         from numbers import Real, Integral
         from typing import Optional, Union
 
@@ -506,7 +506,7 @@ class TestReadMe(TestCase):
         with self.assertRaises(ContractNotRespected):
             t.surface = -1
 
-        # from classtools_autocode import autoargs, autoprops, Boolean
+        # from autoclass import autoargs, autoprops, Boolean
         import enforce as en
         from enforce import runtime_validation
 
