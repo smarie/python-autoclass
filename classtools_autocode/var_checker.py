@@ -45,63 +45,64 @@ def check_var(var, var_types:Union[type, List[type]] =None, var_name=None, enfor
         match = False
         for var_type in var_types:
             # just in case, even though users should use FunctionType or MethodType which is the true type
-            if var_type == Callable:
+            if var_type is Callable:
                 if callable(var):
                     match = True
+                    break
             else:
                 if isinstance(var, var_type):
                     match = True
+                    break
 
         if not match:
             raise TypeError('Error, ' + var_name + '" should be one of type(s) ' + str(var_types) + ', found: ' + str(type(var)))
 
-    if not (var is None) and not (allowed_values is None):
-        #enforce allowed values
-        if not (var in allowed_values):
-            raise TypeError('Error, ' + var_name + '" should be one of "' + str(allowed_values) + '", found: ' + str(var))
+    if var is not None:
+        if allowed_values is not None:
+            # enforce allowed values
+            if var not in allowed_values:
+                raise TypeError('Error, ' + var_name + '" should be one of "' + str(allowed_values) + '", found: ' + str(var))
 
-    if not (var is None) and not (min_value is None):
-        # enforce min value
-        if min_strict:
-            if not (var > min_value):
-                raise TypeError(
-                    'Error, ' + var_name + '" should be strictly greater than "' + str(min_value) + '", found: ' + str(var))
-        else:
-            if not (var >= min_value):
-                raise TypeError(
-                    'Error, ' + var_name + '" should be greater than "' + str(min_value) + '", found: ' + str(var))
+        if min_value is not None:
+            # enforce min value
+            if min_strict:
+                if not (var > min_value):
+                    raise TypeError(
+                        'Error, ' + var_name + '" should be strictly greater than "' + str(min_value) + '", found: ' + str(var))
+            else:
+                if not (var >= min_value):
+                    raise TypeError(
+                        'Error, ' + var_name + '" should be greater than "' + str(min_value) + '", found: ' + str(var))
 
-    if not (var is None) and not (max_value is None):
-        # enforce max value
-        if max_strict:
-            if not (var < max_value):
-                raise TypeError(
-                    'Error, ' + var_name + '" should be strictly lesser than "' + str(max_value) + '", found: ' + str(var))
-        else:
-            if not (var <= max_value):
-                raise TypeError(
-                    'Error, ' + var_name + '" should be lesser than "' + str(max_value) + '", found: ' + str(var))
+        if max_value is not None:
+            # enforce max value
+            if max_strict:
+                if not (var < max_value):
+                    raise TypeError(
+                        'Error, ' + var_name + '" should be strictly lesser than "' + str(max_value) + '", found: ' + str(var))
+            else:
+                if not (var <= max_value):
+                    raise TypeError(
+                        'Error, ' + var_name + '" should be lesser than "' + str(max_value) + '", found: ' + str(var))
 
-    if not (var is None) and not (min_len is None):
-        # enforce min length
-        if min_len_strict:
-            if not (len(var) > min_len):
-                raise TypeError(
-                    'Error, ' + var_name + '" length should be strictly greater than "' + str(min_len) + '", found: ' + str(len(var)))
-        else:
-            if not (len(var) >= min_len):
-                raise TypeError(
-                    'Error, ' + var_name + '" length should be greater than "' + str(min_len) + '", found: ' + str(len(var)))
+        if min_len is not None:
+            # enforce min length
+            if min_len_strict:
+                if not (len(var) > min_len):
+                    raise TypeError(
+                        'Error, ' + var_name + '" length should be strictly greater than "' + str(min_len) + '", found: ' + str(len(var)))
+            else:
+                if not (len(var) >= min_len):
+                    raise TypeError(
+                        'Error, ' + var_name + '" length should be greater than "' + str(min_len) + '", found: ' + str(len(var)))
 
-    if not (var is None) and not (max_len is None):
-        # enforce max length
-        if max_len_strict:
-            if not (len(var) < max_len):
-                raise TypeError(
-                    'Error, ' + var_name + '" length should be strictly lesser than "' + str(max_len) + '", found: ' + str(len(var)))
-        else:
-            if not (len(var) <= max_len):
-                raise TypeError(
-                    'Error, ' + var_name + '" length should be lesser than "' + str(max_len) + '", found: ' + str(len(var)))
-
-    return
+        if max_len is not None:
+            # enforce max length
+            if max_len_strict:
+                if not (len(var) < max_len):
+                    raise TypeError(
+                        'Error, ' + var_name + '" length should be strictly lesser than "' + str(max_len) + '", found: ' + str(len(var)))
+            else:
+                if not (len(var) <= max_len):
+                    raise TypeError(
+                        'Error, ' + var_name + '" length should be lesser than "' + str(max_len) + '", found: ' + str(len(var)))
