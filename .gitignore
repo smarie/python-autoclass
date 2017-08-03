@@ -93,4 +93,4 @@ ENV/
 
 # Mkdocs
 site/
-github_travis_rsa
+github_travis_rsa*

@@ -47,10 +47,10 @@ after_success:
   - mkdocs build
 #  - mkdocs gh-deploy requires special care :
   # ---grant the possibility to push on the repo---
-  - openssl aes-256-cbc -K $encrypted_c39d762d5b90_key -iv $encrypted_c39d762d5b90_iv -in github_travis_rsa.enc -out github_travis_rsa -d
-  - chmod 600 github_travis_rsa
+  - openssl aes-256-cbc -K $encrypted_c39d762d5b90_key -iv $encrypted_c39d762d5b90_iv -in github_travis_rsa_clstools.enc -out github_travis_rsa_clstools -d
+  - chmod 600 github_travis_rsa_clstools
   - eval `ssh-agent -s`  # launch the authentication agent
-  - ssh-add github_travis_rsa  # register the key
+  - ssh-add github_travis_rsa_clstools  # register the key
   - git config user.name "Automatic Publish"
   - git config user.email "sylvain.marie@schneider-electric.com"
   - git remote add gh-token "${GH_REF}";
