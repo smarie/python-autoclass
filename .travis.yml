@@ -37,7 +37,7 @@ install:
 
 script:
 #  - coverage run tests.py
-  - pytest --cov-report term-missing --cov=./classtools-autocode -v classtools-autocode/tests/
+  - pytest --cov-report term-missing --cov=./classtools_autocode -v classtools_autocode/tests/
 
 after_success:
 # ***reporting***

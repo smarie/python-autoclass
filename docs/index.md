@@ -1,5 +1,7 @@
 # python-classtools-autocode
 
+[![Build Status](https://travis-ci.org/smarie/python-classtools-autocode.svg?branch=master)](https://travis-ci.org/smarie/python-classtools-autocode) [![codecov](https://codecov.io/gh/smarie/python-classtools-autocode/branch/master/graph/badge.svg)](https://codecov.io/gh/smarie/python-classtools-autocode) [![Documentation](https://img.shields.io/badge/docs-latest-blue.svg)](https://smarie.github.io/python-classtools-autocode/)
+
 `classtools-autocode` provides tools to automatically generate python 3.5+ classes code, such as **constructor body** or **properties getters/setters**, along with optional support of **validation contracts**.
 
 The objective of this library is to reduce the amount of redundancy by automatically generating parts of the code from the information already available somewhere else (typically, in the constructor signature). The intent is similar to [attrs](https://github.com/python-attrs/attrs): remove boilerplate.

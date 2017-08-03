@@ -1,11 +1,13 @@
-[![Documentation Status](https://readthedocs.org/projects/classtools-autocode/badge/?version=latest)](http://classtools-autocode.readthedocs.io/en/latest/?badge=latest)
-
 # python-classtools-autocode
 
-Project page : [official](http://classtools-autocode.readthedocs.io), [backup](https://smarie.github.io/python-classtools-autocode/)
+[![Build Status](https://travis-ci.org/smarie/python-classtools-autocode.svg?branch=master)](https://travis-ci.org/smarie/python-classtools-autocode) [![codecov](https://codecov.io/gh/smarie/python-classtools-autocode/branch/master/graph/badge.svg)](https://codecov.io/gh/smarie/python-classtools-autocode) [![Documentation](https://img.shields.io/badge/docs-latest-blue.svg)](https://smarie.github.io/python-classtools-autocode/)
+
+Project page : [https://smarie.github.io/python-classtools-autocode/](https://smarie.github.io/python-classtools-autocode/)
 
 ## What's new
 
+* Improved documentation, and no longer hosted on readthedocs
+* Travis and codecov integration
 * Doc now generated from markdown using [mkdocs](http://www.mkdocs.org/)
 
 ## Want to contribute ?
