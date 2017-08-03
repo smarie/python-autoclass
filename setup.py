@@ -56,7 +56,7 @@ except(ImportError):
 # THIS IS DEPRECATED AS WE NOW USE GIT TO MANAGE VERSION
 # with open(path.join(here, 'VERSION')) as version_file:
 #    VERSION = version_file.read().strip()
-OBSOLETES = ['classtools-autocode']
+OBSOLETES = ['classtools_autocode']
 
 setup(
     name=DISTNAME,
