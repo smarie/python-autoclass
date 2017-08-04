@@ -30,7 +30,7 @@ except Exception as e:
 DISTNAME = 'autoclass'
 DESCRIPTION = 'Helps you write compact python classes'
 MAINTAINER = 'Sylvain Marié'
-MAINTAINER_EMAIL = '"Sylvain Marié" <sylvain.marie@schneider-electric.com>'
+MAINTAINER_EMAIL = 'sylvain.marie@schneider-electric.com'
 URL = 'https://github.com/smarie/python-autoclass'
 LICENSE = 'BSD 3-Clause'
 LICENSE_LONG = 'License :: OSI Approved :: BSD License'
