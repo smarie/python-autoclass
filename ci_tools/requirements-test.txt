@@ -3,4 +3,3 @@ PyContracts
 enforce
 pytest
 pytest-logging
-pytest-cov
