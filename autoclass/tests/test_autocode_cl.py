@@ -8,7 +8,7 @@ from autoclass import autoargs, autoprops, getter_override, setter_override, \
 class TestAutoArgs(TestCase):
 
     def test_autoargs_simple(self):
-        """ Basic functionality, no customization - all constructor arguments are auto-assigned """
+        """ @autoargs Basic functionality, no customization - all constructor arguments are auto-assigned """
 
         class A(object):
             @autoargs
@@ -24,7 +24,7 @@ class TestAutoArgs(TestCase):
         self.assertTrue(a.debug == True)
 
     def test_autoargs_signature_preserving(self):
-        """ Advanced: check that the constructor still has the correct signature """
+        """ @autoargs Advanced: check that the constructor still has the correct signature """
 
         class A(object):
             @autoargs
@@ -37,7 +37,7 @@ class TestAutoArgs(TestCase):
 
     def test_autoargs_varargs(self):
         """
-        Basic functionality, with special case of variable arguments *args.
+        @autoargs Basic functionality, with special case of variable arguments *args.
         -- note that the variable arguments are stored in a single attribute
         """
         class B(object):
@@ -57,7 +57,7 @@ class TestAutoArgs(TestCase):
 
     def test_autoargs_varargs_kwvarargs(self):
         """
-        Basic functionality, with special case of variable arguments *args and keyword arguments **kw
+        @autoargs Basic functionality, with special case of variable arguments *args and keyword arguments **kw
         -- note that *args are stored in a single attribute while **kw are stored in several attributes
         """
         class C(object):
@@ -95,7 +95,7 @@ class TestAutoArgs(TestCase):
         self.assertTrue(a.debug == True)
 
     def test_autoargs_include(self):
-        """ With explicit list of names to include """
+        """ @autoargs With explicit list of names to include """
 
         class C(object):
             @autoargs(include=('bar', 'baz', 'verbose'))
@@ -114,7 +114,7 @@ class TestAutoArgs(TestCase):
             print(a.foo)
 
     def test_autoargs_exclude(self):
-        """ With explicit list of names to exclude """
+        """ @autoargs With explicit list of names to exclude """
 
         class C(object):
             @autoargs(exclude=('bar', 'baz', 'verbose'))
@@ -135,7 +135,7 @@ class TestAutoArgs(TestCase):
             print(a.verbose)
 
     def test_autoargs_include_exclude(self):
-        # you can't use both at the same time
+        """ @autoargs assert that you can't use both include/exclude at the same time"""
         with self.assertRaises(ValueError):
             class Dummy(object):
                 @autoargs(exclude='', include='')
@@ -143,7 +143,8 @@ class TestAutoArgs(TestCase):
                     pass
 
     def test_autoargs_include_exclude_typos(self):
-        """ Asserts that errors are correctly raised in case of a nonexistent attribute name in include/exclude """
+        """ @autoargs Asserts that errors are correctly raised in case of a nonexistent attribute name in
+        include/exclude """
 
         with self.assertRaises(ValueError):
             class Dummy(object):
@@ -192,8 +193,8 @@ class TestAutoProps(TestCase):
 
     def test_autoprops_pycontracts(self):
         """
-        Basic functionality with PyContracts - if a `@contract` annotation exist on the `__init__` method, mentioning
-        a contract for a given parameter, the parameter contract will be added on the generated setter method
+        @autopropsBasic functionality with PyContracts - if a `@contract` annotation exist on the `__init__` method,
+        mentioning a contract for a given parameter, the parameter contract will be added on the generated setter method
         """
 
         from contracts import ContractNotRespected, contract
@@ -219,7 +220,7 @@ class TestAutoProps(TestCase):
         self.assertTrue(t.b[0] == 'r')
 
     def test_autoprops_include(self):
-        """ With pycontracts and explicit list of attributes to include """
+        """ @autoprops With pycontracts and explicit list of attributes to include """
 
         from contracts import ContractNotRespected, contract
 
@@ -243,7 +244,7 @@ class TestAutoProps(TestCase):
 
 
     def test_autoprops_exclude(self):
-        """ With pycontracts and explicit list of attributes to exclude """
+        """ @autoprops With pycontracts and explicit list of attributes to exclude """
 
         from contracts import ContractNotRespected, contract
 
@@ -266,7 +267,7 @@ class TestAutoProps(TestCase):
         self.assertTrue(t.b[0] == '')
 
     def test_autoprops_include_exclude(self):
-        """ Asserts that include/exclude cant be used at the same time """
+        """ @autoprops Asserts that include/exclude cant be used at the same time """
 
         # you can't use both at the same time
         with self.assertRaises(ValueError):
@@ -275,7 +276,7 @@ class TestAutoProps(TestCase):
                 pass
 
     def test_autoprops_override(self):
-        """ With Pycontracts. Tests that the user may override generated getter and a setter """
+        """ @autoprops With Pycontracts. Tests that the user may override generated getter and a setter """
 
         from contracts import ContractNotRespected, contract
 
@@ -321,7 +322,8 @@ class TestAutoProps(TestCase):
 
 
     def test_autoprops_override_exceptions(self):
-        """ Asserts that the user can not override a generated method if the overriden method has a wrong signature """
+        """ @autoprops Asserts that the user can not override a generated method if the overriden method has a wrong
+        signature """
 
         # -- a getter is overriden while the attribute does not exist in constructor
         with self.assertRaises(AttributeError):
@@ -364,7 +366,7 @@ class TestAutoProps(TestCase):
                     return self._b
 
     def test_autoprops_manual(self):
-        """ Tests the manual wrapper autoprops() """
+        """ @autoprops Tests the manual wrapper autoprops() """
 
         from contracts import ContractNotRespected
         from contracts import contract
@@ -392,7 +394,7 @@ class TestAutoProps(TestCase):
         self.assertTrue(t.b[0] == 'r')
 
     def test_autoprops_signature_preserving(self):
-        """ Advanced: checks that the generated constructor still has the correct signature"""
+        """ @autoprops Advanced: checks that the generated constructor still has the correct signature"""
 
         @autoprops
         class FooConfigD(object):
