@@ -62,7 +62,8 @@ after_success:
   - git remote add gh-token "${GH_REF}";
   - git fetch gh-token && git fetch gh-token gh-pages:gh-pages;
   # push but only if this is not a build triggered by a pull request
-  - if [ "${TRAVIS_PULL_REQUEST}" = "false" ]; then echo "Pushing to github"; PYTHONPATH=autoclass/ mkdocs gh-deploy -v --clean --remote-name gh-token; git push gh-token gh-pages; fi;
+  # note: here we use the --dirty flag so that mkdocs does not clean the additional reports that we copied in the site
+  - if [ "${TRAVIS_PULL_REQUEST}" = "false" ]; then echo "Pushing to github"; PYTHONPATH=autoclass/ mkdocs gh-deploy -v --dirty -f ci_tools/mkdocs.yml --remote-name gh-token; git push gh-token gh-pages; fi;
 
 deploy:
   provider: pypi
