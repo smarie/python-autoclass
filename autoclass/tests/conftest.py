@@ -1,6 +1,5 @@
 from py.xml import html
 import pytest
-from setuptools_scm import find_matching_entrypoint
 from setuptools_scm.git import GitWorkdir
 
 
@@ -55,9 +54,9 @@ def get_git_hash():
     # tmp = proc.stdout.read()
     # rev_node = tmp.decode().replace('\n', '')
 
-    ep = find_matching_entrypoint('.', 'setuptools_scm.parse_scm')
-    if ep:
-        ep.load()
+    # ep = find_matching_entrypoint('.', 'setuptools_scm.parse_scm')
+    # if ep:
+    #     ep.load()
     wd = GitWorkdir('.')
     rev_node, _, ret = wd.do_ex('git rev-parse --verify --quiet HEAD')
     return rev_node
