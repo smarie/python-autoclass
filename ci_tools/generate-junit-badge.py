@@ -22,7 +22,7 @@ def download_badge(junit_xml: str='junit.xml', dest_folder: str='reports/junit')
         color = 'green'
     else:
         color = 'brightgreen'
-    url = 'https://img.shields.io/badge/tests--success-' + str(success_percentage) + '%25-' + color + '.svg'
+    url = 'https://img.shields.io/badge/tests-' + str(success_percentage) + '%25-' + color + '.svg'
 
     dest_file = path.join(dest_folder, 'junit-badge.svg')
 

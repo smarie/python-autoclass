@@ -50,7 +50,7 @@ after_success:
   - pylint autoclass
 # ***documentation***
   - mkdocs build -f ci_tools/mkdocs.yml
-  - cp reports/junit site/
+  - mv reports/junit site/
   # mkdocs gh-deploy requires special care :
   # ---grant the possibility to push on the repo---
   - openssl aes-256-cbc -K $encrypted_a1c855bcf509_key -iv $encrypted_a1c855bcf509_iv -in ci_tools/github_travis_rsa_clstools.enc -out ci_tools/github_travis_rsa_clstools -d
