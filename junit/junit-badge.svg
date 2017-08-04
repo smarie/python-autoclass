@@ -6,10 +6,10 @@
 <head>
 
 
-<meta http-equiv="set-cookie" content="cf_use_ob=0; expires=Fri, 04-Aug-17 14:59:32 GMT; path=/">
+<meta http-equiv="set-cookie" content="cf_use_ob=0; expires=Fri, 04-Aug-17 14:59:33 GMT; path=/">
 
 
-<title>img.shields.io | 525: SSL handshake failed</title>
+<title>img.shields.io | 522: Connection timed out</title>
 <meta charset="UTF-8" />
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
 <meta http-equiv="X-UA-Compatible" content="IE=Edge,chrome=1" />
@@ -32,10 +32,10 @@
         <div class="cf-wrapper cf-error-overview">
             <h1>
               <span class="cf-error-type" data-translate="error">Error</span>
-              <span class="cf-error-code">525</span>
-              <small class="heading-ray-id">Ray ID: 38925fab0b4154da &bull; 2017-08-04 14:59:02 UTC</small>
+              <span class="cf-error-code">522</span>
+              <small class="heading-ray-id">Ray ID: 3892607d0b4855a0 &bull; 2017-08-04 14:59:03 UTC</small>
             </h1>
-            <h2 class="cf-subheadline" data-translate="error_desc">SSL handshake failed</h2>
+            <h2 class="cf-subheadline" data-translate="error_desc">Connection timed out</h2>
         </div><!-- /.error-overview -->
 
         <div class="cf-section cf-highlight cf-status-display">
@@ -80,7 +80,7 @@
             <div class="cf-columns two">
                 <div class="cf-column">
                     <h2 data-translate="what_happened">What happened?</h2>
-                    <p data-translate="origin_ssl_bad_handshake">Cloudflare is unable to establish an SSL connection to the origin server.</p>
+                    <p data-translate="connection_timed_out">The initial connection between Cloudflare's network and the origin web server timed out. As a result, the web page can not be displayed.</p>
                 </div>
 
                 <div class="cf-column">
@@ -89,16 +89,16 @@
       <p data-translate="try_again_in_a_few">Please try again in a few minutes.</p>
 
       <h5 data-translate="if_website_owner">If you're the owner of this website:</h5>
-      <p><span data-translate="525_owner_desc">It appears that the SSL configuration used is not compatible with Cloudflare. This could happen for a several reasons, including no shared cipher suites.</span> <a href="https://support.cloudflare.com/hc/en-us/articles/200278659">Additional troubleshooting information here.</a></p>
+      <p><span data-translate="522_owner_desc">Contact your hosting provider letting them know your web server is not completing requests. An Error 522 means that the request was able to connect to your web server, but that the request didn't finish. The most likely cause is that something on your server is hogging resources.</span> <a href="https://support.cloudflare.com/hc/en-us/articles/200171906-Error-522" data-translate="addtl_troubleshooting">Additional troubleshooting information here.</a></p>
                 </div>
             </div>
         </div><!-- /.section -->
 
         <div class="cf-error-footer cf-wrapper">
   <p>
-    <span class="cf-footer-item">Cloudflare Ray ID: <strong>38925fab0b4154da</strong></span>
+    <span class="cf-footer-item">Cloudflare Ray ID: <strong>3892607d0b4855a0</strong></span>
     <span class="cf-footer-separator">&bull;</span>
-    <span class="cf-footer-item"><span data-translate="your_ip">Your IP</span>: 35.184.165.227</span>
+    <span class="cf-footer-item"><span data-translate="your_ip">Your IP</span>: 104.197.34.24</span>
     <span class="cf-footer-separator">&bull;</span>
     <span class="cf-footer-item"><span data-translate="performance_security_by">Performance &amp; security by</span> <a data-orig-proto="https" data-orig-ref="www.cloudflare.com/5xx-error-landing?utm_source=error_footer" id="brand_link" target="_blank">Cloudflare</a></span>
     
