@@ -27,6 +27,7 @@ env:
 before_install:
   - sudo apt-get install pandoc
   - sudo apt-get install ant
+  - sudo apt-get install ant-optional
 
 install:
   - pip install -r ci_tools/requirements-setup.txt
@@ -59,11 +60,12 @@ after_success:
   - ssh-add ci_tools/github_travis_rsa_clstools  # register the key
   - git config user.name "Automatic Publish"
   - git config user.email "sylvain.marie@schneider-electric.com"
-  - git remote add gh-token "${GH_REF}";
-  - git fetch gh-token && git fetch gh-token gh-pages:gh-pages;
+  - git remote add gh-remote "${GH_REF}";
+  - git fetch gh-remote && git fetch gh-remote gh-pages:gh-pages;
   # push but only if this is not a build triggered by a pull request
   # note: here we use the --dirty flag so that mkdocs does not clean the additional reports that we copied in the site
-  - if [ "${TRAVIS_PULL_REQUEST}" = "false" ]; then echo "Pushing to github"; PYTHONPATH=autoclass/ mkdocs gh-deploy -v --dirty -f ci_tools/mkdocs.yml --remote-name gh-token; git push gh-token gh-pages; fi;
+  - if [ "${TRAVIS_PULL_REQUEST}" = "false" ] && [ "${TRAVIS_PYTHON_VERSION}" = "3.5" ]; then echo "Pushing to github"; PYTHONPATH=autoclass/ mkdocs gh-deploy -v --dirty -f ci_tools/mkdocs.yml --remote-name gh-remote; git push gh-remote gh-pages; fi;
+#  - if [ "${TRAVIS_PULL_REQUEST}" = "false" ] && [ "${TRAVIS_PYTHON_VERSION}" = "3.5" ]; then echo "Pushing to github"; git push gh-remote gh-pages; fi;
 
 deploy:
   provider: pypi
@@ -72,7 +74,8 @@ deploy:
     secure: "rhZ0DDTlGeRiXeotIFr2VvC9NaoobbmNEXY6c9sRYu60Ctn8kBWVUIqVXUYrlRLeGNlHb/oFdXxEDNsZrZdvWEW92ulaCWmzsqbjBxouSsz6TFkHD0sqHkbxx6j0um9OcTh5qUKjTKM6epdem6XSVdT+PRPNjaGTJAZSuihMxmI1OFntk2OEwLW34ZWH6/H5wEChDTU3BlfaoaklU0c+fCYGUx46+M0toqbElLtwx0lpu6ARXfptLUxGT+h/VLIvB7lULwKTCoAoUflVzFKZ2DxGpi7c6Er6CHO/9DBdJna7K76VfN/G+dg/Ddos1NtPoRX9vkLelLlYYa/4YGav6D0BNC7n0t42FSzIsGCxexYEJTvk1ZyZXiqdp/4eoGbvXUfrnotKovN0LQuiqqI5qsh3NH1qdNjyQOrms6QpWQSXQvnIkRM9hnArCZJ04GuhL3fdGhSnAWhV9XIO3vqiILNxNOQliVzFfdQKfTemI08fTLAJ5V8ZRtwRKQqV60WZ37kyqkka6/hYMR/8ysUz2xPNLJ53d+pAEXsn/6n43M+GTaJ+8a81cFT6rsGANH2BN3mXxP9AOJZMyqDAoMp9hdDuNmRevxp1qrwTNzl7RXwTcKNWua+Srhkr3VSWI7PwWYsnZ2/FSoI3MMUuDFyTD3s4plu4/0gsdwlJPSuAEmw="
   on:
     tags: true
-  server: https://test.pypi.org/legacy/
+    python: 3.5  #only one of the builds have to be deployed
+#  server: https://test.pypi.org/legacy/
   distributions: "bdist_wheel"
 
 matrix:

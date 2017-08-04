@@ -93,4 +93,7 @@ ENV/
 
 # Mkdocs
 site/
+
+# travis CI
 github_travis_rsa*
+reports

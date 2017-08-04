@@ -27,7 +27,7 @@ pytest -v autoclass/tests/
 You may need to install requirements for setup beforehand, using 
 
 ```bash
-pip install -r requirements-test.txt
+pip install -r ci_tools/requirements-test.txt
 ```
 
 ## Packaging
@@ -41,7 +41,7 @@ python setup.py egg_info bdist_wheel rotate -m.whl -k3
 You may need to install requirements for setup beforehand, using 
 
 ```bash
-pip install -r requirements-setup.txt
+pip install -r ci_tools/requirements-setup.txt
 ```
 
 ## Generating the documentation page
@@ -55,10 +55,22 @@ mkdocs build
 You may need to install requirements for doc beforehand, using 
 
 ```bash
-pip install -r requirements-doc.txt
+pip install -r ci_tools/requirements-doc.txt
+```
+
+## Generating the test reports
+
+The following commands generate the html test report and the associated badge. 
+
+```bash
+pytest --junitxml=junit.xml -v autoclass/tests/
+ant -f ci_tools/generate-junit-html.xml
+python ci_tools/generate-junit-badge.py
 ```
 
 ### PyPI Releasing memo
+
+This project is now automatically deployed to PyPI when a tag is created. Anyway, for manual deployment we can use:
 
 ```bash
 twine upload dist/* -r pypitest
