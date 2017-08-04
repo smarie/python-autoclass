@@ -23,8 +23,8 @@ try:
     from setuptools_scm import get_version
 except Exception as e:
     raise Exception('Required packages for setup not found. You may wish you execute '
-                    '"pip install -r requirements-setup.txt" to install them or alternatively install them manually '
-                    'using conda or other system. The list is : ' + str(SETUP_REQUIRES)) from e
+                    '"pip install -r ci_tools/requirements-setup.txt" to install them or alternatively install them '
+                    'manually using conda or other system. The list is : ' + str(SETUP_REQUIRES)) from e
 
 # ************** ID card *****************
 DISTNAME = 'autoclass'

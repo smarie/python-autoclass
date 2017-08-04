@@ -1,0 +1,6 @@
+# requirements needed to run the tests
+PyContracts
+enforce
+pytest
+pytest-logging
+pytest-cov

@@ -1,5 +1,0 @@
-pytest
-pytest-logging
-pytest-cov
-PyContracts
-enforce

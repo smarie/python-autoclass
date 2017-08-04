@@ -1,0 +1,4 @@
+# requirements needed to generate the reports
+junit2html
+coverage
+pylint
