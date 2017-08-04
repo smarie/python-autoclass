@@ -1,3 +1,5 @@
+import subprocess
+
 from py.xml import html
 import pytest
 from setuptools_scm import version_from_scm
@@ -25,17 +27,25 @@ def pytest_html_results_table_header(cells):
 def pytest_html_results_table_row(report, cells):
     """ Inserts the contents for the 'description' column : the docstring of the test function """
     node_bits = report.nodeid.split('::')
-    cells[1] = html.th(node_bits[0])
-    cells.insert(2, html.td('::'.join(node_bits[1:]) if len(node_bits) > 1 else ''))
+    file = node_bits[0]
+    test_id = node_bits[1:]
+    line = report.location[1]
+
+    cells[1] = html.th(file)
+    cells.insert(2, html.td('::'.join(test_id) if len(node_bits) > 1 else ''))
     cells.insert(3, html.td(report.description))
     # cells.insert(1, html.td(datetime.utcnow(), class_='col-time'))
     # cells.pop()
 
     # use setuptools_scm to get git hash and build the codecov URL to go and see the source of the test
-    parsed_version = version_from_scm('.')
-    if parsed_version is not None:
-        hsh = parsed_version.node + ('' if not parsed_version.dirty else '-dirty')
+    # parsed_version = version_from_scm('.')
+    # if parsed_version is not None:
+    #     hsh = parsed_version.node + ('' if not parsed_version.dirty else '-dirty')
+    try:
+        proc = subprocess.Popen('git rev-parse --verify --quiet HEAD', stdout=subprocess.PIPE)
+        tmp = proc.stdout.read()
+        hsh = tmp.decode().replace('\n', '')
         cells[-1] = html.td(html.a('source', href='https://codecov.io/gh/smarie/python-autoclass/src/' + hsh + '/'
-                                                  + node_bits[0]))
-    else:
-        cells[-1] = html.td('could not parse git version')
+                                                  + file + '#L' + str(line)))
+    except:
+        cells[-1] = html.td('could not read git version')
