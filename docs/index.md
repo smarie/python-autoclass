@@ -25,7 +25,7 @@ The following snippet shows a `HouseConfiguration` class with four attributes.
 Each attribute is validated against the expected type everytime you try to set it (constructor AND modifications), and the `surface` attribute is further validated for positiveness. Notice the size of the resulting code !
 
 ```python
-from classtools_autocode import Boolean, autoargs, autoprops, setter_override
+from autoclass import Boolean, autoargs, autoprops, setter_override
 from numbers import Real, Integral
 from typing import Optional
 from enforce import runtime_validation, config
@@ -69,7 +69,7 @@ Python's primitive types (in particular `dict` and `tuple`) and it's dynamic typ
 However there are certain cases where developers still want to define their own classes, for example to provide strongly-typed APIs to their clients. In such case, *separation of concerns* will typically lead developers to enforce attribute value validation directly in the class, rather than in the code using the object. Eventually developers end up with big classes like this one:
 
 ```python
-from classtools_autocode import check_var, Boolean
+from autoclass import check_var, Boolean
 from numbers import Real, Integral
 from typing import Optional, Union
 
@@ -133,7 +133,7 @@ Now that's **a lot of code** - and only for 4 attributes ! Not mentioning the co
 Really, *"there must be a better way"* : yes there is, and that's what this library provides - it can be used alone, or in combination with [PyContracts](https://andreacensi.github.io/contracts/index.html) and/or any PEP484-based checker such as [enforce](https://github.com/RussBaz/enforce), [typeguard](https://github.com/agronholm/typeguard), [typecheck-decorator](https://github.com/prechelt/typecheck-decorator), etc. in order to generate all the repetitive code for you :
 
 ```python
-from classtools_autocode import Boolean, autoprops, autoargs, setter_override
+from autoclass import Boolean, autoprops, autoargs, setter_override
 from typing import Optional, Union
 from numbers import Real, Integral
 from contracts import contract

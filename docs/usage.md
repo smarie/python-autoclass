@@ -9,7 +9,7 @@ A few illustrative examples can be found in the unit tests below.
 * Basic functionality, no customization - all constructor arguments are auto-assigned: 
 
 ```python
-from classtools_autocode import autoargs
+from autoclass import autoargs
 
 class A(object):
     @autoargs
