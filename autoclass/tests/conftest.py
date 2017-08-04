@@ -1,8 +1,7 @@
-import subprocess
-
 from py.xml import html
 import pytest
-from setuptools_scm import version_from_scm
+from setuptools_scm import find_matching_entrypoint
+from setuptools_scm.git import GitWorkdir
 
 
 @pytest.mark.hookwrapper
@@ -41,11 +40,24 @@ def pytest_html_results_table_row(report, cells):
     # parsed_version = version_from_scm('.')
     # if parsed_version is not None:
     #     hsh = parsed_version.node + ('' if not parsed_version.dirty else '-dirty')
+
     try:
-        proc = subprocess.Popen('git rev-parse --verify --quiet HEAD', stdout=subprocess.PIPE)
-        tmp = proc.stdout.read()
-        hsh = tmp.decode().replace('\n', '')
+        hsh = get_git_hash()
         cells[-1] = html.td(html.a('source', href='https://codecov.io/gh/smarie/python-autoclass/src/' + hsh + '/'
                                                   + file + '#L' + str(line)))
     except:
         cells[-1] = html.td('could not read git version')
+
+
+def get_git_hash():
+    # works in local but not on travis
+    # proc = subprocess.Popen('git rev-parse --verify --quiet HEAD', stdout=subprocess.PIPE)
+    # tmp = proc.stdout.read()
+    # rev_node = tmp.decode().replace('\n', '')
+
+    ep = find_matching_entrypoint('.', 'setuptools_scm.parse_scm')
+    if ep:
+        ep.load()
+    wd = GitWorkdir('.')
+    rev_node, _, ret = wd.do_ex('git rev-parse --verify --quiet HEAD')
+    return rev_node
