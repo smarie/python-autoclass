@@ -47,7 +47,7 @@ after_success:
   - ant -f ci_tools/generate-junit-html.xml  # generates the html for the test results
   - python ci_tools/generate-junit-badge.py  # generates the badge for the test results
   - codecov
-  - pylint autoclass
+  - pylint autoclass  # note that at the moment the report is simply lost, we dont transform the result into anything
 # ***documentation***
   - mkdocs build -f ci_tools/mkdocs.yml
   - mv reports/junit site/
