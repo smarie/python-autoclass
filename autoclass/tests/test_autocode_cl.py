@@ -8,8 +8,8 @@ from autoclass import autoargs, autoprops, getter_override, setter_override, \
 class TestAutoArgs(TestCase):
 
     def test_autoargs_simple(self):
+        """ Basic functionality, no customization - all constructor arguments are auto-assigned """
 
-        # Basic functionality, no customization - all constructor arguments are auto-assigned
         class A(object):
             @autoargs
             def __init__(self, foo, path, debug=False):
@@ -24,7 +24,8 @@ class TestAutoArgs(TestCase):
         self.assertTrue(a.debug == True)
 
     def test_autoargs_signature_preserving(self):
-        # -- Advanced: check that the constructor still has the correct signature
+        """ Advanced: check that the constructor still has the correct signature """
+
         class A(object):
             @autoargs
             def __init__(self, foo, path, debug=False):
@@ -35,9 +36,10 @@ class TestAutoArgs(TestCase):
             self.assertTrue(e.args[0] == "__init__() missing 2 required positional arguments: 'foo' and 'path'")
 
     def test_autoargs_varargs(self):
-
-        # Basic functionality, with special case of variable arguments *args.
-        # -- note that the variable arguments are stored in a single attribute
+        """
+        Basic functionality, with special case of variable arguments *args.
+        -- note that the variable arguments are stored in a single attribute
+        """
         class B(object):
             @autoargs
             def __init__(self, foo, path, debug=False, *args):
@@ -54,9 +56,10 @@ class TestAutoArgs(TestCase):
         self.assertTrue(a.args == (100, 101))
 
     def test_autoargs_varargs_kwvarargs(self):
-
-        # Basic functionality, with special case of variable arguments *args and keyword arguments **kw
-        # -- note that *args are stored in a single attribute while **kw are stored in several attributes
+        """
+        Basic functionality, with special case of variable arguments *args and keyword arguments **kw
+        -- note that *args are stored in a single attribute while **kw are stored in several attributes
+        """
         class C(object):
             @autoargs
             def __init__(self, foo, path, debug=False, *args, **kw):
@@ -76,8 +79,8 @@ class TestAutoArgs(TestCase):
         self.assertTrue(a.bar == 'bar')
 
     def test_autoargs_noarg(self):
+        """ Same than test_autoargs_simple but with empty arguments list in autoargs """
 
-        # Same than test_autoargs_simple but with empty arguments list in autoargs
         class O(object):
             @autoargs()
             def __init__(self, foo, path, debug=False):
@@ -92,8 +95,8 @@ class TestAutoArgs(TestCase):
         self.assertTrue(a.debug == True)
 
     def test_autoargs_include(self):
+        """ With explicit list of names to include """
 
-        # Explicit list of names to include
         class C(object):
             @autoargs(include=('bar', 'baz', 'verbose'))
             def __init__(self, foo, bar, baz, verbose=False):
@@ -111,8 +114,8 @@ class TestAutoArgs(TestCase):
             print(a.foo)
 
     def test_autoargs_exclude(self):
+        """ With explicit list of names to exclude """
 
-        # Explicit list of names to exclude
         class C(object):
             @autoargs(exclude=('bar', 'baz', 'verbose'))
             def __init__(self, foo, bar, baz, verbose=False):
@@ -140,6 +143,7 @@ class TestAutoArgs(TestCase):
                     pass
 
     def test_autoargs_include_exclude_typos(self):
+        """ Asserts that errors are correctly raised in case of a nonexistent attribute name in include/exclude """
 
         with self.assertRaises(ValueError):
             class Dummy(object):
@@ -168,8 +172,8 @@ class TestAutoArgs(TestCase):
 class TestAutoProps(TestCase):
 
     def test_autoprops_no_contract(self):
+        """ Basic @autoprops functionality, no customization - all constructor arguments become properties """
 
-        # Basic functionality, no customization - all constructor arguments become properties
         @autoprops
         class FooConfigA(object):
 
@@ -186,19 +190,12 @@ class TestAutoProps(TestCase):
         self.assertTrue(t.a == '')
         self.assertTrue(t.b[0] == 'r')
 
-    def test_autoprop_contract_slow(self):
+    def test_autoprops_pycontracts(self):
+        """
+        Basic functionality with PyContracts - if a `@contract` annotation exist on the `__init__` method, mentioning
+        a contract for a given parameter, the parameter contract will be added on the generated setter method
+        """
 
-        # TODO : loading PyContracts is extremely slow !!! is there a way to improve ?
-        import cProfile
-        #cProfile.run('from contracts.syntax import ParseException')
-        cProfile.run('from contracts import ContractNotRespected, contract')
-
-        print('this is extremely slow !!!')
-
-    def test_autoprops(self):
-
-        # Basic functionality with PyContracts - if a `@contract` annotation exist on the `__init__` method, mentioning
-        # a contract for a given parameter, the parameter contract will be added on the generated setter method
         from contracts import ContractNotRespected, contract
 
         @autoprops
@@ -221,8 +218,8 @@ class TestAutoProps(TestCase):
         t.b=['r']
         self.assertTrue(t.b[0] == 'r')
 
-
     def test_autoprops_include(self):
+        """ With pycontracts and explicit list of attributes to include """
 
         from contracts import ContractNotRespected, contract
 
@@ -246,6 +243,7 @@ class TestAutoProps(TestCase):
 
 
     def test_autoprops_exclude(self):
+        """ With pycontracts and explicit list of attributes to exclude """
 
         from contracts import ContractNotRespected, contract
 
@@ -268,6 +266,8 @@ class TestAutoProps(TestCase):
         self.assertTrue(t.b[0] == '')
 
     def test_autoprops_include_exclude(self):
+        """ Asserts that include/exclude cant be used at the same time """
+
         # you can't use both at the same time
         with self.assertRaises(ValueError):
             @autoprops(include='', exclude='')
@@ -275,6 +275,7 @@ class TestAutoProps(TestCase):
                 pass
 
     def test_autoprops_override(self):
+        """ With Pycontracts. Tests that the user may override generated getter and a setter """
 
         from contracts import ContractNotRespected, contract
 
@@ -301,7 +302,6 @@ class TestAutoProps(TestCase):
                     print('Property \'b\' was set to \'' + str(toto) + '\'')
                     self._b = toto
 
-
             t = FooConfigC('rhubarb', ['pie', 'pie2'])
 
             # check that we can still read a's value
@@ -321,6 +321,7 @@ class TestAutoProps(TestCase):
 
 
     def test_autoprops_override_exceptions(self):
+        """ Asserts that the user can not override a generated method if the overriden method has a wrong signature """
 
         # -- a getter is overriden while the attribute does not exist in constructor
         with self.assertRaises(AttributeError):
@@ -363,6 +364,7 @@ class TestAutoProps(TestCase):
                     return self._b
 
     def test_autoprops_manual(self):
+        """ Tests the manual wrapper autoprops() """
 
         from contracts import ContractNotRespected
         from contracts import contract
@@ -390,7 +392,8 @@ class TestAutoProps(TestCase):
         self.assertTrue(t.b[0] == 'r')
 
     def test_autoprops_signature_preserving(self):
-        # -- Advanced: check that the constructor still has the correct signature
+        """ Advanced: checks that the generated constructor still has the correct signature"""
+
         @autoprops
         class FooConfigD(object):
             @autoargs
@@ -416,6 +419,8 @@ class TestReadMe(TestCase):
     """
 
     def test_readme_old_way(self):
+        """ Makes sure that the code in the documentation page is correct for the 'old way' of writing classes """
+
         from autoclass import check_var, Boolean
         from numbers import Real, Integral
         from typing import Optional, Union
@@ -474,10 +479,11 @@ class TestReadMe(TestCase):
         HouseConfiguration('test', 0.1)
 
     def test_readme_pycontracts(self):
+        """ Makes sure that the code in the documentation page is correct for the PyContracts example """
 
         from contracts import contract, ContractNotRespected
         from numbers import Real, Integral
-        from typing import Optional, Union
+        from typing import Optional
 
         @autoprops
         class HouseConfiguration(object):
@@ -506,9 +512,14 @@ class TestReadMe(TestCase):
         with self.assertRaises(ContractNotRespected):
             t.surface = -1
 
+    def test_readme_enforce(self):
+        """ Makes sure that the code in the documentation page is correct for the enforce example """
+
         # from autoclass import autoargs, autoprops, Boolean
         import enforce as en
         from enforce import runtime_validation
+        from numbers import Real, Integral
+        from typing import Optional
 
         en.config(dict(mode='covariant'))  # allow subclasses when validating types
 

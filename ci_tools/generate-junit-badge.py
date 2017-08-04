@@ -4,7 +4,7 @@ from os import makedirs, path
 import xunitparser
 
 
-def download_badge(junit_xml: str='junit.xml', dest_folder: str='reports/junit'):
+def download_badge(junit_xml: str='reports/junit/junit.xml', dest_folder: str='reports/junit'):
 
     makedirs(dest_folder, exist_ok=True)
 
