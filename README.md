@@ -4,9 +4,9 @@
 
 Project page : [https://smarie.github.io/python-autoclass/](https://smarie.github.io/python-autoclass/)
 
-## What's new
+## What's new in the development process
 
-* Improved documentation, and no longer hosted on readthedocs
+* Improved documentation structure, and no longer hosted on readthedocs
 * Travis and codecov integration
 * Doc now generated from markdown using [mkdocs](http://www.mkdocs.org/)
 

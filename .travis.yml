@@ -50,7 +50,7 @@ after_success:
   - codecov
   - pylint autoclass  # note that at the moment the report is simply lost, we dont transform the result into anything
 # ***documentation***
-  - mkdocs build -f ci_tools/mkdocs.yml
+  - mkdocs build -f docs/mkdocs.yml
   - mv reports/junit site/
   # mkdocs gh-deploy requires special care :
   # ---grant the possibility to push on the repo---
@@ -64,7 +64,7 @@ after_success:
   - git fetch gh-remote && git fetch gh-remote gh-pages:gh-pages;
   # push but only if this is not a build triggered by a pull request
   # note: here we use the --dirty flag so that mkdocs does not clean the additional reports that we copied in the site
-  - if [ "${TRAVIS_PULL_REQUEST}" = "false" ] && [ "${TRAVIS_PYTHON_VERSION}" = "3.5" ]; then echo "Pushing to github"; PYTHONPATH=autoclass/ mkdocs gh-deploy -v --dirty -f ci_tools/mkdocs.yml --remote-name gh-remote; git push gh-remote gh-pages; fi;
+  - if [ "${TRAVIS_PULL_REQUEST}" = "false" ] && [ "${TRAVIS_PYTHON_VERSION}" = "3.5" ]; then echo "Pushing to github"; PYTHONPATH=autoclass/ mkdocs gh-deploy -v --dirty -f docs/mkdocs.yml --remote-name gh-remote; git push gh-remote gh-pages; fi;
 #  - if [ "${TRAVIS_PULL_REQUEST}" = "false" ] && [ "${TRAVIS_PYTHON_VERSION}" = "3.5" ]; then echo "Pushing to github"; git push gh-remote gh-pages; fi;
 
 deploy:

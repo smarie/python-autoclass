@@ -5,6 +5,7 @@ pages:
     - Home: index.md
     - Usage details: usage.md
     - Validators list: validators.md
+    - Changelog: changelog.md
 theme: material  # readthedocs  mkdocs
 
 markdown_extensions:
