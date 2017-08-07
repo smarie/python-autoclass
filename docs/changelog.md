@@ -1,5 +1,3 @@
-## Changelog
-
 ### 1.4.0 - Added validation feature
 
  * New: `@validate` annotation allowing to implement input validation. Comes with a bunch of built-in validators.
