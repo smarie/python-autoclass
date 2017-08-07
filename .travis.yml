@@ -76,7 +76,7 @@ deploy:
     tags: true
     python: 3.5  #only one of the builds have to be deployed
 #  server: https://test.pypi.org/legacy/
-  distributions: "bdist_wheel"
+  distributions: "sdist bdist_wheel"
 
 matrix:
     fast_finish: true

@@ -2,7 +2,8 @@ from typing import List, Union
 from unittest import TestCase
 
 from autoclass import autoargs, autoprops, getter_override, setter_override, \
-    IllegalSetterSignatureException, DuplicateOverrideError, check_var, autoprops_decorate, Boolean
+    IllegalSetterSignatureException, DuplicateOverrideError, check_var, autoprops_decorate, Boolean, minlens, gts, \
+    between, validate, ValidationError, gt
 
 
 class TestAutoArgs(TestCase):
@@ -414,6 +415,56 @@ class TestAutoProps(TestCase):
             # yes ; right now it is still a lambda, since using a named method does not seem to work :(
             self.assertTrue(e.args[0] == "<lambda>() missing 1 required positional argument: 'self'")
 
+    def test_autoprops_enforce_validate(self):
+        """ Makes sure that autoprops works with enforce AND validate """
+
+        # from autoclass import autoargs, autoprops, Boolean
+        import enforce as en
+        from enforce import runtime_validation
+        from numbers import Real, Integral
+        from typing import Optional
+
+        en.config(dict(mode='covariant'))  # allow subclasses when validating types
+
+        @runtime_validation
+        @autoprops
+        class HouseConfiguration(object):
+
+            @autoargs
+            @validate(name=minlens(0),
+                      surface=gts(0),
+                      nb_floors=between(1, 100, open_right=True))
+            def __init__(self,
+                         name: str,
+                         surface: Real,
+                         nb_floors: Optional[Integral] = 1,
+                         with_windows: Boolean = False):
+                pass
+
+            # -- overriden setter for surface for custom validation or other things
+            @setter_override
+            def surface(self, surface):
+                print('Set surface to {}'.format(surface))
+                self.toto = 'done'
+                self._surface = surface
+
+        t = HouseConfiguration('test', 12, 2)
+
+        # 'Optional' works
+        t.nb_floors = None
+
+        # Custom print works
+        t.surface = 0.1
+        assert t.toto == 'done'
+
+        # Type validation works
+        from enforce.exceptions import RuntimeTypeError
+        with self.assertRaises(RuntimeTypeError):
+            t.nb_floors = 2.2
+
+        # Custom validation works
+        with self.assertRaises(ValidationError):
+            t.surface = 0
 
 class TestReadMe(TestCase):
     """
@@ -555,3 +606,65 @@ class TestReadMe(TestCase):
         # Custom validation works
         with self.assertRaises(AssertionError):
             t.surface = 0
+
+    def test_readme_enforce_validate(self):
+        """ Makes sure that the code in the documentation page is correct for the enforce + validate example """
+
+        # from autoclass import autoargs, autoprops, Boolean
+        import enforce as en
+        from enforce import runtime_validation
+        from numbers import Real, Integral
+        from typing import Optional
+
+        en.config(dict(mode='covariant'))  # allow subclasses when validating types
+
+        @runtime_validation
+        @autoprops
+        class HouseConfiguration(object):
+            @autoargs
+            @validate(name=minlens(0),
+                      surface=gt(0))
+            def __init__(self,
+                         name: str,
+                         surface: Real,
+                         nb_floors: Optional[Integral] = 1,
+                         with_windows: Boolean = False):
+                pass
+
+            # -- overriden setter for surface for custom validation or other things
+            @setter_override
+            def surface(self, surface):
+                print('Set surface to {}'.format(surface))
+                self._surface = surface
+
+        t = HouseConfiguration('test', 12, 2)
+
+        # 'Optional' works
+        t.nb_floors = None
+
+        # Type validation works
+        from enforce.exceptions import RuntimeTypeError
+        with self.assertRaises(RuntimeTypeError):
+            t.nb_floors = 2.2
+
+        # Custom validation works
+        with self.assertRaises(ValidationError):
+            t.surface = -1
+
+    def test_readme_usage_autoprops_validate(self):
+        @autoprops
+        class FooConfigA(object):
+            @autoargs
+            @validate(a=minlens(0))
+            def __init__(self, a: str):
+                pass
+
+        t = FooConfigA('rhubarb')
+
+        # check that the generated getters work
+        t.a = 'r'
+        assert t.a == 'r'
+
+        # check that there are validators on the generated setters
+        with self.assertRaises(ValidationError):
+            t.a = ''  # raises ValidationError

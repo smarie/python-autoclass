@@ -4,9 +4,9 @@ from warnings import warn
 
 from decorator import decorate
 
+from autoclass.validate import validate_decorate
 from autoclass.autoargs import get_constructor, _sieve
-from autoclass.utils import _create_function_decorator__robust_to_args, \
-    _create_class_decorator__robust_to_args
+from autoclass.utils import _create_function_decorator__robust_to_args, _create_class_decorator__robust_to_args
 
 __GETTER_OVERRIDE_ANNOTATION = '__getter_override__'
 __SETTER_OVERRIDE_ANNOTATION = '__setter_override__'
@@ -89,7 +89,11 @@ def _execute_autoprops_on_class(object_type: Type[Any], include:Union[str, Tuple
     # 1. Find the __init__ constructor signature and possible pycontracts @contract
     constructor = get_constructor(object_type)
     s = signature(constructor)
+
+    # option a) pycontracts
     contracts_dict = constructor.__contracts__ if hasattr(constructor, '__contracts__') else {}
+    # option b) validate
+    validators_dict = constructor.__validators__ if hasattr(constructor, '__validators__') else {}
 
     # 2. For each attribute that is not 'self' and is included and not excluded, add the property
     added = []
@@ -98,7 +102,8 @@ def _execute_autoprops_on_class(object_type: Type[Any], include:Union[str, Tuple
             added += attr_name
             attr_type = s.parameters[attr_name]._annotation
             _add_property(object_type, attr_name, attr_type,
-                          contracts_dict[attr_name] if attr_name in contracts_dict.keys() else None)
+                          pycontract=(contracts_dict[attr_name] if attr_name in contracts_dict.keys() else None),
+                          validators=(validators_dict[attr_name] if attr_name in validators_dict.keys() else None))
 
     # 3. Finally check that there is no overriden setter or getter that does not correspond to an attribute
     extra_overrides = getmembers(object_type, predicate=(lambda fun: callable(fun) and
@@ -113,15 +118,17 @@ def _execute_autoprops_on_class(object_type: Type[Any], include:Union[str, Tuple
                                                     'getter/setter can not be overriden by function ' + extra_overrides[0][1].__qualname__)
 
 
-def _add_property(object_type: Type[Any], property_name: str, property_type: type, property_contract: Any = None):
+def _add_property(object_type: Type[Any], property_name: str, property_type: type, pycontract: Any = None,
+                  validators: Any = None):
     """
-    A method to dynamically add a property to a class with the given contract. If the property getter and/or setter
-    has been overriden, it is taken into account too.
+    A method to dynamically add a property to a class with the optional given pycontract or validators.
+    If the property getter and/or setter have been overriden, it is taken into account too.
 
     :param object_type: the class on which to execute.
     :param property_name:
     :param property_type:
-    :param property_contract:
+    :param pycontract:
+    :param validators:
     :return:
     """
 
@@ -135,11 +142,13 @@ def _add_property(object_type: Type[Any], property_name: str, property_type: typ
     setter_fun, var_name = _get_setter_fun(object_type, property_name, property_type, private_property_name)
 
     # 4. add the contract to the setter, if any
-    if property_contract:
-        setter_fun_with_possible_contract = _add_contract_to_setter(setter_fun, var_name, property_contract,
+    setter_fun_with_possible_contract = setter_fun
+    if pycontract is not None:
+        setter_fun_with_possible_contract = _add_contract_to_setter(setter_fun, var_name, pycontract,
                                                                     property_name)
-    else:
-        setter_fun_with_possible_contract = setter_fun
+    elif validators is not None:
+        setter_fun_with_possible_contract = _add_validators_to_setter(setter_fun, var_name, validators,
+                                                                      property_name)
 
     # 5. change the function name to make it look nice
     setter_fun_with_possible_contract.__name__ = property_name
@@ -148,7 +157,6 @@ def _add_property(object_type: Type[Any], property_name: str, property_type: typ
     #__annotations__
     #__doc__
     #__dict__
-
 
     # 6. Finally add the property to the class
     # WARNING : property_obj.setter(f) does absolutely nothing :) > we have to assign the result
@@ -278,7 +286,7 @@ def _add_contract_to_setter(setter_fun, var_name, property_contract, property_na
     # -- add the generated contract
     setter_fun_with_possible_contract = contract(setter_fun, **{var_name: property_contract})
 
-    # the only thing we can't do is to replace the function's parameter name dynamically
+    # the only thing we can't do is to replace the function's parameter name dynamically in the error messages
     # so we wrap the function again to catch the potential pycontracts error :(
     # old:
     # @functools.wraps(func) -> to make the wrapper function look like the wrapped function
@@ -294,6 +302,48 @@ def _add_contract_to_setter(setter_fun, var_name, property_contract, property_na
 
     # f = _contracts_parser_interceptor(f)
     setter_fun_with_possible_contract = decorate(setter_fun_with_possible_contract, _contracts_parser_interceptor)
+    return setter_fun_with_possible_contract
+
+
+def _add_validators_to_setter(setter_fun, var_name, validators, property_name):
+
+    # 0. check that we can import validate
+    # note: this is useless now but maybe one day validate will be another project ?
+    try:
+        # noinspection PyUnresolvedReferences
+        from autoclass import validate
+    except ImportError as e:
+        raise Exception(
+            'Use of _add_contract_to_setter requires that validate library is installed. Check that you can '
+            '\'import validate\'')
+
+    # -- check if a contract already exists on the function
+    if hasattr(setter_fun, '__validators__'):
+        msg = 'Overriden setter for attribute ' + property_name + ' implemented by function ' \
+              + str(setter_fun.__qualname__) + ' has validators while there are validators already defined ' \
+              'for this property in the __init__ constructor. This will lead to double-contract in the final ' \
+              'setter, please remove the one on the overriden setter.'
+        warn(msg)
+
+    # -- add the generated contract
+    setter_fun_with_possible_contract = validate_decorate(setter_fun, **{var_name: validators})
+
+    # # the only thing we can't do is to replace the function's parameter name dynamically in the validation error
+    # #  messages so we wrap the function again to catch the potential pycontracts error :(
+    # # old:
+    # # @functools.wraps(func) -> to make the wrapper function look like the wrapped function
+    # # def wrapper(self, *args, **kwargs):
+    # # new:
+    # # we now use 'decorate' to have a wrapper that has the same signature, see below
+    # def _contracts_parser_interceptor(func, self, *args, **kwargs):
+    #     try:
+    #         return func(self, *args, **kwargs)
+    #     except ContractNotRespected as e:
+    #         e.error = e.error.replace('\'val\'', '\'' + property_name + '\'')
+    #         raise e
+
+    # f = _contracts_parser_interceptor(f)
+    # setter_fun_with_possible_contract = decorate(setter_fun_with_possible_contract, _contracts_parser_interceptor)
     return setter_fun_with_possible_contract
 
 

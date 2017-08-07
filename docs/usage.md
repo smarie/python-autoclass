@@ -1,5 +1,26 @@
 ## Usage details
 
+### @validate
+
+Adds input validation to a method.
+
+```python
+from autoclass import validate, not_none, is_even, gt
+
+@validate(a=[not_none, is_even, gt(1)], b=is_even)
+def myfunc(a, b):
+    print('hello')
+    
+myfunc(84, 82)  # OK
+myfunc(None,0)  # ValidationError: a is None
+myfunc(1,0)     # ValidationError: a is not even
+myfunc(2,1)     # ValidationError: b is not even
+myfunc(0,0)     # ValidationError: a is not >= 1
+```
+
+Many validators are provided out of the box to use with `@validate`: `gt`, `between`, `is_in`, `maxlen`... check them out in [the validators list page](https://smarie.github.io/python-autoclass/validators/).
+
+
 ### @autoargs
 
 Automatically affects the contents of a function to self. Initial code and test examples from [this answer from utnubu](http://stackoverflow.com/questions/3652851/what-is-the-best-way-to-do-automatic-attribute-assignment-in-python-and-is-it-a#answer-3653049).
@@ -153,6 +174,27 @@ assert t.b[0] == 'r'
 # check that there are contracts on the generated setters
 t.a = ''  # raises ContractNotRespected
 t.b = ['r','']  # raises ContractNotRespected
+```
+
+* if a `@validate` annotation exist on the `__init__` method, mentioning a contract for a given parameter, the parameter contract will be added on the generated setter method:
+
+```python
+@autoprops
+class FooConfigA(object):
+
+    @autoargs
+    @validate(a=minlens(0))
+    def __init__(self, a: str):
+        pass
+
+t = FooConfigA('rhubarb')
+
+# check that the generated getters work
+t.a='r'
+assert t.a == 'r'
+
+# check that there are validators on the generated setters
+t.a = ''  # raises ValidationError
 ```
 
 * The user may override the generated getter and/or setter by creating them explicitly in the class and annotating
