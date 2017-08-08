@@ -241,6 +241,13 @@
     <ul class="md-nav__list" data-md-scrollfix>
       
         <li class="md-nav__item">
+  <a href="#142-improved-and-documented-validators" title="1.4.2 - Improved and documented validators" class="md-nav__link">
+    1.4.2 - Improved and documented validators
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#141-improved-and-documented-validation-feature" title="1.4.1 - Improved and documented validation feature" class="md-nav__link">
     1.4.1 - Improved and documented validation feature
   </a>
@@ -317,6 +324,13 @@
     <ul class="md-nav__list" data-md-scrollfix>
       
         <li class="md-nav__item">
+  <a href="#142-improved-and-documented-validators" title="1.4.2 - Improved and documented validators" class="md-nav__link">
+    1.4.2 - Improved and documented validators
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#141-improved-and-documented-validation-feature" title="1.4.1 - Improved and documented validation feature" class="md-nav__link">
     1.4.1 - Improved and documented validation feature
   </a>
@@ -384,7 +398,15 @@
                 
                   <h1>Changelog</h1>
                 
-                <h3 id="141-improved-and-documented-validation-feature">1.4.1 - Improved and documented validation feature<a class="headerlink" href="#141-improved-and-documented-validation-feature" title="Permanent link">&para;</a></h3>
+                <h3 id="142-improved-and-documented-validators">1.4.2 - Improved and documented validators<a class="headerlink" href="#142-improved-and-documented-validators" title="Permanent link">&para;</a></h3>
+<ul>
+<li>improved validators list documentation</li>
+<li>added new validator: <code>and_</code></li>
+<li>fixed bugs in <code>or_</code>, <code>not_</code>, and <code>xor_</code> : since custom validators may now throw exceptions other than <code>ValidationError</code> and may return <code>None</code>, there was a need to update them to take these cases into account</li>
+<li><code>not_</code> may now be applied to a list of validators (implicit <code>and_</code>)</li>
+<li>more unit tests for boolean validators</li>
+</ul>
+<h3 id="141-improved-and-documented-validation-feature">1.4.1 - Improved and documented validation feature<a class="headerlink" href="#141-improved-and-documented-validation-feature" title="Permanent link">&para;</a></h3>
 <ul>
 <li>A validator function may now return <code>None</code></li>
 <li>improved documentation on <code>@validate</code> in particular for custom validators implementation</li>

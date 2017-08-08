@@ -199,6 +199,8 @@
     
     <input class="md-toggle md-nav__toggle" data-md-toggle="toc" type="checkbox" id="toc">
     
+      
+    
     
       <label class="md-nav__link md-nav__link--active" for="toc">
         Usage details
@@ -212,19 +214,13 @@
 <nav class="md-nav md-nav--secondary">
   
   
+    
+  
   
     <label class="md-nav__title" for="toc">Table of contents</label>
     <ul class="md-nav__list" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#usage-details" title="Usage details" class="md-nav__link">
-    Usage details
-  </a>
-  
-    <nav class="md-nav">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
   <a href="#validate" title="@validate" class="md-nav__link">
     @validate
   </a>
@@ -250,23 +246,18 @@
     </nav>
   
 </li>
-        
-          <li class="md-nav__item">
+      
+        <li class="md-nav__item">
   <a href="#autoargs" title="@autoargs" class="md-nav__link">
     @autoargs
   </a>
   
 </li>
-        
-          <li class="md-nav__item">
+      
+        <li class="md-nav__item">
   <a href="#autoprops" title="@autoprops" class="md-nav__link">
     @autoprops
   </a>
-  
-</li>
-        
-      </ul>
-    </nav>
   
 </li>
       
@@ -317,19 +308,13 @@
 <nav class="md-nav md-nav--secondary">
   
   
+    
+  
   
     <label class="md-nav__title" for="toc">Table of contents</label>
     <ul class="md-nav__list" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#usage-details" title="Usage details" class="md-nav__link">
-    Usage details
-  </a>
-  
-    <nav class="md-nav">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
   <a href="#validate" title="@validate" class="md-nav__link">
     @validate
   </a>
@@ -355,23 +340,18 @@
     </nav>
   
 </li>
-        
-          <li class="md-nav__item">
+      
+        <li class="md-nav__item">
   <a href="#autoargs" title="@autoargs" class="md-nav__link">
     @autoargs
   </a>
   
 </li>
-        
-          <li class="md-nav__item">
+      
+        <li class="md-nav__item">
   <a href="#autoprops" title="@autoprops" class="md-nav__link">
     @autoprops
   </a>
-  
-</li>
-        
-      </ul>
-    </nav>
   
 </li>
       
@@ -392,10 +372,8 @@
                   <a href="https://github.com/smarie/python-autoclass/edit/master/docs/usage.md" title="Edit this page" class="md-icon md-content__icon">edit</a>
                 
                 
-                  <h1>Usage details</h1>
-                
-                <h2 id="usage-details">Usage details<a class="headerlink" href="#usage-details" title="Permanent link">&para;</a></h2>
-<h3 id="validate">@validate<a class="headerlink" href="#validate" title="Permanent link">&para;</a></h3>
+                <h1 id="usage-details">Usage details<a class="headerlink" href="#usage-details" title="Permanent link">&para;</a></h1>
+<h2 id="validate">@validate<a class="headerlink" href="#validate" title="Permanent link">&para;</a></h2>
 <p>Adds input validation to a method. Simply declare the name of the input to validate and associate to it a validator or a list of validators:</p>
 <div class="codehilite"><pre><span></span><span class="nd">@validate</span><span class="p">(</span><span class="o">&lt;</span><span class="n">input_name</span><span class="o">&gt;=&lt;</span><span class="n">validator_or_list_of_validators</span><span class="o">&gt;</span><span class="p">,</span> <span class="o">...</span><span class="p">)</span>
 </pre></div>
@@ -416,7 +394,7 @@
 </pre></div>
 
 
-<h4 id="not_none-in-combination-with-type-checkers-such-as-enforce"><code>not_none</code> in combination with type checkers such as enforce<a class="headerlink" href="#not_none-in-combination-with-type-checkers-such-as-enforce" title="Permanent link">&para;</a></h4>
+<h3 id="not_none-in-combination-with-type-checkers-such-as-enforce"><code>not_none</code> in combination with type checkers such as enforce<a class="headerlink" href="#not_none-in-combination-with-type-checkers-such-as-enforce" title="Permanent link">&para;</a></h3>
 <p>When used in combination with a PEP484 type checker such as enforce, you don't need to include the <code>not_none</code> validator. Indeed if an input is not explicitly declared with type <code>Optional[...]</code> or <code>Union[NoneType, ...]</code>, a good type checker should already raise an error:</p>
 <div class="codehilite"><pre><span></span><span class="kn">from</span> <span class="nn">enforce</span> <span class="kn">import</span> <span class="n">runtime_validation</span>
 <span class="kn">from</span> <span class="nn">numbers</span> <span class="kn">import</span> <span class="n">Integral</span>
@@ -433,7 +411,7 @@
 </pre></div>
 
 
-<h4 id="implementing-custom-validators">Implementing custom validators<a class="headerlink" href="#implementing-custom-validators" title="Permanent link">&para;</a></h4>
+<h3 id="implementing-custom-validators">Implementing custom validators<a class="headerlink" href="#implementing-custom-validators" title="Permanent link">&para;</a></h3>
 <p>You may implement your own validators: simply provide a function that returns <code>True</code> in case of correct validation, and either raises an exception or returns <code>False</code> in case validation fails. The <code>ValidationError</code> type is provided for convenience, but you may wish to use another exception type. The example below shows four styles of validators </p>
 <div class="codehilite"><pre><span></span><span class="kn">from</span> <span class="nn">autoclass</span> <span class="kn">import</span> <span class="n">validate</span><span class="p">,</span> <span class="n">ValidationError</span>
 
@@ -472,7 +450,7 @@
 </pre></div>
 
 
-<h3 id="autoargs">@autoargs<a class="headerlink" href="#autoargs" title="Permanent link">&para;</a></h3>
+<h2 id="autoargs">@autoargs<a class="headerlink" href="#autoargs" title="Permanent link">&para;</a></h2>
 <p>Automatically affects the contents of a function to self. Initial code and test examples from <a href="http://stackoverflow.com/questions/3652851/what-is-the-best-way-to-do-automatic-attribute-assignment-in-python-and-is-it-a#answer-3653049">this answer from utnubu</a>.</p>
 <p>A few illustrative examples can be found in the unit tests below.</p>
 <ul>
@@ -579,7 +557,7 @@
 </pre></div>
 
 
-<h3 id="autoprops">@autoprops<a class="headerlink" href="#autoprops" title="Permanent link">&para;</a></h3>
+<h2 id="autoprops">@autoprops<a class="headerlink" href="#autoprops" title="Permanent link">&para;</a></h2>
 <p>Automatically generates all properties getters and setters from the class constructor.</p>
 <ul>
 <li>Basic functionality, no customization - all constructor arguments become properties: </li>
