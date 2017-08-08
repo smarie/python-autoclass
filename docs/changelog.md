@@ -1,3 +1,7 @@
+### 1.4.3 - User-friendly validators error messages
+
+* better validation error messages for parametrized validators
+
 ### 1.4.2 - Improved and documented validators
 
  * improved validators list documentation

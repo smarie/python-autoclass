@@ -156,6 +156,10 @@ class ValidationError(Exception):
                                + str(func) + '\' with validator ' + str(validator_func) + '.\n' + extra_msg)
 
 
+def get_names(validators):
+    return ', '.join([val.__name__ for val in validators])
+
+
 # ----------- some convenient validators ...
 def not_none(x: Any):
     """ 'Is not None' validator """
@@ -175,7 +179,7 @@ def and_(validators):
             res = validator(x)
             if res not in {None, True}:
                 # one validator was unhappy > raise
-                raise ValidationError('and(' + str(validators) + '): Validator ' + str(validator)
+                raise ValidationError('and(' + get_names(validators) + '): Validator ' + str(validator)
                                       + ' failed validation for input ' + str(x))
         return True
 
@@ -213,8 +217,8 @@ def not_(validator, catch_all: bool = False):
                 return True  # caught exception: return True
 
             # if we're here that's a failure
-            raise ValidationError('not(' + str(validator) + '): Validator ' + str(validator) + ' validated '
-                                  'input ' + str(x) + ' with success, therefore the not() is a failure')
+            raise ValidationError('not(' + str(validator) + '): Validator validated input \'' + str(x) + '\' with success, '
+                                  'therefore the not() is a failure')
         else:
             try:
                 res = validator(x)
@@ -224,8 +228,8 @@ def not_(validator, catch_all: bool = False):
                 return True  # caught exception: return True
 
             # if we're here that's a failure
-            raise ValidationError('not(' + str(validator) + '): Validator ' + str(validator) + ' validated '
-                                  'input ' + str(x) + ' with success, therefore the not() is a failure')
+            raise ValidationError('not(' + str(validator) + '): Validator validated input \'' + str(x) + '\' with success, '
+                                  'therefore the not() is a failure')
     return validate
 
 
@@ -252,10 +256,9 @@ def or_(validators):
                     err = e  # remember the first exception
 
         # no validator accepted: raise
-        msg = 'or(' + str(validators) + '): All validators ' + str(validators) + ' failed validation for input ' \
-              + str(x) + '. '
+        msg = 'or(' + get_names(validators) + '): All validators failed validation for input \'' + str(x) + '\'. '
         if err is not None:
-            msg += 'First exception caught was :' + str(err)
+            msg += 'First exception caught was: \'' + str(err) + '\''
         raise ValidationError(msg)
 
     return validate
@@ -294,17 +297,17 @@ def xor_(validators):
                 return True
             else:
                 # second validator happy : fail, too many validators happy
-                raise ValidationError('xor(' + str(validators) + ') : Too many validators succeeded : '
+                raise ValidationError('xor(' + get_names(validators) + ') : Too many validators succeeded : '
                                       + str(ok_validator) + ' + ' + str(sec_validator))
         else:
             # no validator happy
-            msg = 'xor(' + str(validators) + '): All validators ' + str(validators) + ' failed validation for input ' \
-                  + str(x) + '. '
+            msg = 'xor(' + get_names(validators) + '): All validators failed validation for input \'' + str(x) + '\'. '
             if err is not None:
-                msg += 'First exception caught was :' + str(err)
+                msg += 'First exception caught was: \'' + str(err) + '\''
             raise ValidationError(msg)
 
     return validate
+
 
 # ------------- orderables ----------------
 def gt(min_value: Any, strict: bool = False):

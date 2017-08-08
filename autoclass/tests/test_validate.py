@@ -147,3 +147,6 @@ class TestValidate(TestCase):
 
         with self.assertRaises(ValidationError):
             myfunc(6)  # ValidationError: a is both even and a multiple of 3
+
+        with self.assertRaises(ValidationError):
+            myfunc(7)  # ValidationError: a is both even and a multiple of 3
