@@ -34,7 +34,7 @@ def validate(**validators: Dict[str, Callable[[Any], bool]]):
         if is_even(a) and gt1(a) and is_even(b):
             print('hello')
         else:
-            raise ValidationException(...)
+            raise ValidationError(...)
     ```
     
     :param validators: 
@@ -318,10 +318,16 @@ def gt(min_value: Any, strict: bool = False):
     """
     if strict:
         def gt(x):
-            return x > min_value
+            if x > min_value:
+                return True
+            else:
+                raise ValidationError('gt: x > ' + str(min_value) + ' does not hold for x=' + str(x))
     else:
         def gt(x):
-            return x >= min_value
+            if x >= min_value:
+                return True
+            else:
+                raise ValidationError('gt: x >= ' + str(min_value) + ' does not hold for x=' + str(x))
     return gt
 
 
@@ -341,10 +347,16 @@ def lt(max_value: Any, strict: bool = False):
     """
     if strict:
         def lt(x):
-            return x < max_value
+            if x < max_value:
+                return True
+            else:
+                raise ValidationError('lt: x < ' + str(max_value) + ' does not hold for x=' + str(x))
     else:
         def lt(x):
-            return x <= max_value
+            if x <= max_value:
+                return True
+            else:
+                raise ValidationError('lt: x <= ' + str(max_value) + ' does not hold for x=' + str(x))
     return lt
 
 
@@ -367,16 +379,32 @@ def between(min_val: Any, max_val: Any, open_left: bool = False, open_right: boo
     """
     if open_left and open_right:
         def between(x):
-            return (min_val < x) and (x < max_val)
+            if (min_val < x) and (x < max_val):
+                return True
+            else:
+                raise ValidationError('between: ' + str(min_val) + ' < x < ' + str(max_val) + ' does not hold for x='
+                                      + str(x))
     elif open_left:
         def between(x):
-            return (min_val < x) and (x <= max_val)
+            if (min_val < x) and (x <= max_val):
+                return True
+            else:
+                raise ValidationError('between: ' + str(min_val) + ' < x <= ' + str(max_val) + ' does not hold for x='
+                                      + str(x))
     elif open_right:
         def between(x):
-            return (min_val <= x) and (x < max_val)
+            if (min_val <= x) and (x < max_val):
+                return True
+            else:
+                raise ValidationError('between: ' + str(min_val) + ' <= x < ' + str(max_val) + ' does not hold for x='
+                                      + str(x))
     else:
         def between(x):
-            return (min_val <= x) and (x <= max_val)
+            if (min_val <= x) and (x <= max_val):
+                return True
+            else:
+                raise ValidationError('between: ' + str(min_val) + ' <= x <= ' + str(max_val) + ' does not hold for x='
+                                      + str(x))
     return between
 
 
@@ -394,8 +422,12 @@ def is_odd(x: Integral):
 def is_mod(ref):
     """ Validates that x is a multiple of the reference (`x % ref == 0`) """
     def is_mod(x):
-        return x % ref == 0
+        if x % ref == 0:
+            return True
+        else:
+            raise ValidationError('is_mod: x % ' + str(ref) + ' == 0 does not hold for x=' + str(x))
     return is_mod
+
 
 # ------------- collections ----------------
 def minlen(min_length: Integral, strict: bool = False):
@@ -410,10 +442,16 @@ def minlen(min_length: Integral, strict: bool = False):
     """
     if strict:
         def minlen(x):
-            return len(x) > min_length
+            if len(x) > min_length:
+                return True
+            else:
+                raise ValidationError('minlen: len(x) > ' + str(min_length) + ' does not hold for x=' + str(x))
     else:
         def minlen(x):
-            return len(x) >= min_length
+            if len(x) >= min_length:
+                return True
+            else:
+                raise ValidationError('minlen: len(x) >= ' + str(min_length) + ' does not hold for x=' + str(x))
     return minlen
 
 
@@ -434,10 +472,16 @@ def maxlen(max_length: Integral, strict: bool = False):
     """
     if strict:
         def maxlen(x):
-            return len(x) < max_length
+            if len(x) < max_length:
+                return True
+            else:
+                raise ValidationError('maxlen: len(x) < ' + str(max_length) + ' does not hold for x=' + str(x))
     else:
         def maxlen(x):
-            return len(x) <= max_length
+            if len(x) <= max_length:
+                return True
+            else:
+                raise ValidationError('maxlen: len(x) <= ' + str(max_length) + ' does not hold for x=' + str(x))
     return maxlen
 
 
@@ -455,7 +499,10 @@ def is_in(allowed_values: Set):
     :return:
     """
     def valin(x):
-        return x in allowed_values
+        if x in allowed_values:
+            return True
+        else:
+            raise ValidationError('is_in: x in ' + str(allowed_values) + ' does not hold for x=' + str(x))
     return valin
 
 
@@ -468,7 +515,11 @@ def is_subset(reference_set: Set):
     :return:
     """
     def is_subset(x):
-        return len(x - reference_set) == 0
+        if len(x - reference_set) == 0:
+            return True
+        else:
+            raise ValidationError('is_subset: len(x - reference_set) == 0 does not hold for x=' + str(x)
+                                  + ' and reference_set=' + str(reference_set))
     return is_subset
 
 
@@ -481,5 +532,9 @@ def is_superset(reference_set: Set):
     :return:
     """
     def is_superset(x):
-        return len(reference_set - x) == 0
+        if len(reference_set - x) == 0:
+            return True
+        else:
+            raise ValidationError('is_superset: len(reference_set - x) == 0 does not hold for x=' + str(x)
+                                  + ' and reference_set=' + str(reference_set))
     return is_superset
