@@ -1,3 +1,11 @@
+### 1.4.2 - Improved and documented validators
+
+ * improved validators list documentation
+ * added new validator: `and_`
+ * fixed bugs in `or_`, `not_`, and `xor_` : since custom validators may now throw exceptions other than `ValidationError` and may return `None`, there was a need to update them to take these cases into account
+ * `not_` may now be applied to a list of validators (implicit `and_`)
+ * more unit tests for boolean validators
+
 ### 1.4.1 - Improved and documented validation feature 
 
  * A validator function may now return `None`

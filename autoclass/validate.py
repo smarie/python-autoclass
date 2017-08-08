@@ -86,7 +86,7 @@ def validate_decorate(func: Callable, **validators: Dict[str, Callable[[Any], bo
     return a
 
 
-def _validate(value_to_validate, validator_func, func, att_name, ignore_if_none: bool = True):
+def _validate(value_to_validate, validator_func, func, att_name):
     """
     Subroutine that actually executes validation
 
@@ -102,7 +102,7 @@ def _validate(value_to_validate, validator_func, func, att_name, ignore_if_none:
         # --handle case where the first is not_none
         if validator_func[0] is not_none:
             for val_func in validator_func:
-                _validate(value_to_validate, val_func, func, att_name, ignore_if_none=False)
+                _validate(value_to_validate, val_func, func, att_name)
         else:
             for val_func in validator_func:
                 # --the first was not not_none : dont allow it elsewhere
@@ -162,56 +162,147 @@ def not_none(x: Any):
     return x is not None
 
 
-def not_(validator):
-    """ Generates the inverse of the provided validator: when the validator returns False or raises a ValidationError,
-     this validator returns True. Otherwise it returns False. """
+def and_(validators):
+    """
+    An 'and' validator: returns True if all of the provided validators are happy with the input. This method will
+    raise a ValidationException on the first False received or Exception caught
+
+    :param validators:
+    :return:
+    """
     def validate(x):
-        try:
+        for validator in validators:
             res = validator(x)
-            # inverse the result
-            return not res
-        except ValidationError:
-            # this is probably sane to return True
-            return True
+            if res not in {None, True}:
+                # one validator was unhappy > raise
+                raise ValidationError('and(' + str(validators) + '): Validator ' + str(validator)
+                                      + ' failed validation for input ' + str(x))
+        return True
 
     return validate
 
 
-def or_(validators):
-    """ An 'or' validator: returns True if at least one of the provided validators is happy with the input. """
+def not_(validator, catch_all: bool = False):
+    """
+    Generates the inverse of the provided validator: when the validator returns False or raises a `ValidationError`,
+    this validator returns True. Otherwise it returns False. If the `catch_all` parameter is set to `True`, any
+    exception will be caught instead of just `ValidationError`s.
+
+    Note that you may provide a list of validators to `not_()`. It will be interpreted as `not_(and_(<valiators_list>))`
+
+    :param validator:
+    :param catch_all: an optional boolean flag. By default, only ValidationError are silently catched and turned into
+    a 'ok' result. Turning this flag to True will assume that all exceptions should be catched and turned to a
+    'ok' result
+    :return:
+    """
+    try:
+        # in case this is a validator list, create a 'and_' around it
+        validator[0]
+        validator = and_(validator)
+    except:
+        pass
 
     def validate(x):
-        for validator in validators:
+        if catch_all:
             try:
-                if validator(x):
-                    # we can return : one validator was happy
+                res = validator(x)
+                if res not in {None, True}:  # inverse the result
+                    return True
+            except:
+                return True  # caught exception: return True
+
+            # if we're here that's a failure
+            raise ValidationError('not(' + str(validator) + '): Validator ' + str(validator) + ' validated '
+                                  'input ' + str(x) + ' with success, therefore the not() is a failure')
+        else:
+            try:
+                res = validator(x)
+                if res not in {None, True}:  # inverse the result
                     return True
             except ValidationError:
-                pass
-        # no validator accepted: return false
-        return False
+                return True  # caught exception: return True
+
+            # if we're here that's a failure
+            raise ValidationError('not(' + str(validator) + '): Validator ' + str(validator) + ' validated '
+                                  'input ' + str(x) + ' with success, therefore the not() is a failure')
+    return validate
+
+
+def or_(validators):
+    """
+    An 'or' validator: returns True if at least one of the provided validators is happy with the input. All exceptions
+    will be silently caught. In case of failure, a global ValidationException will be raised, together with the first
+    exception message if any.
+
+    :param validators:
+    :return:
+    """
+
+    def validate(x):
+        err = None
+        for validator in validators:
+            try:
+                res = validator(x)
+                if res in {None, True}:
+                    # we can return : one validator was happy
+                    return True
+            except Exception as e:
+                if err is None:
+                    err = e  # remember the first exception
+
+        # no validator accepted: raise
+        msg = 'or(' + str(validators) + '): All validators ' + str(validators) + ' failed validation for input ' \
+              + str(x) + '. '
+        if err is not None:
+            msg += 'First exception caught was :' + str(err)
+        raise ValidationError(msg)
 
     return validate
 
 
 def xor_(validators):
-    """ A 'xor' validator: returns True if exactly one of the provided validators is happy with the input. """
+    """
+    A 'xor' validator: returns True if exactly one of the provided validators is happy with the input. All
+    exceptions will be silently caught. In case of failure, a global ValidationException will be raised, together with
+    the first exception message if any.
 
+    :param validators:
+    :return:
+    """
     def validate(x):
-        ok = False
+        ok_validator = None
+        sec_validator = None
+        err = None
         for validator in validators:
             try:
-                if validator(x):
-                    if ok:
-                        # second validator happy : fail, to many validators happy
-                        return False
+                res = validator(x)
+                if res in {None, True}:
+                    if ok_validator is not None:
+                        sec_validator = validator
                     else:
                         # we found the first one happy
-                        ok = True
-            except ValidationError:
-                pass
+                        ok_validator = validator
+            except Exception as e:
+                if err is None:
+                    err = e  # remember the first exception
+
         # return if were happy or not
-        return ok
+        if ok_validator is not None:
+            if sec_validator is None:
+                # one unique validator happy: success
+                return True
+            else:
+                # second validator happy : fail, too many validators happy
+                raise ValidationError('xor(' + str(validators) + ') : Too many validators succeeded : '
+                                      + str(ok_validator) + ' + ' + str(sec_validator))
+        else:
+            # no validator happy
+            msg = 'xor(' + str(validators) + '): All validators ' + str(validators) + ' failed validation for input ' \
+                  + str(x) + '. '
+            if err is not None:
+                msg += 'First exception caught was :' + str(err)
+            raise ValidationError(msg)
 
     return validate
 
@@ -291,14 +382,20 @@ def between(min_val: Any, max_val: Any, open_left: bool = False, open_right: boo
 
 # ------------- integers ------------------
 def is_even(x: Integral):
-    """ 'Is even' validator """
+    """ Validates that x is even (`x % 2 == 0`) """
     return x % 2 == 0
 
 
 def is_odd(x: Integral):
-    """ 'Is odd' validator """
+    """ Validates that x is odd (`x % 2 != 0`) """
     return x % 2 != 0
 
+
+def is_mod(ref):
+    """ Validates that x is a multiple of the reference (`x % ref == 0`) """
+    def is_mod(x):
+        return x % ref == 0
+    return is_mod
 
 # ------------- collections ----------------
 def minlen(min_length: Integral, strict: bool = False):

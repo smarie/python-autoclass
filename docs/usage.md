@@ -1,6 +1,6 @@
-## Usage details
+# Usage details
 
-### @validate
+## @validate
 
 Adds input validation to a method. Simply declare the name of the input to validate and associate to it a validator or a list of validators:
 
@@ -24,7 +24,7 @@ myfunc(2,1)     # ValidationError: b is not even
 myfunc(0,0)     # ValidationError: a is not >= 1
 ```
 
-#### `not_none` in combination with type checkers such as enforce
+### `not_none` in combination with type checkers such as enforce
 
 When used in combination with a PEP484 type checker such as enforce, you don't need to include the `not_none` validator. Indeed if an input is not explicitly declared with type `Optional[...]` or `Union[NoneType, ...]`, a good type checker should already raise an error:
 
@@ -44,7 +44,7 @@ myfunc(None, 0)  # RuntimeTypeError: a is None
 ```
 
 
-#### Implementing custom validators
+### Implementing custom validators
 
 You may implement your own validators: simply provide a function that returns `True` in case of correct validation, and either raises an exception or returns `False` in case validation fails. The `ValidationError` type is provided for convenience, but you may wish to use another exception type. The example below shows four styles of validators 
 
@@ -86,7 +86,7 @@ myfunc(0,0)     # ValidationError: a is not >= 1
 ```
 
 
-### @autoargs
+## @autoargs
 
 Automatically affects the contents of a function to self. Initial code and test examples from [this answer from utnubu](http://stackoverflow.com/questions/3652851/what-is-the-best-way-to-do-automatic-attribute-assignment-in-python-and-is-it-a#answer-3653049).
 
@@ -192,7 +192,7 @@ print(a.verbose)  # raises AttributeError
 ```
 
 
-### @autoprops
+## @autoprops
 
 Automatically generates all properties getters and setters from the class constructor.
 

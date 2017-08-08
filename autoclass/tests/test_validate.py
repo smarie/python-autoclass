@@ -1,6 +1,6 @@
 from unittest import TestCase
 
-from autoclass import validate, ValidationError, is_even, gt, not_none
+from autoclass import validate, ValidationError, is_even, gt, not_none, not_, is_mod, or_, xor_
 
 
 class TestValidate(TestCase):
@@ -99,3 +99,51 @@ class TestValidate(TestCase):
         # -- check that the validation works
         myfunc(84, 82)
         myfunc(None, 0)
+
+    def test_validate_not(self):
+        """ Test for the not_ validator """
+
+        @validate(a=not_(is_even), b=not_([is_even, is_mod(3)]))
+        def myfunc(a, b):
+            print('hello')
+
+        # -- check that the validation works
+        myfunc(11, 11)
+
+        with self.assertRaises(ValidationError):
+            myfunc(84, 82)  # ValidationError: a is even
+
+        with self.assertRaises(ValidationError):
+            myfunc(84, 3)   # ValidationError: b is odd (ok) but it is a multiple of 3 (nok)
+
+    def test_validate_or(self):
+        """ Test for the or_ validator, also in combination with not_"""
+
+        @validate(a=or_([is_even, is_mod(3)]), b=not_(or_([is_even, is_mod(3)])))
+        def myfunc(a, b):
+            print('hello')
+
+        # -- check that the validation works
+        myfunc(9, None)  # a is not even but is a multiple of 3 > ok
+        myfunc(4, None)  # a is even but is not a multiple of 3 > ok
+        myfunc(6, 7)     # b is not even AND not a multiple of 3 > ok
+
+        with self.assertRaises(ValidationError):
+            myfunc(7, None)  # ValidationError: a is odd and not multiple of 3
+
+        with self.assertRaises(ValidationError):
+            myfunc(None, 3)  # ValidationError: b is odd but it is a multiple of 3
+
+    def test_validate_xor(self):
+        """ Test for the xor_ validator """
+
+        @validate(a=xor_([is_even, is_mod(3)]))
+        def myfunc(a):
+            print('hello')
+
+        # -- check that the validation works
+        myfunc(9)  # a is not even but is a multiple of 3 > ok
+        myfunc(4)  # a is even but is not a multiple of 3 > ok
+
+        with self.assertRaises(ValidationError):
+            myfunc(6)  # ValidationError: a is both even and a multiple of 3
