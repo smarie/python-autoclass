@@ -142,7 +142,7 @@ class ValidationError(Exception):
         super(ValidationError, self).__init__(contents)
 
     @staticmethod
-    def create(func, att_name, validator_func, item, extra_msg: str = ''):
+    def create(func, att_name, validator_func, item, extra_msg: str = None):
         """
         
         :param func:
@@ -152,8 +152,9 @@ class ValidationError(Exception):
         :param extra_msg
         :return: 
         """
-        return ValidationError('Error validating input \'' + str(att_name) + '=' + str(item) + '\' for function \''
-                               + str(func) + '\' with validator ' + str(validator_func) + '.\n' + extra_msg)
+        return ValidationError('Error validating input ' + str(att_name) + '=\'' + str(item) + '\' for function \''
+                               + str(func) + '\' with validator ' + (validator_func.__name__ or str(validator_func))
+                               + (('.\n  ' + extra_msg) if extra_msg else ''))
 
 
 def get_names(validators):
