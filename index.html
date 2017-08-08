@@ -12,7 +12,7 @@
       
         <link rel="shortcut icon" href="./assets/images/favicon.png">
       
-      <meta name="generator" content="mkdocs-0.16.3, mkdocs-material-1.8.0">
+      <meta name="generator" content="mkdocs-0.16.3, mkdocs-material-1.8.1">
     
     
       
@@ -223,8 +223,8 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#why" title="Why ?" class="md-nav__link">
-    Why ?
+  <a href="#why-autoclass" title="Why autoclass ?" class="md-nav__link">
+    Why autoclass ?
   </a>
   
 </li>
@@ -330,8 +330,8 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#why" title="Why ?" class="md-nav__link">
-    Why ?
+  <a href="#why-autoclass" title="Why autoclass ?" class="md-nav__link">
+    Why autoclass ?
   </a>
   
 </li>
@@ -391,8 +391,9 @@
 
 <h2 id="example-usage">Example usage<a class="headerlink" href="#example-usage" title="Permanent link">&para;</a></h2>
 <p>The following snippet shows a <code>HouseConfiguration</code> class with four attributes.
-Each attribute is validated against the expected type everytime you try to set it (constructor AND modifications), and the <code>name</code> and <code>surface</code> attribute are further validated. Notice the size of the resulting code !</p>
-<div class="codehilite"><pre><span></span><span class="kn">from</span> <span class="nn">autoclass</span> <span class="kn">import</span> <span class="n">Boolean</span><span class="p">,</span> <span class="n">autoargs</span><span class="p">,</span> <span class="n">validate</span><span class="p">,</span> <span class="n">minlens</span><span class="p">,</span> <span class="n">gt</span><span class="p">,</span> <span class="n">between</span><span class="p">,</span> <span class="n">autoprops</span><span class="p">,</span> <span class="n">setter_override</span>
+Each attribute is validated against the expected type everytime you try to set it (constructor AND modifications), and the <code>name</code> and <code>surface</code> attribute are further validated (<code>len(name) &gt; 0</code> and <code>surface &gt;= 0</code>). Notice the size of the resulting code !</p>
+<div class="codehilite"><pre><span></span><span class="kn">from</span> <span class="nn">autoclass</span> <span class="kn">import</span> <span class="n">autoargs</span><span class="p">,</span> <span class="n">autoprops</span><span class="p">,</span> <span class="n">setter_override</span>
+<span class="kn">from</span> <span class="nn">autoclass</span> <span class="kn">import</span> <span class="n">Boolean</span><span class="p">,</span> <span class="n">validate</span><span class="p">,</span> <span class="n">minlens</span><span class="p">,</span> <span class="n">gt</span>
 <span class="kn">from</span> <span class="nn">numbers</span> <span class="kn">import</span> <span class="n">Real</span><span class="p">,</span> <span class="n">Integral</span>
 <span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Optional</span>
 <span class="kn">from</span> <span class="nn">enforce</span> <span class="kn">import</span> <span class="n">runtime_validation</span><span class="p">,</span> <span class="n">config</span>
@@ -425,11 +426,13 @@ Each attribute is validated against the expected type everytime you try to set i
 <span class="n">t</span> <span class="o">=</span> <span class="n">HouseConfiguration</span><span class="p">(</span><span class="s1">&#39;test&#39;</span><span class="p">,</span> <span class="mi">12</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
 <span class="n">t</span><span class="o">.</span><span class="n">nb_floors</span> <span class="o">=</span> <span class="bp">None</span>  <span class="c1"># Declared &#39;Optional&#39;: no error</span>
 <span class="n">t</span><span class="o">.</span><span class="n">nb_floors</span> <span class="o">=</span> <span class="mf">2.2</span>   <span class="c1"># Type validation: enforce raises a RuntimeTypeError</span>
-<span class="n">t</span><span class="o">.</span><span class="n">surface</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span>       <span class="c1"># Value validation: @validate raises an ValidationError</span>
+<span class="n">t</span><span class="o">.</span><span class="n">surface</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span>      <span class="c1"># Value validation: @validate raises a ValidationError</span>
+<span class="n">HouseConfiguration</span><span class="p">(</span><span class="s1">&#39;&#39;</span><span class="p">,</span> <span class="mi">12</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>  <span class="c1"># Value validation: @validate raises a ValidationError</span>
 </pre></div>
 
 
-<h2 id="why">Why ?<a class="headerlink" href="#why" title="Permanent link">&para;</a></h2>
+<p>Note that the <code>Real</code> and <code>Integral</code> types come from the <a href="https://docs.python.org/3.6/library/numbers.html"><code>numbers</code></a> built-in module. They provide an easy way to support both python primitives AND e.g. numpy primitives. In this library we provide an additional <code>Boolean</code> class to complete the picture.</p>
+<h2 id="why-autoclass">Why autoclass ?<a class="headerlink" href="#why-autoclass" title="Permanent link">&para;</a></h2>
 <p>Python's primitive types (in particular <code>dict</code> and <code>tuple</code>) and it's dynamic typing system make it extremely powerful, to the point that it is often more convenient for developers to use primitive types or generic dynamic objects such as <a href="https://github.com/Infinidat/munch">Munch</a>, rather than small custom classes.</p>
 <p>However there are certain cases where developers still want to define their own classes, for example to provide strongly-typed APIs to their clients. In such case, <em>separation of concerns</em> will typically lead developers to enforce attribute value validation directly in the class, rather than in the code using the object. Eventually developers end up with big classes like this one:</p>
 <div class="codehilite"><pre><span></span><span class="kn">from</span> <span class="nn">autoclass</span> <span class="kn">import</span> <span class="n">check_var</span><span class="p">,</span> <span class="n">Boolean</span>
@@ -493,7 +496,7 @@ Each attribute is validated against the expected type everytime you try to set i
 
 
 <p>Now that's <strong>a lot of code</strong> - and only for 4 attributes ! Not mentioning the code for <code>check_var</code> that was not included here for the sake of readability (I include it in the library, for reference). And guess what - it is still highly prone to <strong>human mistakes</strong>. For example I made a mistake in the setter for <code>nb_floors</code>, did you spot it ? Also it makes the code <strong>less readable</strong>: did you spot that the setter for the surface property is different from the others?</p>
-<p>Really, <em>"there must be a better way"</em> : yes there is, and that's what this library provides - it can be used alone, or in combination with <a href="https://andreacensi.github.io/contracts/index.html">PyContracts</a> and/or any PEP484-based checker such as <a href="https://github.com/RussBaz/enforce">enforce</a>, <a href="https://github.com/agronholm/typeguard">typeguard</a>, <a href="https://github.com/prechelt/typecheck-decorator">typecheck-decorator</a>, etc. in order to generate all the repetitive code for you :</p>
+<p>Really, <em>"there must be a better way"</em> : yes there is, and that's what this library provides - it can be used alone, or in combination with <a href="https://andreacensi.github.io/contracts/index.html">PyContracts</a> and/or any PEP484-based checker such as <a href="https://github.com/RussBaz/enforce">enforce</a>, <a href="https://github.com/agronholm/typeguard">typeguard</a>, <a href="https://github.com/prechelt/typecheck-decorator">typecheck-decorator</a>, etc. in order to generate all the repetitive code for you. Here is an example with PyContracts:</p>
 <div class="codehilite"><pre><span></span><span class="kn">from</span> <span class="nn">autoclass</span> <span class="kn">import</span> <span class="n">Boolean</span><span class="p">,</span> <span class="n">autoprops</span><span class="p">,</span> <span class="n">autoargs</span><span class="p">,</span> <span class="n">setter_override</span>
 <span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Optional</span><span class="p">,</span> <span class="n">Union</span>
 <span class="kn">from</span> <span class="nn">numbers</span> <span class="kn">import</span> <span class="n">Real</span><span class="p">,</span> <span class="n">Integral</span>
@@ -528,14 +531,14 @@ Each attribute is validated against the expected type everytime you try to set i
 <li>all attribute validation contracts are declared once in the <code>@contract</code> annotation of <code>__init__</code></li>
 <li>it is still possible to implement custom logic in a getter or a setter, without having to repeat the <code>@contract</code></li>
 </ul>
-<p>Note: unfortunately with PyContracts the type information is duplicated. However if you use type checkers relying on PEP484 directly such as <a href="https://github.com/RussBaz/enforce">enforce</a>, <a href="https://github.com/agronholm/typeguard">typeguard</a>, <a href="https://github.com/prechelt/typecheck-decorator">typecheck-decorator</a>, etc. this is not the case - as shown in the <a href="#example_usage">initial example with enforce and validate</a>.</p>
+<p>Note: unfortunately with PyContracts the type information is duplicated. However if you use type checkers relying on PEP484 directly such as <a href="https://github.com/RussBaz/enforce">enforce</a>, <a href="https://github.com/agronholm/typeguard">typeguard</a>, <a href="https://github.com/prechelt/typecheck-decorator">typecheck-decorator</a>, etc. this is not the case - as we saw in the <a href="#example_usage">initial example with enforce and validate</a>.</p>
 <h2 id="main-features">Main features<a class="headerlink" href="#main-features" title="Permanent link">&para;</a></h2>
 <ul>
 <li>
-<p><strong><code>@validate</code></strong> is a decorator for any method, that adds input validators to the method. </p>
+<p><strong><code>@validate</code></strong> is a decorator for any method, that adds input validators to the method.</p>
 </li>
 <li>
-<p>Many validators are provided out of the box to use with <code>@validate</code>: <code>gt</code>, <code>between</code>, <code>is_in</code>, <code>maxlen</code>... check them out in <a href="https://smarie.github.io/python-autoclass/validators/">the validators list page</a>.</p>
+<p>Many validators are provided out of the box to use with <code>@validate</code>: <code>gt</code>, <code>between</code>, <code>is_in</code>, <code>maxlen</code>... check them out in <a href="https://smarie.github.io/python-autoclass/validators/">the validators list page</a>. But you can of course use your own, too.</p>
 </li>
 <li>
 <p><strong><code>@autoargs</code></strong> is a decorator for the <code>__init__</code> method of a class. It automatically assigns all of the <code>__init__</code> method's parameters to <code>self</code>. For more fine-grain tuning, explicit inclusion and exclusion lists are supported, too. <em>Note: the original @autoargs idea and code come from <a href="http://stackoverflow.com/questions/3652851/what-is-the-best-way-to-do-automatic-attribute-assignment-in-python-and-is-it-a#answer-3653049">this answer from utnubu</a></em></p>
@@ -544,13 +547,13 @@ Each attribute is validated against the expected type everytime you try to set i
 <p><strong><code>@autoprops</code></strong> is a decorator for a whole class. It automatically generates properties getters and setters for all attributes, with the correct PEP484 type hints. As for <code>@autoargs</code>, the default list of attributes is the list of parameters of the <code>__init__</code> method, and explicit inclusion and exclusion lists are supported. </p>
 </li>
 <li>
-<p><strong><code>@autoprops</code></strong> automatically adds <code>@contract</code> (<em>PyContracts</em>) or <code>@validate</code> (from autoclass) on the generated setters if a <code>@contract</code> or <code>@validate</code> exists for that property on the <code>__init__</code> method.</p>
+<p><strong><code>@autoprops</code></strong> automatically adds <code>@contract</code> (<em>PyContracts</em>) or <code>@validate</code> (from <code>autoclass</code>) on the generated setters if a <code>@contract</code> or <code>@validate</code> exists for that attribute on the <code>__init__</code> method.</p>
 </li>
 <li>
-<p><strong><code>@autoprops</code></strong>-generated getters and setters are fully PEP484 decorated so that type checkers like <em>enforce</em>'s <code>@runtime_validation</code> automatically apply to generated methods when used to decorate the whole class.</p>
+<p><strong><code>@autoprops</code></strong>-generated getters and setters are fully PEP484 decorated so that type checkers like <em>enforce</em>'s <code>@runtime_validation</code> automatically apply to generated methods when used to decorate the whole class. No explicit integration needed in autoclass!</p>
 </li>
 <li>
-<p>You may override the getter or setter generated by <code>@autoprops</code> using <strong><code>@getter_override</code></strong> and <strong><code>@setter_override</code></strong>. Note that the <code>@contract</code> and <code>@validate</code> will still be added on your custom setter if present on <code>__init__</code>.</p>
+<p>You may override the getter or setter generated by <code>@autoprops</code> using <strong><code>@getter_override</code></strong> and <strong><code>@setter_override</code></strong>. Note that the <code>@contract</code> and <code>@validate</code> will still be added on your custom setter if present on <code>__init__</code>, you don't have to repeat it yourself</p>
 </li>
 <li>
 <p>Equivalent manual wrapper methods are provided for all decorators in this library: <code>autoargs_decorate(init_func, include, exclude)</code>, <code>autoprops_decorate(cls, include, exclude)</code>, <code>autoprops_override_decorate(func, attribute, is_getter)</code>, <code>validate_decorate(func, **validators)</code></p>
@@ -576,7 +579,7 @@ Each attribute is validated against the expected type everytime you try to set i
 </ul>
 </li>
 <li>
-<p><a href="https://github.com/python-attrs/attrs">attrs</a></p>
+<p><a href="https://github.com/python-attrs/attrs">attrs</a> is a library with the same target, but the way to use it is quite different from 'standard' python. It is very powerful and elegant, though.</p>
 </li>
 <li>
 <p><a href="http://pythonhosted.org/decorator/">decorator</a> library, which provides everything one needs to create complex decorators easily (signature and annotations-preserving decorators, decorators with class factory) as well as provides some useful decorators (<code>@contextmanager</code>, <code>@blocking</code>, <code>@dispatch_on</code>). We use it to preserve the signature of class constructors and overriden setter methods.</p>
@@ -594,7 +597,7 @@ Each attribute is validated against the expected type everytime you try to set i
 </ul>
 <p><em>Do you like this library ? You might also like <a href="https://github.com/smarie?utf8=%E2%9C%93&amp;tab=repositories&amp;q=&amp;type=&amp;language=python">these</a></em> </p>
 <h2 id="want-to-contribute">Want to contribute ?<a class="headerlink" href="#want-to-contribute" title="Permanent link">&para;</a></h2>
-<p>Details on the github page: <a href="https://github.com/smarie/python-autoclass">https://github.com/smarie/python-autoclass</a> </p>
+<p>Details on the github page: <a href="https://github.com/smarie/python-autoclass">https://github.com/smarie/python-autoclass</a></p>
                 
                   
                 
@@ -650,7 +653,7 @@ Each attribute is validated against the expected type everytime you try to set i
       
     </div>
     
-      <script src="./assets/javascripts/application-1d6ee6ee6c.js"></script>
+      <script src="./assets/javascripts/application-6940329b9f.js"></script>
       
       
       <script>app.initialize({url:{base:"."}})</script>
