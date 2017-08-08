@@ -647,9 +647,13 @@ class TestReadMe(TestCase):
         with self.assertRaises(RuntimeTypeError):
             t.nb_floors = 2.2
 
-        # Custom validation works
+        # Value validation works
         with self.assertRaises(ValidationError):
             t.surface = -1
+
+        # Value validation works in constructor
+        with self.assertRaises(ValidationError):
+            HouseConfiguration('', 12, 2)
 
     def test_readme_usage_autoprops_validate(self):
         @autoprops

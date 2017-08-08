@@ -119,7 +119,8 @@ def _validate(value_to_validate, validator_func, func, att_name, ignore_if_none:
             pass
         else:
             # validate
-            if not validator_func(value_to_validate):
+            res = validator_func(value_to_validate)
+            if res not in {None, True}:
                 raise ValidationError.create(func, att_name, validator_func, value_to_validate)
 
 

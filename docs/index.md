@@ -22,10 +22,11 @@ You may wish to also install [PyContracts](https://andreacensi.github.io/contrac
 ## Example usage
 
 The following snippet shows a `HouseConfiguration` class with four attributes.
-Each attribute is validated against the expected type everytime you try to set it (constructor AND modifications), and the `name` and `surface` attribute are further validated. Notice the size of the resulting code !
+Each attribute is validated against the expected type everytime you try to set it (constructor AND modifications), and the `name` and `surface` attribute are further validated (`len(name) > 0` and `surface >= 0`). Notice the size of the resulting code !
 
 ```python
-from autoclass import Boolean, autoargs, validate, minlens, gt, between, autoprops, setter_override
+from autoclass import autoargs, autoprops, setter_override
+from autoclass import Boolean, validate, minlens, gt
 from numbers import Real, Integral
 from typing import Optional
 from enforce import runtime_validation, config
@@ -59,12 +60,14 @@ We can test that validation works:
 t = HouseConfiguration('test', 12, 2)
 t.nb_floors = None  # Declared 'Optional': no error
 t.nb_floors = 2.2   # Type validation: enforce raises a RuntimeTypeError
-t.surface = -1       # Value validation: @validate raises an ValidationError
+t.surface = -1      # Value validation: @validate raises a ValidationError
+HouseConfiguration('', 12, 2)  # Value validation: @validate raises a ValidationError
 ```
 
+Note that the `Real` and `Integral` types come from the [`numbers`](https://docs.python.org/3.6/library/numbers.html) built-in module. They provide an easy way to support both python primitives AND e.g. numpy primitives. In this library we provide an additional `Boolean` class to complete the picture.
 
 
-## Why ?
+## Why autoclass ?
 
 Python's primitive types (in particular `dict` and `tuple`) and it's dynamic typing system make it extremely powerful, to the point that it is often more convenient for developers to use primitive types or generic dynamic objects such as [Munch](https://github.com/Infinidat/munch), rather than small custom classes.
 
@@ -132,7 +135,7 @@ class HouseConfiguration(object):
 
 Now that's **a lot of code** - and only for 4 attributes ! Not mentioning the code for `check_var` that was not included here for the sake of readability (I include it in the library, for reference). And guess what - it is still highly prone to **human mistakes**. For example I made a mistake in the setter for `nb_floors`, did you spot it ? Also it makes the code **less readable**: did you spot that the setter for the surface property is different from the others?
 
-Really, *"there must be a better way"* : yes there is, and that's what this library provides - it can be used alone, or in combination with [PyContracts](https://andreacensi.github.io/contracts/index.html) and/or any PEP484-based checker such as [enforce](https://github.com/RussBaz/enforce), [typeguard](https://github.com/agronholm/typeguard), [typecheck-decorator](https://github.com/prechelt/typecheck-decorator), etc. in order to generate all the repetitive code for you :
+Really, *"there must be a better way"* : yes there is, and that's what this library provides - it can be used alone, or in combination with [PyContracts](https://andreacensi.github.io/contracts/index.html) and/or any PEP484-based checker such as [enforce](https://github.com/RussBaz/enforce), [typeguard](https://github.com/agronholm/typeguard), [typecheck-decorator](https://github.com/prechelt/typecheck-decorator), etc. in order to generate all the repetitive code for you. Here is an example with PyContracts:
 
 ```python
 from autoclass import Boolean, autoprops, autoargs, setter_override
@@ -168,24 +171,24 @@ As you can see, this is more compact:
 * all attribute validation contracts are declared once in the `@contract` annotation of `__init__`
 * it is still possible to implement custom logic in a getter or a setter, without having to repeat the `@contract`
 
-Note: unfortunately with PyContracts the type information is duplicated. However if you use type checkers relying on PEP484 directly such as [enforce](https://github.com/RussBaz/enforce), [typeguard](https://github.com/agronholm/typeguard), [typecheck-decorator](https://github.com/prechelt/typecheck-decorator), etc. this is not the case - as shown in the [initial example with enforce and validate](#example_usage).
+Note: unfortunately with PyContracts the type information is duplicated. However if you use type checkers relying on PEP484 directly such as [enforce](https://github.com/RussBaz/enforce), [typeguard](https://github.com/agronholm/typeguard), [typecheck-decorator](https://github.com/prechelt/typecheck-decorator), etc. this is not the case - as we saw in the [initial example with enforce and validate](#example_usage).
 
 
 ## Main features
 
-* **`@validate`** is a decorator for any method, that adds input validators to the method. 
+* **`@validate`** is a decorator for any method, that adds input validators to the method.
 
-* Many validators are provided out of the box to use with `@validate`: `gt`, `between`, `is_in`, `maxlen`... check them out in [the validators list page](https://smarie.github.io/python-autoclass/validators/).
+* Many validators are provided out of the box to use with `@validate`: `gt`, `between`, `is_in`, `maxlen`... check them out in [the validators list page](https://smarie.github.io/python-autoclass/validators/). But you can of course use your own, too.
 
 * **`@autoargs`** is a decorator for the `__init__` method of a class. It automatically assigns all of the `__init__` method's parameters to `self`. For more fine-grain tuning, explicit inclusion and exclusion lists are supported, too. *Note: the original @autoargs idea and code come from [this answer from utnubu](http://stackoverflow.com/questions/3652851/what-is-the-best-way-to-do-automatic-attribute-assignment-in-python-and-is-it-a#answer-3653049)*
 
 * **`@autoprops`** is a decorator for a whole class. It automatically generates properties getters and setters for all attributes, with the correct PEP484 type hints. As for `@autoargs`, the default list of attributes is the list of parameters of the `__init__` method, and explicit inclusion and exclusion lists are supported. 
 
-* **`@autoprops`** automatically adds `@contract` (*PyContracts*) or `@validate` (from autoclass) on the generated setters if a `@contract` or `@validate` exists for that property on the `__init__` method.
+* **`@autoprops`** automatically adds `@contract` (*PyContracts*) or `@validate` (from `autoclass`) on the generated setters if a `@contract` or `@validate` exists for that attribute on the `__init__` method.
 
-* **`@autoprops`**-generated getters and setters are fully PEP484 decorated so that type checkers like *enforce*'s `@runtime_validation` automatically apply to generated methods when used to decorate the whole class.
+* **`@autoprops`**-generated getters and setters are fully PEP484 decorated so that type checkers like *enforce*'s `@runtime_validation` automatically apply to generated methods when used to decorate the whole class. No explicit integration needed in autoclass!
 
-* You may override the getter or setter generated by `@autoprops` using **`@getter_override`** and **`@setter_override`**. Note that the `@contract` and `@validate` will still be added on your custom setter if present on `__init__`.
+* You may override the getter or setter generated by `@autoprops` using **`@getter_override`** and **`@setter_override`**. Note that the `@contract` and `@validate` will still be added on your custom setter if present on `__init__`, you don't have to repeat it yourself
 
 * Equivalent manual wrapper methods are provided for all decorators in this library: `autoargs_decorate(init_func, include, exclude)`, `autoprops_decorate(cls, include, exclude)`, `autoprops_override_decorate(func, attribute, is_getter)`, `validate_decorate(func, **validators)`
 
@@ -203,7 +206,7 @@ Note: unfortunately with PyContracts the type information is duplicated. However
     * [typeguard](https://github.com/agronholm/typeguard)
     * [typecheck-decorator](https://github.com/prechelt/typecheck-decorator)
 
-* [attrs](https://github.com/python-attrs/attrs)
+* [attrs](https://github.com/python-attrs/attrs) is a library with the same target, but the way to use it is quite different from 'standard' python. It is very powerful and elegant, though.
 
 * [decorator](http://pythonhosted.org/decorator/) library, which provides everything one needs to create complex decorators easily (signature and annotations-preserving decorators, decorators with class factory) as well as provides some useful decorators (`@contextmanager`, `@blocking`, `@dispatch_on`). We use it to preserve the signature of class constructors and overriden setter methods.
 
@@ -220,4 +223,4 @@ Note: unfortunately with PyContracts the type information is duplicated. However
 
 ## Want to contribute ?
 
-Details on the github page: [https://github.com/smarie/python-autoclass](https://github.com/smarie/python-autoclass) 
+Details on the github page: [https://github.com/smarie/python-autoclass](https://github.com/smarie/python-autoclass)

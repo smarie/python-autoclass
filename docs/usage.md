@@ -2,7 +2,13 @@
 
 ### @validate
 
-Adds input validation to a method.
+Adds input validation to a method. Simply declare the name of the input to validate and associate to it a validator or a list of validators:
+
+```python
+@validate(<input_name>=<validator_or_list_of_validators>, ...)
+```
+
+Many validators are provided out of the box to use with `@validate`: `gt`, `between`, `is_in`, `maxlen`... check them out in [the validators list page](https://smarie.github.io/python-autoclass/validators/). For example below we check that input `a` is not `None`, is even, and is greater than 1, and that input `b` is even:
 
 ```python
 from autoclass import validate, not_none, is_even, gt
@@ -18,7 +24,66 @@ myfunc(2,1)     # ValidationError: b is not even
 myfunc(0,0)     # ValidationError: a is not >= 1
 ```
 
-Many validators are provided out of the box to use with `@validate`: `gt`, `between`, `is_in`, `maxlen`... check them out in [the validators list page](https://smarie.github.io/python-autoclass/validators/).
+#### `not_none` in combination with type checkers such as enforce
+
+When used in combination with a PEP484 type checker such as enforce, you don't need to include the `not_none` validator. Indeed if an input is not explicitly declared with type `Optional[...]` or `Union[NoneType, ...]`, a good type checker should already raise an error:
+
+```python
+from enforce import runtime_validation
+from numbers import Integral
+from autoclass import validate, is_even, gt
+
+@runtime_validation
+@validate(a=[is_even, gt(1)], b=is_even)
+def myfunc(a: Integral, b):
+    print('hello')
+
+# -- check that the validation works
+myfunc(84, None) # OK because b has no type annotation nor not_none validator
+myfunc(None, 0)  # RuntimeTypeError: a is None
+```
+
+
+#### Implementing custom validators
+
+You may implement your own validators: simply provide a function that returns `True` in case of correct validation, and either raises an exception or returns `False` in case validation fails. The `ValidationError` type is provided for convenience, but you may wish to use another exception type. The example below shows four styles of validators 
+
+```python
+from autoclass import validate, ValidationError
+
+def is_mod_3(x):
+    """ A simple validator with no parameters """
+    return x % 3 == 0
+
+def is_mod(ref):
+    """ A validator generator, with parameters """
+    def is_mod_ref(x):
+        return x % ref == 0
+    return is_mod_ref
+
+def gt_ex1(x):
+    """ A validator raising a custom exception in case of failure """
+    if x >= 1:
+        return True
+    else:
+        raise ValidationError('gt_ex1: x >= 1 does not hold for x=' + str(x))
+
+def gt_assert2(x):
+    """ (not recommended) A validator relying on assert and therefore only valid in 'debug' mode """
+    assert x >= 2
+
+@validate(a=[gt_ex1, gt_assert2, is_mod_3],
+          b=is_mod(5))
+def myfunc(a, b):
+    print('hello')
+
+# -- check that the validation works
+myfunc(21, 15)  # ok
+myfunc(4,21)    # ValidationError: a is not a multiple of 3
+myfunc(15,1)    # ValidationError: b is not a multiple of 5
+myfunc(1,0)     # AssertionError: a is not >= 2
+myfunc(0,0)     # ValidationError: a is not >= 1
+```
 
 
 ### @autoargs
