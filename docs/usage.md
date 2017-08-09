@@ -326,3 +326,19 @@ assert t.b[0] == 'r'
 t.a = ''  # raises ContractNotRespected
 t.b = ['r','']  # raises ContractNotRespected
 ```
+
+## Alternative to decorators: manual function wrappers
+
+Equivalent manual wrapper methods are provided for all decorators in this library: `autoargs_decorate(init_func, include, exclude)`, `autoprops_decorate(cls, include, exclude)`, `autoprops_override_decorate(func, attribute, is_getter)`, `validate_decorate(func, **validators)` 
+
+Therefore you can do:
+
+```python
+from autoclass import validate_decorate, is_even
+
+def my_func(a):
+    pass
+
+my_func = validate_decorate(my_func, a=is_even)
+my_func(9)  # ValidationError
+```

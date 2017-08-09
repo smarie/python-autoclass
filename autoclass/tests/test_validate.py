@@ -1,7 +1,7 @@
 from unittest import TestCase
 
 from autoclass import validate, ValidationError, is_even, gt, not_none, not_, is_mod, or_, xor_, is_subset, and_, \
-    is_superset, is_in
+    is_superset, is_in, validate_decorate
 
 
 class TestValidate(TestCase):
@@ -284,3 +284,14 @@ class TestValidate(TestCase):
 
         with self.assertRaises(ValidationError):
             myfunc(None, None, {'+'})
+
+    def test_decorate_manually(self):
+        """ Tests that the manual decorator works """
+
+        def my_func(a):
+            pass
+
+        my_func = validate_decorate(my_func, a=is_even)
+
+        with self.assertRaises(ValidationError):
+            my_func(9)
