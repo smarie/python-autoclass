@@ -65,6 +65,26 @@ def validate_decorate(func: Callable, **validators: Dict[str, Callable[[Any], bo
         if len(incorrect) > 0:
             raise ValueError('@validate definition exception: validators are defined for \'' + str(incorrect) + '\' '
                              'that is/are not part of signature for ' + str(func))
+    # for att_name, att_validators in validators.items():
+    #     i = att_validators.index(not_none)
+    #     if i > 0:
+    #         raise ValueError('not_none is a special validator that can only be provided at the beginning of the'
+    #                          ' validators list')
+
+    # replace validators lists with explicit and_ if needed
+    for att_name, att_validators in validators.items():
+        att_validators = _assert_list_and_protect_not_none(att_validators, allow_not_none=True)
+        if att_validators[0] != not_none:
+            # att_validators is a list not containing not_none: wrap in an 'and_' and wrap with a none-ignoring checker
+            validators[att_name] = _not_none_checker(and_(att_validators), ignore_none_silently=True)
+        else:
+            # first element of att_validators is not_none
+            if len(att_validators) > 1:
+                # remove not_none from the list, wrap witha and_, and wrap with the corresponding_not_none_checker
+                validators[att_name] = _not_none_checker(and_(att_validators[1:]), ignore_none_silently=False)
+            else:
+                # one element in the list only (not_none): include it directly
+                validators[att_name] = att_validators[0]
 
     # (3) create a wrapper around the function to add validation
     # -- old:
@@ -86,42 +106,48 @@ def validate_decorate(func: Callable, **validators: Dict[str, Callable[[Any], bo
     return a
 
 
+def _not_none_checker(validator, ignore_none_silently: bool = True):
+    """
+    Generates a checker handling None values. When a None value is received, it is not passed to the validator.
+    Instead this operator will either drop silently (ignore_none_silently = True) or return a False
+    (ignore_none_silently=False)
+
+    :param validator:
+    :param ignore_none_silently:
+    :return:
+    """
+    if ignore_none_silently:
+        def drop_none_silently(x):
+            if not_none(x):
+                return validator(x)
+            else:
+                # value is None : skip validation (users should explicitly include 'not_none' as the first validator to
+                # change this behaviour)
+                return True
+        return drop_none_silently
+    else:
+        def check_not_none(x):
+            if not_none(x):
+                return validator(x)
+            else:
+                return False
+        return check_not_none
+
+
 def _validate(value_to_validate, validator_func, func, att_name):
     """
     Subroutine that actually executes validation
 
     :param value_to_validate: the value to validate
-    :param validator_func: the validator function or a list of validator functions that will be applied on
-    value_to_validate
+    :param validator_func: the validator function that will be applied on value_to_validate
     :param func: the method for which this validation is performed. This is used just for errors
     :param att_name: the name of the attribute that is being validated
     :return:
     """
-    try:
-        # try to interprete validator_func as a collection of validators
-        # --handle case where the first is not_none
-        if validator_func[0] is not_none:
-            for val_func in validator_func:
-                _validate(value_to_validate, val_func, func, att_name)
-        else:
-            for val_func in validator_func:
-                # --the first was not not_none : dont allow it elsewhere
-                if val_func is not_none:
-                    raise ValueError('not_none is a special validator that can only be provided at the beginning of the'
-                                     ' validators list')
-                _validate(value_to_validate, val_func, func, att_name)
-
-    except TypeError:
-        # try to interprete validator_func as a single validator
-        if (value_to_validate is None) and (validator_func is not not_none):
-            # value is None : skip validation (users should explicitly include not_none as the first validator to
-            # change this behaviour)
-            pass
-        else:
-            # validate
-            res = validator_func(value_to_validate)
-            if res not in {None, True}:
-                raise ValidationError.create(func, att_name, validator_func, value_to_validate)
+    # new: validator_func should always be a single element here
+    res = validator_func(value_to_validate)
+    if res not in {None, True}:
+        raise ValidationError.create(func, att_name, validator_func, value_to_validate)
 
 
 class ValidationError(Exception):
@@ -175,16 +201,142 @@ def and_(validators):
     :param validators:
     :return:
     """
-    def validate(x):
-        for validator in validators:
-            res = validator(x)
-            if res not in {None, True}:
-                # one validator was unhappy > raise
-                raise ValidationError('and(' + get_names(validators) + '): Validator ' + str(validator)
-                                      + ' failed validation for input ' + str(x))
-        return True
 
-    return validate
+    validators = _assert_list_and_protect_not_none(validators)
+
+    if len(validators) == 1:
+        return validators[0]  # simplification for single validator case
+    else:
+        def and_v_(x):
+            for validator in validators:
+                res = validator(x)
+                if res not in {None, True}:
+                    # one validator was unhappy > raise
+                    raise ValidationError('and(' + get_names(validators) + '): Validator ' + str(validator)
+                                          + ' failed validation for input ' + str(x))
+            return True
+
+        return and_v_
+
+
+def or_(validators):
+    """
+    An 'or' validator: returns True if at least one of the provided validators is happy with the input. All exceptions
+    will be silently caught. In case of failure, a global ValidationException will be raised, together with the first
+    exception message if any.
+
+    :param validators:
+    :return:
+    """
+
+    validators = _assert_list_and_protect_not_none(validators)
+
+    if len(validators) == 1:
+        return validators[0]  # simplification for single validator case
+    else:
+        def or_v_(x):
+            err = None
+            for validator in validators:
+                try:
+                    res = validator(x)
+                    if res in {None, True}:
+                        # we can return : one validator was happy
+                        return True
+                except Exception as e:
+                    if err is None:
+                        err = e  # remember the first exception
+
+            # no validator accepted: raise
+            msg = 'or(' + get_names(validators) + '): All validators failed validation for input \'' + str(x) + '\'. '
+            if err is not None:
+                msg += 'First exception caught was: \'' + str(err) + '\''
+            raise ValidationError(msg)
+
+        return or_v_
+
+
+def xor_(validators):
+    """
+    A 'xor' validator: returns True if exactly one of the provided validators is happy with the input. All
+    exceptions will be silently caught. In case of failure, a global ValidationException will be raised, together with
+    the first exception message if any.
+
+    :param validators:
+    :return:
+    """
+
+    validators = _assert_list_and_protect_not_none(validators)
+
+    if len(validators) == 1:
+        return validators[0]  # simplification for single validator case
+    else:
+        def xor_v_(x):
+            ok_validator = None
+            sec_validator = None
+            err = None
+            for validator in validators:
+                try:
+                    res = validator(x)
+                    if res in {None, True}:
+                        if ok_validator is not None:
+                            sec_validator = validator
+                        else:
+                            # we found the first one happy
+                            ok_validator = validator
+                except Exception as e:
+                    if err is None:
+                        err = e  # remember the first exception
+
+            # return if were happy or not
+            if ok_validator is not None:
+                if sec_validator is None:
+                    # one unique validator happy: success
+                    return True
+                else:
+                    # second validator happy : fail, too many validators happy
+                    raise ValidationError('xor(' + get_names(validators) + ') : Too many validators succeeded : '
+                                          + str(ok_validator) + ' + ' + str(sec_validator))
+            else:
+                # no validator happy
+                msg = 'xor(' + get_names(validators) + '): All validators failed validation for input \'' + str(x) + '\'. '
+                if err is not None:
+                    msg += 'First exception caught was: \'' + str(err) + '\''
+                raise ValidationError(msg)
+
+        return xor_v_
+
+
+def _assert_list_and_protect_not_none(validators, allow_not_none: bool = False):
+    """
+     * if validators is an empty list, throw error
+     * If validators is a singleton, turns it into a list.
+     * If validators contains not_none and allow_not_none is set to True, asserts that not_none is first in the list
+     * If validators contains not_none and allow_not_none is set to False, asserts that not_none is not present at all
+     in the list
+
+    :param validators:
+    :param allow_not_none:
+    :return:
+    """
+    i = -1
+    try:
+        i = validators.index(not_none)
+    except ValueError:
+        # not_none not found in validators list : ok
+        pass
+    except AttributeError:
+        # validators is not a list (no attribute 'index'): turn it into a list
+        validators = [validators]
+
+    # not_none ?
+    if i > 0 or (i == 0 and not allow_not_none):
+        raise ValueError('not_none is a special validator that can only be provided at the beginning of the'
+                         ' global validators list')
+    # empty list ?
+    if len(validators) == 0:
+        raise ValueError('provided validators list is empty')
+
+    return validators
 
 
 def not_(validator, catch_all: bool = False):
@@ -201,14 +353,11 @@ def not_(validator, catch_all: bool = False):
     'ok' result
     :return:
     """
-    try:
-        # in case this is a validator list, create a 'and_' around it
-        validator[0]
-        validator = and_(validator)
-    except:
-        pass
 
-    def validate(x):
+    # in case this is a validator list, create a 'and_' around it (otherwise this returns the validator)
+    validator = and_(validator)
+
+    def not_v_(x):
         if catch_all:
             try:
                 res = validator(x)
@@ -231,83 +380,7 @@ def not_(validator, catch_all: bool = False):
             # if we're here that's a failure
             raise ValidationError('not(' + str(validator) + '): Validator validated input \'' + str(x) + '\' with success, '
                                   'therefore the not() is a failure')
-    return validate
-
-
-def or_(validators):
-    """
-    An 'or' validator: returns True if at least one of the provided validators is happy with the input. All exceptions
-    will be silently caught. In case of failure, a global ValidationException will be raised, together with the first
-    exception message if any.
-
-    :param validators:
-    :return:
-    """
-
-    def validate(x):
-        err = None
-        for validator in validators:
-            try:
-                res = validator(x)
-                if res in {None, True}:
-                    # we can return : one validator was happy
-                    return True
-            except Exception as e:
-                if err is None:
-                    err = e  # remember the first exception
-
-        # no validator accepted: raise
-        msg = 'or(' + get_names(validators) + '): All validators failed validation for input \'' + str(x) + '\'. '
-        if err is not None:
-            msg += 'First exception caught was: \'' + str(err) + '\''
-        raise ValidationError(msg)
-
-    return validate
-
-
-def xor_(validators):
-    """
-    A 'xor' validator: returns True if exactly one of the provided validators is happy with the input. All
-    exceptions will be silently caught. In case of failure, a global ValidationException will be raised, together with
-    the first exception message if any.
-
-    :param validators:
-    :return:
-    """
-    def validate(x):
-        ok_validator = None
-        sec_validator = None
-        err = None
-        for validator in validators:
-            try:
-                res = validator(x)
-                if res in {None, True}:
-                    if ok_validator is not None:
-                        sec_validator = validator
-                    else:
-                        # we found the first one happy
-                        ok_validator = validator
-            except Exception as e:
-                if err is None:
-                    err = e  # remember the first exception
-
-        # return if were happy or not
-        if ok_validator is not None:
-            if sec_validator is None:
-                # one unique validator happy: success
-                return True
-            else:
-                # second validator happy : fail, too many validators happy
-                raise ValidationError('xor(' + get_names(validators) + ') : Too many validators succeeded : '
-                                      + str(ok_validator) + ' + ' + str(sec_validator))
-        else:
-            # no validator happy
-            msg = 'xor(' + get_names(validators) + '): All validators failed validation for input \'' + str(x) + '\'. '
-            if err is not None:
-                msg += 'First exception caught was: \'' + str(err) + '\''
-            raise ValidationError(msg)
-
-    return validate
+    return not_v_
 
 
 # ------------- orderables ----------------
@@ -519,11 +592,13 @@ def is_subset(reference_set: Set):
     :return:
     """
     def is_subset(x):
-        if len(x - reference_set) == 0:
+        missing = x - reference_set
+        if len(missing) == 0:
             return True
         else:
             raise ValidationError('is_subset: len(x - reference_set) == 0 does not hold for x=' + str(x)
-                                  + ' and reference_set=' + str(reference_set))
+                                  + ' and reference_set=' + str(reference_set) + '. x contains unsupported '
+                                  'elements ' + str(missing))
     return is_subset
 
 
@@ -536,9 +611,11 @@ def is_superset(reference_set: Set):
     :return:
     """
     def is_superset(x):
-        if len(reference_set - x) == 0:
+        missing = reference_set - x
+        if len(missing) == 0:
             return True
         else:
             raise ValidationError('is_superset: len(reference_set - x) == 0 does not hold for x=' + str(x)
-                                  + ' and reference_set=' + str(reference_set))
+                                  + ' and reference_set=' + str(reference_set) + '. x does not contain required '
+                                  'elements ' + str(missing))
     return is_superset
