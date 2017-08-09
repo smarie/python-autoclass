@@ -261,6 +261,13 @@
   
 </li>
       
+        <li class="md-nav__item">
+  <a href="#alternative-to-decorators-manual-function-wrappers" title="Alternative to decorators: manual function wrappers" class="md-nav__link">
+    Alternative to decorators: manual function wrappers
+  </a>
+  
+</li>
+      
       
       
     </ul>
@@ -351,6 +358,13 @@
         <li class="md-nav__item">
   <a href="#autoprops" title="@autoprops" class="md-nav__link">
     @autoprops
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#alternative-to-decorators-manual-function-wrappers" title="Alternative to decorators: manual function wrappers" class="md-nav__link">
+    Alternative to decorators: manual function wrappers
   </a>
   
 </li>
@@ -691,6 +705,19 @@ them with <code>@getter_override</code> or <code>@setter_override</code>. Note t
 <span class="c1"># check that there are contracts on the generated setters</span>
 <span class="n">t</span><span class="o">.</span><span class="n">a</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span>  <span class="c1"># raises ContractNotRespected</span>
 <span class="n">t</span><span class="o">.</span><span class="n">b</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;r&#39;</span><span class="p">,</span><span class="s1">&#39;&#39;</span><span class="p">]</span>  <span class="c1"># raises ContractNotRespected</span>
+</pre></div>
+
+
+<h2 id="alternative-to-decorators-manual-function-wrappers">Alternative to decorators: manual function wrappers<a class="headerlink" href="#alternative-to-decorators-manual-function-wrappers" title="Permanent link">&para;</a></h2>
+<p>Equivalent manual wrapper methods are provided for all decorators in this library: <code>autoargs_decorate(init_func, include, exclude)</code>, <code>autoprops_decorate(cls, include, exclude)</code>, <code>autoprops_override_decorate(func, attribute, is_getter)</code>, <code>validate_decorate(func, **validators)</code> </p>
+<p>Therefore you can do:</p>
+<div class="codehilite"><pre><span></span><span class="kn">from</span> <span class="nn">autoclass</span> <span class="kn">import</span> <span class="n">validate_decorate</span><span class="p">,</span> <span class="n">is_even</span>
+
+<span class="k">def</span> <span class="nf">my_func</span><span class="p">(</span><span class="n">a</span><span class="p">):</span>
+    <span class="k">pass</span>
+
+<span class="n">my_func</span> <span class="o">=</span> <span class="n">validate_decorate</span><span class="p">(</span><span class="n">my_func</span><span class="p">,</span> <span class="n">a</span><span class="o">=</span><span class="n">is_even</span><span class="p">)</span>
+<span class="n">my_func</span><span class="p">(</span><span class="mi">9</span><span class="p">)</span>  <span class="c1"># ValidationError</span>
 </pre></div>
                 
                   
