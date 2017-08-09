@@ -1,3 +1,11 @@
+### 1.5.0 - Robustness and minor improvements
+
+ * better error messages for set enforcers
+ * uniform management of validators lists: now passing a list creates an 'and_' operator behind the scenes
+ * better handling of empty lists
+ * and, or, xor now automatically replace themselves with their contents when their contents is a single validator
+ * added a few tests to improve coverage (hopefully)
+
 ### 1.4.3 - User-friendly validators error messages
 
 * better validation error messages for parametrized validators
