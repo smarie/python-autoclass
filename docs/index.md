@@ -9,7 +9,7 @@ The objective of this library is to reduce the amount of redundancy by automatic
 ## Installing
 
 ```bash
-> pip install pyoad
+> pip install autoclass
 ```
 
 You may wish to also install [PyContracts](https://andreacensi.github.io/contracts/index.html) or [enforce](https://github.com/RussBaz/enforce) in order to use the `@contract` or `@runtime_validation` annotations shown in this documentation.
