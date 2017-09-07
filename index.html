@@ -12,7 +12,7 @@
       
         <link rel="shortcut icon" href="./assets/images/favicon.png">
       
-      <meta name="generator" content="mkdocs-0.16.3, mkdocs-material-1.8.1">
+      <meta name="generator" content="mkdocs-0.16.3, mkdocs-material-1.10.0">
     
     
       
@@ -20,10 +20,10 @@
       
     
     
-      <script src="./assets/javascripts/modernizr-1df76c4e58.js"></script>
+      <script src="./assets/javascripts/modernizr-e826f8942a.js"></script>
     
     
-      <link rel="stylesheet" href="./assets/stylesheets/application-bfecc7305d.css">
+      <link rel="stylesheet" href="./assets/stylesheets/application-b6a6d08807.css">
       
     
     
@@ -61,10 +61,11 @@
   <nav class="md-header-nav md-grid">
     <div class="md-flex">
       <div class="md-flex__cell md-flex__cell--shrink">
-        
-          <a href="." title="autoclass" class="md-icon md-icon--home md-header-nav__button">
-          </a>
-        
+        <a href="." title="autoclass" class="md-header-nav__button md-logo">
+          
+            <i class="md-icon md-icon--home"></i>
+          
+        </a>
       </div>
       <div class="md-flex__cell md-flex__cell--shrink">
         <label class="md-icon md-icon--menu md-header-nav__button" for="drawer"></label>
@@ -89,7 +90,7 @@
     <form class="md-search__form" name="search">
       <input type="text" class="md-search__input" name="query" required placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="query">
       <label class="md-icon md-search__icon" for="search"></label>
-      <button type="reset" class="md-icon md-search__icon" data-md-component="reset">close</button>
+      <button type="reset" class="md-icon md-search__icon" data-md-component="reset">&#xE5CD;</button>
     </form>
     <div class="md-search__output">
       <div class="md-search__scrollwrap" data-md-scrollfix>
@@ -146,9 +147,11 @@
                   <div class="md-sidebar__inner">
                     <nav class="md-nav md-nav--primary" data-md-level="0">
   <label class="md-nav__title md-nav__title--site" for="drawer">
-    
-      <i class="md-icon md-icon--home md-nav__button"></i>
-    
+    <div class="md-nav__button md-logo">
+      
+        <i class="md-icon md-icon--home"></i>
+      
+    </div>
     autoclass
   </label>
   
@@ -371,12 +374,12 @@
             <article class="md-content__inner md-typeset">
               
                 
-                  <a href="https://github.com/smarie/python-autoclass/edit/master/docs/index.md" title="Edit this page" class="md-icon md-content__icon">edit</a>
+                  <a href="https://github.com/smarie/python-autoclass/edit/master/docs/index.md" title="Edit this page" class="md-icon md-content__icon">&#xE3C9;</a>
                 
                 
                 <h1 id="python-autoclass">python-autoclass<a class="headerlink" href="#python-autoclass" title="Permanent link">&para;</a></h1>
 <p><a href="https://travis-ci.org/smarie/python-autoclass"><img alt="Build Status" src="https://travis-ci.org/smarie/python-autoclass.svg?branch=master" /></a> <a href="https://smarie.github.io/python-autoclass/junit/report.html"><img alt="Tests Status" src="https://smarie.github.io/python-autoclass/junit/junit-badge.svg?dummy=8484744" /></a> <a href="https://codecov.io/gh/smarie/python-autoclass"><img alt="codecov" src="https://codecov.io/gh/smarie/python-autoclass/branch/master/graph/badge.svg" /></a> <a href="https://smarie.github.io/python-autoclass/"><img alt="Documentation" src="https://img.shields.io/badge/docs-latest-blue.svg" /></a> <a href="https://pypi.python.org/pypi/autoclass/"><img alt="PyPI" src="https://img.shields.io/badge/PyPI-autoclass-blue.svg" /></a></p>
-<p><code>autoclass</code> provides tools to automatically generate python 3.5+ classes code, such as <strong>constructor body</strong> or <strong>properties getters/setters</strong>, along with optional support of <strong>validation contracts</strong>.</p>
+<p><code>autoclass</code> provides tools to automatically generate python 3.5.3+ classes code, such as <strong>constructor body</strong> or <strong>properties getters/setters</strong>, along with optional support of <strong>validation contracts</strong>.</p>
 <p>The objective of this library is to reduce the amount of redundancy by automatically generating parts of the code from the information already available somewhere else (typically, in the constructor signature). The intent is similar to <a href="https://github.com/python-attrs/attrs">attrs</a>: remove boilerplate.</p>
 <h2 id="installing">Installing<a class="headerlink" href="#installing" title="Permanent link">&para;</a></h2>
 <div class="codehilite"><pre><span></span>&gt; pip install autoclass
@@ -653,7 +656,7 @@ Each attribute is validated against the expected type everytime you try to set i
       
     </div>
     
-      <script src="./assets/javascripts/application-6940329b9f.js"></script>
+      <script src="./assets/javascripts/application-f3ab9e5ff8.js"></script>
       
       
       <script>app.initialize({url:{base:"."}})</script>
