@@ -7,7 +7,7 @@ from autoclass.utils import _create_function_decorator__robust_to_args
 from autoclass.var_checker import check_var
 
 
-def autoargs(include:Union[str, Tuple[str]]=None,exclude:Union[str, Tuple[str]]=None):
+def autoargs(include: Union[str, Tuple[str]]=None, exclude: Union[str, Tuple[str]]=None):
     """
     Defines a decorator with parameters, to automatically assign the inputs of a function to self PRIOR to executing 
     the function. In other words:
@@ -36,7 +36,8 @@ def autoargs(include:Union[str, Tuple[str]]=None,exclude:Union[str, Tuple[str]]=
     return _create_function_decorator__robust_to_args(autoargs_decorate, include, exclude=exclude)
 
 
-def autoargs_decorate(func: Callable, include:Union[str, Tuple[str]]=None, exclude:Union[str, Tuple[str]]=None) -> Callable:
+def autoargs_decorate(func: Callable, include: Union[str, Tuple[str]]=None, exclude: Union[str, Tuple[str]]=None) \
+        -> Callable:
     """
     Defines a decorator with parameters, to automatically assign the inputs of a function to self PRIOR to executing 
     the function. This is the inline way to apply the decorator 
@@ -58,6 +59,8 @@ def autoargs_decorate(func: Callable, include:Union[str, Tuple[str]]=None, exclu
     # (0) first check parameters
     if include is not None and exclude is not None:
         raise ValueError('Only one of \'include\' or \'exclude\' argument should be provided.')
+    check_var(include, var_name='include', var_types=[str, tuple], enforce_not_none=False)
+    check_var(exclude, var_name='exclude', var_types=[str, tuple], enforce_not_none=False)
 
     # (1) then retrieve function signature
     # attrs, varargs, varkw, defaults = getargspec(func)
@@ -162,8 +165,9 @@ def _sieve(attr, include:Union[str, Tuple[str]]=None, exclude:Union[str, Tuple[s
     if include is not None and exclude is not None:
         raise ValueError('Only one of \'include\' or \'exclude\' argument should be provided.')
 
-    check_var(include, var_name='include', var_types=[str, tuple], enforce_not_none=False)
-    check_var(exclude, var_name='exclude', var_types=[str, tuple], enforce_not_none=False)
+    # win time by not doing this
+    # check_var(include, var_name='include', var_types=[str, tuple], enforce_not_none=False)
+    # check_var(exclude, var_name='exclude', var_types=[str, tuple], enforce_not_none=False)
 
     if attr is 'self':
         return False

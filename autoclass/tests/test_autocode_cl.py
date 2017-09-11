@@ -4,6 +4,7 @@ from unittest import TestCase
 from autoclass import autoargs, autoprops, getter_override, setter_override, \
     IllegalSetterSignatureException, DuplicateOverrideError, check_var, autoprops_decorate, Boolean, minlens, gts, \
     between, validate, ValidationError, gt
+from autoclass.autodict import autodict
 
 
 class TestAutoArgs(TestCase):
@@ -243,7 +244,6 @@ class TestAutoProps(TestCase):
         t.b=[''] # we can because there is no setter, hence no contract
         self.assertTrue(t.b[0] == '')
 
-
     def test_autoprops_exclude(self):
         """ @autoprops With pycontracts and explicit list of attributes to exclude """
 
@@ -320,7 +320,6 @@ class TestAutoProps(TestCase):
             # check that 'b' still has a getter generated
             t.b = ['eh', 'oh']
             self.assertTrue(t.b == ['eh', 'oh'])
-
 
     def test_autoprops_override_exceptions(self):
         """ @autoprops Asserts that the user can not override a generated method if the overriden method has a wrong
@@ -465,6 +464,106 @@ class TestAutoProps(TestCase):
         # Custom validation works
         with self.assertRaises(ValidationError):
             t.surface = 0
+
+
+class TestAutoDict(TestCase):
+
+    def test_autodict(self):
+        """ Basic @autodict functionality, no customization - all public fields become visible in the resulting
+        dictionary """
+
+        @autodict
+        class FooConfigA(object):
+
+            def __init__(self, a: str, b: List[str]):
+                self.a = a
+                self.b = b
+                self.c = 't'
+                self._weak_private = 'r'
+                self.__class_private = 't'
+
+        t = FooConfigA('rhubarb', ['pie', 'pie2'])
+        t.new_field = 0
+        t._new_field_weak_private = 1
+        t.__new_field_class_private = 1
+
+        # check that the dict view works
+        self.assertTrue(t['a'] == t.a)
+        self.assertTrue(t['b'] == t.b)
+        self.assertTrue(t['c'] == t.c)
+        self.assertTrue(t['_weak_private'] == t._weak_private)
+        self.assertTrue(t['_FooConfigA__class_private'] == t._FooConfigA__class_private)
+        self.assertTrue(t['new_field'] == t.new_field)
+        self.assertTrue(t['_new_field_weak_private'] == t._new_field_weak_private)
+        self.assertTrue(t['_TestAutoDict__new_field_class_private'] == t._TestAutoDict__new_field_class_private)
+
+    # def test_autodict_include(self):
+    #     """ @autodict With explicit list of names to include """
+    #
+    #     class C(object):
+    #         @autodict(include=('bar', 'baz', 'verbose'))
+    #         def __init__(self, foo, bar, baz, verbose=False):
+    #             pass
+    #
+    #     # Test :
+    #     # -- create an instance
+    #     a = C('rhubarb', 'pie', 1)
+    #     # -- check that the fields exist and have the correct value
+    #     self.assertTrue(a.bar == 'pie')
+    #     self.assertTrue(a.baz == 1)
+    #     self.assertTrue(a.verbose == False)
+    #     # -- check that a non-included field does not exist
+    #     with self.assertRaises(AttributeError):
+    #         print(a.foo)
+    #
+    # def test_autodict_exclude(self):
+    #     """ @autodict With explicit list of names to exclude """
+    #
+    #     class C(object):
+    #         @autodict(exclude=('bar', 'baz', 'verbose'))
+    #         def __init__(self, foo, bar, baz, verbose=False):
+    #             pass
+    #
+    #     # Test :
+    #     # -- create an instance
+    #     a = C('rhubarb', 'pie', 1)
+    #     # -- check that the fields exist and have the correct value
+    #     self.assertTrue(a.foo == 'rhubarb')
+    #     # -- check that the non-included fields do not exist
+    #     with self.assertRaises(AttributeError):
+    #         print(a.bar)
+    #     with self.assertRaises(AttributeError):
+    #         print(a.baz)
+    #     with self.assertRaises(AttributeError):
+    #         print(a.verbose)
+    #
+    # def test_autodict_include_exclude(self):
+    #     """ @autodict assert that you can't use both include/exclude at the same time"""
+    #     with self.assertRaises(ValueError):
+    #         class Dummy(object):
+    #             @autodict(exclude='', include='')
+    #             def __init__(self, foo, bar, baz, verbose=False):
+    #                 pass
+    #
+    # def test_autodict_include_exclude_typos(self):
+    #     """ @autodict Asserts that errors are correctly raised in case of a nonexistent attribute name in
+    #     include/exclude """
+    #
+    #     with self.assertRaises(ValueError):
+    #         class Dummy(object):
+    #             @autodict(exclude='fo')
+    #             def __init__(self, foo, bar, baz, verbose=False):
+    #                 pass
+    #
+    #     with self.assertRaises(ValueError):
+    #         class Dummy(object):
+    #             @autodict(include='fo')
+    #             def __init__(self, foo, bar, baz, verbose=False):
+    #                 pass
+    #
+    # def test_autodict_nonexistent_field_and_getattr_override(self):
+    #     pass
+
 
 class TestReadMe(TestCase):
     """
