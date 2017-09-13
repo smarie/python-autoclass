@@ -379,7 +379,7 @@
                 
                 <h1 id="python-autoclass">python-autoclass<a class="headerlink" href="#python-autoclass" title="Permanent link">&para;</a></h1>
 <p><a href="https://travis-ci.org/smarie/python-autoclass"><img alt="Build Status" src="https://travis-ci.org/smarie/python-autoclass.svg?branch=master" /></a> <a href="https://smarie.github.io/python-autoclass/junit/report.html"><img alt="Tests Status" src="https://smarie.github.io/python-autoclass/junit/junit-badge.svg?dummy=8484744" /></a> <a href="https://codecov.io/gh/smarie/python-autoclass"><img alt="codecov" src="https://codecov.io/gh/smarie/python-autoclass/branch/master/graph/badge.svg" /></a> <a href="https://smarie.github.io/python-autoclass/"><img alt="Documentation" src="https://img.shields.io/badge/docs-latest-blue.svg" /></a> <a href="https://pypi.python.org/pypi/autoclass/"><img alt="PyPI" src="https://img.shields.io/badge/PyPI-autoclass-blue.svg" /></a></p>
-<p><code>autoclass</code> provides tools to automatically generate python 3.5.3+ classes code, such as <strong>constructor body</strong> or <strong>properties getters/setters</strong>, along with optional support of <strong>validation contracts</strong>.</p>
+<p><code>autoclass</code> provides tools to automatically generate python 3.5.3+ classes code, such as <strong>constructor body</strong> or <strong>properties getters/setters</strong>, along with optional support of <strong>validation contracts</strong>. It also provides extra goodies such as <strong>a dict view on top of objects</strong> (the opposite of munch), and more.</p>
 <p>The objective of this library is to reduce the amount of redundancy by automatically generating parts of the code from the information already available somewhere else (typically, in the constructor signature). The intent is similar to <a href="https://github.com/python-attrs/attrs">attrs</a>: remove boilerplate.</p>
 <h2 id="installing">Installing<a class="headerlink" href="#installing" title="Permanent link">&para;</a></h2>
 <div class="codehilite"><pre><span></span>&gt; pip install autoclass
@@ -395,18 +395,19 @@
 <h2 id="example-usage">Example usage<a class="headerlink" href="#example-usage" title="Permanent link">&para;</a></h2>
 <p>The following snippet shows a <code>HouseConfiguration</code> class with four attributes.
 Each attribute is validated against the expected type everytime you try to set it (constructor AND modifications), and the <code>name</code> and <code>surface</code> attribute are further validated (<code>len(name) &gt; 0</code> and <code>surface &gt;= 0</code>). Notice the size of the resulting code !</p>
-<div class="codehilite"><pre><span></span><span class="kn">from</span> <span class="nn">autoclass</span> <span class="kn">import</span> <span class="n">autoargs</span><span class="p">,</span> <span class="n">autoprops</span><span class="p">,</span> <span class="n">setter_override</span>
+<div class="codehilite"><pre><span></span><span class="kn">from</span> <span class="nn">autoclass</span> <span class="kn">import</span> <span class="n">autoclass</span><span class="p">,</span> <span class="n">setter_override</span>
 <span class="kn">from</span> <span class="nn">autoclass</span> <span class="kn">import</span> <span class="n">Boolean</span><span class="p">,</span> <span class="n">validate</span><span class="p">,</span> <span class="n">minlens</span><span class="p">,</span> <span class="n">gt</span>
 <span class="kn">from</span> <span class="nn">numbers</span> <span class="kn">import</span> <span class="n">Real</span><span class="p">,</span> <span class="n">Integral</span>
 <span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Optional</span>
-<span class="kn">from</span> <span class="nn">enforce</span> <span class="kn">import</span> <span class="n">runtime_validation</span><span class="p">,</span> <span class="n">config</span>
 
+<span class="c1"># we use enforce runtime checker for this example</span>
+<span class="kn">from</span> <span class="nn">enforce</span> <span class="kn">import</span> <span class="n">runtime_validation</span><span class="p">,</span> <span class="n">config</span>
 <span class="n">config</span><span class="p">(</span><span class="nb">dict</span><span class="p">(</span><span class="n">mode</span><span class="o">=</span><span class="s1">&#39;covariant&#39;</span><span class="p">))</span>  <span class="c1"># to accept subclasses in validation</span>
 
 <span class="nd">@runtime_validation</span>
-<span class="nd">@autoprops</span>
+<span class="nd">@autoclass</span>
 <span class="k">class</span> <span class="nc">HouseConfiguration</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
-    <span class="nd">@autoargs</span>
+
     <span class="nd">@validate</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="n">minlens</span><span class="p">(</span><span class="mi">0</span><span class="p">),</span>
               <span class="n">surface</span><span class="o">=</span><span class="n">gt</span><span class="p">(</span><span class="mi">0</span><span class="p">))</span>
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span>
@@ -435,6 +436,36 @@ Each attribute is validated against the expected type everytime you try to set i
 
 
 <p>Note that the <code>Real</code> and <code>Integral</code> types come from the <a href="https://docs.python.org/3.6/library/numbers.html"><code>numbers</code></a> built-in module. They provide an easy way to support both python primitives AND e.g. numpy primitives. In this library we provide an additional <code>Boolean</code> class to complete the picture.</p>
+<p>In addition some goodies are activated by default such as </p>
+<ul>
+<li>a string representation:</li>
+</ul>
+<div class="codehilite"><pre><span></span><span class="nb">str</span><span class="p">(</span><span class="n">t</span><span class="p">)</span>
+<span class="nb">repr</span><span class="p">(</span><span class="n">t</span><span class="p">)</span>
+</pre></div>
+
+
+<p>both return</p>
+<div class="codehilite"><pre><span></span>HouseConfiguration<span class="o">({</span><span class="s1">&#39;nb_floors&#39;</span>: None, <span class="s1">&#39;with_windows&#39;</span>: False, <span class="s1">&#39;surface&#39;</span>: <span class="m">12</span>, <span class="s1">&#39;name&#39;</span>: <span class="s1">&#39;test&#39;</span><span class="o">})</span>
+</pre></div>
+
+
+<ul>
+<li>a dictionary view on top of the object, a <code>from_dict</code> class method, and a dict-based equality function:</li>
+</ul>
+<div class="codehilite"><pre><span></span><span class="c1"># use objects as dicts</span>
+<span class="n">t</span><span class="o">.</span><span class="n">keys</span><span class="p">()</span>
+<span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">t</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+    <span class="k">print</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">k</span><span class="p">)</span> <span class="o">+</span> <span class="s1">&#39;: &#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">v</span><span class="p">))</span>
+
+<span class="c1"># build objects from dict</span>
+<span class="n">HouseConfiguration</span><span class="o">.</span><span class="n">from_dict</span><span class="p">({</span><span class="s1">&#39;name&#39;</span><span class="p">:</span> <span class="s1">&#39;test2&#39;</span><span class="p">,</span> <span class="s1">&#39;surface&#39;</span><span class="p">:</span> <span class="mi">1</span><span class="p">})</span>
+
+<span class="c1"># compare objects as dicts</span>
+<span class="k">assert</span> <span class="n">t</span> <span class="o">==</span> <span class="p">{</span><span class="s1">&#39;name&#39;</span><span class="p">:</span> <span class="s1">&#39;test&#39;</span><span class="p">,</span> <span class="s1">&#39;nb_floors&#39;</span><span class="p">:</span> <span class="bp">None</span><span class="p">,</span> <span class="s1">&#39;surface&#39;</span><span class="p">:</span> <span class="mi">12</span><span class="p">,</span> <span class="s1">&#39;with_windows&#39;</span><span class="p">:</span> <span class="bp">False</span><span class="p">}</span>
+</pre></div>
+
+
 <h2 id="why-autoclass">Why autoclass ?<a class="headerlink" href="#why-autoclass" title="Permanent link">&para;</a></h2>
 <p>Python's primitive types (in particular <code>dict</code> and <code>tuple</code>) and it's dynamic typing system make it extremely powerful, to the point that it is often more convenient for developers to use primitive types or generic dynamic objects such as <a href="https://github.com/Infinidat/munch">Munch</a>, rather than small custom classes.</p>
 <p>However there are certain cases where developers still want to define their own classes, for example to provide strongly-typed APIs to their clients. In such case, <em>separation of concerns</em> will typically lead developers to enforce attribute value validation directly in the class, rather than in the code using the object. Eventually developers end up with big classes like this one:</p>

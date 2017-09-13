@@ -272,6 +272,13 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#autoclass" title="@autoclass" class="md-nav__link">
+    @autoclass
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#alternative-to-decorators-manual-function-wrappers" title="Alternative to decorators: manual function wrappers" class="md-nav__link">
     Alternative to decorators: manual function wrappers
   </a>
@@ -375,6 +382,13 @@
         <li class="md-nav__item">
   <a href="#autodict" title="@autodict" class="md-nav__link">
     @autodict
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#autoclass" title="@autoclass" class="md-nav__link">
+    @autoclass
   </a>
   
 </li>
@@ -744,10 +758,11 @@ them with <code>@getter_override</code> or <code>@setter_override</code>. Note t
 <li>it adds <code>collections.Mapping</code> to the list of parent classes (i.e. to the class' <code>__bases__</code>)</li>
 <li>it generates <code>__len__</code>, <code>__iter__</code> and <code>__getitem__</code> in order for the appropriate fields to be exposed in the dict view. Parameters allow to customize the list of fields that will be visible. Note that any methods with the same name will be overridden.</li>
 <li>if <code>only_constructor_args</code> is <code>True</code> (default), it generates a static <code>from_dict</code> method in the class corresponding to a call to the constructor with the unfolded dict. Note that this method may be overridden by the user.</li>
+<li>if <code>__eq__</code> is not implemented on this class, it generates a version that handles the case <code>self == other</code> where other is of the same type. In that case the dictionary equality is used. Other equality tests remain unchanged.</li>
 </ul>
 <p>Examples:</p>
 <ul>
-<li>Basic functionality, no customization - all constructor arguments become properties: </li>
+<li>Basic functionality, no customization - all constructor arguments can be viewed in the dict: </li>
 </ul>
 <div class="codehilite"><pre><span></span><span class="nd">@autodict</span>
 <span class="k">class</span> <span class="nc">A</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
@@ -760,9 +775,13 @@ them with <code>@getter_override</code> or <code>@setter_override</code>. Note t
 <span class="k">assert</span> <span class="n">o</span> <span class="o">==</span> <span class="nb">dict</span><span class="p">(</span><span class="n">o</span><span class="p">)</span>
 <span class="k">assert</span> <span class="n">o</span> <span class="o">==</span> <span class="p">{</span><span class="s1">&#39;a&#39;</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span> <span class="s1">&#39;b&#39;</span><span class="p">:</span> <span class="s1">&#39;r&#39;</span><span class="p">}</span>
 
-<span class="c1"># you can create an object from a dict too thanks to the generated class function</span>
-<span class="n">p</span> <span class="o">=</span> <span class="n">A</span><span class="o">.</span><span class="n">from_dict</span><span class="p">({</span><span class="s1">&#39;a&#39;</span><span class="p">:</span> <span class="mi">2</span><span class="p">,</span> <span class="s1">&#39;b&#39;</span><span class="p">:</span> <span class="s1">&#39;s&#39;</span><span class="p">})</span>
-<span class="k">assert</span> <span class="nb">vars</span><span class="p">(</span><span class="n">p</span><span class="p">)</span> <span class="o">==</span> <span class="p">{</span><span class="s1">&#39;a&#39;</span><span class="p">:</span> <span class="mi">2</span><span class="p">,</span> <span class="s1">&#39;b&#39;</span><span class="p">:</span> <span class="s1">&#39;s&#39;</span><span class="p">}</span>
+<span class="c1"># you can create an object from a dict too, thanks to the generated class function</span>
+<span class="n">p</span> <span class="o">=</span> <span class="n">A</span><span class="o">.</span><span class="n">from_dict</span><span class="p">({</span><span class="s1">&#39;a&#39;</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span> <span class="s1">&#39;b&#39;</span><span class="p">:</span> <span class="s1">&#39;r&#39;</span><span class="p">})</span>
+<span class="k">assert</span> <span class="n">p</span> <span class="o">==</span> <span class="n">o</span>
+
+<span class="c1"># str and repr methods show interesting stuff</span>
+<span class="nb">str</span><span class="p">(</span><span class="n">p</span><span class="p">)</span>  <span class="c1"># &quot;A({&#39;a&#39;: 1, &#39;b&#39;: &#39;r&#39;})&quot;</span>
+<span class="nb">repr</span><span class="p">(</span><span class="n">p</span><span class="p">)</span>  <span class="c1"># &quot;A({&#39;a&#39;: 1, &#39;b&#39;: &#39;r&#39;})&quot;</span>
 </pre></div>
 
 
@@ -778,8 +797,8 @@ them with <code>@getter_override</code> or <code>@setter_override</code>. Note t
 <span class="n">o</span> <span class="o">=</span> <span class="n">B</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="s1">&#39;r&#39;</span><span class="p">)</span>
 <span class="c1"># same results</span>
 <span class="k">assert</span> <span class="n">o</span> <span class="o">==</span> <span class="p">{</span><span class="s1">&#39;a&#39;</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span> <span class="s1">&#39;b&#39;</span><span class="p">:</span> <span class="s1">&#39;r&#39;</span><span class="p">}</span>
-<span class="n">p</span> <span class="o">=</span> <span class="n">B</span><span class="o">.</span><span class="n">from_dict</span><span class="p">({</span><span class="s1">&#39;a&#39;</span><span class="p">:</span> <span class="mi">2</span><span class="p">,</span> <span class="s1">&#39;b&#39;</span><span class="p">:</span> <span class="s1">&#39;s&#39;</span><span class="p">})</span>
-<span class="k">assert</span> <span class="nb">vars</span><span class="p">(</span><span class="n">p</span><span class="p">)</span> <span class="o">==</span> <span class="p">{</span><span class="s1">&#39;a&#39;</span><span class="p">:</span> <span class="mi">2</span><span class="p">,</span> <span class="s1">&#39;b&#39;</span><span class="p">:</span> <span class="s1">&#39;s&#39;</span><span class="p">}</span>
+<span class="n">p</span> <span class="o">=</span> <span class="n">B</span><span class="o">.</span><span class="n">from_dict</span><span class="p">({</span><span class="s1">&#39;a&#39;</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span> <span class="s1">&#39;b&#39;</span><span class="p">:</span> <span class="s1">&#39;r&#39;</span><span class="p">})</span>
+<span class="k">assert</span> <span class="n">p</span> <span class="o">==</span> <span class="n">o</span>
 </pre></div>
 
 
@@ -837,8 +856,63 @@ them with <code>@getter_override</code> or <code>@setter_override</code>. Note t
 <ul>
 <li>Note: as for all features in this library, you may also perform the same action without decorator, using <code>autodict_decorate(cls)</code>. See <a href="../alternative-to-decorators-manual-function-wrappers">here</a></li>
 </ul>
+<h2 id="autoclass">@autoclass<a class="headerlink" href="#autoclass" title="Permanent link">&para;</a></h2>
+<p>Applies all or part of the above at once. Useful if you want to make the most from this library.</p>
+<ul>
+<li>Basic functionality, no customization - all constructor arguments become properties that are auto-assigned in constructor, and the object behaves like a dict and can be created from a dict: </li>
+</ul>
+<div class="codehilite"><pre><span></span><span class="kn">from</span> <span class="nn">numbers</span> <span class="kn">import</span> <span class="n">Integral</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Optional</span>
+
+<span class="c1"># we will use enforce as the runtime checker</span>
+<span class="kn">import</span> <span class="nn">enforce</span> <span class="kn">as</span> <span class="nn">en</span>
+<span class="kn">from</span> <span class="nn">enforce</span> <span class="kn">import</span> <span class="n">runtime_validation</span>
+<span class="n">en</span><span class="o">.</span><span class="n">config</span><span class="p">(</span><span class="nb">dict</span><span class="p">(</span><span class="n">mode</span><span class="o">=</span><span class="s1">&#39;covariant&#39;</span><span class="p">))</span>  <span class="c1"># allow subclasses when validating types</span>
+
+<span class="c1"># class definition</span>
+<span class="nd">@runtime_validation</span>
+<span class="nd">@autoclass</span>
+<span class="k">class</span> <span class="nc">AllOfTheAbove</span><span class="p">:</span>
+    <span class="nd">@validate</span><span class="p">(</span><span class="n">a</span><span class="o">=</span><span class="n">gt</span><span class="p">(</span><span class="mi">1</span><span class="p">),</span> <span class="n">c</span><span class="o">=</span><span class="n">minlen</span><span class="p">(</span><span class="mi">1</span><span class="p">))</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">a</span><span class="p">:</span> <span class="n">Integral</span><span class="p">,</span> <span class="n">b</span><span class="p">:</span> <span class="n">Boolean</span><span class="p">,</span> <span class="n">c</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]]</span> <span class="o">=</span> <span class="bp">None</span><span class="p">):</span>
+        <span class="k">pass</span>
+
+<span class="c1"># instance creation</span>
+<span class="n">o</span> <span class="o">=</span> <span class="n">AllOfTheAbove</span><span class="p">(</span><span class="n">a</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">b</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+
+<span class="c1"># @autoargs works</span>
+<span class="k">assert</span> <span class="n">o</span><span class="o">.</span><span class="n">a</span> <span class="o">==</span> <span class="mi">2</span>
+
+<span class="c1"># @autoprops works, in combination with any runtime checker (here demonstrated with enforce)</span>
+<span class="n">o</span><span class="o">.</span><span class="n">b</span> <span class="o">=</span> <span class="mi">1</span>  <span class="c1"># !RuntimeTypeError Argument &#39;b&#39; was not of type Boolean. Actual type was int.</span>
+
+<span class="c1"># @autodict works</span>
+<span class="k">assert</span> <span class="n">o</span> <span class="o">==</span> <span class="p">{</span><span class="s1">&#39;a&#39;</span><span class="p">:</span> <span class="mi">2</span><span class="p">,</span> <span class="s1">&#39;b&#39;</span><span class="p">:</span> <span class="bp">True</span><span class="p">,</span> <span class="s1">&#39;c&#39;</span><span class="p">:</span> <span class="bp">None</span><span class="p">}</span>
+<span class="k">assert</span> <span class="n">AllOfTheAbove</span><span class="o">.</span><span class="n">from_dict</span><span class="p">(</span><span class="n">o</span><span class="p">)</span> <span class="o">==</span> <span class="n">o</span>
+<span class="k">assert</span> <span class="nb">dict</span><span class="p">(</span><span class="o">**</span><span class="n">o</span><span class="p">)</span> <span class="o">==</span> <span class="n">o</span>
+</pre></div>
+
+
+<ul>
+<li>you can also disable part of the features :</li>
+</ul>
+<div class="codehilite"><pre><span></span><span class="nd">@autoclass</span><span class="p">(</span><span class="n">autodict</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>
+<span class="k">class</span> <span class="nc">PartsOfTheAbove</span><span class="p">:</span>
+    <span class="nd">@validate</span><span class="p">(</span><span class="n">a</span><span class="o">=</span><span class="n">gt</span><span class="p">(</span><span class="mi">1</span><span class="p">),</span> <span class="n">c</span><span class="o">=</span><span class="n">minlen</span><span class="p">(</span><span class="mi">1</span><span class="p">))</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">a</span><span class="p">:</span> <span class="n">Integral</span><span class="p">,</span> <span class="n">b</span><span class="p">:</span> <span class="n">Boolean</span><span class="p">,</span> <span class="n">c</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]]</span> <span class="o">=</span> <span class="bp">None</span><span class="p">):</span>
+        <span class="k">pass</span>
+
+<span class="c1"># instance creation</span>
+<span class="n">o</span> <span class="o">=</span> <span class="n">PartsOfTheAbove</span><span class="p">(</span><span class="n">a</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">b</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+
+<span class="k">assert</span> <span class="n">o</span> <span class="o">==</span> <span class="p">{</span><span class="s1">&#39;a&#39;</span><span class="p">:</span> <span class="mi">2</span><span class="p">,</span> <span class="s1">&#39;b&#39;</span><span class="p">:</span> <span class="bp">True</span><span class="p">,</span> <span class="s1">&#39;c&#39;</span><span class="p">:</span> <span class="bp">None</span><span class="p">}</span>  <span class="c1"># AssertionError</span>
+<span class="k">assert</span> <span class="n">PartsOfTheAbove</span><span class="o">.</span><span class="n">from_dict</span><span class="p">(</span><span class="n">o</span><span class="p">)</span> <span class="o">==</span> <span class="n">o</span>  <span class="c1"># AttributeError: &#39;PartsOfTheAbove&#39; has no attribute &#39;from_dict&#39;</span>
+<span class="k">assert</span> <span class="nb">dict</span><span class="p">(</span><span class="o">**</span><span class="n">o</span><span class="p">)</span> <span class="o">==</span> <span class="n">o</span>  <span class="c1"># TypeError: argument after ** must be a mapping</span>
+</pre></div>
+
+
 <h2 id="alternative-to-decorators-manual-function-wrappers">Alternative to decorators: manual function wrappers<a class="headerlink" href="#alternative-to-decorators-manual-function-wrappers" title="Permanent link">&para;</a></h2>
-<p>Equivalent manual wrapper methods are provided for all decorators in this library: <code>autoargs_decorate(init_func, include, exclude)</code>, <code>autoprops_decorate(cls, include, exclude)</code>, <code>autoprops_override_decorate(func, attribute, is_getter)</code>, <code>validate_decorate(func, **validators)</code>, <code>autodict_decorate(cls, include, exclude, only_constructor_args, only_public_fields)</code></p>
+<p>Equivalent manual wrapper methods are provided for all decorators in this library: <code>autoargs_decorate(init_func, include, exclude)</code>, <code>autoprops_decorate(cls, include, exclude)</code>, <code>autoprops_override_decorate(func, attribute, is_getter)</code>, <code>validate_decorate(func, **validators)</code>, <code>autodict_decorate(cls, include, exclude, only_constructor_args, only_public_fields)</code>, <code>autoclass_decorate(cls, include, exclude, autoargs, autoprops, autodict)</code></p>
 <p>Therefore you can do:</p>
 <div class="codehilite"><pre><span></span><span class="kn">from</span> <span class="nn">autoclass</span> <span class="kn">import</span> <span class="n">validate_decorate</span><span class="p">,</span> <span class="n">is_even</span>
 
