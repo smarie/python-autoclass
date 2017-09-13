@@ -1,3 +1,7 @@
+### 1.7.0 - @autoclass
+ * New decorator `@autoclass` to apply several features at once.
+ * `@autodict` now also generates a `from_dict` static method in the class, as well as `__str__`, `__repr__` and `__eq__` if not present 
+
 ### 1.6.0 - @autodict
  * New decorator `@autodict` to make a class behave like a (read-only) dict. So this is a 'dict view' on top of an object, basically the opposite of `munch` (that is an 'object view' on top of a dict)
 

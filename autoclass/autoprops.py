@@ -6,8 +6,10 @@ from decorator import decorate
 
 from autoclass import check_var
 from autoclass.validate import validate_decorate
-from autoclass.autoargs import get_constructor, _sieve
-from autoclass.utils import _create_function_decorator__robust_to_args, _create_class_decorator__robust_to_args
+from autoclass.utils_include_exclude import _sieve
+from autoclass.utils_reflexion import get_constructor
+from autoclass.utils_decoration import _create_function_decorator__robust_to_args, \
+    _create_class_decorator__robust_to_args
 
 __GETTER_OVERRIDE_ANNOTATION = '__getter_override__'
 __SETTER_OVERRIDE_ANNOTATION = '__setter_override__'
@@ -34,8 +36,8 @@ def autoprops(include: Union[str, Tuple[str]]=None, exclude: Union[str, Tuple[st
     them with @getter_override or @setter_override. Note that the contract will still be dynamically added on the
     setter, even if the setter already has one (in such case a `UserWarning` will be issued)
 
-    :param include: a named tuple of explicit attributes to include (None means all)
-    :param exclude: a named tuple of explicit attributes to exclude. In such case, include should be None.
+    :param include: a tuple of explicit attribute names to include (None means all)
+    :param exclude: a tuple of explicit attribute names to exclude. In such case, include should be None.
     :return:
     """
     return _create_class_decorator__robust_to_args(autoprops_decorate, include, exclude=exclude)
@@ -53,8 +55,8 @@ def autoprops_decorate(cls: Type[Any], include: Union[str, Tuple[str]] = None,
     setter, even if the setter already has one (in such case a `UserWarning` will be issued)
 
     :param cls: the class on which to execute. Note that it won't be wrapped.
-    :param include: a named tuple of explicit attributes to include (None means all)
-    :param exclude: a named tuple of explicit attributes to exclude. In such case, include should be None.
+    :param include: a tuple of explicit attribute names to include (None means all)
+    :param exclude: a tuple of explicit attribute names to exclude. In such case, include should be None.
     :return:
     """
 
@@ -79,8 +81,8 @@ def _execute_autoprops_on_class(object_type: Type[Any], include: Union[str, Tupl
     It will add a @contract on top of all setters (generated or overridden, if they don't already have one)
 
     :param object_type: the class on which to execute.
-    :param include: a named tuple of explicit attributes to include (None means all)
-    :param exclude: a named tuple of explicit attributes to exclude. In such case, include should be None.
+    :param include: a tuple of explicit attribute names to include (None means all)
+    :param exclude: a tuple of explicit attribute names to exclude. In such case, include should be None.
     :return:
     """
 
@@ -88,7 +90,6 @@ def _execute_autoprops_on_class(object_type: Type[Any], include: Union[str, Tupl
         raise ValueError('Only one of \'include\' or \'exclude\' argument should be provided.')
     check_var(include, var_name='include', var_types=[str, tuple], enforce_not_none=False)
     check_var(exclude, var_name='exclude', var_types=[str, tuple], enforce_not_none=False)
-
 
     # 1. Find the __init__ constructor signature and possible pycontracts @contract
     constructor = get_constructor(object_type)
@@ -103,7 +104,7 @@ def _execute_autoprops_on_class(object_type: Type[Any], include: Union[str, Tupl
     added = []
     for attr_name in s.parameters.keys():
         if _sieve(attr_name, include=include, exclude=exclude):
-            added += attr_name
+            added.append(attr_name)
             attr_type = s.parameters[attr_name]._annotation
             _add_property(object_type, attr_name, attr_type,
                           pycontract=(contracts_dict[attr_name] if attr_name in contracts_dict.keys() else None),

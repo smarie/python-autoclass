@@ -346,10 +346,11 @@ Automatically generates a read-only dictionary view on top of the object.It does
 * it adds `collections.Mapping` to the list of parent classes (i.e. to the class' `__bases__`)
 * it generates `__len__`, `__iter__` and `__getitem__` in order for the appropriate fields to be exposed in the dict view. Parameters allow to customize the list of fields that will be visible. Note that any methods with the same name will be overridden.
 * if `only_constructor_args` is `True` (default), it generates a static `from_dict` method in the class corresponding to a call to the constructor with the unfolded dict. Note that this method may be overridden by the user.
+* if `__eq__` is not implemented on this class, it generates a version that handles the case `self == other` where other is of the same type. In that case the dictionary equality is used. Other equality tests remain unchanged.
 
 Examples:
 
-* Basic functionality, no customization - all constructor arguments become properties: 
+* Basic functionality, no customization - all constructor arguments can be viewed in the dict: 
 
 ```python
 @autodict
@@ -363,9 +364,13 @@ o = A(1, 'r')
 assert o == dict(o)
 assert o == {'a': 1, 'b': 'r'}
 
-# you can create an object from a dict too thanks to the generated class function
-p = A.from_dict({'a': 2, 'b': 's'})
-assert vars(p) == {'a': 2, 'b': 's'}
+# you can create an object from a dict too, thanks to the generated class function
+p = A.from_dict({'a': 1, 'b': 'r'})
+assert p == o
+
+# str and repr methods show interesting stuff
+str(p)  # "A({'a': 1, 'b': 'r'})"
+repr(p)  # "A({'a': 1, 'b': 'r'})"
 ```
 
 * You can obviously combine it with `@autoargs`:
@@ -380,8 +385,8 @@ class B(object):
 o = B(1, 'r')
 # same results
 assert o == {'a': 1, 'b': 'r'}
-p = B.from_dict({'a': 2, 'b': 's'})
-assert vars(p) == {'a': 2, 'b': 's'}
+p = B.from_dict({'a': 1, 'b': 'r'})
+assert p == o
 ```
 
 * Note that by default only fields with the same name than constructor arguments are visible:
@@ -435,9 +440,65 @@ class Bar(object):
 * Note: as for all features in this library, you may also perform the same action without decorator, using `autodict_decorate(cls)`. See [here](./alternative-to-decorators-manual-function-wrappers)
 
 
+## @autoclass
+
+Applies all or part of the above at once. Useful if you want to make the most from this library.
+
+* Basic functionality, no customization - all constructor arguments become properties that are auto-assigned in constructor, and the object behaves like a dict and can be created from a dict: 
+
+```python
+from numbers import Integral
+from typing import Optional
+
+# we will use enforce as the runtime checker
+import enforce as en
+from enforce import runtime_validation
+en.config(dict(mode='covariant'))  # allow subclasses when validating types
+
+# class definition
+@runtime_validation
+@autoclass
+class AllOfTheAbove:
+    @validate(a=gt(1), c=minlen(1))
+    def __init__(self, a: Integral, b: Boolean, c: Optional[List[str]] = None):
+        pass
+
+# instance creation
+o = AllOfTheAbove(a=2, b=True)
+
+# @autoargs works
+assert o.a == 2
+
+# @autoprops works, in combination with any runtime checker (here demonstrated with enforce)
+o.b = 1  # !RuntimeTypeError Argument 'b' was not of type Boolean. Actual type was int.
+
+# @autodict works
+assert o == {'a': 2, 'b': True, 'c': None}
+assert AllOfTheAbove.from_dict(o) == o
+assert dict(**o) == o
+```
+
+* you can also disable part of the features :
+
+```python
+@autoclass(autodict=False)
+class PartsOfTheAbove:
+    @validate(a=gt(1), c=minlen(1))
+    def __init__(self, a: Integral, b: Boolean, c: Optional[List[str]] = None):
+        pass
+
+# instance creation
+o = PartsOfTheAbove(a=2, b=True)
+
+assert o == {'a': 2, 'b': True, 'c': None}  # AssertionError
+assert PartsOfTheAbove.from_dict(o) == o  # AttributeError: 'PartsOfTheAbove' has no attribute 'from_dict'
+assert dict(**o) == o  # TypeError: argument after ** must be a mapping
+```
+
+
 ## Alternative to decorators: manual function wrappers
 
-Equivalent manual wrapper methods are provided for all decorators in this library: `autoargs_decorate(init_func, include, exclude)`, `autoprops_decorate(cls, include, exclude)`, `autoprops_override_decorate(func, attribute, is_getter)`, `validate_decorate(func, **validators)`, `autodict_decorate(cls, include, exclude, only_constructor_args, only_public_fields)`
+Equivalent manual wrapper methods are provided for all decorators in this library: `autoargs_decorate(init_func, include, exclude)`, `autoprops_decorate(cls, include, exclude)`, `autoprops_override_decorate(func, attribute, is_getter)`, `validate_decorate(func, **validators)`, `autodict_decorate(cls, include, exclude, only_constructor_args, only_public_fields)`, `autoclass_decorate(cls, include, exclude, autoargs, autoprops, autodict)`
 
 Therefore you can do:
 

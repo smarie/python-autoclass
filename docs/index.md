@@ -2,7 +2,7 @@
 
 [![Build Status](https://travis-ci.org/smarie/python-autoclass.svg?branch=master)](https://travis-ci.org/smarie/python-autoclass) [![Tests Status](https://smarie.github.io/python-autoclass/junit/junit-badge.svg?dummy=8484744)](https://smarie.github.io/python-autoclass/junit/report.html) [![codecov](https://codecov.io/gh/smarie/python-autoclass/branch/master/graph/badge.svg)](https://codecov.io/gh/smarie/python-autoclass) [![Documentation](https://img.shields.io/badge/docs-latest-blue.svg)](https://smarie.github.io/python-autoclass/) [![PyPI](https://img.shields.io/badge/PyPI-autoclass-blue.svg)](https://pypi.python.org/pypi/autoclass/)
 
-`autoclass` provides tools to automatically generate python 3.5.3+ classes code, such as **constructor body** or **properties getters/setters**, along with optional support of **validation contracts**.
+`autoclass` provides tools to automatically generate python 3.5.3+ classes code, such as **constructor body** or **properties getters/setters**, along with optional support of **validation contracts**. It also provides extra goodies such as **a dict view on top of objects** (the opposite of munch), and more.
 
 The objective of this library is to reduce the amount of redundancy by automatically generating parts of the code from the information already available somewhere else (typically, in the constructor signature). The intent is similar to [attrs](https://github.com/python-attrs/attrs): remove boilerplate.
 
@@ -25,18 +25,19 @@ The following snippet shows a `HouseConfiguration` class with four attributes.
 Each attribute is validated against the expected type everytime you try to set it (constructor AND modifications), and the `name` and `surface` attribute are further validated (`len(name) > 0` and `surface >= 0`). Notice the size of the resulting code !
 
 ```python
-from autoclass import autoargs, autoprops, setter_override
+from autoclass import autoclass, setter_override
 from autoclass import Boolean, validate, minlens, gt
 from numbers import Real, Integral
 from typing import Optional
-from enforce import runtime_validation, config
 
+# we use enforce runtime checker for this example
+from enforce import runtime_validation, config
 config(dict(mode='covariant'))  # to accept subclasses in validation
 
 @runtime_validation
-@autoprops
+@autoclass
 class HouseConfiguration(object):
-    @autoargs
+    
     @validate(name=minlens(0),
               surface=gt(0))
     def __init__(self,
@@ -66,6 +67,35 @@ HouseConfiguration('', 12, 2)  # Value validation: @validate raises a Validation
 
 Note that the `Real` and `Integral` types come from the [`numbers`](https://docs.python.org/3.6/library/numbers.html) built-in module. They provide an easy way to support both python primitives AND e.g. numpy primitives. In this library we provide an additional `Boolean` class to complete the picture.
 
+In addition some goodies are activated by default such as 
+
+* a string representation:
+
+```python
+str(t)
+repr(t)
+```
+
+both return
+
+```bash
+HouseConfiguration({'nb_floors': None, 'with_windows': False, 'surface': 12, 'name': 'test'})
+```
+
+* a dictionary view on top of the object, a `from_dict` class method, and a dict-based equality function:
+
+```python
+# use objects as dicts
+t.keys()
+for k, v in t.items():
+    print(str(k) + ': ' + str(v))
+
+# build objects from dict
+HouseConfiguration.from_dict({'name': 'test2', 'surface': 1})
+
+# compare objects as dicts
+assert t == {'name': 'test', 'nb_floors': None, 'surface': 12, 'with_windows': False}
+```
 
 ## Why autoclass ?
 

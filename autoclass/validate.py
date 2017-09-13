@@ -4,7 +4,7 @@ from typing import Callable, Dict, Any, Set
 
 from decorator import decorate
 
-from autoclass.utils import _create_function_decorator__robust_to_args, apply_on_func_args
+from autoclass.utils_decoration import _create_function_decorator__robust_to_args, apply_on_func_args
 
 
 def validate(**validators: Dict[str, Callable[[Any], bool]]):

@@ -117,4 +117,4 @@ def test_autodict(only_constructor_args, only_public_fields):
 
     # assert that the generated static method works
     if only_constructor_args:
-        assert dict(FooConfigA.from_dict(t)) == t
+        assert FooConfigA.from_dict(t) == t

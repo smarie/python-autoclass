@@ -1,5 +1,6 @@
 import pytest
-from autoclass import autoargs, autoprops, setter_override, Boolean, minlens, validate, ValidationError, gt, autodict
+from autoclass import autoargs, autoprops, setter_override, Boolean, minlens, validate, ValidationError, gt, autodict, \
+    is_in, minlen, autoclass
 from typing import List
 
 
@@ -145,18 +146,19 @@ def test_readme_enforce():
 def test_readme_enforce_validate():
     """ Makes sure that the code in the documentation page is correct for the enforce + validate example """
 
-    # from autoclass import autoargs, autoprops, Boolean
-    import enforce as en
-    from enforce import runtime_validation
+    from autoclass import autoclass, setter_override
+    from autoclass import Boolean, validate, minlens, gt
     from numbers import Real, Integral
     from typing import Optional
 
-    en.config(dict(mode='covariant'))  # allow subclasses when validating types
+    # we use enforce runtime checker for this example
+    from enforce import runtime_validation, config
+    config(dict(mode='covariant'))  # to accept subclasses in validation
 
     @runtime_validation
-    @autoprops
+    @autoclass
     class HouseConfiguration(object):
-        @autoargs
+
         @validate(name=minlens(0),
                   surface=gt(0))
         def __init__(self,
@@ -189,6 +191,18 @@ def test_readme_enforce_validate():
     # Value validation works in constructor
     with pytest.raises(ValidationError):
         HouseConfiguration('', 12, 2)
+
+    # str and repr work
+    assert str(t) == repr(t)
+    # "HouseConfiguration({'nb_floors': None, 'with_windows': False, 'surface': 12, 'name': 'test'})"
+    # assert eval(repr(t)) == t does not work !
+
+    # dict work
+    assert t == {'name': 'test', 'nb_floors': None, 'surface': 12, 'with_windows': False}
+    t.keys()
+    for k, v in t.items():
+        print(str(k) + ': ' + str(v))
+    HouseConfiguration.from_dict({'name': 'test2', 'surface': 1})
 
 
 def test_readme_usage_autoprops_validate():
@@ -226,8 +240,12 @@ def test_readme_usage_autodict_1():
     assert o == {'a': 1, 'b': 'r'}
 
     # you can create an object from a dict too thanks to the generated class function
-    p = A.from_dict({'a': 2, 'b': 's'})
-    assert vars(p) == {'a': 2, 'b': 's'}
+    p = A.from_dict({'a': 1, 'b': 'r'})
+    assert p == o
+
+    # str and repr methods show interesting stuff
+    str(p)  # "A({'a': 1, 'b': 'r'})"
+    repr(p)  # "A({'a': 1, 'b': 'r'})"
 
     # ** with autoargs
     @autodict
@@ -241,8 +259,8 @@ def test_readme_usage_autodict_1():
     assert o == {'a': 1, 'b': 'r'}
 
     # you can create an object from a dict too thanks to the generated class function
-    p = B.from_dict({'a': 2, 'b': 's'})
-    assert vars(p) == {'a': 2, 'b': 's'}
+    p = B.from_dict({'a': 1, 'b': 'r'})
+    assert p == o
 
 
 def test_readme_usage_autodict_2():
@@ -278,3 +296,76 @@ def test_readme_usage_autodict_3():
                  'non_constructor_arg': 'b',
                  '_private': 1,
                  '_D__class_private': 't'}  # notice the name
+
+
+def test_readme_usage_autoclass():
+
+    from numbers import Integral
+    from typing import Optional
+
+    # we will use enforce as the runtime checker
+    import enforce as en
+    from enforce import runtime_validation
+    en.config(dict(mode='covariant'))  # allow subclasses when validating types
+
+    # class definition
+    @runtime_validation
+    @autoclass
+    class AllOfTheAbove:
+        @validate(a=gt(1), c=minlen(1))
+        def __init__(self, a: Integral, b: Boolean, c: Optional[List[str]] = None):
+            pass
+
+    # instance creation
+    o = AllOfTheAbove(a=2, b=True)
+
+    # @autoargs works
+    assert o.a == 2
+
+    # @autoprops works, in combination with any runtime checker (here demonstrated with enforce)
+    from enforce.exceptions import RuntimeTypeError
+    with pytest.raises(RuntimeTypeError):
+        o.b = 1  # RuntimeTypeError Argument 'b' was not of type Boolean. Actual type was int.
+
+    # @autodict works
+    assert o == {'a': 2, 'b': True, 'c': None}
+    assert AllOfTheAbove.from_dict(o) == o
+    assert dict(**o) == o
+
+
+def test_readme_usage_autoclass_custom():
+
+    from numbers import Integral
+    from typing import Optional
+
+    # we will use enforce as the runtime checker
+    import enforce as en
+    from enforce import runtime_validation
+    en.config(dict(mode='covariant'))  # allow subclasses when validating types
+
+    # class definition
+    @runtime_validation
+    @autoclass(autodict=False)
+    class PartsOfTheAbove:
+        @validate(a=gt(1), c=minlen(1))
+        def __init__(self, a: Integral, b: Boolean, c: Optional[List[str]] = None):
+            pass
+
+    # instance creation
+    o = PartsOfTheAbove(a=2, b=True)
+
+    # @autoargs works
+    assert o.a == 2
+
+    # @autoprops works, in combination with any runtime checker (here demonstrated with enforce)
+    from enforce.exceptions import RuntimeTypeError
+    with pytest.raises(RuntimeTypeError):
+        o.b = 1  # RuntimeTypeError Argument 'b' was not of type Boolean. Actual type was int.
+
+    # @autodict is disabled
+    with pytest.raises(AssertionError):
+        assert o == {'a': 2, 'b': True, 'c': None}  # AssertionError
+    with pytest.raises(AttributeError):
+        assert PartsOfTheAbove.from_dict(o) == o  # AttributeError: type object 'PartsOfTheAbove' has no attribute 'from_dict'
+    with pytest.raises(TypeError):
+        assert dict(**o) == o  # TypeError: type object argument after ** must be a mapping, not PartsOfTheAbove
