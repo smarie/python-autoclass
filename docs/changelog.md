@@ -1,3 +1,6 @@
+### 1.6.0 - @autodict
+ * New decorator `@autodict` to make a class behave like a (read-only) dict. So this is a 'dict view' on top of an object, basically the opposite of `munch` (that is an 'object view' on top of a dict)
+
 ### 1.5.0 - Robustness and minor improvements
 
  * better error messages for set enforcers

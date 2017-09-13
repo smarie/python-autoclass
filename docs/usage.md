@@ -216,6 +216,18 @@ assert t.a == ''
 assert t.b[0] == 'r'
 ```
 
+* You can include or exclude some properties in the list of those generated with :
+
+```python
+@autoprops(include=('a', 'b'))
+class Foo(object):
+    ...
+
+@autoprops(exclude=('b'))
+class Bar(object):
+    ...
+```
+
 * if a **[PyContracts](https://andreacensi.github.io/contracts/index.html)** `@contract` annotation exist on the `__init__` method, mentioning a contract for a given parameter, the
 parameter contract will be added on the generated setter method:
 
@@ -223,14 +235,14 @@ parameter contract will be added on the generated setter method:
 from contracts import ContractNotRespected, contract
 
 @autoprops
-class FooConfigA(object):
+class FooConfigB(object):
 
     @autoargs
     @contract(a='str[>0]', b='list[>0](str[>0])')
     def __init__(self, a: str, b: List[str]):
         pass
 
-t = FooConfigA('rhubarb', ['pie', 'pie2'])
+t = FooConfigB('rhubarb', ['pie', 'pie2'])
 
 # check that the generated getters work
 t.b=['r']
@@ -245,14 +257,14 @@ t.b = ['r','']  # raises ContractNotRespected
 
 ```python
 @autoprops
-class FooConfigA(object):
+class FooConfigC(object):
 
     @autoargs
     @validate(a=minlens(0))
     def __init__(self, a: str):
         pass
 
-t = FooConfigA('rhubarb')
+t = FooConfigC('rhubarb')
 
 # check that the generated getters work
 t.a='r'
@@ -267,7 +279,7 @@ them with `@getter_override` or `@setter_override`. Note that the contract will 
 
 ```python
 @autoprops
-class FooConfigC(object):
+class FooConfigD(object):
 
     @autoargs
     @contract(a='str[>0]', b='list[>0](str[>0])')
@@ -286,7 +298,7 @@ class FooConfigC(object):
         print('Property \'b\' was set to \'' + str(toto) + '\'')
         self._b = toto
 
-t = FooConfigC('rhubarb', ['pie', 'pie2'])
+t = FooConfigD('rhubarb', ['pie', 'pie2'])
 
 # check that we can still read a's value
 assert t.a == 'rhubarb'
@@ -307,16 +319,16 @@ t.b=['']  # raises ContractNotRespected
 
 ```python
 # we don't use @autoprops here
-class FooConfigA(object):
+class FooConfigD(object):
     @autoargs
     @contract(a='str[>0]', b='list[>0](str[>0])')
     def __init__(self, a: str, b: List[str]):
         pass
 
 # we execute it here
-autoprops_decorate(FooConfigA)
+autoprops_decorate(FooConfigD)
 
-t = FooConfigA('rhubarb', ['pie', 'pie2'])
+t = FooConfigD('rhubarb', ['pie', 'pie2'])
 
 # check that the generated getters work
 t.b = ['r']
@@ -327,9 +339,105 @@ t.a = ''  # raises ContractNotRespected
 t.b = ['r','']  # raises ContractNotRespected
 ```
 
+## @autodict
+
+Automatically generates a read-only dictionary view on top of the object.It does three things:
+
+* it adds `collections.Mapping` to the list of parent classes (i.e. to the class' `__bases__`)
+* it generates `__len__`, `__iter__` and `__getitem__` in order for the appropriate fields to be exposed in the dict view. Parameters allow to customize the list of fields that will be visible. Note that any methods with the same name will be overridden.
+* if `only_constructor_args` is `True` (default), it generates a static `from_dict` method in the class corresponding to a call to the constructor with the unfolded dict. Note that this method may be overridden by the user.
+
+Examples:
+
+* Basic functionality, no customization - all constructor arguments become properties: 
+
+```python
+@autodict
+class A(object):
+    def __init__(self, a: int, b: str):
+        self.a = a
+        self.b = b
+
+o = A(1, 'r')
+# o behaves like a read-only dict
+assert o == dict(o)
+assert o == {'a': 1, 'b': 'r'}
+
+# you can create an object from a dict too thanks to the generated class function
+p = A.from_dict({'a': 2, 'b': 's'})
+assert vars(p) == {'a': 2, 'b': 's'}
+```
+
+* You can obviously combine it with `@autoargs`:
+
+```python
+@autodict
+class B(object):
+    @autoargs
+    def __init__(self, a: int, b: str):
+        pass
+
+o = B(1, 'r')
+# same results
+assert o == {'a': 1, 'b': 'r'}
+p = B.from_dict({'a': 2, 'b': 's'})
+assert vars(p) == {'a': 2, 'b': 's'}
+```
+
+* Note that by default only fields with the same name than constructor arguments are visible:
+
+```python
+@autodict
+class C(object):
+    @autoargs
+    def __init__(self, a: str, b: List[str]):
+        self.non_constructor_arg = 't'
+        self._private = 1
+        self.__class_private = 't'
+
+o = C(1, 'r')
+# only fields corresponding to constructor arguments are visible
+assert o == {'a': 1, 'b': 'r'}
+```
+
+* You can decide to open to all object fields, including or excluding (default) the class-private ones. Note that class-private attributes will be visible with their usual scrambled name:
+
+```python
+@autodict(only_constructor_args=False, only_public_fields=False)
+class D(object):
+    @autoargs
+    def __init__(self, a: str, b: List[str]):
+        self.non_constructor_arg = 'b'
+        self._private = 1
+        self.__class_private = 't'
+
+o = D(1, 'r')
+# o behaves like a read-only dict, all fields are now visible
+assert o == dict(o)
+assert o == {'a': 1, 'b': 'r',
+             'non_constructor_arg': 'b',
+             '_private': 1,
+             '_D__class_private': 't'}  # notice the name
+``` 
+
+* In addition, you can include or exclude some names in the list of visible fields with one of `include` or `exclude`:
+
+```python
+@autodict(include=['a', 'b'], ...)
+class Foo(object):
+    ...
+
+@autodict(exclude=['b'], ...)
+class Bar(object):
+    ...
+```
+
+* Note: as for all features in this library, you may also perform the same action without decorator, using `autodict_decorate(cls)`. See [here](./alternative-to-decorators-manual-function-wrappers)
+
+
 ## Alternative to decorators: manual function wrappers
 
-Equivalent manual wrapper methods are provided for all decorators in this library: `autoargs_decorate(init_func, include, exclude)`, `autoprops_decorate(cls, include, exclude)`, `autoprops_override_decorate(func, attribute, is_getter)`, `validate_decorate(func, **validators)` 
+Equivalent manual wrapper methods are provided for all decorators in this library: `autoargs_decorate(init_func, include, exclude)`, `autoprops_decorate(cls, include, exclude)`, `autoprops_override_decorate(func, attribute, is_getter)`, `validate_decorate(func, **validators)`, `autodict_decorate(cls, include, exclude, only_constructor_args, only_public_fields)`
 
 Therefore you can do:
 
