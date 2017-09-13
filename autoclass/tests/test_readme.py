@@ -100,6 +100,45 @@ def test_readme_pycontracts():
         t.surface = -1
 
 
+def test_readme_typechecked():
+    """ Makes sure that the code in the documentation page is correct for the pytypes example """
+
+    # from autoclass import autoargs, autoprops, Boolean
+    from pytypes import typechecked
+    from numbers import Real, Integral
+    from typing import Optional
+
+    @typechecked
+    @autoclass
+    class HouseConfiguration(object):
+        def __init__(self,
+                     name: str,
+                     surface: Real,
+                     nb_floors: Optional[Integral] = 1,
+                     with_windows: Boolean = False):
+            pass
+
+        # -- overriden setter for surface for custom validation
+        @setter_override
+        def surface(self, surface):
+            assert surface > 0
+            self._surface = surface
+
+    t = HouseConfiguration('test', 12, 2)
+
+    # 'Optional' works
+    t.nb_floors = None
+
+    # Type validation works
+    from enforce.exceptions import RuntimeTypeError
+    with pytest.raises(RuntimeTypeError):
+        t.nb_floors = 2.2
+
+    # Custom validation works
+    with pytest.raises(AssertionError):
+        t.surface = 0
+
+
 def test_readme_enforce():
     """ Makes sure that the code in the documentation page is correct for the enforce example """
 
