@@ -439,7 +439,7 @@ def lt(max_value: Any, strict: bool = False):
 
 def lts(max_value_strict: Any):
     """ Alias for 'lesser than' validator generator in strict mode """
-    return gt(max_value_strict, True)
+    return lt(max_value_strict, True)
 
 
 def between(min_val: Any, max_val: Any, open_left: bool = False, open_right: bool = False):

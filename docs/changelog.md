@@ -1,3 +1,6 @@
+### 1.7.1 - bug fix: lts validator
+ * `lts` was erroneously mappend onto `gt`. Fixed this.
+
 ### 1.7.0 - @autoclass
  * New decorator `@autoclass` to apply several features at once.
  * `@autodict` now also generates a `from_dict` static method in the class, as well as `__str__`, `__repr__` and `__eq__` if not present 
