@@ -228,7 +228,7 @@ function filter_table(elem) {
     not_found_message.hidden = !all_rows_hidden;
 }
 </script>
-    <p>Report generated on 15-Sep-2017 at 17:03:24 by<a href="https://pypi.python.org/pypi/pytest-html"> pytest-html</a> v1.15.2</p>
+    <p>Report generated on 15-Sep-2017 at 17:03:30 by<a href="https://pypi.python.org/pypi/pytest-html"> pytest-html</a> v1.15.2</p>
     <h2>Environment</h2>
     <table id="environment">
       <tr>
@@ -239,25 +239,25 @@ function filter_table(elem) {
         <td>/usr/lib/jvm/java-8-oracle</td></tr>
       <tr>
         <td>Packages</td>
-        <td>{&apos;py&apos;: &apos;1.4.34&apos;, &apos;pytest&apos;: &apos;3.2.1&apos;, &apos;pluggy&apos;: &apos;0.4.0&apos;}</td></tr>
+        <td>{&apos;pytest&apos;: &apos;3.2.1&apos;, &apos;py&apos;: &apos;1.4.34&apos;, &apos;pluggy&apos;: &apos;0.4.0&apos;}</td></tr>
       <tr>
         <td>Platform</td>
         <td>Linux-4.4.0-93-generic-x86_64-with-debian-jessie-sid</td></tr>
       <tr>
         <td>Plugins</td>
-        <td>{&apos;html&apos;: &apos;1.15.2&apos;, &apos;metadata&apos;: &apos;1.5.0&apos;, &apos;logging&apos;: &apos;2015.11.4&apos;, &apos;cov&apos;: &apos;2.5.1&apos;}</td></tr>
+        <td>{&apos;html&apos;: &apos;1.15.2&apos;, &apos;cov&apos;: &apos;2.5.1&apos;, &apos;metadata&apos;: &apos;1.5.0&apos;, &apos;logging&apos;: &apos;2015.11.4&apos;}</td></tr>
       <tr>
         <td>Python</td>
         <td>3.5.3</td></tr>
       <tr>
         <td>TRAVIS_BRANCH</td>
-        <td>master</td></tr>
+        <td>1.7.1</td></tr>
       <tr>
         <td>TRAVIS_BUILD_ID</td>
-        <td>275973086</td></tr>
+        <td>275972962</td></tr>
       <tr>
         <td>TRAVIS_BUILD_NUMBER</td>
-        <td>55</td></tr>
+        <td>54</td></tr>
       <tr>
         <td>TRAVIS_COMMIT</td>
         <td>f47c5f8c72798304e6bb1cd7491681d23e802d51</td></tr>
@@ -265,17 +265,14 @@ function filter_table(elem) {
         <td>TRAVIS_COMMIT_MESSAGE</td>
         <td>Fixed lts operator (was a wrong alias, executing gt behind the scene !)</td></tr>
       <tr>
-        <td>TRAVIS_COMMIT_RANGE</td>
-        <td>86b2febd58b0...f47c5f8c7279</td></tr>
-      <tr>
         <td>TRAVIS_EVENT_TYPE</td>
         <td>push</td></tr>
       <tr>
         <td>TRAVIS_JOB_ID</td>
-        <td>275973087</td></tr>
+        <td>275972963</td></tr>
       <tr>
         <td>TRAVIS_JOB_NUMBER</td>
-        <td>55.1</td></tr>
+        <td>54.1</td></tr>
       <tr>
         <td>TRAVIS_OS_NAME</td>
         <td>linux</td></tr>
@@ -287,9 +284,12 @@ function filter_table(elem) {
         <td>smarie/python-autoclass</td></tr>
       <tr>
         <td>TRAVIS_SUDO</td>
-        <td>true</td></tr></table>
+        <td>true</td></tr>
+      <tr>
+        <td>TRAVIS_TAG</td>
+        <td>1.7.1</td></tr></table>
     <h2>Summary</h2>
-    <p>48 tests ran in 1.01 seconds. </p>
+    <p>48 tests ran in 1.28 seconds. </p>
     <p class="filter" hidden="true">(Un)check the boxes to filter the results.</p><input checked="true" class="filter" data-test-result="passed" hidden="true" name="filter_checkbox" onChange="filter_table(this)" type="checkbox"/><span class="passed">47 passed</span>, <input checked="true" class="filter" data-test-result="skipped" disabled="true" hidden="true" name="filter_checkbox" onChange="filter_table(this)" type="checkbox"/><span class="skipped">0 skipped</span>, <input checked="true" class="filter" data-test-result="failed" hidden="true" name="filter_checkbox" onChange="filter_table(this)" type="checkbox"/><span class="failed">1 failed</span>, <input checked="true" class="filter" data-test-result="error" disabled="true" hidden="true" name="filter_checkbox" onChange="filter_table(this)" type="checkbox"/><span class="error">0 errors</span>, <input checked="true" class="filter" data-test-result="xfailed" disabled="true" hidden="true" name="filter_checkbox" onChange="filter_table(this)" type="checkbox"/><span class="xfailed">0 expected failures</span>, <input checked="true" class="filter" data-test-result="xpassed" disabled="true" hidden="true" name="filter_checkbox" onChange="filter_table(this)" type="checkbox"/><span class="xpassed">0 unexpected passes</span>
     <h2>Results</h2>
     <table id="results-table">
@@ -488,7 +488,7 @@ function filter_table(elem) {
     @autopropsBasic functionality with PyContracts - if a `@contract` annotation exist on the `__init__` method,
     mentioning a contract for a given parameter, the parameter contract will be added on the generated setter method
     </td>
-          <td class="col-duration">0.22</td>
+          <td class="col-duration">0.27</td>
           <td><a href="https://codecov.io/gh/smarie/python-autoclass/src/f47c5f8c72798304e6bb1cd7491681d23e802d51/autoclass/tests/test_autoprops.py#L27">source</a></td></tr>
         <tr>
           <td class="extra" colspan="6">
@@ -499,7 +499,7 @@ function filter_table(elem) {
           <th>autoclass/tests/test_autoprops.py</th>
           <td>test_autoprops_include</td>
           <td> @autoprops With pycontracts and explicit list of attributes to include </td>
-          <td class="col-duration">0.00</td>
+          <td class="col-duration">0.01</td>
           <td><a href="https://codecov.io/gh/smarie/python-autoclass/src/f47c5f8c72798304e6bb1cd7491681d23e802d51/autoclass/tests/test_autoprops.py#L55">source</a></td></tr>
         <tr>
           <td class="extra" colspan="6">
@@ -558,7 +558,7 @@ Property &#x27;b&#x27; was set to &#x27;[&#x27;eh&#x27;, &#x27;oh&#x27;]&#x27;
           <th>autoclass/tests/test_autoprops.py</th>
           <td>test_autoprops_manual</td>
           <td> @autoprops Tests the manual wrapper autoprops() </td>
-          <td class="col-duration">0.00</td>
+          <td class="col-duration">0.01</td>
           <td><a href="https://codecov.io/gh/smarie/python-autoclass/src/f47c5f8c72798304e6bb1cd7491681d23e802d51/autoclass/tests/test_autoprops.py#L201">source</a></td></tr>
         <tr>
           <td class="extra" colspan="6">
@@ -580,7 +580,7 @@ Property &#x27;b&#x27; was set to &#x27;[&#x27;eh&#x27;, &#x27;oh&#x27;]&#x27;
           <th>autoclass/tests/test_autoprops.py</th>
           <td>test_autoprops_enforce_validate</td>
           <td> Makes sure that autoprops works with enforce AND validate </td>
-          <td class="col-duration">0.02</td>
+          <td class="col-duration">0.03</td>
           <td><a href="https://codecov.io/gh/smarie/python-autoclass/src/f47c5f8c72798304e6bb1cd7491681d23e802d51/autoclass/tests/test_autoprops.py#L252">source</a></td></tr>
         <tr>
           <td class="extra" colspan="6">
@@ -604,7 +604,7 @@ Set surface to 0.1
           <th>autoclass/tests/test_readme.py</th>
           <td>test_readme_pycontracts</td>
           <td> Makes sure that the code in the documentation page is correct for the PyContracts example </td>
-          <td class="col-duration">0.05</td>
+          <td class="col-duration">0.06</td>
           <td><a href="https://codecov.io/gh/smarie/python-autoclass/src/f47c5f8c72798304e6bb1cd7491681d23e802d51/autoclass/tests/test_readme.py#L67">source</a></td></tr>
         <tr>
           <td class="extra" colspan="6">
