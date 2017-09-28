@@ -466,6 +466,7 @@ Each attribute is validated against the expected type everytime you try to set i
 </pre></div>
 
 
+<p>Check the <a href="./usage/">Usage</a> page for more details.</p>
 <h2 id="why-autoclass">Why autoclass ?<a class="headerlink" href="#why-autoclass" title="Permanent link">&para;</a></h2>
 <p>Python's primitive types (in particular <code>dict</code> and <code>tuple</code>) and it's dynamic typing system make it extremely powerful, to the point that it is often more convenient for developers to use primitive types or generic dynamic objects such as <a href="https://github.com/Infinidat/munch">Munch</a>, rather than small custom classes.</p>
 <p>However there are certain cases where developers still want to define their own classes, for example to provide strongly-typed APIs to their clients. In such case, <em>separation of concerns</em> will typically lead developers to enforce attribute value validation directly in the class, rather than in the code using the object. Eventually developers end up with big classes like this one:</p>
