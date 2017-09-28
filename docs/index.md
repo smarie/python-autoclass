@@ -97,6 +97,9 @@ HouseConfiguration.from_dict({'name': 'test2', 'surface': 1})
 assert t == {'name': 'test', 'nb_floors': None, 'surface': 12, 'with_windows': False}
 ```
 
+Check the [Usage](./usage/) page for more details.
+
+
 ## Why autoclass ?
 
 Python's primitive types (in particular `dict` and `tuple`) and it's dynamic typing system make it extremely powerful, to the point that it is often more convenient for developers to use primitive types or generic dynamic objects such as [Munch](https://github.com/Infinidat/munch), rather than small custom classes.

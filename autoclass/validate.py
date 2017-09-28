@@ -1,6 +1,6 @@
 from inspect import getfullargspec
 from numbers import Integral
-from typing import Callable, Dict, Any, Set
+from typing import Callable, Dict, Any, Set, List, Tuple, Union, Iterable, Container
 
 from decorator import decorate
 
@@ -73,18 +73,7 @@ def validate_decorate(func: Callable, **validators: Dict[str, Callable[[Any], bo
 
     # replace validators lists with explicit and_ if needed
     for att_name, att_validators in validators.items():
-        att_validators = _assert_list_and_protect_not_none(att_validators, allow_not_none=True)
-        if att_validators[0] != not_none:
-            # att_validators is a list not containing not_none: wrap in an 'and_' and wrap with a none-ignoring checker
-            validators[att_name] = _not_none_checker(and_(att_validators), ignore_none_silently=True)
-        else:
-            # first element of att_validators is not_none
-            if len(att_validators) > 1:
-                # remove not_none from the list, wrap witha and_, and wrap with the corresponding_not_none_checker
-                validators[att_name] = _not_none_checker(and_(att_validators[1:]), ignore_none_silently=False)
-            else:
-                # one element in the list only (not_none): include it directly
-                validators[att_name] = att_validators[0]
+        validators[att_name] = create_main_validation_function(att_validators, allow_not_none=True)
 
     # (3) create a wrapper around the function to add validation
     # -- old:
@@ -105,6 +94,45 @@ def validate_decorate(func: Callable, **validators: Dict[str, Callable[[Any], bo
     a.__validators__ = validators
     return a
 
+
+def create_main_validation_function(att_validators, allow_not_none: bool):
+    """
+    Creates the main validation function to be used for a specific input.
+    * if att_validators is not a list, it transforms it into a list
+    * if 'not_none' validator is present in the list, it should be the first in the list.
+
+    The function generates a validation function that will
+    * either raise an error on None or ignore None values silently, depending respectively on if the user included
+    `not_none` in the validators list or not
+    * combine all validators from the list (except 'not_none') in an 'and_' validator if more than one validator
+
+    :param att_validators: a validator function or a list of validators
+    :param allow_not_none: True to allow 'not_none' to be present in the list of validators
+    :return:
+    """
+    att_validators = _assert_list_and_protect_not_none(att_validators, allow_not_none=allow_not_none)
+
+    if att_validators[0] != not_none:
+        ignore_nones_silently = True
+        remaining_validators = att_validators
+    else:
+        # the first element is not_none, it will be removed and replaced with _not_none_checker
+        ignore_nones_silently = False
+        remaining_validators = att_validators[1:]
+
+    if len(remaining_validators) >= 1:
+        # note that and_ automatically reduces to contents when contents is a single element
+        main_validation_function = _not_none_checker(and_(remaining_validators),
+                                                     ignore_none_silently=ignore_nones_silently)
+    else:
+        if ignore_nones_silently:
+            main_validation_function = _not_none_checker(remaining_validators[0],
+                                                         ignore_none_silently=ignore_nones_silently)
+        else:
+            # there is a single validator here and it is 'not_none'. We cant replace it with
+            main_validation_function = not_none
+
+    return main_validation_function
 
 def _not_none_checker(validator, ignore_none_silently: bool = True):
     """
@@ -329,6 +357,8 @@ def _assert_list_and_protect_not_none(validators, allow_not_none: bool = False):
         validators = [validators]
 
     # not_none ?
+    # obviously this does not prevent users to embed a not_none inside an 'and_' or something else... but we cant
+    # prevent all mistakes :)
     if i > 0 or (i == 0 and not allow_not_none):
         raise ValueError('not_none is a special validator that can only be provided at the beginning of the'
                          ' global validators list')
@@ -381,7 +411,6 @@ def not_(validator, catch_all: bool = False):
             raise ValidationError('not(' + str(validator) + '): Validator validated input \'' + str(x) + '\' with success, '
                                   'therefore the not() is a failure')
     return not_v_
-
 
 # ------------- orderables ----------------
 def gt(min_value: Any, strict: bool = False):
@@ -619,3 +648,66 @@ def is_superset(reference_set: Set):
                                   + ' and reference_set=' + str(reference_set) + '. x does not contain required '
                                   'elements ' + str(missing))
     return is_superset
+
+
+def on_all_(validators: Union[List, Callable]):
+    """
+    Generates a validator for collection inputs where each element of the input will be validated against the validators
+    provided. For convenience, a list of validators can be provided and will be replaced with an 'and_'.
+
+    Note that if you want to apply DIFFERENT validators for each element in the input, you should rather use on_each_.
+
+    :param validators:
+    :return:
+    """
+    # create the validation function
+    validator_funcs = create_main_validation_function(validators, allow_not_none=True)
+
+    def on_all_val(x):
+        # validate all elements in x in turn
+        idx = -1
+        for x_elt in x:
+            idx += 1
+            res = validators(x_elt)
+            if res not in {None, True}:
+                # one element of x was not valid > raise
+                raise ValidationError('on_all_(' + str(validators) + '): failed validation for input element [' + idx
+                                      + ']: ' + str(x_elt))
+        return True
+
+    return on_all_val
+
+
+def on_each_(validators_collection: Iterable):
+    """
+    Generates a validator for collection inputs where each element of the input will be validated against the
+    corresponding validator(s) in the validators_collection. Validators inside the tuple can be provided as a list for
+    convenience, this will be replaced with an 'and_' operator if the list has more than one element.
+
+    Note that if you want to apply the SAME validators to all elements in the input, you should rather use on_all_.
+
+    :param validators_collection:
+    :return:
+    """
+    # create a tuple of validation functions.
+    validator_funcs = tuple(create_main_validation_function(validators, allow_not_none=True)
+                            for validators in validators_collection)
+
+    # generate a validation function based on the tuple of validators lists
+    def on_each_val(x: Tuple):
+        if len(validator_funcs) != len(x):
+            raise ValidationError('on_each_: x does not have the same number of elements than validators_collection.')
+        else:
+            # apply each validator on the input with the same position in the collection
+            idx = -1
+            for elt, validator_func in zip(x, validator_funcs):
+                idx += 1
+                res = validator_func(elt)
+                if res not in {None, True}:
+                    # one validator was unhappy > raise
+                    raise ValidationError('on_each_(' + str(validators_collection) + '): Validator ['
+                                          + idx + '] (' + str(validators_collection[idx]) + ') failed validation for '
+                                          'input ' + str(x[idx]))
+            return True
+
+    return on_each_val

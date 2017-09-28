@@ -1,3 +1,6 @@
+### 1.8.0 - new validators for collections
+ * Added `on_each_` and `on_all_`
+
 ### 1.7.1 - bug fix: lts validator
  * `lts` was erroneously mappend onto `gt`. Fixed this.
 

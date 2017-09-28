@@ -40,7 +40,7 @@ DOWNLOAD_URL = URL + '/tarball/' + version_for_download_url
 
 KEYWORDS = 'auto code generator decorator properties fields attributes contract object classes'
 # --Get the long description from the README file
-#with open(path.join(here, 'README.md'), encoding='utf-8') as f:
+# with open(path.join(here, 'README.md'), encoding='utf-8') as f:
 #    LONG_DESCRIPTION = f.read()
 try:
     import pypandoc
@@ -92,12 +92,12 @@ setup(
 
         # Specify the Python versions you support here. In particular, ensure
         # that you indicate whether you support Python 2, Python 3 or both.
-        #'Programming Language :: Python :: 2',
-        #'Programming Language :: Python :: 2.6',
-        #'Programming Language :: Python :: 2.7',
-        #'Programming Language :: Python :: 3',
-        #'Programming Language :: Python :: 3.3',
-        #'Programming Language :: Python :: 3.4',
+        # 'Programming Language :: Python :: 2',
+        # 'Programming Language :: Python :: 2.6',
+        # 'Programming Language :: Python :: 2.7',
+        # 'Programming Language :: Python :: 3',
+        # 'Programming Language :: Python :: 3.3',
+        # 'Programming Language :: Python :: 3.4',
         'Programming Language :: Python :: 3.5',
         'Programming Language :: Python :: 3.6',
     ],
@@ -122,7 +122,7 @@ setup(
 
     # we're using git
     use_scm_version=True, # this provides the version + adds the date if local non-commited changes.
-    #use_scm_version={'local_scheme':'dirty-tag'}, # this provides the version + adds '+dirty' if local non-commited changes.
+    # use_scm_version={'local_scheme':'dirty-tag'}, # this provides the version + adds '+dirty' if local non-commited changes.
     setup_requires=SETUP_REQUIRES,
 
     # test
