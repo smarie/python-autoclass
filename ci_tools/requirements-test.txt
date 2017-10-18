@@ -1,5 +1,6 @@
 # requirements needed to run the tests
 PyContracts
 enforce
+pytypes
 pytest
 pytest-logging
