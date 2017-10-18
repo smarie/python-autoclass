@@ -130,8 +130,8 @@ def test_readme_typechecked():
     t.nb_floors = None
 
     # Type validation works
-    from enforce.exceptions import RuntimeTypeError
-    with pytest.raises(RuntimeTypeError):
+    from pytypes import InputTypeError
+    with pytest.raises(InputTypeError):
         t.nb_floors = 2.2
 
     # Custom validation works
