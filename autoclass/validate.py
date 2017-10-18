@@ -650,35 +650,37 @@ def is_superset(reference_set: Set):
     return is_superset
 
 
-def on_all_(validators: Union[List, Callable]):
+# TODO rename 'all_on_each'
+def on_all_(*validators_for_all_elts):
     """
     Generates a validator for collection inputs where each element of the input will be validated against the validators
     provided. For convenience, a list of validators can be provided and will be replaced with an 'and_'.
 
     Note that if you want to apply DIFFERENT validators for each element in the input, you should rather use on_each_.
 
-    :param validators:
+    :param validators_for_all_elts:
     :return:
     """
     # create the validation function
-    validator_funcs = create_main_validation_function(validators, allow_not_none=True)
+    validator_funcs = create_main_validation_function(validators_for_all_elts, allow_not_none=True)
 
     def on_all_val(x):
         # validate all elements in x in turn
         idx = -1
         for x_elt in x:
             idx += 1
-            res = validators(x_elt)
+            res = validator_funcs(x_elt)
             if res not in {None, True}:
                 # one element of x was not valid > raise
-                raise ValidationError('on_all_(' + str(validators) + '): failed validation for input element [' + idx
-                                      + ']: ' + str(x_elt))
+                raise ValidationError('on_all_(' + str(validators_for_all_elts) + '): failed validation for input '
+                                      'element [' + str(idx) + ']: ' + str(x_elt))
         return True
 
     return on_all_val
 
 
-def on_each_(validators_collection: Iterable):
+# TODO rename one_for_each
+def on_each_(*validators_collection):
     """
     Generates a validator for collection inputs where each element of the input will be validated against the
     corresponding validator(s) in the validators_collection. Validators inside the tuple can be provided as a list for
@@ -705,8 +707,8 @@ def on_each_(validators_collection: Iterable):
                 res = validator_func(elt)
                 if res not in {None, True}:
                     # one validator was unhappy > raise
-                    raise ValidationError('on_each_(' + str(validators_collection) + '): Validator ['
-                                          + idx + '] (' + str(validators_collection[idx]) + ') failed validation for '
+                    raise ValidationError('on_each_(' + str(validators_collection) + '): Validator [' + str(idx)
+                                          + '] (' + str(validators_collection[idx]) + ') failed validation for '
                                           'input ' + str(x[idx]))
             return True
 

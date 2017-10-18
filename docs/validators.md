@@ -105,13 +105,13 @@ Alias for maxlen in strict mode
 
 'Is superset' validator generator. Returns a validator to check that `x` is a superset of `reference_set`. That is, `len(reference_set - x) == 0`
 
-#### on_all_(validators)
+#### on_all_(*validators_for_all_elts)
 
 Generates a validator for collection inputs where each element of the input will be validated against the validators provided. For convenience, a list of validators can be provided and will be replaced with an `and_`.
 
 Note that if you want to apply DIFFERENT validators for each element in the input collection, you should rather use `on_each_`.
 
-#### on_each_(validators_collection)
+#### on_each_(*validators_collection)
 
 Generates a validator for collection inputs where each element of the input will be validated against the corresponding validator(s) in the validators_collection. Validators inside the tuple can be provided as a list for convenience, this will be replaced with an `and_` operator if the list has more than one element.
 

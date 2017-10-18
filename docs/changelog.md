@@ -1,3 +1,7 @@
+### 1.8.1 - minor improvements
+ * Now detecting conflicts with `enforce` when annotations are not in the right order (see [#12](https://github.com/smarie/python-autoclass/issues/12))
+ * Added tests for `on_each_` and `on_all_` and fixed corresponding bugs.
+
 ### 1.8.0 - new validators for collections
  * Added `on_each_` and `on_all_`
 

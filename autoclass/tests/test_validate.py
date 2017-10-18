@@ -1,7 +1,8 @@
+from typing import Tuple
 from unittest import TestCase
 
 from autoclass import validate, ValidationError, is_even, gt, not_none, not_, is_mod, or_, xor_, is_subset, and_, \
-    is_superset, is_in, validate_decorate
+    is_superset, is_in, validate_decorate, on_all_, on_each_, lt
 
 
 class TestValidate(TestCase):
@@ -284,6 +285,26 @@ class TestValidate(TestCase):
 
         with self.assertRaises(ValidationError):
             myfunc(None, None, {'+'})
+
+    def test_validate_on_all(self):
+        @validate(a=on_all_(is_even, lt(0)))
+        def myfunc(a: Tuple):
+            print('hello')
+
+        myfunc((0, -10, -2))
+
+        with self.assertRaises(ValidationError):
+            myfunc((0, -10, -1))
+
+    def test_validate_on_each(self):
+        @validate(a=on_each_(is_even, lt(0)))
+        def myfunc(a: Tuple[int, int]):
+            print('hello')
+
+        myfunc((0, -1))
+
+        with self.assertRaises(ValidationError):
+            myfunc((0, 2))
 
     def test_decorate_manually(self):
         """ Tests that the manual decorator works """
