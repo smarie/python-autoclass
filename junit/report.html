@@ -228,7 +228,7 @@ function filter_table(elem) {
     not_found_message.hidden = !all_rows_hidden;
 }
 </script>
-    <p>Report generated on 18-Oct-2017 at 16:00:17 by<a href="https://pypi.python.org/pypi/pytest-html"> pytest-html</a> v1.16.0</p>
+    <p>Report generated on 18-Oct-2017 at 16:00:22 by<a href="https://pypi.python.org/pypi/pytest-html"> pytest-html</a> v1.16.0</p>
     <h2>Environment</h2>
     <table id="environment">
       <tr>
@@ -239,25 +239,25 @@ function filter_table(elem) {
         <td>/usr/lib/jvm/java-8-oracle</td></tr>
       <tr>
         <td>Packages</td>
-        <td>{&apos;pytest&apos;: &apos;3.2.1&apos;, &apos;py&apos;: &apos;1.4.34&apos;, &apos;pluggy&apos;: &apos;0.4.0&apos;}</td></tr>
+        <td>{&apos;pluggy&apos;: &apos;0.4.0&apos;, &apos;py&apos;: &apos;1.4.34&apos;, &apos;pytest&apos;: &apos;3.2.1&apos;}</td></tr>
       <tr>
         <td>Platform</td>
         <td>Linux-4.4.0-93-generic-x86_64-with-debian-jessie-sid</td></tr>
       <tr>
         <td>Plugins</td>
-        <td>{&apos;cov&apos;: &apos;2.5.1&apos;, &apos;html&apos;: &apos;1.16.0&apos;, &apos;metadata&apos;: &apos;1.5.0&apos;, &apos;logging&apos;: &apos;2015.11.4&apos;}</td></tr>
+        <td>{&apos;metadata&apos;: &apos;1.5.0&apos;, &apos;logging&apos;: &apos;2015.11.4&apos;, &apos;cov&apos;: &apos;2.5.1&apos;, &apos;html&apos;: &apos;1.16.0&apos;}</td></tr>
       <tr>
         <td>Python</td>
         <td>3.5.3</td></tr>
       <tr>
         <td>TRAVIS_BRANCH</td>
-        <td>1.8.1</td></tr>
+        <td>master</td></tr>
       <tr>
         <td>TRAVIS_BUILD_ID</td>
-        <td>289575926</td></tr>
+        <td>289575913</td></tr>
       <tr>
         <td>TRAVIS_BUILD_NUMBER</td>
-        <td>59</td></tr>
+        <td>58</td></tr>
       <tr>
         <td>TRAVIS_COMMIT</td>
         <td>0ba4f4dd37b390889a2ba492bea2dd469830d543</td></tr>
@@ -267,14 +267,17 @@ function filter_table(elem) {
 * Updated doc
 * updated changelog, ready for 1.8.1</td></tr>
       <tr>
+        <td>TRAVIS_COMMIT_RANGE</td>
+        <td>ef698a4450d3...0ba4f4dd37b3</td></tr>
+      <tr>
         <td>TRAVIS_EVENT_TYPE</td>
         <td>push</td></tr>
       <tr>
         <td>TRAVIS_JOB_ID</td>
-        <td>289575927</td></tr>
+        <td>289575914</td></tr>
       <tr>
         <td>TRAVIS_JOB_NUMBER</td>
-        <td>59.1</td></tr>
+        <td>58.1</td></tr>
       <tr>
         <td>TRAVIS_OS_NAME</td>
         <td>linux</td></tr>
@@ -286,12 +289,9 @@ function filter_table(elem) {
         <td>smarie/python-autoclass</td></tr>
       <tr>
         <td>TRAVIS_SUDO</td>
-        <td>true</td></tr>
-      <tr>
-        <td>TRAVIS_TAG</td>
-        <td>1.8.1</td></tr></table>
+        <td>true</td></tr></table>
     <h2>Summary</h2>
-    <p>52 tests ran in 1.54 seconds. </p>
+    <p>52 tests ran in 1.98 seconds. </p>
     <p class="filter" hidden="true">(Un)check the boxes to filter the results.</p><input checked="true" class="filter" data-test-result="passed" hidden="true" name="filter_checkbox" onChange="filter_table(this)" type="checkbox"/><span class="passed">51 passed</span>, <input checked="true" class="filter" data-test-result="skipped" disabled="true" hidden="true" name="filter_checkbox" onChange="filter_table(this)" type="checkbox"/><span class="skipped">0 skipped</span>, <input checked="true" class="filter" data-test-result="failed" hidden="true" name="filter_checkbox" onChange="filter_table(this)" type="checkbox"/><span class="failed">1 failed</span>, <input checked="true" class="filter" data-test-result="error" disabled="true" hidden="true" name="filter_checkbox" onChange="filter_table(this)" type="checkbox"/><span class="error">0 errors</span>, <input checked="true" class="filter" data-test-result="xfailed" disabled="true" hidden="true" name="filter_checkbox" onChange="filter_table(this)" type="checkbox"/><span class="xfailed">0 expected failures</span>, <input checked="true" class="filter" data-test-result="xpassed" disabled="true" hidden="true" name="filter_checkbox" onChange="filter_table(this)" type="checkbox"/><span class="xpassed">0 unexpected passes</span>
     <h2>Results</h2>
     <table id="results-table">
@@ -311,11 +311,11 @@ function filter_table(elem) {
           <th>autoclass/tests/test_readme.py</th>
           <td>test_readme_typechecked</td>
           <td> Makes sure that the code in the documentation page is correct for the pytypes example </td>
-          <td class="col-duration">0.04</td>
+          <td class="col-duration">0.05</td>
           <td><a href="https://codecov.io/gh/smarie/python-autoclass/src/0ba4f4dd37b390889a2ba492bea2dd469830d543/autoclass/tests/test_readme.py#L102">source</a></td></tr>
         <tr>
           <td class="extra" colspan="6">
-            <div class="log">def test_readme_typechecked():<br/>        &quot;&quot;&quot; Makes sure that the code in the documentation page is correct for the pytypes example &quot;&quot;&quot;<br/>    <br/>        # from autoclass import autoargs, autoprops, Boolean<br/>        from pytypes import typechecked<br/>        from numbers import Real, Integral<br/>        from typing import Optional<br/>    <br/>        @typechecked<br/>        @autoclass<br/>        class HouseConfiguration(object):<br/>            def __init__(self,<br/>                         name: str,<br/>                         surface: Real,<br/>                         nb_floors: Optional[Integral] = 1,<br/>                         with_windows: Boolean = False):<br/>                pass<br/>    <br/>            # -- overriden setter for surface for custom validation<br/>            @setter_override<br/>            def surface(self, surface):<br/>                assert surface &gt; 0<br/>                self._surface = surface<br/>    <br/>&gt;       t = HouseConfiguration(&#x27;test&#x27;, 12, 2)<br/><br/>autoclass/tests/test_readme.py:127: <br/>_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ <br/>../../../virtualenv/python3.5.3/lib/python3.5/site-packages/pytypes/typechecker.py:825: in checker_tp<br/>    prop_getter or auto_prop_getter, specs)<br/>../../../virtualenv/python3.5.3/lib/python3.5/site-packages/pytypes/typechecker.py:673: in _checkfunctype<br/>    _raise_typecheck_error(msg, False, check_val, tpch, argSig, func)<br/>_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ <br/><br/>msg = &#x27;\n  autoclass.tests.test_readme.test_readme_typechecked.&lt;locals&gt;.HouseConfiguration.__init__\n  called with incompatible types:\nExpected: Tuple[str, Real, Union[Integral, NoneType], Boolean]\nReceived: Tuple[str, int, int, int]&#x27;<br/>is_return = False, value = (&#x27;test&#x27;, 12, 2, 1)<br/>received_type = typing.Tuple[str, int, int, int]<br/>expected_type = typing.Tuple[str, numbers.Real, typing.Union[numbers.Integral, NoneType], autoclass.utils_typing.Boolean]<br/>func = &lt;function test_readme_typechecked.&lt;locals&gt;.HouseConfiguration.__init__ at 0x7f2e4b3ff840&gt;<br/><br/>    def _raise_typecheck_error(msg, is_return=False, value=None, received_type=None,<br/>                expected_type=None, func=None):<br/>        if pytypes.warning_mode:<br/>            import traceback<br/>            tb = traceback.extract_stack()<br/>            off = util._calc_traceback_list_offset(tb)<br/>            cat = pytypes.ReturnTypeWarning if is_return else pytypes.InputTypeWarning<br/>            warn_explicit(msg, cat, tb[off][0], tb[off][1])<br/>    # 		if not func is None:<br/>    # 			warn_explicit(msg, cat, func.__code__.co_filename,<br/>    # 					func.__code__.co_firstlineno, func.__module__)<br/>    # 		else:<br/>    # 			warn(msg, pytypes.ReturnTypeWarning)<br/>        else:<br/>            if is_return:<br/>                raise pytypes.ReturnTypeError(msg)<br/>            else:<br/>&gt;               raise pytypes.InputTypeError(msg)<br/><span class="error">E               pytypes.exceptions.InputTypeError: </span><br/><span class="error">E                 autoclass.tests.test_readme.test_readme_typechecked.&lt;locals&gt;.HouseConfiguration.__init__</span><br/><span class="error">E                 called with incompatible types:</span><br/><span class="error">E               Expected: Tuple[str, Real, Union[Integral, NoneType], Boolean]</span><br/><span class="error">E               Received: Tuple[str, int, int, int]</span><br/><br/>../../../virtualenv/python3.5.3/lib/python3.5/site-packages/pytypes/type_util.py:1446: InputTypeError<br/></div></td></tr></tbody>
+            <div class="log">def test_readme_typechecked():<br/>        &quot;&quot;&quot; Makes sure that the code in the documentation page is correct for the pytypes example &quot;&quot;&quot;<br/>    <br/>        # from autoclass import autoargs, autoprops, Boolean<br/>        from pytypes import typechecked<br/>        from numbers import Real, Integral<br/>        from typing import Optional<br/>    <br/>        @typechecked<br/>        @autoclass<br/>        class HouseConfiguration(object):<br/>            def __init__(self,<br/>                         name: str,<br/>                         surface: Real,<br/>                         nb_floors: Optional[Integral] = 1,<br/>                         with_windows: Boolean = False):<br/>                pass<br/>    <br/>            # -- overriden setter for surface for custom validation<br/>            @setter_override<br/>            def surface(self, surface):<br/>                assert surface &gt; 0<br/>                self._surface = surface<br/>    <br/>&gt;       t = HouseConfiguration(&#x27;test&#x27;, 12, 2)<br/><br/>autoclass/tests/test_readme.py:127: <br/>_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ <br/>../../../virtualenv/python3.5.3/lib/python3.5/site-packages/pytypes/typechecker.py:825: in checker_tp<br/>    prop_getter or auto_prop_getter, specs)<br/>../../../virtualenv/python3.5.3/lib/python3.5/site-packages/pytypes/typechecker.py:673: in _checkfunctype<br/>    _raise_typecheck_error(msg, False, check_val, tpch, argSig, func)<br/>_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ <br/><br/>msg = &#x27;\n  autoclass.tests.test_readme.test_readme_typechecked.&lt;locals&gt;.HouseConfiguration.__init__\n  called with incompatible types:\nExpected: Tuple[str, Real, Union[Integral, NoneType], Boolean]\nReceived: Tuple[str, int, int, int]&#x27;<br/>is_return = False, value = (&#x27;test&#x27;, 12, 2, 1)<br/>received_type = typing.Tuple[str, int, int, int]<br/>expected_type = typing.Tuple[str, numbers.Real, typing.Union[numbers.Integral, NoneType], autoclass.utils_typing.Boolean]<br/>func = &lt;function test_readme_typechecked.&lt;locals&gt;.HouseConfiguration.__init__ at 0x7fc7ce7e3158&gt;<br/><br/>    def _raise_typecheck_error(msg, is_return=False, value=None, received_type=None,<br/>                expected_type=None, func=None):<br/>        if pytypes.warning_mode:<br/>            import traceback<br/>            tb = traceback.extract_stack()<br/>            off = util._calc_traceback_list_offset(tb)<br/>            cat = pytypes.ReturnTypeWarning if is_return else pytypes.InputTypeWarning<br/>            warn_explicit(msg, cat, tb[off][0], tb[off][1])<br/>    # 		if not func is None:<br/>    # 			warn_explicit(msg, cat, func.__code__.co_filename,<br/>    # 					func.__code__.co_firstlineno, func.__module__)<br/>    # 		else:<br/>    # 			warn(msg, pytypes.ReturnTypeWarning)<br/>        else:<br/>            if is_return:<br/>                raise pytypes.ReturnTypeError(msg)<br/>            else:<br/>&gt;               raise pytypes.InputTypeError(msg)<br/><span class="error">E               pytypes.exceptions.InputTypeError: </span><br/><span class="error">E                 autoclass.tests.test_readme.test_readme_typechecked.&lt;locals&gt;.HouseConfiguration.__init__</span><br/><span class="error">E                 called with incompatible types:</span><br/><span class="error">E               Expected: Tuple[str, Real, Union[Integral, NoneType], Boolean]</span><br/><span class="error">E               Received: Tuple[str, int, int, int]</span><br/><br/>../../../virtualenv/python3.5.3/lib/python3.5/site-packages/pytypes/type_util.py:1446: InputTypeError<br/></div></td></tr></tbody>
       <tbody class="passed results-table-row">
         <tr>
           <td class="col-result">Passed</td>
@@ -428,7 +428,7 @@ function filter_table(elem) {
           <th>autoclass/tests/test_autoclass.py</th>
           <td>test_autoclass_enforce_validate_not_reversed</td>
           <td> Tests that if we reverse the annotations orders, it still works. Currently it fails </td>
-          <td class="col-duration">0.03</td>
+          <td class="col-duration">0.04</td>
           <td><a href="https://codecov.io/gh/smarie/python-autoclass/src/0ba4f4dd37b390889a2ba492bea2dd469830d543/autoclass/tests/test_autoclass.py#L5">source</a></td></tr>
         <tr>
           <td class="extra" colspan="6">
@@ -513,7 +513,7 @@ function filter_table(elem) {
     @autopropsBasic functionality with PyContracts - if a `@contract` annotation exist on the `__init__` method,
     mentioning a contract for a given parameter, the parameter contract will be added on the generated setter method
     </td>
-          <td class="col-duration">0.26</td>
+          <td class="col-duration">0.37</td>
           <td><a href="https://codecov.io/gh/smarie/python-autoclass/src/0ba4f4dd37b390889a2ba492bea2dd469830d543/autoclass/tests/test_autoprops.py#L27">source</a></td></tr>
         <tr>
           <td class="extra" colspan="6">
@@ -583,7 +583,7 @@ Property &#x27;b&#x27; was set to &#x27;[&#x27;eh&#x27;, &#x27;oh&#x27;]&#x27;
           <th>autoclass/tests/test_autoprops.py</th>
           <td>test_autoprops_manual</td>
           <td> @autoprops Tests the manual wrapper autoprops() </td>
-          <td class="col-duration">0.01</td>
+          <td class="col-duration">0.00</td>
           <td><a href="https://codecov.io/gh/smarie/python-autoclass/src/0ba4f4dd37b390889a2ba492bea2dd469830d543/autoclass/tests/test_autoprops.py#L201">source</a></td></tr>
         <tr>
           <td class="extra" colspan="6">
@@ -629,7 +629,7 @@ Set surface to 0.1
           <th>autoclass/tests/test_readme.py</th>
           <td>test_readme_pycontracts</td>
           <td> Makes sure that the code in the documentation page is correct for the PyContracts example </td>
-          <td class="col-duration">0.03</td>
+          <td class="col-duration">0.05</td>
           <td><a href="https://codecov.io/gh/smarie/python-autoclass/src/0ba4f4dd37b390889a2ba492bea2dd469830d543/autoclass/tests/test_readme.py#L67">source</a></td></tr>
         <tr>
           <td class="extra" colspan="6">
@@ -668,7 +668,7 @@ Set surface to 1
           <th>autoclass/tests/test_readme.py</th>
           <td>test_readme_usage_autoprops_validate</td>
           <td>None</td>
-          <td class="col-duration">0.00</td>
+          <td class="col-duration">0.01</td>
           <td><a href="https://codecov.io/gh/smarie/python-autoclass/src/0ba4f4dd37b390889a2ba492bea2dd469830d543/autoclass/tests/test_readme.py#L246">source</a></td></tr>
         <tr>
           <td class="extra" colspan="6">
@@ -679,7 +679,7 @@ Set surface to 1
           <th>autoclass/tests/test_readme.py</th>
           <td>test_readme_usage_autodict_1</td>
           <td> basic autodict without and with autoargs </td>
-          <td class="col-duration">0.00</td>
+          <td class="col-duration">0.01</td>
           <td><a href="https://codecov.io/gh/smarie/python-autoclass/src/0ba4f4dd37b390889a2ba492bea2dd469830d543/autoclass/tests/test_readme.py#L265">source</a></td></tr>
         <tr>
           <td class="extra" colspan="6">
@@ -712,7 +712,7 @@ Set surface to 1
           <th>autoclass/tests/test_readme.py</th>
           <td>test_readme_usage_autoclass</td>
           <td>None</td>
-          <td class="col-duration">0.01</td>
+          <td class="col-duration">0.02</td>
           <td><a href="https://codecov.io/gh/smarie/python-autoclass/src/0ba4f4dd37b390889a2ba492bea2dd469830d543/autoclass/tests/test_readme.py#L339">source</a></td></tr>
         <tr>
           <td class="extra" colspan="6">
