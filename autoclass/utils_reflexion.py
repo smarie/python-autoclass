@@ -43,24 +43,36 @@ from typing import Type, Any
 #     return [attribute_name for attribute_name, param in s.parameters.items() if param.default is Parameter.empty]
 
 
-def get_constructor(item_type):
+def get_constructor(typ, allow_inheritance: bool=False):
     """
-    Utility method to return the unique constructor of a class
+    Utility method to return the unique constructor (__init__) of a type
 
-    :param item_type:
-    :return:
+    :param typ: a type
+    :param allow_inheritance: if True, the constructor will be returned even if it is not defined in this class
+    (inherited). By default this is set to False: an exception is raised when no constructor is explicitly defined in
+    the class
+    :return: the found constructor
     """
-    constructors = [f[1] for f in getmembers(item_type) if f[0] is '__init__']
-    if len(constructors) > 1:
-        raise Exception('Several constructors were found for class ' + str(item_type))
-    if len(constructors) == 0:
-        raise Exception('No constructor was found for class ' + str(item_type))
 
-    constructor = constructors[0]
+    # constructors = [f[1] for f in getmembers(typ) if f[0] is '__init__']
+    # if len(constructors) > 1:
+    #     raise Exception('Several constructors were found for class ' + str(typ))
+    # if len(constructors) == 0:
+    #     raise Exception('No constructor was found for class ' + str(typ))
+    #
+    # constructor = constructors[0]
+    #
+    # # if constructor is a wrapped function, access to the underlying function
 
-    # if constructor is a wrapped function, access to the underlying function
-
-    return constructor
+    # faster: just access it!
+    if allow_inheritance:
+        return typ.__init__
+    else:
+        # check that the constructor is really defined here
+        if '__init__' in typ.__dict__:
+            return typ.__init__
+        else:
+            raise Exception('No explicit constructor was found for class ' + str(typ))
 
 
 # def get_class_that_defined_method(meth):
