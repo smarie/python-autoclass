@@ -228,7 +228,7 @@ function filter_table(elem) {
     not_found_message.hidden = !all_rows_hidden;
 }
 </script>
-    <p>Report generated on 28-Sep-2017 at 11:09:29 by<a href="https://pypi.python.org/pypi/pytest-html"> pytest-html</a> v1.16.0</p>
+    <p>Report generated on 18-Oct-2017 at 16:00:17 by<a href="https://pypi.python.org/pypi/pytest-html"> pytest-html</a> v1.16.0</p>
     <h2>Environment</h2>
     <table id="environment">
       <tr>
@@ -245,37 +245,36 @@ function filter_table(elem) {
         <td>Linux-4.4.0-93-generic-x86_64-with-debian-jessie-sid</td></tr>
       <tr>
         <td>Plugins</td>
-        <td>{&apos;metadata&apos;: &apos;1.5.0&apos;, &apos;cov&apos;: &apos;2.5.1&apos;, &apos;logging&apos;: &apos;2015.11.4&apos;, &apos;html&apos;: &apos;1.16.0&apos;}</td></tr>
+        <td>{&apos;cov&apos;: &apos;2.5.1&apos;, &apos;html&apos;: &apos;1.16.0&apos;, &apos;metadata&apos;: &apos;1.5.0&apos;, &apos;logging&apos;: &apos;2015.11.4&apos;}</td></tr>
       <tr>
         <td>Python</td>
         <td>3.5.3</td></tr>
       <tr>
         <td>TRAVIS_BRANCH</td>
-        <td>master</td></tr>
+        <td>1.8.1</td></tr>
       <tr>
         <td>TRAVIS_BUILD_ID</td>
-        <td>280820734</td></tr>
+        <td>289575926</td></tr>
       <tr>
         <td>TRAVIS_BUILD_NUMBER</td>
-        <td>56</td></tr>
+        <td>59</td></tr>
       <tr>
         <td>TRAVIS_COMMIT</td>
-        <td>ef698a4450d3d83f78a3ae7e9e0a86a79b19f090</td></tr>
+        <td>0ba4f4dd37b390889a2ba492bea2dd469830d543</td></tr>
       <tr>
         <td>TRAVIS_COMMIT_MESSAGE</td>
-        <td>Added two new validators for collections : on_each_ and on_all_. Plus, minor changes.</td></tr>
-      <tr>
-        <td>TRAVIS_COMMIT_RANGE</td>
-        <td>f47c5f8c7279...ef698a4450d3</td></tr>
+        <td>Added tests for on_all_ and on_each_ and fixed an issue in their validation exceptions.
+* Updated doc
+* updated changelog, ready for 1.8.1</td></tr>
       <tr>
         <td>TRAVIS_EVENT_TYPE</td>
         <td>push</td></tr>
       <tr>
         <td>TRAVIS_JOB_ID</td>
-        <td>280820735</td></tr>
+        <td>289575927</td></tr>
       <tr>
         <td>TRAVIS_JOB_NUMBER</td>
-        <td>56.1</td></tr>
+        <td>59.1</td></tr>
       <tr>
         <td>TRAVIS_OS_NAME</td>
         <td>linux</td></tr>
@@ -287,10 +286,13 @@ function filter_table(elem) {
         <td>smarie/python-autoclass</td></tr>
       <tr>
         <td>TRAVIS_SUDO</td>
-        <td>true</td></tr></table>
+        <td>true</td></tr>
+      <tr>
+        <td>TRAVIS_TAG</td>
+        <td>1.8.1</td></tr></table>
     <h2>Summary</h2>
-    <p>48 tests ran in 1.27 seconds. </p>
-    <p class="filter" hidden="true">(Un)check the boxes to filter the results.</p><input checked="true" class="filter" data-test-result="passed" hidden="true" name="filter_checkbox" onChange="filter_table(this)" type="checkbox"/><span class="passed">47 passed</span>, <input checked="true" class="filter" data-test-result="skipped" disabled="true" hidden="true" name="filter_checkbox" onChange="filter_table(this)" type="checkbox"/><span class="skipped">0 skipped</span>, <input checked="true" class="filter" data-test-result="failed" hidden="true" name="filter_checkbox" onChange="filter_table(this)" type="checkbox"/><span class="failed">1 failed</span>, <input checked="true" class="filter" data-test-result="error" disabled="true" hidden="true" name="filter_checkbox" onChange="filter_table(this)" type="checkbox"/><span class="error">0 errors</span>, <input checked="true" class="filter" data-test-result="xfailed" disabled="true" hidden="true" name="filter_checkbox" onChange="filter_table(this)" type="checkbox"/><span class="xfailed">0 expected failures</span>, <input checked="true" class="filter" data-test-result="xpassed" disabled="true" hidden="true" name="filter_checkbox" onChange="filter_table(this)" type="checkbox"/><span class="xpassed">0 unexpected passes</span>
+    <p>52 tests ran in 1.54 seconds. </p>
+    <p class="filter" hidden="true">(Un)check the boxes to filter the results.</p><input checked="true" class="filter" data-test-result="passed" hidden="true" name="filter_checkbox" onChange="filter_table(this)" type="checkbox"/><span class="passed">51 passed</span>, <input checked="true" class="filter" data-test-result="skipped" disabled="true" hidden="true" name="filter_checkbox" onChange="filter_table(this)" type="checkbox"/><span class="skipped">0 skipped</span>, <input checked="true" class="filter" data-test-result="failed" hidden="true" name="filter_checkbox" onChange="filter_table(this)" type="checkbox"/><span class="failed">1 failed</span>, <input checked="true" class="filter" data-test-result="error" disabled="true" hidden="true" name="filter_checkbox" onChange="filter_table(this)" type="checkbox"/><span class="error">0 errors</span>, <input checked="true" class="filter" data-test-result="xfailed" disabled="true" hidden="true" name="filter_checkbox" onChange="filter_table(this)" type="checkbox"/><span class="xfailed">0 expected failures</span>, <input checked="true" class="filter" data-test-result="xpassed" disabled="true" hidden="true" name="filter_checkbox" onChange="filter_table(this)" type="checkbox"/><span class="xpassed">0 unexpected passes</span>
     <h2>Results</h2>
     <table id="results-table">
       <thead id="results-table-head">
@@ -309,11 +311,11 @@ function filter_table(elem) {
           <th>autoclass/tests/test_readme.py</th>
           <td>test_readme_typechecked</td>
           <td> Makes sure that the code in the documentation page is correct for the pytypes example </td>
-          <td class="col-duration">0.00</td>
-          <td><a href="https://codecov.io/gh/smarie/python-autoclass/src/ef698a4450d3d83f78a3ae7e9e0a86a79b19f090/autoclass/tests/test_readme.py#L102">source</a></td></tr>
+          <td class="col-duration">0.04</td>
+          <td><a href="https://codecov.io/gh/smarie/python-autoclass/src/0ba4f4dd37b390889a2ba492bea2dd469830d543/autoclass/tests/test_readme.py#L102">source</a></td></tr>
         <tr>
           <td class="extra" colspan="6">
-            <div class="log">def test_readme_typechecked():<br/>        &quot;&quot;&quot; Makes sure that the code in the documentation page is correct for the pytypes example &quot;&quot;&quot;<br/>    <br/>        # from autoclass import autoargs, autoprops, Boolean<br/>&gt;       from pytypes import typechecked<br/><span class="error">E       ImportError: No module named &#x27;pytypes&#x27;</span><br/><br/>autoclass/tests/test_readme.py:107: ImportError<br/></div></td></tr></tbody>
+            <div class="log">def test_readme_typechecked():<br/>        &quot;&quot;&quot; Makes sure that the code in the documentation page is correct for the pytypes example &quot;&quot;&quot;<br/>    <br/>        # from autoclass import autoargs, autoprops, Boolean<br/>        from pytypes import typechecked<br/>        from numbers import Real, Integral<br/>        from typing import Optional<br/>    <br/>        @typechecked<br/>        @autoclass<br/>        class HouseConfiguration(object):<br/>            def __init__(self,<br/>                         name: str,<br/>                         surface: Real,<br/>                         nb_floors: Optional[Integral] = 1,<br/>                         with_windows: Boolean = False):<br/>                pass<br/>    <br/>            # -- overriden setter for surface for custom validation<br/>            @setter_override<br/>            def surface(self, surface):<br/>                assert surface &gt; 0<br/>                self._surface = surface<br/>    <br/>&gt;       t = HouseConfiguration(&#x27;test&#x27;, 12, 2)<br/><br/>autoclass/tests/test_readme.py:127: <br/>_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ <br/>../../../virtualenv/python3.5.3/lib/python3.5/site-packages/pytypes/typechecker.py:825: in checker_tp<br/>    prop_getter or auto_prop_getter, specs)<br/>../../../virtualenv/python3.5.3/lib/python3.5/site-packages/pytypes/typechecker.py:673: in _checkfunctype<br/>    _raise_typecheck_error(msg, False, check_val, tpch, argSig, func)<br/>_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ <br/><br/>msg = &#x27;\n  autoclass.tests.test_readme.test_readme_typechecked.&lt;locals&gt;.HouseConfiguration.__init__\n  called with incompatible types:\nExpected: Tuple[str, Real, Union[Integral, NoneType], Boolean]\nReceived: Tuple[str, int, int, int]&#x27;<br/>is_return = False, value = (&#x27;test&#x27;, 12, 2, 1)<br/>received_type = typing.Tuple[str, int, int, int]<br/>expected_type = typing.Tuple[str, numbers.Real, typing.Union[numbers.Integral, NoneType], autoclass.utils_typing.Boolean]<br/>func = &lt;function test_readme_typechecked.&lt;locals&gt;.HouseConfiguration.__init__ at 0x7f2e4b3ff840&gt;<br/><br/>    def _raise_typecheck_error(msg, is_return=False, value=None, received_type=None,<br/>                expected_type=None, func=None):<br/>        if pytypes.warning_mode:<br/>            import traceback<br/>            tb = traceback.extract_stack()<br/>            off = util._calc_traceback_list_offset(tb)<br/>            cat = pytypes.ReturnTypeWarning if is_return else pytypes.InputTypeWarning<br/>            warn_explicit(msg, cat, tb[off][0], tb[off][1])<br/>    # 		if not func is None:<br/>    # 			warn_explicit(msg, cat, func.__code__.co_filename,<br/>    # 					func.__code__.co_firstlineno, func.__module__)<br/>    # 		else:<br/>    # 			warn(msg, pytypes.ReturnTypeWarning)<br/>        else:<br/>            if is_return:<br/>                raise pytypes.ReturnTypeError(msg)<br/>            else:<br/>&gt;               raise pytypes.InputTypeError(msg)<br/><span class="error">E               pytypes.exceptions.InputTypeError: </span><br/><span class="error">E                 autoclass.tests.test_readme.test_readme_typechecked.&lt;locals&gt;.HouseConfiguration.__init__</span><br/><span class="error">E                 called with incompatible types:</span><br/><span class="error">E               Expected: Tuple[str, Real, Union[Integral, NoneType], Boolean]</span><br/><span class="error">E               Received: Tuple[str, int, int, int]</span><br/><br/>../../../virtualenv/python3.5.3/lib/python3.5/site-packages/pytypes/type_util.py:1446: InputTypeError<br/></div></td></tr></tbody>
       <tbody class="passed results-table-row">
         <tr>
           <td class="col-result">Passed</td>
@@ -321,7 +323,7 @@ function filter_table(elem) {
           <td>test_autoargs_simple</td>
           <td> @autoargs Basic functionality, no customization - all constructor arguments are auto-assigned </td>
           <td class="col-duration">0.00</td>
-          <td><a href="https://codecov.io/gh/smarie/python-autoclass/src/ef698a4450d3d83f78a3ae7e9e0a86a79b19f090/autoclass/tests/test_autoargs.py#L4">source</a></td></tr>
+          <td><a href="https://codecov.io/gh/smarie/python-autoclass/src/0ba4f4dd37b390889a2ba492bea2dd469830d543/autoclass/tests/test_autoargs.py#L4">source</a></td></tr>
         <tr>
           <td class="extra" colspan="6">
             <div class="empty log">No log output captured.</div></td></tr></tbody>
@@ -332,7 +334,7 @@ function filter_table(elem) {
           <td>test_autoargs_signature_preserving</td>
           <td> @autoargs Advanced: check that the constructor still has the correct signature </td>
           <td class="col-duration">0.00</td>
-          <td><a href="https://codecov.io/gh/smarie/python-autoclass/src/ef698a4450d3d83f78a3ae7e9e0a86a79b19f090/autoclass/tests/test_autoargs.py#L21">source</a></td></tr>
+          <td><a href="https://codecov.io/gh/smarie/python-autoclass/src/0ba4f4dd37b390889a2ba492bea2dd469830d543/autoclass/tests/test_autoargs.py#L21">source</a></td></tr>
         <tr>
           <td class="extra" colspan="6">
             <div class="empty log">No log output captured.</div></td></tr></tbody>
@@ -346,7 +348,7 @@ function filter_table(elem) {
     -- note that the variable arguments are stored in a single attribute
     </td>
           <td class="col-duration">0.00</td>
-          <td><a href="https://codecov.io/gh/smarie/python-autoclass/src/ef698a4450d3d83f78a3ae7e9e0a86a79b19f090/autoclass/tests/test_autoargs.py#L35">source</a></td></tr>
+          <td><a href="https://codecov.io/gh/smarie/python-autoclass/src/0ba4f4dd37b390889a2ba492bea2dd469830d543/autoclass/tests/test_autoargs.py#L35">source</a></td></tr>
         <tr>
           <td class="extra" colspan="6">
             <div class="empty log">No log output captured.</div></td></tr></tbody>
@@ -360,7 +362,7 @@ function filter_table(elem) {
     -- note that *args are stored in a single attribute while **kw are stored in several attributes
     </td>
           <td class="col-duration">0.00</td>
-          <td><a href="https://codecov.io/gh/smarie/python-autoclass/src/ef698a4450d3d83f78a3ae7e9e0a86a79b19f090/autoclass/tests/test_autoargs.py#L57">source</a></td></tr>
+          <td><a href="https://codecov.io/gh/smarie/python-autoclass/src/0ba4f4dd37b390889a2ba492bea2dd469830d543/autoclass/tests/test_autoargs.py#L57">source</a></td></tr>
         <tr>
           <td class="extra" colspan="6">
             <div class="empty log">No log output captured.</div></td></tr></tbody>
@@ -371,7 +373,7 @@ function filter_table(elem) {
           <td>test_autoargs_noarg</td>
           <td> Same than test_autoargs_simple but with empty arguments list in autoargs </td>
           <td class="col-duration">0.00</td>
-          <td><a href="https://codecov.io/gh/smarie/python-autoclass/src/ef698a4450d3d83f78a3ae7e9e0a86a79b19f090/autoclass/tests/test_autoargs.py#L82">source</a></td></tr>
+          <td><a href="https://codecov.io/gh/smarie/python-autoclass/src/0ba4f4dd37b390889a2ba492bea2dd469830d543/autoclass/tests/test_autoargs.py#L82">source</a></td></tr>
         <tr>
           <td class="extra" colspan="6">
             <div class="empty log">No log output captured.</div></td></tr></tbody>
@@ -382,7 +384,7 @@ function filter_table(elem) {
           <td>test_autoargs_include</td>
           <td> @autoargs With explicit list of names to include </td>
           <td class="col-duration">0.00</td>
-          <td><a href="https://codecov.io/gh/smarie/python-autoclass/src/ef698a4450d3d83f78a3ae7e9e0a86a79b19f090/autoclass/tests/test_autoargs.py#L99">source</a></td></tr>
+          <td><a href="https://codecov.io/gh/smarie/python-autoclass/src/0ba4f4dd37b390889a2ba492bea2dd469830d543/autoclass/tests/test_autoargs.py#L99">source</a></td></tr>
         <tr>
           <td class="extra" colspan="6">
             <div class="empty log">No log output captured.</div></td></tr></tbody>
@@ -393,7 +395,7 @@ function filter_table(elem) {
           <td>test_autoargs_exclude</td>
           <td> @autoargs With explicit list of names to exclude </td>
           <td class="col-duration">0.00</td>
-          <td><a href="https://codecov.io/gh/smarie/python-autoclass/src/ef698a4450d3d83f78a3ae7e9e0a86a79b19f090/autoclass/tests/test_autoargs.py#L119">source</a></td></tr>
+          <td><a href="https://codecov.io/gh/smarie/python-autoclass/src/0ba4f4dd37b390889a2ba492bea2dd469830d543/autoclass/tests/test_autoargs.py#L119">source</a></td></tr>
         <tr>
           <td class="extra" colspan="6">
             <div class="empty log">No log output captured.</div></td></tr></tbody>
@@ -404,7 +406,7 @@ function filter_table(elem) {
           <td>test_autoargs_include_exclude</td>
           <td> @autoargs assert that you can&apos;t use both include/exclude at the same time</td>
           <td class="col-duration">0.00</td>
-          <td><a href="https://codecov.io/gh/smarie/python-autoclass/src/ef698a4450d3d83f78a3ae7e9e0a86a79b19f090/autoclass/tests/test_autoargs.py#L141">source</a></td></tr>
+          <td><a href="https://codecov.io/gh/smarie/python-autoclass/src/0ba4f4dd37b390889a2ba492bea2dd469830d543/autoclass/tests/test_autoargs.py#L141">source</a></td></tr>
         <tr>
           <td class="extra" colspan="6">
             <div class="empty log">No log output captured.</div></td></tr></tbody>
@@ -416,7 +418,30 @@ function filter_table(elem) {
           <td> @autoargs Asserts that errors are correctly raised in case of a nonexistent attribute name in
     include/exclude </td>
           <td class="col-duration">0.00</td>
-          <td><a href="https://codecov.io/gh/smarie/python-autoclass/src/ef698a4450d3d83f78a3ae7e9e0a86a79b19f090/autoclass/tests/test_autoargs.py#L150">source</a></td></tr>
+          <td><a href="https://codecov.io/gh/smarie/python-autoclass/src/0ba4f4dd37b390889a2ba492bea2dd469830d543/autoclass/tests/test_autoargs.py#L150">source</a></td></tr>
+        <tr>
+          <td class="extra" colspan="6">
+            <div class="empty log">No log output captured.</div></td></tr></tbody>
+      <tbody class="passed results-table-row">
+        <tr>
+          <td class="col-result">Passed</td>
+          <th>autoclass/tests/test_autoclass.py</th>
+          <td>test_autoclass_enforce_validate_not_reversed</td>
+          <td> Tests that if we reverse the annotations orders, it still works. Currently it fails </td>
+          <td class="col-duration">0.03</td>
+          <td><a href="https://codecov.io/gh/smarie/python-autoclass/src/0ba4f4dd37b390889a2ba492bea2dd469830d543/autoclass/tests/test_autoclass.py#L5">source</a></td></tr>
+        <tr>
+          <td class="extra" colspan="6">
+            <div class="log">----------------------------- Captured stdout call -----------------------------<br/>Set surface to 12
+</div></td></tr></tbody>
+      <tbody class="passed results-table-row">
+        <tr>
+          <td class="col-result">Passed</td>
+          <th>autoclass/tests/test_autoclass.py</th>
+          <td>test_autoclass_enforce_validate_reversed</td>
+          <td> Tests that if we reverse the annotations orders, it still works. Currently it fails </td>
+          <td class="col-duration">0.00</td>
+          <td><a href="https://codecov.io/gh/smarie/python-autoclass/src/0ba4f4dd37b390889a2ba492bea2dd469830d543/autoclass/tests/test_autoclass.py#L28">source</a></td></tr>
         <tr>
           <td class="extra" colspan="6">
             <div class="empty log">No log output captured.</div></td></tr></tbody>
@@ -428,7 +453,7 @@ function filter_table(elem) {
           <td> Basic @autodict functionality, no customization - all constructor fields become visible in the resulting
     dictionary </td>
           <td class="col-duration">0.00</td>
-          <td><a href="https://codecov.io/gh/smarie/python-autoclass/src/ef698a4450d3d83f78a3ae7e9e0a86a79b19f090/autoclass/tests/test_autodict.py#L6">source</a></td></tr>
+          <td><a href="https://codecov.io/gh/smarie/python-autoclass/src/0ba4f4dd37b390889a2ba492bea2dd469830d543/autoclass/tests/test_autodict.py#L6">source</a></td></tr>
         <tr>
           <td class="extra" colspan="6">
             <div class="empty log">No log output captured.</div></td></tr></tbody>
@@ -440,7 +465,7 @@ function filter_table(elem) {
           <td> Basic @autodict functionality, no customization - all constructor fields become visible in the resulting
     dictionary </td>
           <td class="col-duration">0.00</td>
-          <td><a href="https://codecov.io/gh/smarie/python-autoclass/src/ef698a4450d3d83f78a3ae7e9e0a86a79b19f090/autoclass/tests/test_autodict.py#L6">source</a></td></tr>
+          <td><a href="https://codecov.io/gh/smarie/python-autoclass/src/0ba4f4dd37b390889a2ba492bea2dd469830d543/autoclass/tests/test_autodict.py#L6">source</a></td></tr>
         <tr>
           <td class="extra" colspan="6">
             <div class="empty log">No log output captured.</div></td></tr></tbody>
@@ -452,7 +477,7 @@ function filter_table(elem) {
           <td> Basic @autodict functionality, no customization - all constructor fields become visible in the resulting
     dictionary </td>
           <td class="col-duration">0.00</td>
-          <td><a href="https://codecov.io/gh/smarie/python-autoclass/src/ef698a4450d3d83f78a3ae7e9e0a86a79b19f090/autoclass/tests/test_autodict.py#L6">source</a></td></tr>
+          <td><a href="https://codecov.io/gh/smarie/python-autoclass/src/0ba4f4dd37b390889a2ba492bea2dd469830d543/autoclass/tests/test_autodict.py#L6">source</a></td></tr>
         <tr>
           <td class="extra" colspan="6">
             <div class="empty log">No log output captured.</div></td></tr></tbody>
@@ -464,7 +489,7 @@ function filter_table(elem) {
           <td> Basic @autodict functionality, no customization - all constructor fields become visible in the resulting
     dictionary </td>
           <td class="col-duration">0.00</td>
-          <td><a href="https://codecov.io/gh/smarie/python-autoclass/src/ef698a4450d3d83f78a3ae7e9e0a86a79b19f090/autoclass/tests/test_autodict.py#L6">source</a></td></tr>
+          <td><a href="https://codecov.io/gh/smarie/python-autoclass/src/0ba4f4dd37b390889a2ba492bea2dd469830d543/autoclass/tests/test_autodict.py#L6">source</a></td></tr>
         <tr>
           <td class="extra" colspan="6">
             <div class="empty log">No log output captured.</div></td></tr></tbody>
@@ -475,7 +500,7 @@ function filter_table(elem) {
           <td>test_autoprops_no_contract</td>
           <td> Basic @autoprops functionality, no customization - all constructor arguments become properties </td>
           <td class="col-duration">0.00</td>
-          <td><a href="https://codecov.io/gh/smarie/python-autoclass/src/ef698a4450d3d83f78a3ae7e9e0a86a79b19f090/autoclass/tests/test_autoprops.py#L8">source</a></td></tr>
+          <td><a href="https://codecov.io/gh/smarie/python-autoclass/src/0ba4f4dd37b390889a2ba492bea2dd469830d543/autoclass/tests/test_autoprops.py#L8">source</a></td></tr>
         <tr>
           <td class="extra" colspan="6">
             <div class="empty log">No log output captured.</div></td></tr></tbody>
@@ -488,8 +513,8 @@ function filter_table(elem) {
     @autopropsBasic functionality with PyContracts - if a `@contract` annotation exist on the `__init__` method,
     mentioning a contract for a given parameter, the parameter contract will be added on the generated setter method
     </td>
-          <td class="col-duration">0.27</td>
-          <td><a href="https://codecov.io/gh/smarie/python-autoclass/src/ef698a4450d3d83f78a3ae7e9e0a86a79b19f090/autoclass/tests/test_autoprops.py#L27">source</a></td></tr>
+          <td class="col-duration">0.26</td>
+          <td><a href="https://codecov.io/gh/smarie/python-autoclass/src/0ba4f4dd37b390889a2ba492bea2dd469830d543/autoclass/tests/test_autoprops.py#L27">source</a></td></tr>
         <tr>
           <td class="extra" colspan="6">
             <div class="empty log">No log output captured.</div></td></tr></tbody>
@@ -499,8 +524,8 @@ function filter_table(elem) {
           <th>autoclass/tests/test_autoprops.py</th>
           <td>test_autoprops_include</td>
           <td> @autoprops With pycontracts and explicit list of attributes to include </td>
-          <td class="col-duration">0.00</td>
-          <td><a href="https://codecov.io/gh/smarie/python-autoclass/src/ef698a4450d3d83f78a3ae7e9e0a86a79b19f090/autoclass/tests/test_autoprops.py#L55">source</a></td></tr>
+          <td class="col-duration">0.01</td>
+          <td><a href="https://codecov.io/gh/smarie/python-autoclass/src/0ba4f4dd37b390889a2ba492bea2dd469830d543/autoclass/tests/test_autoprops.py#L55">source</a></td></tr>
         <tr>
           <td class="extra" colspan="6">
             <div class="empty log">No log output captured.</div></td></tr></tbody>
@@ -510,8 +535,8 @@ function filter_table(elem) {
           <th>autoclass/tests/test_autoprops.py</th>
           <td>test_autoprops_exclude</td>
           <td> @autoprops With pycontracts and explicit list of attributes to exclude </td>
-          <td class="col-duration">0.00</td>
-          <td><a href="https://codecov.io/gh/smarie/python-autoclass/src/ef698a4450d3d83f78a3ae7e9e0a86a79b19f090/autoclass/tests/test_autoprops.py#L78">source</a></td></tr>
+          <td class="col-duration">0.01</td>
+          <td><a href="https://codecov.io/gh/smarie/python-autoclass/src/0ba4f4dd37b390889a2ba492bea2dd469830d543/autoclass/tests/test_autoprops.py#L78">source</a></td></tr>
         <tr>
           <td class="extra" colspan="6">
             <div class="empty log">No log output captured.</div></td></tr></tbody>
@@ -522,7 +547,7 @@ function filter_table(elem) {
           <td>test_autoprops_include_exclude</td>
           <td> @autoprops Asserts that include/exclude cant be used at the same time </td>
           <td class="col-duration">0.00</td>
-          <td><a href="https://codecov.io/gh/smarie/python-autoclass/src/ef698a4450d3d83f78a3ae7e9e0a86a79b19f090/autoclass/tests/test_autoprops.py#L101">source</a></td></tr>
+          <td><a href="https://codecov.io/gh/smarie/python-autoclass/src/0ba4f4dd37b390889a2ba492bea2dd469830d543/autoclass/tests/test_autoprops.py#L101">source</a></td></tr>
         <tr>
           <td class="extra" colspan="6">
             <div class="empty log">No log output captured.</div></td></tr></tbody>
@@ -533,7 +558,7 @@ function filter_table(elem) {
           <td>test_autoprops_override</td>
           <td> @autoprops With Pycontracts. Tests that the user may override generated getter and a setter </td>
           <td class="col-duration">0.01</td>
-          <td><a href="https://codecov.io/gh/smarie/python-autoclass/src/ef698a4450d3d83f78a3ae7e9e0a86a79b19f090/autoclass/tests/test_autoprops.py#L111">source</a></td></tr>
+          <td><a href="https://codecov.io/gh/smarie/python-autoclass/src/0ba4f4dd37b390889a2ba492bea2dd469830d543/autoclass/tests/test_autoprops.py#L111">source</a></td></tr>
         <tr>
           <td class="extra" colspan="6">
             <div class="log">----------------------------- Captured stdout call -----------------------------<br/>Property &#x27;b&#x27; was set to &#x27;[&#x27;pie&#x27;, &#x27;pie2&#x27;]&#x27;
@@ -547,8 +572,8 @@ Property &#x27;b&#x27; was set to &#x27;[&#x27;eh&#x27;, &#x27;oh&#x27;]&#x27;
           <td>test_autoprops_override_exceptions</td>
           <td> @autoprops Asserts that the user can not override a generated method if the overriden method has a wrong
     signature </td>
-          <td class="col-duration">0.00</td>
-          <td><a href="https://codecov.io/gh/smarie/python-autoclass/src/ef698a4450d3d83f78a3ae7e9e0a86a79b19f090/autoclass/tests/test_autoprops.py#L156">source</a></td></tr>
+          <td class="col-duration">0.03</td>
+          <td><a href="https://codecov.io/gh/smarie/python-autoclass/src/0ba4f4dd37b390889a2ba492bea2dd469830d543/autoclass/tests/test_autoprops.py#L156">source</a></td></tr>
         <tr>
           <td class="extra" colspan="6">
             <div class="empty log">No log output captured.</div></td></tr></tbody>
@@ -559,7 +584,7 @@ Property &#x27;b&#x27; was set to &#x27;[&#x27;eh&#x27;, &#x27;oh&#x27;]&#x27;
           <td>test_autoprops_manual</td>
           <td> @autoprops Tests the manual wrapper autoprops() </td>
           <td class="col-duration">0.01</td>
-          <td><a href="https://codecov.io/gh/smarie/python-autoclass/src/ef698a4450d3d83f78a3ae7e9e0a86a79b19f090/autoclass/tests/test_autoprops.py#L201">source</a></td></tr>
+          <td><a href="https://codecov.io/gh/smarie/python-autoclass/src/0ba4f4dd37b390889a2ba492bea2dd469830d543/autoclass/tests/test_autoprops.py#L201">source</a></td></tr>
         <tr>
           <td class="extra" colspan="6">
             <div class="empty log">No log output captured.</div></td></tr></tbody>
@@ -570,7 +595,7 @@ Property &#x27;b&#x27; was set to &#x27;[&#x27;eh&#x27;, &#x27;oh&#x27;]&#x27;
           <td>test_autoprops_signature_preserving</td>
           <td> @autoprops Advanced: checks that the generated constructor still has the correct signature</td>
           <td class="col-duration">0.00</td>
-          <td><a href="https://codecov.io/gh/smarie/python-autoclass/src/ef698a4450d3d83f78a3ae7e9e0a86a79b19f090/autoclass/tests/test_autoprops.py#L230">source</a></td></tr>
+          <td><a href="https://codecov.io/gh/smarie/python-autoclass/src/0ba4f4dd37b390889a2ba492bea2dd469830d543/autoclass/tests/test_autoprops.py#L230">source</a></td></tr>
         <tr>
           <td class="extra" colspan="6">
             <div class="empty log">No log output captured.</div></td></tr></tbody>
@@ -580,8 +605,8 @@ Property &#x27;b&#x27; was set to &#x27;[&#x27;eh&#x27;, &#x27;oh&#x27;]&#x27;
           <th>autoclass/tests/test_autoprops.py</th>
           <td>test_autoprops_enforce_validate</td>
           <td> Makes sure that autoprops works with enforce AND validate </td>
-          <td class="col-duration">0.03</td>
-          <td><a href="https://codecov.io/gh/smarie/python-autoclass/src/ef698a4450d3d83f78a3ae7e9e0a86a79b19f090/autoclass/tests/test_autoprops.py#L252">source</a></td></tr>
+          <td class="col-duration">0.01</td>
+          <td><a href="https://codecov.io/gh/smarie/python-autoclass/src/0ba4f4dd37b390889a2ba492bea2dd469830d543/autoclass/tests/test_autoprops.py#L252">source</a></td></tr>
         <tr>
           <td class="extra" colspan="6">
             <div class="log">----------------------------- Captured stdout call -----------------------------<br/>Set surface to 12
@@ -594,7 +619,7 @@ Set surface to 0.1
           <td>test_readme_old_way</td>
           <td> Makes sure that the code in the documentation page is correct for the &apos;old way&apos; of writing classes </td>
           <td class="col-duration">0.00</td>
-          <td><a href="https://codecov.io/gh/smarie/python-autoclass/src/ef698a4450d3d83f78a3ae7e9e0a86a79b19f090/autoclass/tests/test_readme.py#L6">source</a></td></tr>
+          <td><a href="https://codecov.io/gh/smarie/python-autoclass/src/0ba4f4dd37b390889a2ba492bea2dd469830d543/autoclass/tests/test_readme.py#L6">source</a></td></tr>
         <tr>
           <td class="extra" colspan="6">
             <div class="empty log">No log output captured.</div></td></tr></tbody>
@@ -604,8 +629,8 @@ Set surface to 0.1
           <th>autoclass/tests/test_readme.py</th>
           <td>test_readme_pycontracts</td>
           <td> Makes sure that the code in the documentation page is correct for the PyContracts example </td>
-          <td class="col-duration">0.06</td>
-          <td><a href="https://codecov.io/gh/smarie/python-autoclass/src/ef698a4450d3d83f78a3ae7e9e0a86a79b19f090/autoclass/tests/test_readme.py#L67">source</a></td></tr>
+          <td class="col-duration">0.03</td>
+          <td><a href="https://codecov.io/gh/smarie/python-autoclass/src/0ba4f4dd37b390889a2ba492bea2dd469830d543/autoclass/tests/test_readme.py#L67">source</a></td></tr>
         <tr>
           <td class="extra" colspan="6">
             <div class="empty log">No log output captured.</div></td></tr></tbody>
@@ -616,7 +641,7 @@ Set surface to 0.1
           <td>test_readme_enforce</td>
           <td> Makes sure that the code in the documentation page is correct for the enforce example </td>
           <td class="col-duration">0.01</td>
-          <td><a href="https://codecov.io/gh/smarie/python-autoclass/src/ef698a4450d3d83f78a3ae7e9e0a86a79b19f090/autoclass/tests/test_readme.py#L141">source</a></td></tr>
+          <td><a href="https://codecov.io/gh/smarie/python-autoclass/src/0ba4f4dd37b390889a2ba492bea2dd469830d543/autoclass/tests/test_readme.py#L141">source</a></td></tr>
         <tr>
           <td class="extra" colspan="6">
             <div class="empty log">No log output captured.</div></td></tr></tbody>
@@ -626,8 +651,8 @@ Set surface to 0.1
           <th>autoclass/tests/test_readme.py</th>
           <td>test_readme_enforce_validate</td>
           <td> Makes sure that the code in the documentation page is correct for the enforce + validate example </td>
-          <td class="col-duration">0.01</td>
-          <td><a href="https://codecov.io/gh/smarie/python-autoclass/src/ef698a4450d3d83f78a3ae7e9e0a86a79b19f090/autoclass/tests/test_readme.py#L184">source</a></td></tr>
+          <td class="col-duration">0.02</td>
+          <td><a href="https://codecov.io/gh/smarie/python-autoclass/src/0ba4f4dd37b390889a2ba492bea2dd469830d543/autoclass/tests/test_readme.py#L184">source</a></td></tr>
         <tr>
           <td class="extra" colspan="6">
             <div class="log">----------------------------- Captured stdout call -----------------------------<br/>Set surface to 12
@@ -644,7 +669,7 @@ Set surface to 1
           <td>test_readme_usage_autoprops_validate</td>
           <td>None</td>
           <td class="col-duration">0.00</td>
-          <td><a href="https://codecov.io/gh/smarie/python-autoclass/src/ef698a4450d3d83f78a3ae7e9e0a86a79b19f090/autoclass/tests/test_readme.py#L246">source</a></td></tr>
+          <td><a href="https://codecov.io/gh/smarie/python-autoclass/src/0ba4f4dd37b390889a2ba492bea2dd469830d543/autoclass/tests/test_readme.py#L246">source</a></td></tr>
         <tr>
           <td class="extra" colspan="6">
             <div class="empty log">No log output captured.</div></td></tr></tbody>
@@ -655,7 +680,7 @@ Set surface to 1
           <td>test_readme_usage_autodict_1</td>
           <td> basic autodict without and with autoargs </td>
           <td class="col-duration">0.00</td>
-          <td><a href="https://codecov.io/gh/smarie/python-autoclass/src/ef698a4450d3d83f78a3ae7e9e0a86a79b19f090/autoclass/tests/test_readme.py#L265">source</a></td></tr>
+          <td><a href="https://codecov.io/gh/smarie/python-autoclass/src/0ba4f4dd37b390889a2ba492bea2dd469830d543/autoclass/tests/test_readme.py#L265">source</a></td></tr>
         <tr>
           <td class="extra" colspan="6">
             <div class="empty log">No log output captured.</div></td></tr></tbody>
@@ -666,7 +691,7 @@ Set surface to 1
           <td>test_readme_usage_autodict_2</td>
           <td> basic autodict with other and private fields </td>
           <td class="col-duration">0.00</td>
-          <td><a href="https://codecov.io/gh/smarie/python-autoclass/src/ef698a4450d3d83f78a3ae7e9e0a86a79b19f090/autoclass/tests/test_readme.py#L304">source</a></td></tr>
+          <td><a href="https://codecov.io/gh/smarie/python-autoclass/src/0ba4f4dd37b390889a2ba492bea2dd469830d543/autoclass/tests/test_readme.py#L304">source</a></td></tr>
         <tr>
           <td class="extra" colspan="6">
             <div class="empty log">No log output captured.</div></td></tr></tbody>
@@ -677,7 +702,7 @@ Set surface to 1
           <td>test_readme_usage_autodict_3</td>
           <td>None</td>
           <td class="col-duration">0.00</td>
-          <td><a href="https://codecov.io/gh/smarie/python-autoclass/src/ef698a4450d3d83f78a3ae7e9e0a86a79b19f090/autoclass/tests/test_readme.py#L320">source</a></td></tr>
+          <td><a href="https://codecov.io/gh/smarie/python-autoclass/src/0ba4f4dd37b390889a2ba492bea2dd469830d543/autoclass/tests/test_readme.py#L320">source</a></td></tr>
         <tr>
           <td class="extra" colspan="6">
             <div class="empty log">No log output captured.</div></td></tr></tbody>
@@ -688,7 +713,7 @@ Set surface to 1
           <td>test_readme_usage_autoclass</td>
           <td>None</td>
           <td class="col-duration">0.01</td>
-          <td><a href="https://codecov.io/gh/smarie/python-autoclass/src/ef698a4450d3d83f78a3ae7e9e0a86a79b19f090/autoclass/tests/test_readme.py#L339">source</a></td></tr>
+          <td><a href="https://codecov.io/gh/smarie/python-autoclass/src/0ba4f4dd37b390889a2ba492bea2dd469830d543/autoclass/tests/test_readme.py#L339">source</a></td></tr>
         <tr>
           <td class="extra" colspan="6">
             <div class="empty log">No log output captured.</div></td></tr></tbody>
@@ -699,7 +724,7 @@ Set surface to 1
           <td>test_readme_usage_autoclass_custom</td>
           <td>None</td>
           <td class="col-duration">0.01</td>
-          <td><a href="https://codecov.io/gh/smarie/python-autoclass/src/ef698a4450d3d83f78a3ae7e9e0a86a79b19f090/autoclass/tests/test_readme.py#L374">source</a></td></tr>
+          <td><a href="https://codecov.io/gh/smarie/python-autoclass/src/0ba4f4dd37b390889a2ba492bea2dd469830d543/autoclass/tests/test_readme.py#L374">source</a></td></tr>
         <tr>
           <td class="extra" colspan="6">
             <div class="empty log">No log output captured.</div></td></tr></tbody>
@@ -710,7 +735,7 @@ Set surface to 1
           <td>TestValidate::test_decorate_manually</td>
           <td> Tests that the manual decorator works </td>
           <td class="col-duration">0.00</td>
-          <td><a href="https://codecov.io/gh/smarie/python-autoclass/src/ef698a4450d3d83f78a3ae7e9e0a86a79b19f090/autoclass/tests/test_validate.py#L287">source</a></td></tr>
+          <td><a href="https://codecov.io/gh/smarie/python-autoclass/src/0ba4f4dd37b390889a2ba492bea2dd469830d543/autoclass/tests/test_validate.py#L308">source</a></td></tr>
         <tr>
           <td class="extra" colspan="6">
             <div class="empty log">No log output captured.</div></td></tr></tbody>
@@ -721,7 +746,7 @@ Set surface to 1
           <td>TestValidate::test_validate_and</td>
           <td> Simple test of the @validate annotation, with built-in validators is_even and gt(1) </td>
           <td class="col-duration">0.00</td>
-          <td><a href="https://codecov.io/gh/smarie/python-autoclass/src/ef698a4450d3d83f78a3ae7e9e0a86a79b19f090/autoclass/tests/test_validate.py#L217">source</a></td></tr>
+          <td><a href="https://codecov.io/gh/smarie/python-autoclass/src/0ba4f4dd37b390889a2ba492bea2dd469830d543/autoclass/tests/test_validate.py#L218">source</a></td></tr>
         <tr>
           <td class="extra" colspan="6">
             <div class="log">----------------------------- Captured stdout call -----------------------------<br/>hello
@@ -734,7 +759,7 @@ hello
           <td>TestValidate::test_validate_custom</td>
           <td> Simple test of the @validate annotation, with custom validators of several styles</td>
           <td class="col-duration">0.00</td>
-          <td><a href="https://codecov.io/gh/smarie/python-autoclass/src/ef698a4450d3d83f78a3ae7e9e0a86a79b19f090/autoclass/tests/test_validate.py#L45">source</a></td></tr>
+          <td><a href="https://codecov.io/gh/smarie/python-autoclass/src/0ba4f4dd37b390889a2ba492bea2dd469830d543/autoclass/tests/test_validate.py#L46">source</a></td></tr>
         <tr>
           <td class="extra" colspan="6">
             <div class="log">----------------------------- Captured stdout call -----------------------------<br/>hello
@@ -746,7 +771,7 @@ hello
           <td>TestValidate::test_validate_empty</td>
           <td>None</td>
           <td class="col-duration">0.00</td>
-          <td><a href="https://codecov.io/gh/smarie/python-autoclass/src/ef698a4450d3d83f78a3ae7e9e0a86a79b19f090/autoclass/tests/test_validate.py#L38">source</a></td></tr>
+          <td><a href="https://codecov.io/gh/smarie/python-autoclass/src/0ba4f4dd37b390889a2ba492bea2dd469830d543/autoclass/tests/test_validate.py#L39">source</a></td></tr>
         <tr>
           <td class="extra" colspan="6">
             <div class="empty log">No log output captured.</div></td></tr></tbody>
@@ -757,7 +782,7 @@ hello
           <td>TestValidate::test_validate_enforce</td>
           <td> Tests that a None will be catched by enforce: no need for not_none validator </td>
           <td class="col-duration">0.00</td>
-          <td><a href="https://codecov.io/gh/smarie/python-autoclass/src/ef698a4450d3d83f78a3ae7e9e0a86a79b19f090/autoclass/tests/test_validate.py#L85">source</a></td></tr>
+          <td><a href="https://codecov.io/gh/smarie/python-autoclass/src/0ba4f4dd37b390889a2ba492bea2dd469830d543/autoclass/tests/test_validate.py#L86">source</a></td></tr>
         <tr>
           <td class="extra" colspan="6">
             <div class="log">----------------------------- Captured stdout call -----------------------------<br/>hello
@@ -769,7 +794,7 @@ hello
           <td>TestValidate::test_validate_is_in</td>
           <td> Test for the subset and superset validators </td>
           <td class="col-duration">0.00</td>
-          <td><a href="https://codecov.io/gh/smarie/python-autoclass/src/ef698a4450d3d83f78a3ae7e9e0a86a79b19f090/autoclass/tests/test_validate.py#L252">source</a></td></tr>
+          <td><a href="https://codecov.io/gh/smarie/python-autoclass/src/0ba4f4dd37b390889a2ba492bea2dd469830d543/autoclass/tests/test_validate.py#L253">source</a></td></tr>
         <tr>
           <td class="extra" colspan="6">
             <div class="log">----------------------------- Captured stdout call -----------------------------<br/>hello
@@ -781,7 +806,7 @@ hello
           <td>TestValidate::test_validate_name_error</td>
           <td> Checks that wrong attribute names cant be provided to @validate</td>
           <td class="col-duration">0.00</td>
-          <td><a href="https://codecov.io/gh/smarie/python-autoclass/src/ef698a4450d3d83f78a3ae7e9e0a86a79b19f090/autoclass/tests/test_validate.py#L104">source</a></td></tr>
+          <td><a href="https://codecov.io/gh/smarie/python-autoclass/src/0ba4f4dd37b390889a2ba492bea2dd469830d543/autoclass/tests/test_validate.py#L105">source</a></td></tr>
         <tr>
           <td class="extra" colspan="6">
             <div class="empty log">No log output captured.</div></td></tr></tbody>
@@ -792,7 +817,7 @@ hello
           <td>TestValidate::test_validate_none_is_allowed</td>
           <td>None</td>
           <td class="col-duration">0.00</td>
-          <td><a href="https://codecov.io/gh/smarie/python-autoclass/src/ef698a4450d3d83f78a3ae7e9e0a86a79b19f090/autoclass/tests/test_validate.py#L111">source</a></td></tr>
+          <td><a href="https://codecov.io/gh/smarie/python-autoclass/src/0ba4f4dd37b390889a2ba492bea2dd469830d543/autoclass/tests/test_validate.py#L112">source</a></td></tr>
         <tr>
           <td class="extra" colspan="6">
             <div class="log">----------------------------- Captured stdout call -----------------------------<br/>hello
@@ -805,7 +830,31 @@ hello
           <td>TestValidate::test_validate_not</td>
           <td> Test for the not_ validator </td>
           <td class="col-duration">0.00</td>
-          <td><a href="https://codecov.io/gh/smarie/python-autoclass/src/ef698a4450d3d83f78a3ae7e9e0a86a79b19f090/autoclass/tests/test_validate.py#L120">source</a></td></tr>
+          <td><a href="https://codecov.io/gh/smarie/python-autoclass/src/0ba4f4dd37b390889a2ba492bea2dd469830d543/autoclass/tests/test_validate.py#L121">source</a></td></tr>
+        <tr>
+          <td class="extra" colspan="6">
+            <div class="log">----------------------------- Captured stdout call -----------------------------<br/>hello
+</div></td></tr></tbody>
+      <tbody class="passed results-table-row">
+        <tr>
+          <td class="col-result">Passed</td>
+          <th>autoclass/tests/test_validate.py</th>
+          <td>TestValidate::test_validate_on_all</td>
+          <td>None</td>
+          <td class="col-duration">0.00</td>
+          <td><a href="https://codecov.io/gh/smarie/python-autoclass/src/0ba4f4dd37b390889a2ba492bea2dd469830d543/autoclass/tests/test_validate.py#L288">source</a></td></tr>
+        <tr>
+          <td class="extra" colspan="6">
+            <div class="log">----------------------------- Captured stdout call -----------------------------<br/>hello
+</div></td></tr></tbody>
+      <tbody class="passed results-table-row">
+        <tr>
+          <td class="col-result">Passed</td>
+          <th>autoclass/tests/test_validate.py</th>
+          <td>TestValidate::test_validate_on_each</td>
+          <td>None</td>
+          <td class="col-duration">0.00</td>
+          <td><a href="https://codecov.io/gh/smarie/python-autoclass/src/0ba4f4dd37b390889a2ba492bea2dd469830d543/autoclass/tests/test_validate.py#L298">source</a></td></tr>
         <tr>
           <td class="extra" colspan="6">
             <div class="log">----------------------------- Captured stdout call -----------------------------<br/>hello
@@ -817,7 +866,7 @@ hello
           <td>TestValidate::test_validate_or</td>
           <td> Test for the or_ validator, also in combination with not_</td>
           <td class="col-duration">0.00</td>
-          <td><a href="https://codecov.io/gh/smarie/python-autoclass/src/ef698a4450d3d83f78a3ae7e9e0a86a79b19f090/autoclass/tests/test_validate.py#L150">source</a></td></tr>
+          <td><a href="https://codecov.io/gh/smarie/python-autoclass/src/0ba4f4dd37b390889a2ba492bea2dd469830d543/autoclass/tests/test_validate.py#L151">source</a></td></tr>
         <tr>
           <td class="extra" colspan="6">
             <div class="log">----------------------------- Captured stdout call -----------------------------<br/>hello
@@ -832,7 +881,7 @@ hello
           <td>TestValidate::test_validate_simple</td>
           <td> Simple test of the @validate annotation, with built-in validators is_even and gt(1) </td>
           <td class="col-duration">0.00</td>
-          <td><a href="https://codecov.io/gh/smarie/python-autoclass/src/ef698a4450d3d83f78a3ae7e9e0a86a79b19f090/autoclass/tests/test_validate.py#L8">source</a></td></tr>
+          <td><a href="https://codecov.io/gh/smarie/python-autoclass/src/0ba4f4dd37b390889a2ba492bea2dd469830d543/autoclass/tests/test_validate.py#L9">source</a></td></tr>
         <tr>
           <td class="extra" colspan="6">
             <div class="log">----------------------------- Captured stdout call -----------------------------<br/>hello
@@ -844,7 +893,7 @@ hello
           <td>TestValidate::test_validate_subset_superset</td>
           <td> Test for the subset and superset validators </td>
           <td class="col-duration">0.00</td>
-          <td><a href="https://codecov.io/gh/smarie/python-autoclass/src/ef698a4450d3d83f78a3ae7e9e0a86a79b19f090/autoclass/tests/test_validate.py#L264">source</a></td></tr>
+          <td><a href="https://codecov.io/gh/smarie/python-autoclass/src/0ba4f4dd37b390889a2ba492bea2dd469830d543/autoclass/tests/test_validate.py#L265">source</a></td></tr>
         <tr>
           <td class="extra" colspan="6">
             <div class="log">----------------------------- Captured stdout call -----------------------------<br/>hello
@@ -856,7 +905,7 @@ hello
           <td>TestValidate::test_validate_wrong_notnone</td>
           <td>None</td>
           <td class="col-duration">0.00</td>
-          <td><a href="https://codecov.io/gh/smarie/python-autoclass/src/ef698a4450d3d83f78a3ae7e9e0a86a79b19f090/autoclass/tests/test_validate.py#L31">source</a></td></tr>
+          <td><a href="https://codecov.io/gh/smarie/python-autoclass/src/0ba4f4dd37b390889a2ba492bea2dd469830d543/autoclass/tests/test_validate.py#L32">source</a></td></tr>
         <tr>
           <td class="extra" colspan="6">
             <div class="empty log">No log output captured.</div></td></tr></tbody>
@@ -867,7 +916,7 @@ hello
           <td>TestValidate::test_validate_xor</td>
           <td> Test for the xor_ validator </td>
           <td class="col-duration">0.00</td>
-          <td><a href="https://codecov.io/gh/smarie/python-autoclass/src/ef698a4450d3d83f78a3ae7e9e0a86a79b19f090/autoclass/tests/test_validate.py#L184">source</a></td></tr>
+          <td><a href="https://codecov.io/gh/smarie/python-autoclass/src/0ba4f4dd37b390889a2ba492bea2dd469830d543/autoclass/tests/test_validate.py#L185">source</a></td></tr>
         <tr>
           <td class="extra" colspan="6">
             <div class="log">----------------------------- Captured stdout call -----------------------------<br/>hello

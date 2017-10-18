@@ -12,7 +12,7 @@
       
         <link rel="shortcut icon" href="../assets/images/favicon.png">
       
-      <meta name="generator" content="mkdocs-0.16.3, mkdocs-material-1.10.1">
+      <meta name="generator" content="mkdocs-0.16.3, mkdocs-material-1.10.3">
     
     
       
@@ -23,7 +23,7 @@
       <script src="../assets/javascripts/modernizr-e826f8942a.js"></script>
     
     
-      <link rel="stylesheet" href="../assets/stylesheets/application-a20f419c8e.css">
+      <link rel="stylesheet" href="../assets/stylesheets/application-9011e2d3f8.css">
       
     
     
@@ -136,6 +136,7 @@
 </header>
     
     <div class="md-container">
+      
       
       
       <main class="md-main">
@@ -427,15 +428,15 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#on_all_validators" title="on_all_(validators)" class="md-nav__link">
-    on_all_(validators)
+  <a href="#on_all_validators_for_all_elts" title="on_all_(*validators_for_all_elts)" class="md-nav__link">
+    on_all_(*validators_for_all_elts)
   </a>
   
 </li>
         
           <li class="md-nav__item">
-  <a href="#on_each_validators_collection" title="on_each_(validators_collection)" class="md-nav__link">
-    on_each_(validators_collection)
+  <a href="#on_each_validators_collection" title="on_each_(*validators_collection)" class="md-nav__link">
+    on_each_(*validators_collection)
   </a>
   
 </li>
@@ -685,15 +686,15 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#on_all_validators" title="on_all_(validators)" class="md-nav__link">
-    on_all_(validators)
+  <a href="#on_all_validators_for_all_elts" title="on_all_(*validators_for_all_elts)" class="md-nav__link">
+    on_all_(*validators_for_all_elts)
   </a>
   
 </li>
         
           <li class="md-nav__item">
-  <a href="#on_each_validators_collection" title="on_each_(validators_collection)" class="md-nav__link">
-    on_each_(validators_collection)
+  <a href="#on_each_validators_collection" title="on_each_(*validators_collection)" class="md-nav__link">
+    on_each_(*validators_collection)
   </a>
   
 </li>
@@ -785,10 +786,10 @@
 <p>'Is subset' validator generator. Returns a validator to check that <code>x</code> is a subset of <code>reference_set</code>. That is, <code>len(x - reference_set) == 0</code></p>
 <h4 id="is_supersetreference_set">is_superset(reference_set)<a class="headerlink" href="#is_supersetreference_set" title="Permanent link">&para;</a></h4>
 <p>'Is superset' validator generator. Returns a validator to check that <code>x</code> is a superset of <code>reference_set</code>. That is, <code>len(reference_set - x) == 0</code></p>
-<h4 id="on_all_validators">on_all_(validators)<a class="headerlink" href="#on_all_validators" title="Permanent link">&para;</a></h4>
+<h4 id="on_all_validators_for_all_elts">on_all_(*validators_for_all_elts)<a class="headerlink" href="#on_all_validators_for_all_elts" title="Permanent link">&para;</a></h4>
 <p>Generates a validator for collection inputs where each element of the input will be validated against the validators provided. For convenience, a list of validators can be provided and will be replaced with an <code>and_</code>.</p>
 <p>Note that if you want to apply DIFFERENT validators for each element in the input collection, you should rather use <code>on_each_</code>.</p>
-<h4 id="on_each_validators_collection">on_each_(validators_collection)<a class="headerlink" href="#on_each_validators_collection" title="Permanent link">&para;</a></h4>
+<h4 id="on_each_validators_collection">on_each_(*validators_collection)<a class="headerlink" href="#on_each_validators_collection" title="Permanent link">&para;</a></h4>
 <p>Generates a validator for collection inputs where each element of the input will be validated against the corresponding validator(s) in the validators_collection. Validators inside the tuple can be provided as a list for convenience, this will be replaced with an <code>and_</code> operator if the list has more than one element.</p>
 <p>Note that if you want to apply the SAME validators to all elements in the input, you should rather use <code>on_all_</code>.</p>
                 
