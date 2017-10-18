@@ -2,6 +2,24 @@ from inspect import isclass
 from typing import Callable
 
 
+class AutoclassDecorationException(Exception):
+    pass
+
+
+def _check_known_decorators(typ, calling_decorator: str) -> bool:
+    """
+    Checks that a given type is not already decorated by known decorators that may cause trouble.
+    If so, it raises an Exception
+    :return:
+    """
+    for member in typ.__dict__.values():
+        if hasattr(member, '__enforcer__'):
+            raise AutoclassDecorationException('It seems that @runtime_validation decorator was applied to type <'
+                                               + str(typ) + '> BEFORE ' + calling_decorator + '. This is not supported '
+                                               'as it may lead to counter-intuitive behaviour, please change the order '
+                                               'of the decorators on <' + str(typ) + '>')
+
+
 def _call_decorator_with_or_without_args(decorator_function_impl: Callable, objectIsFunction: bool, *args, **kwargs):
     """
     Utility function for all decorators: handles the fact that 

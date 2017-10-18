@@ -5,7 +5,7 @@ from warnings import warn
 from autoclass import check_var
 from autoclass.utils_include_exclude import _sieve
 from autoclass.utils_reflexion import get_constructor
-from autoclass.utils_decoration import _create_class_decorator__robust_to_args
+from autoclass.utils_decoration import _create_class_decorator__robust_to_args, _check_known_decorators
 
 from collections import Mapping
 
@@ -54,6 +54,9 @@ def autodict_decorate(cls: Type[Any], include: Union[str, Tuple[str]] = None,
     only_public_fields is set to False, all fields are visible. Otherwise (default), class-private fields will be hidden
     :return:
     """
+
+    # first check that we do not conflict with other known decorators
+    _check_known_decorators(cls, '@autodict')
 
     # perform the class mod
     _execute_autodict_on_class(cls, include=include, exclude=exclude, only_constructor_args=only_constructor_args,

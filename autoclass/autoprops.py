@@ -9,7 +9,7 @@ from autoclass.validate import validate_decorate
 from autoclass.utils_include_exclude import _sieve
 from autoclass.utils_reflexion import get_constructor
 from autoclass.utils_decoration import _create_function_decorator__robust_to_args, \
-    _create_class_decorator__robust_to_args
+    _create_class_decorator__robust_to_args, _check_known_decorators
 
 __GETTER_OVERRIDE_ANNOTATION = '__getter_override__'
 __SETTER_OVERRIDE_ANNOTATION = '__setter_override__'
@@ -59,6 +59,9 @@ def autoprops_decorate(cls: Type[Any], include: Union[str, Tuple[str]] = None,
     :param exclude: a tuple of explicit attribute names to exclude. In such case, include should be None.
     :return:
     """
+
+    # first check that we do not conflict with other known decorators
+    _check_known_decorators(cls, '@autoprops')
 
     # perform the class mod
     _execute_autoprops_on_class(cls, include=include, exclude=exclude)
@@ -167,7 +170,16 @@ def _add_property(object_type: Type[Any], property_name: str, property_type: typ
     # 6. Finally add the property to the class
     # WARNING : property_obj.setter(f) does absolutely nothing :) > we have to assign the result
     # setattr(object_type, property_name, property_obj.setter(f))
-    setattr(object_type, property_name, property(fget=getter_fun, fset=setter_fun_with_possible_contract))
+    new_prop = property(fget=getter_fun, fset=setter_fun_with_possible_contract)
+
+    # # specific for enforce: here we might wrap the overriden property setter on which enforce has already written
+    # # something.
+    # if hasattr(setter_fun_with_possible_contract, '__enforcer__'):
+    #     new_prop.__enforcer__ = setter_fun_with_possible_contract.__enforcer__
+    # DESIGN DECISION > although this would probably work, it is probably better to 'force' users to always use the
+    # @autoprops annotation BEFORE any other annotation. This is now done in autoprops_decorate
+
+    setattr(object_type, property_name, new_prop)
 
     return
 
