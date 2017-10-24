@@ -90,7 +90,7 @@ def validate_decorate(func: Callable, **validators: Dict[str, Callable[[Any], bo
         return func(*args, **kwargs)
 
     a = decorate(func, wrapper)
-    # save the validators somewhere for reference
+    # save the validators somewhere for reference. This is useful for other decorators example for autoclass/autoprops
     a.__validators__ = validators
     return a
 
@@ -133,6 +133,7 @@ def create_main_validation_function(att_validators, allow_not_none: bool):
             main_validation_function = not_none
 
     return main_validation_function
+
 
 def _not_none_checker(validator, ignore_none_silently: bool = True):
     """
