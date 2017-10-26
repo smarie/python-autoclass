@@ -1,100 +1,23 @@
-<?xml version="1.0" encoding="utf-8"?><testsuite errors="0" failures="1" name="pytest" skips="0" tests="52" time="1.242"><testcase classname="autoclass.tests.test_autoargs" file="autoclass/tests/test_autoargs.py" line="4" name="test_autoargs_simple" time="0.001323699951171875"></testcase><testcase classname="autoclass.tests.test_autoargs" file="autoclass/tests/test_autoargs.py" line="21" name="test_autoargs_signature_preserving" time="0.0015363693237304688"></testcase><testcase classname="autoclass.tests.test_autoargs" file="autoclass/tests/test_autoargs.py" line="35" name="test_autoargs_varargs" time="0.0016417503356933594"></testcase><testcase classname="autoclass.tests.test_autoargs" file="autoclass/tests/test_autoargs.py" line="57" name="test_autoargs_varargs_kwvarargs" time="0.0018050670623779297"></testcase><testcase classname="autoclass.tests.test_autoargs" file="autoclass/tests/test_autoargs.py" line="82" name="test_autoargs_noarg" time="0.0012660026550292969"></testcase><testcase classname="autoclass.tests.test_autoargs" file="autoclass/tests/test_autoargs.py" line="99" name="test_autoargs_include" time="0.0022275447845458984"></testcase><testcase classname="autoclass.tests.test_autoargs" file="autoclass/tests/test_autoargs.py" line="119" name="test_autoargs_exclude" time="0.0015234947204589844"></testcase><testcase classname="autoclass.tests.test_autoargs" file="autoclass/tests/test_autoargs.py" line="141" name="test_autoargs_include_exclude" time="0.0009505748748779297"></testcase><testcase classname="autoclass.tests.test_autoargs" file="autoclass/tests/test_autoargs.py" line="150" name="test_autoargs_include_exclude_typos" time="0.001752614974975586"></testcase><testcase classname="autoclass.tests.test_autoclass" file="autoclass/tests/test_autoclass.py" line="5" name="test_autoclass_enforce_validate_not_reversed" time="0.021373510360717773"><system-out>Set surface to 12
-</system-out></testcase><testcase classname="autoclass.tests.test_autoclass" file="autoclass/tests/test_autoclass.py" line="28" name="test_autoclass_enforce_validate_reversed" time="0.002584218978881836"></testcase><testcase classname="autoclass.tests.test_autodict" file="autoclass/tests/test_autodict.py" line="6" name="test_autodict[only_constructor_args-only_public]" time="0.003222227096557617"></testcase><testcase classname="autoclass.tests.test_autodict" file="autoclass/tests/test_autodict.py" line="6" name="test_autodict[only_constructor_args-including class-private dunder fields]" time="0.0032520294189453125"></testcase><testcase classname="autoclass.tests.test_autodict" file="autoclass/tests/test_autodict.py" line="6" name="test_autodict[all_obj_fields-only_public]" time="0.002653360366821289"></testcase><testcase classname="autoclass.tests.test_autodict" file="autoclass/tests/test_autodict.py" line="6" name="test_autodict[all_obj_fields-including class-private dunder fields]" time="0.003206014633178711"></testcase><testcase classname="autoclass.tests.test_autoprops" file="autoclass/tests/test_autoprops.py" line="8" name="test_autoprops_no_contract" time="0.002354145050048828"></testcase><testcase classname="autoclass.tests.test_autoprops" file="autoclass/tests/test_autoprops.py" line="27" name="test_autoprops_pycontracts" time="0.24012422561645508"></testcase><testcase classname="autoclass.tests.test_autoprops" file="autoclass/tests/test_autoprops.py" line="55" name="test_autoprops_include" time="0.0033521652221679688"></testcase><testcase classname="autoclass.tests.test_autoprops" file="autoclass/tests/test_autoprops.py" line="78" name="test_autoprops_exclude" time="0.007320404052734375"></testcase><testcase classname="autoclass.tests.test_autoprops" file="autoclass/tests/test_autoprops.py" line="101" name="test_autoprops_include_exclude" time="0.0010569095611572266"></testcase><testcase classname="autoclass.tests.test_autoprops" file="autoclass/tests/test_autoprops.py" line="111" name="test_autoprops_override" time="0.010350704193115234"><system-out>Property &apos;b&apos; was set to &apos;[&apos;pie&apos;, &apos;pie2&apos;]&apos;
-a is being read. Its value is &apos;rhubarb&apos;
-Property &apos;b&apos; was set to &apos;[&apos;eh&apos;, &apos;oh&apos;]&apos;
-</system-out></testcase><testcase classname="autoclass.tests.test_autoprops" file="autoclass/tests/test_autoprops.py" line="156" name="test_autoprops_override_exceptions" time="0.025922775268554688"></testcase><testcase classname="autoclass.tests.test_autoprops" file="autoclass/tests/test_autoprops.py" line="201" name="test_autoprops_manual" time="0.0043239593505859375"></testcase><testcase classname="autoclass.tests.test_autoprops" file="autoclass/tests/test_autoprops.py" line="230" name="test_autoprops_signature_preserving" time="0.002469778060913086"></testcase><testcase classname="autoclass.tests.test_autoprops" file="autoclass/tests/test_autoprops.py" line="252" name="test_autoprops_enforce_validate" time="0.008255958557128906"><system-out>Set surface to 12
-Set surface to 0.1
-</system-out></testcase><testcase classname="autoclass.tests.test_readme" file="autoclass/tests/test_readme.py" line="6" name="test_readme_old_way" time="0.0013453960418701172"></testcase><testcase classname="autoclass.tests.test_readme" file="autoclass/tests/test_readme.py" line="67" name="test_readme_pycontracts" time="0.030649185180664062"></testcase><testcase classname="autoclass.tests.test_readme" file="autoclass/tests/test_readme.py" line="102" name="test_readme_typechecked" time="0.03373122215270996"><failure message="pytypes.exceptions.InputTypeError: 
-  autoclass.tests.test_readme.test_readme_typechecked.&lt;locals&gt;.HouseConfiguration.__init__
-  called with incompatible types:
-Expected: Tuple[str, Real, Union[Integral, NoneType], Boolean]
-Received: Tuple[str, int, int, int]">def test_readme_typechecked():
-        &quot;&quot;&quot; Makes sure that the code in the documentation page is correct for the pytypes example &quot;&quot;&quot;
-    
-        # from autoclass import autoargs, autoprops, Boolean
-        from pytypes import typechecked
-        from numbers import Real, Integral
-        from typing import Optional
-    
-        @typechecked
-        @autoclass
-        class HouseConfiguration(object):
-            def __init__(self,
-                         name: str,
-                         surface: Real,
-                         nb_floors: Optional[Integral] = 1,
-                         with_windows: Boolean = False):
-                pass
-    
-            # -- overriden setter for surface for custom validation
-            @setter_override
-            def surface(self, surface):
-                assert surface &gt; 0
-                self._surface = surface
-    
-&gt;       t = HouseConfiguration(&apos;test&apos;, 12, 2)
-
-autoclass/tests/test_readme.py:127: 
-_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
-../../../virtualenv/python3.5.3/lib/python3.5/site-packages/pytypes/typechecker.py:825: in checker_tp
-    prop_getter or auto_prop_getter, specs)
-../../../virtualenv/python3.5.3/lib/python3.5/site-packages/pytypes/typechecker.py:673: in _checkfunctype
-    _raise_typecheck_error(msg, False, check_val, tpch, argSig, func)
-_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
-
-msg = &apos;\n  autoclass.tests.test_readme.test_readme_typechecked.&lt;locals&gt;.HouseConfiguration.__init__\n  called with incompatible types:\nExpected: Tuple[str, Real, Union[Integral, NoneType], Boolean]\nReceived: Tuple[str, int, int, int]&apos;
-is_return = False, value = (&apos;test&apos;, 12, 2, 1)
-received_type = typing.Tuple[str, int, int, int]
-expected_type = typing.Tuple[str, numbers.Real, typing.Union[numbers.Integral, NoneType], autoclass.utils_typing.Boolean]
-func = &lt;function test_readme_typechecked.&lt;locals&gt;.HouseConfiguration.__init__ at 0x7f45b1fb3730&gt;
-
-    def _raise_typecheck_error(msg, is_return=False, value=None, received_type=None,
-                expected_type=None, func=None):
-        if pytypes.warning_mode:
-            import traceback
-            tb = traceback.extract_stack()
-            off = util._calc_traceback_list_offset(tb)
-            cat = pytypes.ReturnTypeWarning if is_return else pytypes.InputTypeWarning
-            warn_explicit(msg, cat, tb[off][0], tb[off][1])
-    # 		if not func is None:
-    # 			warn_explicit(msg, cat, func.__code__.co_filename,
-    # 					func.__code__.co_firstlineno, func.__module__)
-    # 		else:
-    # 			warn(msg, pytypes.ReturnTypeWarning)
-        else:
-            if is_return:
-                raise pytypes.ReturnTypeError(msg)
-            else:
-&gt;               raise pytypes.InputTypeError(msg)
-E               pytypes.exceptions.InputTypeError: 
-E                 autoclass.tests.test_readme.test_readme_typechecked.&lt;locals&gt;.HouseConfiguration.__init__
-E                 called with incompatible types:
-E               Expected: Tuple[str, Real, Union[Integral, NoneType], Boolean]
-E               Received: Tuple[str, int, int, int]
-
-../../../virtualenv/python3.5.3/lib/python3.5/site-packages/pytypes/type_util.py:1446: InputTypeError</failure></testcase><testcase classname="autoclass.tests.test_readme" file="autoclass/tests/test_readme.py" line="141" name="test_readme_enforce" time="0.006662845611572266"></testcase><testcase classname="autoclass.tests.test_readme" file="autoclass/tests/test_readme.py" line="184" name="test_readme_enforce_validate" time="0.012028694152832031"><system-out>Set surface to 12
-name: test
-surface: 12
-nb_floors: None
-with_windows: False
-Set surface to 1
-</system-out></testcase><testcase classname="autoclass.tests.test_readme" file="autoclass/tests/test_readme.py" line="246" name="test_readme_usage_autoprops_validate" time="0.0029687881469726562"></testcase><testcase classname="autoclass.tests.test_readme" file="autoclass/tests/test_readme.py" line="265" name="test_readme_usage_autodict_1" time="0.003244161605834961"></testcase><testcase classname="autoclass.tests.test_readme" file="autoclass/tests/test_readme.py" line="304" name="test_readme_usage_autodict_2" time="0.002543926239013672"></testcase><testcase classname="autoclass.tests.test_readme" file="autoclass/tests/test_readme.py" line="320" name="test_readme_usage_autodict_3" time="0.002479076385498047"></testcase><testcase classname="autoclass.tests.test_readme" file="autoclass/tests/test_readme.py" line="339" name="test_readme_usage_autoclass" time="0.010323047637939453"></testcase><testcase classname="autoclass.tests.test_readme" file="autoclass/tests/test_readme.py" line="374" name="test_readme_usage_autoclass_custom" time="0.006658315658569336"></testcase><testcase classname="autoclass.tests.test_validate.TestValidate" file="autoclass/tests/test_validate.py" line="308" name="test_decorate_manually" time="0.001897573471069336"></testcase><testcase classname="autoclass.tests.test_validate.TestValidate" file="autoclass/tests/test_validate.py" line="218" name="test_validate_and" time="0.0027115345001220703"><system-out>hello
-hello
-</system-out></testcase><testcase classname="autoclass.tests.test_validate.TestValidate" file="autoclass/tests/test_validate.py" line="46" name="test_validate_custom" time="0.0019526481628417969"><system-out>hello
-</system-out></testcase><testcase classname="autoclass.tests.test_validate.TestValidate" file="autoclass/tests/test_validate.py" line="39" name="test_validate_empty" time="0.0009076595306396484"></testcase><testcase classname="autoclass.tests.test_validate.TestValidate" file="autoclass/tests/test_validate.py" line="86" name="test_validate_enforce" time="0.002305746078491211"><system-out>hello
-</system-out></testcase><testcase classname="autoclass.tests.test_validate.TestValidate" file="autoclass/tests/test_validate.py" line="253" name="test_validate_is_in" time="0.0013761520385742188"><system-out>hello
-</system-out></testcase><testcase classname="autoclass.tests.test_validate.TestValidate" file="autoclass/tests/test_validate.py" line="105" name="test_validate_name_error" time="0.0009062290191650391"></testcase><testcase classname="autoclass.tests.test_validate.TestValidate" file="autoclass/tests/test_validate.py" line="112" name="test_validate_none_is_allowed" time="0.001371145248413086"><system-out>hello
-hello
-</system-out></testcase><testcase classname="autoclass.tests.test_validate.TestValidate" file="autoclass/tests/test_validate.py" line="121" name="test_validate_not" time="0.002673625946044922"><system-out>hello
-</system-out></testcase><testcase classname="autoclass.tests.test_validate.TestValidate" file="autoclass/tests/test_validate.py" line="288" name="test_validate_on_all" time="0.0014007091522216797"><system-out>hello
-</system-out></testcase><testcase classname="autoclass.tests.test_validate.TestValidate" file="autoclass/tests/test_validate.py" line="298" name="test_validate_on_each" time="0.0018687248229980469"><system-out>hello
-</system-out></testcase><testcase classname="autoclass.tests.test_validate.TestValidate" file="autoclass/tests/test_validate.py" line="151" name="test_validate_or" time="0.0019073486328125"><system-out>hello
-hello
-hello
-hello
-</system-out></testcase><testcase classname="autoclass.tests.test_validate.TestValidate" file="autoclass/tests/test_validate.py" line="9" name="test_validate_simple" time="0.0015566349029541016"><system-out>hello
-</system-out></testcase><testcase classname="autoclass.tests.test_validate.TestValidate" file="autoclass/tests/test_validate.py" line="265" name="test_validate_subset_superset" time="0.0017075538635253906"><system-out>hello
-</system-out></testcase><testcase classname="autoclass.tests.test_validate.TestValidate" file="autoclass/tests/test_validate.py" line="32" name="test_validate_wrong_notnone" time="0.0008826255798339844"></testcase><testcase classname="autoclass.tests.test_validate.TestValidate" file="autoclass/tests/test_validate.py" line="185" name="test_validate_xor" time="0.0022873878479003906"><system-out>hello
-hello
-hello
-</system-out></testcase></testsuite>
+<?xml version="1.0" encoding="utf-8"?><testsuite errors="2" failures="0" name="pytest" skips="0" tests="2" time="0.677"><testcase classname="" file="autoclass/tests/test_autoprops.py" name="autoclass.tests.test_autoprops" time="0"><error message="collection failure">ImportError while importing test module &apos;/home/travis/build/smarie/python-autoclass/autoclass/tests/test_autoprops.py&apos;.
+Hint: make sure your test modules/packages have valid Python names.
+Traceback:
+../../../virtualenv/python3.5.3/lib/python3.5/site-packages/_pytest/python.py:395: in _importtestmodule
+    mod = self.fspath.pyimport(ensuresyspath=importmode)
+../../../virtualenv/python3.5.3/lib/python3.5/site-packages/py/_path/local.py:662: in pyimport
+    __import__(modname)
+../../../virtualenv/python3.5.3/lib/python3.5/site-packages/_pytest/assertion/rewrite.py:212: in load_module
+    py.builtin.exec_(co, mod.__dict__)
+autoclass/tests/test_autoprops.py:6: in &lt;module&gt;
+    from valid8 import Boolean, minlens, gts, between, validate, ValidationError
+E   ImportError: No module named &apos;valid8&apos;</error></testcase><testcase classname="" file="autoclass/tests/test_readme.py" name="autoclass.tests.test_readme" time="0"><error message="collection failure">ImportError while importing test module &apos;/home/travis/build/smarie/python-autoclass/autoclass/tests/test_readme.py&apos;.
+Hint: make sure your test modules/packages have valid Python names.
+Traceback:
+../../../virtualenv/python3.5.3/lib/python3.5/site-packages/_pytest/python.py:395: in _importtestmodule
+    mod = self.fspath.pyimport(ensuresyspath=importmode)
+../../../virtualenv/python3.5.3/lib/python3.5/site-packages/py/_path/local.py:662: in pyimport
+    __import__(modname)
+../../../virtualenv/python3.5.3/lib/python3.5/site-packages/_pytest/assertion/rewrite.py:212: in load_module
+    py.builtin.exec_(co, mod.__dict__)
+autoclass/tests/test_readme.py:4: in &lt;module&gt;
+    from valid8 import Boolean, minlens, validate, ValidationError, gt, is_in, minlen
+E   ImportError: No module named &apos;valid8&apos;</error></testcase></testsuite>

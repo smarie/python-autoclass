@@ -240,33 +240,6 @@
     <ul class="md-nav__list" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#validate" title="@validate" class="md-nav__link">
-    @validate
-  </a>
-  
-    <nav class="md-nav">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#not_none-in-combination-with-type-checkers-such-as-enforce" title="not_none in combination with type checkers such as enforce" class="md-nav__link">
-    not_none in combination with type checkers such as enforce
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#implementing-custom-validators" title="Implementing custom validators" class="md-nav__link">
-    Implementing custom validators
-  </a>
-  
-</li>
-        
-      </ul>
-    </nav>
-  
-</li>
-      
-        <li class="md-nav__item">
   <a href="#autoargs" title="@autoargs" class="md-nav__link">
     @autoargs
   </a>
@@ -316,18 +289,6 @@
 
 
   <li class="md-nav__item">
-    <a href="../validators/" title="Validators list" class="md-nav__link">
-      Validators list
-    </a>
-  </li>
-
-    
-      
-      
-      
-
-
-  <li class="md-nav__item">
     <a href="../changelog/" title="Changelog" class="md-nav__link">
       Changelog
     </a>
@@ -353,33 +314,6 @@
   
     <label class="md-nav__title" for="toc">Table of contents</label>
     <ul class="md-nav__list" data-md-scrollfix>
-      
-        <li class="md-nav__item">
-  <a href="#validate" title="@validate" class="md-nav__link">
-    @validate
-  </a>
-  
-    <nav class="md-nav">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#not_none-in-combination-with-type-checkers-such-as-enforce" title="not_none in combination with type checkers such as enforce" class="md-nav__link">
-    not_none in combination with type checkers such as enforce
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#implementing-custom-validators" title="Implementing custom validators" class="md-nav__link">
-    Implementing custom validators
-  </a>
-  
-</li>
-        
-      </ul>
-    </nav>
-  
-</li>
       
         <li class="md-nav__item">
   <a href="#autoargs" title="@autoargs" class="md-nav__link">
@@ -434,83 +368,6 @@
                 
                 
                 <h1 id="usage-details">Usage details<a class="headerlink" href="#usage-details" title="Permanent link">&para;</a></h1>
-<h2 id="validate">@validate<a class="headerlink" href="#validate" title="Permanent link">&para;</a></h2>
-<p>Adds input validation to a method. Simply declare the name of the input to validate and associate to it a validator or a list of validators:</p>
-<div class="codehilite"><pre><span></span><span class="nd">@validate</span><span class="p">(</span><span class="o">&lt;</span><span class="n">input_name</span><span class="o">&gt;=&lt;</span><span class="n">validator_or_list_of_validators</span><span class="o">&gt;</span><span class="p">,</span> <span class="o">...</span><span class="p">)</span>
-</pre></div>
-
-
-<p>Many validators are provided out of the box to use with <code>@validate</code>: <code>gt</code>, <code>between</code>, <code>is_in</code>, <code>maxlen</code>... check them out in <a href="https://smarie.github.io/python-autoclass/validators/">the validators list page</a>. For example below we check that input <code>a</code> is not <code>None</code>, is even, and is greater than 1, and that input <code>b</code> is even:</p>
-<div class="codehilite"><pre><span></span><span class="kn">from</span> <span class="nn">autoclass</span> <span class="kn">import</span> <span class="n">validate</span><span class="p">,</span> <span class="n">not_none</span><span class="p">,</span> <span class="n">is_even</span><span class="p">,</span> <span class="n">gt</span>
-
-<span class="nd">@validate</span><span class="p">(</span><span class="n">a</span><span class="o">=</span><span class="p">[</span><span class="n">not_none</span><span class="p">,</span> <span class="n">is_even</span><span class="p">,</span> <span class="n">gt</span><span class="p">(</span><span class="mi">1</span><span class="p">)],</span> <span class="n">b</span><span class="o">=</span><span class="n">is_even</span><span class="p">)</span>
-<span class="k">def</span> <span class="nf">myfunc</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">):</span>
-    <span class="k">print</span><span class="p">(</span><span class="s1">&#39;hello&#39;</span><span class="p">)</span>
-
-<span class="n">myfunc</span><span class="p">(</span><span class="mi">84</span><span class="p">,</span> <span class="mi">82</span><span class="p">)</span>  <span class="c1"># OK</span>
-<span class="n">myfunc</span><span class="p">(</span><span class="bp">None</span><span class="p">,</span><span class="mi">0</span><span class="p">)</span>  <span class="c1"># ValidationError: a is None</span>
-<span class="n">myfunc</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">)</span>     <span class="c1"># ValidationError: a is not even</span>
-<span class="n">myfunc</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span><span class="mi">1</span><span class="p">)</span>     <span class="c1"># ValidationError: b is not even</span>
-<span class="n">myfunc</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">)</span>     <span class="c1"># ValidationError: a is not &gt;= 1</span>
-</pre></div>
-
-
-<h3 id="not_none-in-combination-with-type-checkers-such-as-enforce"><code>not_none</code> in combination with type checkers such as enforce<a class="headerlink" href="#not_none-in-combination-with-type-checkers-such-as-enforce" title="Permanent link">&para;</a></h3>
-<p>When used in combination with a PEP484 type checker such as enforce, you don't need to include the <code>not_none</code> validator. Indeed if an input is not explicitly declared with type <code>Optional[...]</code> or <code>Union[NoneType, ...]</code>, a good type checker should already raise an error:</p>
-<div class="codehilite"><pre><span></span><span class="kn">from</span> <span class="nn">enforce</span> <span class="kn">import</span> <span class="n">runtime_validation</span>
-<span class="kn">from</span> <span class="nn">numbers</span> <span class="kn">import</span> <span class="n">Integral</span>
-<span class="kn">from</span> <span class="nn">autoclass</span> <span class="kn">import</span> <span class="n">validate</span><span class="p">,</span> <span class="n">is_even</span><span class="p">,</span> <span class="n">gt</span>
-
-<span class="nd">@runtime_validation</span>
-<span class="nd">@validate</span><span class="p">(</span><span class="n">a</span><span class="o">=</span><span class="p">[</span><span class="n">is_even</span><span class="p">,</span> <span class="n">gt</span><span class="p">(</span><span class="mi">1</span><span class="p">)],</span> <span class="n">b</span><span class="o">=</span><span class="n">is_even</span><span class="p">)</span>
-<span class="k">def</span> <span class="nf">myfunc</span><span class="p">(</span><span class="n">a</span><span class="p">:</span> <span class="n">Integral</span><span class="p">,</span> <span class="n">b</span><span class="p">):</span>
-    <span class="k">print</span><span class="p">(</span><span class="s1">&#39;hello&#39;</span><span class="p">)</span>
-
-<span class="c1"># -- check that the validation works</span>
-<span class="n">myfunc</span><span class="p">(</span><span class="mi">84</span><span class="p">,</span> <span class="bp">None</span><span class="p">)</span> <span class="c1"># OK because b has no type annotation nor not_none validator</span>
-<span class="n">myfunc</span><span class="p">(</span><span class="bp">None</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>  <span class="c1"># RuntimeTypeError: a is None</span>
-</pre></div>
-
-
-<h3 id="implementing-custom-validators">Implementing custom validators<a class="headerlink" href="#implementing-custom-validators" title="Permanent link">&para;</a></h3>
-<p>You may implement your own validators: simply provide a function that returns <code>True</code> in case of correct validation, and either raises an exception or returns <code>False</code> in case validation fails. The <code>ValidationError</code> type is provided for convenience, but you may wish to use another exception type. The example below shows four styles of validators </p>
-<div class="codehilite"><pre><span></span><span class="kn">from</span> <span class="nn">autoclass</span> <span class="kn">import</span> <span class="n">validate</span><span class="p">,</span> <span class="n">ValidationError</span>
-
-<span class="k">def</span> <span class="nf">is_mod_3</span><span class="p">(</span><span class="n">x</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot; A simple validator with no parameters &quot;&quot;&quot;</span>
-    <span class="k">return</span> <span class="n">x</span> <span class="o">%</span> <span class="mi">3</span> <span class="o">==</span> <span class="mi">0</span>
-
-<span class="k">def</span> <span class="nf">is_mod</span><span class="p">(</span><span class="n">ref</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot; A validator generator, with parameters &quot;&quot;&quot;</span>
-    <span class="k">def</span> <span class="nf">is_mod_ref</span><span class="p">(</span><span class="n">x</span><span class="p">):</span>
-        <span class="k">return</span> <span class="n">x</span> <span class="o">%</span> <span class="n">ref</span> <span class="o">==</span> <span class="mi">0</span>
-    <span class="k">return</span> <span class="n">is_mod_ref</span>
-
-<span class="k">def</span> <span class="nf">gt_ex1</span><span class="p">(</span><span class="n">x</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot; A validator raising a custom exception in case of failure &quot;&quot;&quot;</span>
-    <span class="k">if</span> <span class="n">x</span> <span class="o">&gt;=</span> <span class="mi">1</span><span class="p">:</span>
-        <span class="k">return</span> <span class="bp">True</span>
-    <span class="k">else</span><span class="p">:</span>
-        <span class="k">raise</span> <span class="n">ValidationError</span><span class="p">(</span><span class="s1">&#39;gt_ex1: x &gt;= 1 does not hold for x=&#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">x</span><span class="p">))</span>
-
-<span class="k">def</span> <span class="nf">gt_assert2</span><span class="p">(</span><span class="n">x</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot; (not recommended) A validator relying on assert and therefore only valid in &#39;debug&#39; mode &quot;&quot;&quot;</span>
-    <span class="k">assert</span> <span class="n">x</span> <span class="o">&gt;=</span> <span class="mi">2</span>
-
-<span class="nd">@validate</span><span class="p">(</span><span class="n">a</span><span class="o">=</span><span class="p">[</span><span class="n">gt_ex1</span><span class="p">,</span> <span class="n">gt_assert2</span><span class="p">,</span> <span class="n">is_mod_3</span><span class="p">],</span>
-          <span class="n">b</span><span class="o">=</span><span class="n">is_mod</span><span class="p">(</span><span class="mi">5</span><span class="p">))</span>
-<span class="k">def</span> <span class="nf">myfunc</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">):</span>
-    <span class="k">print</span><span class="p">(</span><span class="s1">&#39;hello&#39;</span><span class="p">)</span>
-
-<span class="c1"># -- check that the validation works</span>
-<span class="n">myfunc</span><span class="p">(</span><span class="mi">21</span><span class="p">,</span> <span class="mi">15</span><span class="p">)</span>  <span class="c1"># ok</span>
-<span class="n">myfunc</span><span class="p">(</span><span class="mi">4</span><span class="p">,</span><span class="mi">21</span><span class="p">)</span>    <span class="c1"># ValidationError: a is not a multiple of 3</span>
-<span class="n">myfunc</span><span class="p">(</span><span class="mi">15</span><span class="p">,</span><span class="mi">1</span><span class="p">)</span>    <span class="c1"># ValidationError: b is not a multiple of 5</span>
-<span class="n">myfunc</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">)</span>     <span class="c1"># AssertionError: a is not &gt;= 2</span>
-<span class="n">myfunc</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">)</span>     <span class="c1"># ValidationError: a is not &gt;= 1</span>
-</pre></div>
-
-
 <h2 id="autoargs">@autoargs<a class="headerlink" href="#autoargs" title="Permanent link">&para;</a></h2>
 <p>Automatically affects the contents of a function to self. Initial code and test examples from <a href="http://stackoverflow.com/questions/3652851/what-is-the-best-way-to-do-automatic-attribute-assignment-in-python-and-is-it-a#answer-3653049">this answer from utnubu</a>.</p>
 <p>A few illustrative examples can be found in the unit tests below.</p>
@@ -681,9 +538,12 @@ parameter contract will be added on the generated setter method:</li>
 
 
 <ul>
-<li>if a <code>@validate</code> annotation exist on the <code>__init__</code> method, mentioning a contract for a given parameter, the parameter contract will be added on the generated setter method:</li>
+<li>if a <code>@validate</code> annotation (from <code>valid8</code> library) exist on the <code>__init__</code> method, mentioning a contract for a given parameter, the parameter contract will be added on the generated setter method:</li>
 </ul>
-<div class="codehilite"><pre><span></span><span class="nd">@autoprops</span>
+<div class="codehilite"><pre><span></span><span class="c1"># we use valid8 as the value validator</span>
+<span class="kn">from</span> <span class="nn">valid8</span> <span class="kn">import</span> <span class="n">validate</span>
+
+<span class="nd">@autoprops</span>
 <span class="k">class</span> <span class="nc">FooConfigC</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
 
     <span class="nd">@autoargs</span>
@@ -885,6 +745,9 @@ them with <code>@getter_override</code> or <code>@setter_override</code>. Note t
 <span class="kn">from</span> <span class="nn">enforce</span> <span class="kn">import</span> <span class="n">runtime_validation</span>
 <span class="n">en</span><span class="o">.</span><span class="n">config</span><span class="p">(</span><span class="nb">dict</span><span class="p">(</span><span class="n">mode</span><span class="o">=</span><span class="s1">&#39;covariant&#39;</span><span class="p">))</span>  <span class="c1"># allow subclasses when validating types</span>
 
+<span class="c1"># we use valid8 as the value validator</span>
+<span class="kn">from</span> <span class="nn">valid8</span> <span class="kn">import</span> <span class="n">validate</span>
+
 <span class="c1"># class definition</span>
 <span class="nd">@runtime_validation</span>
 <span class="nd">@autoclass</span>
@@ -928,15 +791,14 @@ them with <code>@getter_override</code> or <code>@setter_override</code>. Note t
 
 
 <h2 id="alternative-to-decorators-manual-function-wrappers">Alternative to decorators: manual function wrappers<a class="headerlink" href="#alternative-to-decorators-manual-function-wrappers" title="Permanent link">&para;</a></h2>
-<p>Equivalent manual wrapper methods are provided for all decorators in this library: <code>autoargs_decorate(init_func, include, exclude)</code>, <code>autoprops_decorate(cls, include, exclude)</code>, <code>autoprops_override_decorate(func, attribute, is_getter)</code>, <code>validate_decorate(func, **validators)</code>, <code>autodict_decorate(cls, include, exclude, only_constructor_args, only_public_fields)</code>, <code>autoclass_decorate(cls, include, exclude, autoargs, autoprops, autodict)</code></p>
+<p>Equivalent manual wrapper methods are provided for all decorators in this library: <code>autoargs_decorate(init_func, include, exclude)</code>, <code>autoprops_decorate(cls, include, exclude)</code>, <code>autoprops_override_decorate(func, attribute, is_getter)</code>, <code>autodict_decorate(cls, include, exclude, only_constructor_args, only_public_fields)</code>, <code>autoclass_decorate(cls, include, exclude, autoargs, autoprops, autodict)</code></p>
 <p>Therefore you can do:</p>
-<div class="codehilite"><pre><span></span><span class="kn">from</span> <span class="nn">autoclass</span> <span class="kn">import</span> <span class="n">validate_decorate</span><span class="p">,</span> <span class="n">is_even</span>
+<div class="codehilite"><pre><span></span><span class="kn">from</span> <span class="nn">autoclass</span> <span class="kn">import</span> <span class="n">autoclass_decorate</span>
 
-<span class="k">def</span> <span class="nf">my_func</span><span class="p">(</span><span class="n">a</span><span class="p">):</span>
-    <span class="k">pass</span>
+<span class="k">class</span> <span class="nc">A</span><span class="p">:</span>
+    <span class="o">...</span>
 
-<span class="n">my_func</span> <span class="o">=</span> <span class="n">validate_decorate</span><span class="p">(</span><span class="n">my_func</span><span class="p">,</span> <span class="n">a</span><span class="o">=</span><span class="n">is_even</span><span class="p">)</span>
-<span class="n">my_func</span><span class="p">(</span><span class="mi">9</span><span class="p">)</span>  <span class="c1"># ValidationError</span>
+<span class="n">A</span> <span class="o">=</span> <span class="n">autoclass_decorate</span><span class="p">(</span><span class="n">A</span><span class="p">)</span>
 </pre></div>
                 
                   
@@ -971,13 +833,13 @@ them with <code>@getter_override</code> or <code>@setter_override</code>. Note t
           </a>
         
         
-          <a href="../validators/" title="Validators list" class="md-flex md-footer-nav__link md-footer-nav__link--next" rel="next">
+          <a href="../changelog/" title="Changelog" class="md-flex md-footer-nav__link md-footer-nav__link--next" rel="next">
             <div class="md-flex__cell md-flex__cell--stretch md-footer-nav__title">
               <span class="md-flex__ellipsis">
                 <span class="md-footer-nav__direction">
                   Next
                 </span>
-                Validators list
+                Changelog
               </span>
             </div>
             <div class="md-flex__cell md-flex__cell--shrink">

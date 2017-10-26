@@ -296,18 +296,6 @@
 
 
   <li class="md-nav__item">
-    <a href="validators/" title="Validators list" class="md-nav__link">
-      Validators list
-    </a>
-  </li>
-
-    
-      
-      
-      
-
-
-  <li class="md-nav__item">
     <a href="changelog/" title="Changelog" class="md-nav__link">
       Changelog
     </a>
@@ -402,9 +390,14 @@
 </pre></div>
 
 
-<p>You may wish to also install <a href="https://andreacensi.github.io/contracts/index.html">PyContracts</a> or <a href="https://github.com/RussBaz/enforce">enforce</a> in order to use the <code>@contract</code> or <code>@runtime_validation</code> annotations shown in this documentation.</p>
-<div class="codehilite"><pre><span></span>&gt; pip install PyContracts
-&gt; pip install enforce
+<p>You may wish to also install 
+ * a PEP484-based type checker: <a href="https://github.com/RussBaz/enforce">enforce</a> or <a href="https://github.com/Stewori/pytypes">pytypes</a>. The examples in this documentation currently rely on enforce, through the <code>@runtime_validation</code> annotation
+ * a value validator: <a href="https://github.com/smarie/python-valid8">valid8</a> was originally created in this project and is now independent. It provides the <code>@validate</code> annotation (and it also provides the <code>Boolean</code> type)
+ * Alternatively, you may use<a href="https://andreacensi.github.io/contracts/index.html">PyContracts</a> to perform type and value validation at the same time using <code>@contract</code>, but this will not benefit from PEP484 and uses a dedicated syntax. This documentation also shows some examples.</p>
+<div class="codehilite"><pre><span></span>&gt; pip install enforce
+&gt; pip install pytypes
+&gt; pip install valid8
+&gt; pip install PyContracts
 </pre></div>
 
 
@@ -412,7 +405,7 @@
 <p>The following snippet shows a <code>HouseConfiguration</code> class with four attributes.
 Each attribute is validated against the expected type everytime you try to set it (constructor AND modifications), and the <code>name</code> and <code>surface</code> attribute are further validated (<code>len(name) &gt; 0</code> and <code>surface &gt;= 0</code>). Notice the size of the resulting code !</p>
 <div class="codehilite"><pre><span></span><span class="kn">from</span> <span class="nn">autoclass</span> <span class="kn">import</span> <span class="n">autoclass</span><span class="p">,</span> <span class="n">setter_override</span>
-<span class="kn">from</span> <span class="nn">autoclass</span> <span class="kn">import</span> <span class="n">Boolean</span><span class="p">,</span> <span class="n">validate</span><span class="p">,</span> <span class="n">minlens</span><span class="p">,</span> <span class="n">gt</span>
+<span class="kn">from</span> <span class="nn">valid8</span> <span class="kn">import</span> <span class="n">Boolean</span><span class="p">,</span> <span class="n">validate</span><span class="p">,</span> <span class="n">minlens</span><span class="p">,</span> <span class="n">gt</span>
 <span class="kn">from</span> <span class="nn">numbers</span> <span class="kn">import</span> <span class="n">Real</span><span class="p">,</span> <span class="n">Integral</span>
 <span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Optional</span>
 
@@ -587,19 +580,13 @@ Each attribute is validated against the expected type everytime you try to set i
 <h2 id="main-features">Main features<a class="headerlink" href="#main-features" title="Permanent link">&para;</a></h2>
 <ul>
 <li>
-<p><strong><code>@validate</code></strong> is a decorator for any method, that adds input validators to the method.</p>
-</li>
-<li>
-<p>Many validators are provided out of the box to use with <code>@validate</code>: <code>gt</code>, <code>between</code>, <code>is_in</code>, <code>maxlen</code>... check them out in <a href="https://smarie.github.io/python-autoclass/validators/">the validators list page</a>. But you can of course use your own, too.</p>
-</li>
-<li>
 <p><strong><code>@autoargs</code></strong> is a decorator for the <code>__init__</code> method of a class. It automatically assigns all of the <code>__init__</code> method's parameters to <code>self</code>. For more fine-grain tuning, explicit inclusion and exclusion lists are supported, too. <em>Note: the original @autoargs idea and code come from <a href="http://stackoverflow.com/questions/3652851/what-is-the-best-way-to-do-automatic-attribute-assignment-in-python-and-is-it-a#answer-3653049">this answer from utnubu</a></em></p>
 </li>
 <li>
 <p><strong><code>@autoprops</code></strong> is a decorator for a whole class. It automatically generates properties getters and setters for all attributes, with the correct PEP484 type hints. As for <code>@autoargs</code>, the default list of attributes is the list of parameters of the <code>__init__</code> method, and explicit inclusion and exclusion lists are supported. </p>
 </li>
 <li>
-<p><strong><code>@autoprops</code></strong> automatically adds <code>@contract</code> (<em>PyContracts</em>) or <code>@validate</code> (from <code>autoclass</code>) on the generated setters if a <code>@contract</code> or <code>@validate</code> exists for that attribute on the <code>__init__</code> method.</p>
+<p><strong><code>@autoprops</code></strong> automatically adds <code>@contract</code> (<em>PyContracts</em>) or <code>@validate</code> (from <code>valid8</code>) on the generated setters if a <code>@contract</code> or <code>@validate</code> exists for that attribute on the <code>__init__</code> method.</p>
 </li>
 <li>
 <p><strong><code>@autoprops</code></strong>-generated getters and setters are fully PEP484 decorated so that type checkers like <em>enforce</em>'s <code>@runtime_validation</code> automatically apply to generated methods when used to decorate the whole class. No explicit integration needed in autoclass!</p>
@@ -611,7 +598,7 @@ Each attribute is validated against the expected type everytime you try to set i
 <p><strong><code>@autodict</code></strong> is a decorator for a whole class. It makes a class behave like a (read-only) dict, with control on which attributes are visible in that dictionary. So this is a 'dict view' on top of an object, basically the opposite of <code>munch</code> (that is an 'object view' on top of a dict)</p>
 </li>
 <li>
-<p>Equivalent manual wrapper methods are provided for all decorators in this library: <code>autoargs_decorate(init_func, include, exclude)</code>, <code>autoprops_decorate(cls, include, exclude)</code>, <code>autoprops_override_decorate(func, attribute, is_getter)</code>, <code>validate_decorate(func, **validators)</code>, <code>autodict_decorate(cls, include, exclude, only_constructor_args, only_public_fields)</code></p>
+<p>Equivalent manual wrapper methods are provided for all decorators in this library: <code>autoargs_decorate(init_func, include, exclude)</code>, <code>autoprops_decorate(cls, include, exclude)</code>, <code>autoprops_override_decorate(func, attribute, is_getter)</code>, <code>autodict_decorate(cls, include, exclude, only_constructor_args, only_public_fields)</code></p>
 </li>
 </ul>
 <h2 id="see-also">See Also<a class="headerlink" href="#see-also" title="Permanent link">&para;</a></h2>
