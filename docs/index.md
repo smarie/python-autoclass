@@ -12,11 +12,17 @@ The objective of this library is to reduce the amount of redundancy by automatic
 > pip install autoclass
 ```
 
-You may wish to also install [PyContracts](https://andreacensi.github.io/contracts/index.html) or [enforce](https://github.com/RussBaz/enforce) in order to use the `@contract` or `@runtime_validation` annotations shown in this documentation.
+You may wish to also install 
+ * a PEP484-based type checker: [enforce](https://github.com/RussBaz/enforce) or [pytypes](https://github.com/Stewori/pytypes). The examples in this documentation currently rely on enforce, through the `@runtime_validation` annotation
+ * a value validator: [valid8](https://github.com/smarie/python-valid8) was originally created in this project and is now independent. It provides the `@validate` annotation (and it also provides the `Boolean` type)
+ * Alternatively, you may use[PyContracts](https://andreacensi.github.io/contracts/index.html) to perform type and value validation at the same time using `@contract`, but this will not benefit from PEP484 and uses a dedicated syntax. This documentation also shows some examples.
+
 
 ```bash
-> pip install PyContracts
 > pip install enforce
+> pip install pytypes
+> pip install valid8
+> pip install PyContracts
 ```
 
 ## Example usage
@@ -26,7 +32,7 @@ Each attribute is validated against the expected type everytime you try to set i
 
 ```python
 from autoclass import autoclass, setter_override
-from autoclass import Boolean, validate, minlens, gt
+from valid8 import Boolean, validate, minlens, gt
 from numbers import Real, Integral
 from typing import Optional
 
@@ -211,15 +217,11 @@ Note: unfortunately with PyContracts the type information is duplicated. However
 
 ## Main features
 
-* **`@validate`** is a decorator for any method, that adds input validators to the method.
-
-* Many validators are provided out of the box to use with `@validate`: `gt`, `between`, `is_in`, `maxlen`... check them out in [the validators list page](https://smarie.github.io/python-autoclass/validators/). But you can of course use your own, too.
-
 * **`@autoargs`** is a decorator for the `__init__` method of a class. It automatically assigns all of the `__init__` method's parameters to `self`. For more fine-grain tuning, explicit inclusion and exclusion lists are supported, too. *Note: the original @autoargs idea and code come from [this answer from utnubu](http://stackoverflow.com/questions/3652851/what-is-the-best-way-to-do-automatic-attribute-assignment-in-python-and-is-it-a#answer-3653049)*
 
 * **`@autoprops`** is a decorator for a whole class. It automatically generates properties getters and setters for all attributes, with the correct PEP484 type hints. As for `@autoargs`, the default list of attributes is the list of parameters of the `__init__` method, and explicit inclusion and exclusion lists are supported. 
 
-* **`@autoprops`** automatically adds `@contract` (*PyContracts*) or `@validate` (from `autoclass`) on the generated setters if a `@contract` or `@validate` exists for that attribute on the `__init__` method.
+* **`@autoprops`** automatically adds `@contract` (*PyContracts*) or `@validate` (from `valid8`) on the generated setters if a `@contract` or `@validate` exists for that attribute on the `__init__` method.
 
 * **`@autoprops`**-generated getters and setters are fully PEP484 decorated so that type checkers like *enforce*'s `@runtime_validation` automatically apply to generated methods when used to decorate the whole class. No explicit integration needed in autoclass!
 
@@ -227,7 +229,7 @@ Note: unfortunately with PyContracts the type information is duplicated. However
 
 * **`@autodict`** is a decorator for a whole class. It makes a class behave like a (read-only) dict, with control on which attributes are visible in that dictionary. So this is a 'dict view' on top of an object, basically the opposite of `munch` (that is an 'object view' on top of a dict)
 
-* Equivalent manual wrapper methods are provided for all decorators in this library: `autoargs_decorate(init_func, include, exclude)`, `autoprops_decorate(cls, include, exclude)`, `autoprops_override_decorate(func, attribute, is_getter)`, `validate_decorate(func, **validators)`, `autodict_decorate(cls, include, exclude, only_constructor_args, only_public_fields)`
+* Equivalent manual wrapper methods are provided for all decorators in this library: `autoargs_decorate(init_func, include, exclude)`, `autoprops_decorate(cls, include, exclude)`, `autoprops_override_decorate(func, attribute, is_getter)`, `autodict_decorate(cls, include, exclude, only_constructor_args, only_public_fields)`
 
 
 ## See Also

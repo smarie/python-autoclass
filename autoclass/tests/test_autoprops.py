@@ -2,8 +2,8 @@ from typing import List
 
 import pytest
 from autoclass import autoargs, autoprops, getter_override, setter_override, \
-    IllegalSetterSignatureException, DuplicateOverrideError, autoprops_decorate, Boolean, minlens, gts, \
-    between, validate, ValidationError
+    IllegalSetterSignatureException, DuplicateOverrideError, autoprops_decorate
+from valid8 import Boolean, minlens, gts, between, validate, ValidationError
 
 
 def test_autoprops_no_contract():

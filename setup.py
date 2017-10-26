@@ -14,9 +14,10 @@ here = path.abspath(path.dirname(__file__))
 INSTALL_REQUIRES = ['decorator']
 DEPENDENCY_LINKS = []
 SETUP_REQUIRES = ['pytest-runner', 'setuptools_scm', 'pypandoc', 'pandoc']
-TESTS_REQUIRE = ['pytest', 'pytest-logging', 'pytest-cov', 'PyContracts', 'enforce']
+TESTS_REQUIRE = ['pytest', 'pytest-logging', 'pytest-cov', 'PyContracts', 'enforce', 'valid8']
 EXTRAS_REQUIRE = {'contracts': ['PyContracts'],
-                  'enforce': ['enforce']}
+                  'enforce': ['enforce'],
+                  'validate': ['valid8']}
 
 # simple check
 try:

@@ -5,7 +5,6 @@ from warnings import warn
 from decorator import decorate
 
 from autoclass import check_var
-from autoclass.validate import validate_decorate
 from autoclass.utils_include_exclude import _sieve
 from autoclass.utils_reflexion import get_constructor
 from autoclass.utils_decoration import _create_function_decorator__robust_to_args, \
@@ -329,7 +328,7 @@ def _add_validators_to_setter(setter_fun, var_name, validators, property_name):
     # note: this is useless now but maybe one day validate will be another project ?
     try:
         # noinspection PyUnresolvedReferences
-        from autoclass import validate
+        from valid8 import validate, validate_decorate
     except ImportError:
         raise Exception('Use of _add_contract_to_setter requires that validate library is installed. Check that you can'
                         ' \'import validate\'')

@@ -4,7 +4,6 @@ repo_url: https://github.com/smarie/python-autoclass
 pages:
     - Home: index.md
     - Usage details: usage.md
-    - Validators list: validators.md
     - Changelog: changelog.md
 theme: material  # readthedocs  mkdocs
 

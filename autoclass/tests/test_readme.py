@@ -1,15 +1,16 @@
 import pytest
-from autoclass import autoargs, autoprops, setter_override, Boolean, minlens, validate, ValidationError, gt, autodict, \
-    is_in, minlen, autoclass
+from autoclass import autoargs, autoprops, setter_override, autodict, autoclass
 from typing import List
+from valid8 import Boolean, minlens, validate, ValidationError, gt, is_in, minlen
 
 
 def test_readme_old_way():
     """ Makes sure that the code in the documentation page is correct for the 'old way' of writing classes """
 
-    from autoclass import check_var, Boolean
+    from autoclass import check_var
     from numbers import Real, Integral
     from typing import Optional, Union
+    from valid8 import Boolean
 
     class HouseConfiguration(object):
         def __init__(self,
@@ -186,7 +187,7 @@ def test_readme_enforce_validate():
     """ Makes sure that the code in the documentation page is correct for the enforce + validate example """
 
     from autoclass import autoclass, setter_override
-    from autoclass import Boolean, validate, minlens, gt
+    from valid8 import Boolean, validate, minlens, gt
     from numbers import Real, Integral
     from typing import Optional
 

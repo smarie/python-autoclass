@@ -1,9 +1,11 @@
+# allow users to do
+#     from autoclass import xxx
 from autoclass.autoargs import *
 from autoclass.autoclass import *
 from autoclass.autoprops import *
 from autoclass.autodict import *
 from autoclass.var_checker import *
-from autoclass.validate import *
-from autoclass.utils_typing import *
 
-__all__ = ['autoclass', 'autoargs', 'autoprops', 'autodict', 'validate', 'var_checker', 'utils_typing']
+# allow users to do
+#     import autoclass as ac
+__all__ = ['autoclass', 'autoargs', 'autoprops', 'autodict', 'var_checker']

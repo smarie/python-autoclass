@@ -1,3 +1,7 @@
+### 1.9.0 - valid8 is now an independent project
+
+ * `Boolean`, `validate`, `validate_decorate` and all validators have been moved to an independent project, thus decoupling `autoclass` from the choice of validator library.
+
 ### 1.8.1 - minor improvements
  * Now detecting conflicts with `enforce` when annotations are not in the right order (see [#12](https://github.com/smarie/python-autoclass/issues/12))
  * Added tests for `on_each_` and `on_all_` and fixed corresponding bugs.
