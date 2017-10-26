@@ -390,10 +390,12 @@
 </pre></div>
 
 
-<p>You may wish to also install 
- * a PEP484-based type checker: <a href="https://github.com/RussBaz/enforce">enforce</a> or <a href="https://github.com/Stewori/pytypes">pytypes</a>. The examples in this documentation currently rely on enforce, through the <code>@runtime_validation</code> annotation
- * a value validator: <a href="https://github.com/smarie/python-valid8">valid8</a> was originally created in this project and is now independent. It provides the <code>@validate</code> annotation (and it also provides the <code>Boolean</code> type)
- * Alternatively, you may use<a href="https://andreacensi.github.io/contracts/index.html">PyContracts</a> to perform type and value validation at the same time using <code>@contract</code>, but this will not benefit from PEP484 and uses a dedicated syntax. This documentation also shows some examples.</p>
+<p>You may wish to also install </p>
+<ul>
+<li>a PEP484-based type checker: <a href="https://github.com/RussBaz/enforce">enforce</a> or <a href="https://github.com/Stewori/pytypes">pytypes</a>. The examples in this documentation currently rely on enforce, through the <code>@runtime_validation</code> annotation</li>
+<li>a value validator: <a href="https://github.com/smarie/python-valid8">valid8</a> was originally created in this project and is now independent. It provides the <code>@validate</code> annotation (and it also provides the <code>Boolean</code> type)</li>
+<li>Alternatively, you may use<a href="https://andreacensi.github.io/contracts/index.html">PyContracts</a> to perform type and value validation at the same time using <code>@contract</code>, but this will not benefit from PEP484 and uses a dedicated syntax. This documentation also shows some examples.</li>
+</ul>
 <div class="codehilite"><pre><span></span>&gt; pip install enforce
 &gt; pip install pytypes
 &gt; pip install valid8
