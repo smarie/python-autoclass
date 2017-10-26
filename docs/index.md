@@ -13,6 +13,7 @@ The objective of this library is to reduce the amount of redundancy by automatic
 ```
 
 You may wish to also install 
+
  * a PEP484-based type checker: [enforce](https://github.com/RussBaz/enforce) or [pytypes](https://github.com/Stewori/pytypes). The examples in this documentation currently rely on enforce, through the `@runtime_validation` annotation
  * a value validator: [valid8](https://github.com/smarie/python-valid8) was originally created in this project and is now independent. It provides the `@validate` annotation (and it also provides the `Boolean` type)
  * Alternatively, you may use[PyContracts](https://andreacensi.github.io/contracts/index.html) to perform type and value validation at the same time using `@contract`, but this will not benefit from PEP484 and uses a dedicated syntax. This documentation also shows some examples.
