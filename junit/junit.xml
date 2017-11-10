@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?><testsuite errors="2" failures="0" name="pytest" skips="0" tests="2" time="0.624"><testcase classname="" file="autoclass/tests/test_autoprops.py" name="autoclass.tests.test_autoprops" time="0"><error message="collection failure">ImportError while importing test module &apos;/home/travis/build/smarie/python-autoclass/autoclass/tests/test_autoprops.py&apos;.
+<?xml version="1.0" encoding="utf-8"?><testsuite errors="2" failures="0" name="pytest" skips="0" tests="2" time="0.669"><testcase classname="" file="autoclass/tests/test_autoprops.py" name="autoclass.tests.test_autoprops" time="0"><error message="collection failure">ImportError while importing test module &apos;/home/travis/build/smarie/python-autoclass/autoclass/tests/test_autoprops.py&apos;.
 Hint: make sure your test modules/packages have valid Python names.
 Traceback:
 ../../../virtualenv/python3.5.3/lib/python3.5/site-packages/_pytest/python.py:395: in _importtestmodule

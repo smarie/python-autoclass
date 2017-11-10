@@ -1,4 +1,7 @@
 
+
+
+
 <!DOCTYPE html>
 <html lang="en" class="no-js">
   <head>
@@ -14,7 +17,7 @@
       
         <meta name="lang:clipboard.copied" content="Copied to clipboard">
       
-        <meta name="lang:search.languages" content="">
+        <meta name="lang:search.language" content="en">
       
         <meta name="lang:search.result.none" content="No matching documents">
       
@@ -24,10 +27,8 @@
       
         <meta name="lang:search.tokenizer" content="[\s\-]+">
       
-      
-        <link rel="shortcut icon" href="./assets/images/favicon.png">
-      
-      <meta name="generator" content="mkdocs-0.16.3, mkdocs-material-1.12.1">
+      <link rel="shortcut icon" href="./assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-0.17.1, mkdocs-material-2.0.4">
     
     
       
@@ -35,17 +36,14 @@
       
     
     
+      <link rel="stylesheet" href="./assets/stylesheets/application-709eec9410.css">
+      
+    
+    
       <script src="./assets/javascripts/modernizr-e826f8942a.js"></script>
     
     
-      <link rel="stylesheet" href="./assets/stylesheets/application-04ea671600.css">
       
-    
-    
-      
-        
-        
-        
         <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,400i,700|Roboto+Mono">
         <style>body,input{font-family:"Roboto","Helvetica Neue",Helvetica,Arial,sans-serif}code,kbd,pre{font-family:"Roboto Mono","Courier New",Courier,monospace}</style>
       
@@ -54,9 +52,6 @@
     
     
   </head>
-  
-  
-  
   
     <body>
   
@@ -78,7 +73,7 @@
       <div class="md-flex__cell md-flex__cell--shrink">
         <a href="." title="autoclass" class="md-header-nav__button md-logo">
           
-            <i class="md-icon md-icon--home"></i>
+            <i class="md-icon"></i>
           
         </a>
       </div>
@@ -97,8 +92,9 @@
       </div>
       <div class="md-flex__cell md-flex__cell--shrink">
         
-          <label class="md-icon md-icon--search md-header-nav__button" for="search"></label>
           
+            <label class="md-icon md-icon--search md-header-nav__button" for="search"></label>
+            
 <div class="md-search" data-md-component="search" role="dialog">
   <label class="md-search__overlay" for="search"></label>
   <div class="md-search__inner">
@@ -119,6 +115,7 @@
     </div>
   </div>
 </div>
+          
         
       </div>
       
@@ -130,7 +127,7 @@
   
 
 
-  <a href="https://github.com/smarie/python-autoclass" title="Go to repository" class="md-source" data-md-source="github">
+  <a href="https://github.com/smarie/python-autoclass/" title="Go to repository" class="md-source" data-md-source="github">
     
       <div class="md-source__icon">
         <svg viewBox="0 0 24 24" width="24" height="24">
@@ -152,8 +149,6 @@
     
     <div class="md-container">
       
-      
-      
       <main class="md-main">
         <div class="md-main__inner md-grid" data-md-component="container">
           
@@ -165,7 +160,7 @@
   <label class="md-nav__title md-nav__title--site" for="drawer">
     <span class="md-nav__button md-logo">
       
-        <i class="md-icon md-icon--home"></i>
+        <i class="md-icon"></i>
       
     </span>
     autoclass
@@ -178,7 +173,7 @@
   
 
 
-  <a href="https://github.com/smarie/python-autoclass" title="Go to repository" class="md-source" data-md-source="github">
+  <a href="https://github.com/smarie/python-autoclass/" title="Go to repository" class="md-source" data-md-source="github">
     
       <div class="md-source__icon">
         <svg viewBox="0 0 24 24" width="24" height="24">
@@ -627,7 +622,7 @@ Each attribute is validated against the expected type everytime you try to set i
 <p><a href="https://github.com/python-attrs/attrs">attrs</a> is a library with the same target, but the way to use it is quite different from 'standard' python. It is very powerful and elegant, though.</p>
 </li>
 <li>
-<p><a href="http://pythonhosted.org/decorator/">decorator</a> library, which provides everything one needs to create complex decorators easily (signature and annotations-preserving decorators, decorators with class factory) as well as provides some useful decorators (<code>@contextmanager</code>, <code>@blocking</code>, <code>@dispatch_on</code>). We use it to preserve the signature of class constructors and overriden setter methods.</p>
+<p><a href="http://decorator.readthedocs.io/en/stable/">decorator</a> library, which provides everything one needs to create complex decorators easily (signature and annotations-preserving decorators, decorators with class factory) as well as provides some useful decorators (<code>@contextmanager</code>, <code>@blocking</code>, <code>@dispatch_on</code>). We use it to preserve the signature of class constructors and overriden setter methods.</p>
 </li>
 <li>
 <p>When came the time to find a name for this library I was stuck for a while. In my quest for finding an explicit name that was not already used, I found many interesting libraries on <a href="http://pypi.python.org/">PyPI</a>. I did not test them all but found them 'good to know':</p>
@@ -698,10 +693,9 @@ Each attribute is validated against the expected type everytime you try to set i
       
     </div>
     
-      <script src="./assets/javascripts/application-946997f430.js"></script>
+      <script src="./assets/javascripts/application-8e4952e681.js"></script>
       
-      
-      <script>app.initialize({version:"0.16.3",url:{base:"."}})</script>
+      <script>app.initialize({version:"0.17.1",url:{base:"."}})</script>
       
     
     
