@@ -39,13 +39,15 @@ LICENSE_LONG = 'License :: OSI Approved :: BSD License'
 version_for_download_url = get_version()
 DOWNLOAD_URL = URL + '/tarball/' + version_for_download_url
 
-KEYWORDS = 'auto code generator decorator properties fields attributes contract object classes'
+KEYWORDS = 'auto code generator getter setter constructor autoarg autoprops decorator property properties fields ' \
+           'attribute attr contract object class enforce valid boilerplate pep484 type-hints runtime-typechecking ' \
+           'typechecking'
 # --Get the long description from the README file
 # with open(path.join(here, 'README.md'), encoding='utf-8') as f:
 #    LONG_DESCRIPTION = f.read()
 try:
     import pypandoc
-    LONG_DESCRIPTION = pypandoc.convert(path.join(here, 'README.md'), 'rst').replace('\r', '')
+    LONG_DESCRIPTION = pypandoc.convert(path.join(here, 'docs', 'long_description.md'), 'rst').replace('\r', '')
 except(ImportError):
     from warnings import warn
     warn('WARNING pypandoc could not be imported - we recommend that you install it in order to package the '
