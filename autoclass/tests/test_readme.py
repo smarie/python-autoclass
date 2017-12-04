@@ -1,7 +1,70 @@
 import pytest
 from autoclass import autoargs, autoprops, setter_override, autodict, autoclass
-from typing import List
+from typing import List, Tuple, Dict, Any
 from valid8 import Boolean, minlens, validate, ValidationError, gt, is_in, minlen
+
+
+def test_readme_enforce_validate():
+    """ Makes sure that the code in the documentation page is correct for the enforce + validate example """
+
+    from autoclass import autoclass, setter_override
+    from valid8 import Boolean, validate, minlens, gt
+    from numbers import Real, Integral
+    from typing import Optional
+
+    # we use enforce runtime checker for this example
+    from enforce import runtime_validation, config
+    config(dict(mode='covariant'))  # to accept subclasses in validation
+
+    @runtime_validation
+    @autoclass
+    class HouseConfiguration(object):
+
+        @validate(name=minlens(0),
+                  surface=gt(0))
+        def __init__(self,
+                     name: str,
+                     surface: Real,
+                     nb_floors: Optional[Integral] = 1,
+                     with_windows: Boolean = False):
+            pass
+
+        # -- overriden setter for surface for custom validation or other things
+        @setter_override
+        def surface(self, surface):
+            print('Set surface to {}'.format(surface))
+            self._surface = surface
+
+    t = HouseConfiguration('test', 12, 2)
+
+    # 'Optional' works
+    t.nb_floors = None
+
+    # Type validation works
+    from enforce.exceptions import RuntimeTypeError
+    with pytest.raises(RuntimeTypeError):
+        t.nb_floors = 2.2
+
+    # Value validation works
+    with pytest.raises(ValidationError):
+        t.surface = -1
+
+    # Value validation works in constructor
+    with pytest.raises(ValidationError):
+        HouseConfiguration('', 12, 2)
+
+    # str and repr work
+    assert str(t) == repr(t)
+    # "HouseConfiguration({'nb_floors': None, 'with_windows': False, 'surface': 12, 'name': 'test'})"
+    # assert eval(repr(t)) == t does not work !
+
+    # dict work
+    assert t == {'name': 'test', 'nb_floors': None, 'surface': 12, 'with_windows': False}
+    assert t == dict(name='test', nb_floors=None, surface=12, with_windows=False)
+    t.keys()
+    for k, v in t.items():
+        print(str(k) + ': ' + str(v))
+    HouseConfiguration.from_dict({'name': 'test2', 'surface': 1})
 
 
 def test_readme_old_way():
@@ -101,101 +164,18 @@ def test_readme_pycontracts():
         t.surface = -1
 
 
-def test_readme_typechecked():
-    """ Makes sure that the code in the documentation page is correct for the pytypes example """
-
-    # from autoclass import autoargs, autoprops, Boolean
-    from pytypes import typechecked
-    from numbers import Real, Integral
-    from typing import Optional
-
-    @typechecked
-    @autoclass
-    class HouseConfiguration(object):
-        def __init__(self,
-                     name: str,
-                     surface: Real,
-                     nb_floors: Optional[Integral] = 1,
-                     with_windows: Boolean = False):
-            pass
-
-        # -- overriden setter for surface for custom validation
-        @setter_override
-        def surface(self, surface):
-            assert surface > 0
-            self._surface = surface
-
-    t = HouseConfiguration('test', 12, 2)
-
-    # 'Optional' works
-    t.nb_floors = None
-
-    # Type validation works
-    from pytypes import InputTypeError
-    with pytest.raises(InputTypeError):
-        t.nb_floors = 2.2
-
-    # Custom validation works
-    with pytest.raises(AssertionError):
-        t.surface = 0
-
-
-def test_readme_enforce():
-    """ Makes sure that the code in the documentation page is correct for the enforce example """
-
-    # from autoclass import autoargs, autoprops, Boolean
-    import enforce as en
-    from enforce import runtime_validation
-    from numbers import Real, Integral
-    from typing import Optional
-
-    en.config(dict(mode='covariant'))  # allow subclasses when validating types
-
-    @runtime_validation
-    @autoprops
-    class HouseConfiguration(object):
-        @autoargs
-        def __init__(self,
-                     name: str,
-                     surface: Real,
-                     nb_floors: Optional[Integral] = 1,
-                     with_windows: Boolean = False):
-            pass
-
-        # -- overriden setter for surface for custom validation
-        @setter_override
-        def surface(self, surface):
-            assert surface > 0
-            self._surface = surface
-
-    t = HouseConfiguration('test', 12, 2)
-
-    # 'Optional' works
-    t.nb_floors = None
-
-    # Type validation works
-    from enforce.exceptions import RuntimeTypeError
-    with pytest.raises(RuntimeTypeError):
-        t.nb_floors = 2.2
-
-    # Custom validation works
-    with pytest.raises(AssertionError):
-        t.surface = 0
-
-
-def test_readme_enforce_validate():
-    """ Makes sure that the code in the documentation page is correct for the enforce + validate example """
+def test_readme_pytypes_validate():
+    """ Makes sure that the code in the documentation page is correct for the pytypes + validate example """
 
     from autoclass import autoclass, setter_override
     from valid8 import Boolean, validate, minlens, gt
     from numbers import Real, Integral
     from typing import Optional
 
-    # we use enforce runtime checker for this example
-    from enforce import runtime_validation, config
-    config(dict(mode='covariant'))  # to accept subclasses in validation
+    # we use pytypes for this example
+    from pytypes import typechecked
 
-    @runtime_validation
+    @typechecked
     @autoclass
     class HouseConfiguration(object):
 
@@ -220,8 +200,8 @@ def test_readme_enforce_validate():
     t.nb_floors = None
 
     # Type validation works
-    from enforce.exceptions import RuntimeTypeError
-    with pytest.raises(RuntimeTypeError):
+    from pytypes import InputTypeError
+    with pytest.raises(InputTypeError):
         t.nb_floors = 2.2
 
     # Value validation works
@@ -239,9 +219,12 @@ def test_readme_enforce_validate():
 
     # dict work
     assert t == {'name': 'test', 'nb_floors': None, 'surface': 12, 'with_windows': False}
+    assert t == dict(name='test', nb_floors=None, surface=12, with_windows=False)
     t.keys()
     for k, v in t.items():
         print(str(k) + ': ' + str(v))
+
+    # TODO this is an open bug in pytypes https://github.com/Stewori/pytypes/issues/19
     HouseConfiguration.from_dict({'name': 'test2', 'surface': 1})
 
 

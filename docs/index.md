@@ -14,7 +14,7 @@ The objective of this library is to reduce the amount of redundancy by automatic
 
 You may wish to also install 
 
- * a PEP484-based type checker: [enforce](https://github.com/RussBaz/enforce) or [pytypes](https://github.com/Stewori/pytypes). The examples in this documentation currently rely on enforce, through the `@runtime_validation` annotation
+ * a PEP484-based type checker: [enforce](https://github.com/RussBaz/enforce) or [pytypes](https://github.com/Stewori/pytypes).
  * a value validator: [valid8](https://github.com/smarie/python-valid8) was originally created in this project and is now independent. It provides the `@validate` annotation (and it also provides the `Boolean` type)
  * Alternatively, you may use[PyContracts](https://andreacensi.github.io/contracts/index.html) to perform type and value validation at the same time using `@contract`, but this will not benefit from PEP484 and uses a dedicated syntax. This documentation also shows some examples.
 
@@ -69,7 +69,7 @@ t = HouseConfiguration('test', 12, 2)
 t.nb_floors = None  # Declared 'Optional': no error
 t.nb_floors = 2.2   # Type validation: enforce raises a RuntimeTypeError
 t.surface = -1      # Value validation: @validate raises a ValidationError
-HouseConfiguration('', 12, 2)  # Value validation: @validate raises a ValidationError
+HouseConfiguration('', 12, 2)  # Value validation: @validate > ValidationError
 ```
 
 Note that the `Real` and `Integral` types come from the [`numbers`](https://docs.python.org/3.6/library/numbers.html) built-in module. They provide an easy way to support both python primitives AND e.g. numpy primitives. In this library we provide an additional `Boolean` class to complete the picture.
@@ -86,7 +86,10 @@ repr(t)
 both return
 
 ```bash
-HouseConfiguration({'nb_floors': None, 'with_windows': False, 'surface': 12, 'name': 'test'})
+HouseConfiguration({'nb_floors': None, 
+                    'with_windows': False, 
+                    'surface': 12, 
+                    'name': 'test'})
 ```
 
 * a dictionary view on top of the object, a `from_dict` class method, and a dict-based equality function:
@@ -101,7 +104,7 @@ for k, v in t.items():
 HouseConfiguration.from_dict({'name': 'test2', 'surface': 1})
 
 # compare objects as dicts
-assert t == {'name': 'test', 'nb_floors': None, 'surface': 12, 'with_windows': False}
+assert t == dict(name='test', nb_floors=None, surface=12, with_windows=False)
 ```
 
 Check the [Usage](./usage/) page for more details.
@@ -177,7 +180,7 @@ Not to mention extra methods such as `__str__`, `__eq__`, `from_dict`, `to_dict`
 
 Now that's **a lot of code** - and only for 4 attributes ! Not mentioning the code for `check_var` that was not included here for the sake of readability (I include it in the library, for reference). And guess what - it is still highly prone to **human mistakes**. For example I made a mistake in the setter for `nb_floors`, did you spot it ? Also it makes the code **less readable**: did you spot that the setter for the surface property is different from the others?
 
-Really, *"there must be a better way"* : yes there is, and that's what this library provides - it can be used alone, or in combination with [PyContracts](https://andreacensi.github.io/contracts/index.html) and/or any PEP484-based checker such as [enforce](https://github.com/RussBaz/enforce), [typeguard](https://github.com/agronholm/typeguard), [typecheck-decorator](https://github.com/prechelt/typecheck-decorator), etc. in order to generate all the repetitive code for you. Here is an example with PyContracts:
+Really, *"there must be a better way"* : yes there is, and that's what this library provides - it can be used alone, or in combination with [PyContracts](https://andreacensi.github.io/contracts/index.html) and/or any PEP484-based checker such as [enforce](https://github.com/RussBaz/enforce), [pytypes](https://github.com/Stewori/pytypes), [typeguard](https://github.com/agronholm/typeguard), [typecheck-decorator](https://github.com/prechelt/typecheck-decorator), etc. in order to generate all the repetitive code for you. Here is an example with PyContracts:
 
 ```python
 from autoclass import Boolean, autoprops, autoargs, setter_override
@@ -213,7 +216,36 @@ As you can see, this is more compact:
 * all attribute validation contracts are declared once in the `@contract` annotation of `__init__`
 * it is still possible to implement custom logic in a getter or a setter, without having to repeat the `@contract`
 
-Note: unfortunately with PyContracts the type information is duplicated. However if you use type checkers relying on PEP484 directly such as [enforce](https://github.com/RussBaz/enforce), [typeguard](https://github.com/agronholm/typeguard), [typecheck-decorator](https://github.com/prechelt/typecheck-decorator), etc. this is not the case - as we saw in the [initial example with enforce and validate](#example_usage).
+Note: unfortunately with PyContracts the type information is duplicated. However if you use type checkers relying on PEP484 directly this is not the case - as we saw in the [initial example with enforce and validate](#example_usage). Below is the same example, but with `pytypes` instead of `enforce`:
+
+```python
+from autoclass import autoclass, setter_override
+from valid8 import Boolean, validate, minlens, gt
+from numbers import Real, Integral
+from typing import Optional
+
+# we use pytypes for this example
+from pytypes import typechecked
+
+@typechecked
+@autoclass
+class HouseConfiguration(object):
+    
+    @validate(name=minlens(0),
+              surface=gt(0))
+    def __init__(self,
+                 name: str,
+                 surface: Real,
+                 nb_floors: Optional[Integral] = 1,
+                 with_windows: Boolean = False):
+        pass
+
+    # -- overriden setter for surface for custom validation or other things
+    @setter_override
+    def surface(self, surface):
+        print('Set surface to {}'.format(surface))
+        self._surface = surface
+```
 
 
 ## Main features
