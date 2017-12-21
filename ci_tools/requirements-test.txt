@@ -4,4 +4,4 @@ enforce
 pytypes
 pytest
 pytest-logging
-valid8
+valid8>=2.0.0

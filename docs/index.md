@@ -2,7 +2,7 @@
 
 [![Build Status](https://travis-ci.org/smarie/python-autoclass.svg?branch=master)](https://travis-ci.org/smarie/python-autoclass) [![Tests Status](https://smarie.github.io/python-autoclass/junit/junit-badge.svg?dummy=8484744)](https://smarie.github.io/python-autoclass/junit/report.html) [![codecov](https://codecov.io/gh/smarie/python-autoclass/branch/master/graph/badge.svg)](https://codecov.io/gh/smarie/python-autoclass) [![Documentation](https://img.shields.io/badge/docs-latest-blue.svg)](https://smarie.github.io/python-autoclass/) [![PyPI](https://img.shields.io/badge/PyPI-autoclass-blue.svg)](https://pypi.python.org/pypi/autoclass/)[![downloads](https://img.shields.io/badge/downloads%2011%2F17-10k-brightgreen.svg)](https://kirankoduru.github.io/python/pypi-stats.html)
 
-`autoclass` provides tools to automatically generate python 3.5.3+ classes code, such as **constructor body** or **properties getters/setters**, along with optional support of **validation contracts**. It also provides extra goodies such as **a dict view on top of objects** (the opposite of munch), and more.
+`autoclass` provides tools to automatically generate classes code, such as **constructor body** or **properties getters/setters**, along with optional support of **validation contracts**. It also provides extra goodies such as **a dict view on top of objects** (the opposite of munch), and more.
 
 The objective of this library is to reduce the amount of redundancy by automatically generating parts of the code from the information already available somewhere else (typically, in the constructor signature). The intent is similar to [attrs](https://github.com/python-attrs/attrs): remove boilerplate.
 
@@ -29,7 +29,7 @@ You may wish to also install
 ## Example usage
 
 The following snippet shows a `HouseConfiguration` class with four attributes.
-Each attribute is validated against the expected type everytime you try to set it (constructor AND modifications), and the `name` and `surface` attribute are further validated (`len(name) > 0` and `surface >= 0`). Notice the size of the resulting code !
+Each attribute is validated against the expected type everytime you try to set it (constructor AND modifications), and the `name` and `surface` attributes are further validated (`len(name) > 0` and `surface >= 0`). Notice the size of the resulting code !
 
 ```python
 from autoclass import autoclass, setter_override
@@ -291,7 +291,7 @@ class HouseConfiguration(object):
     * [utils](https://pypi.python.org/pypi/utils/0.9.0)
 
 
-*Do you like this library ? You might also like [these](https://github.com/smarie?utf8=%E2%9C%93&tab=repositories&q=&type=&language=python)* 
+*Do you like this library ? You might also like [my other python libraries](https://github.com/smarie?utf8=%E2%9C%93&tab=repositories&q=&type=&language=python)* 
 
 
 ## Want to contribute ?
