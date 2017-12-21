@@ -385,7 +385,7 @@
                 
                 <h1 id="python-autoclass">python-autoclass<a class="headerlink" href="#python-autoclass" title="Permanent link">&para;</a></h1>
 <p><a href="https://travis-ci.org/smarie/python-autoclass"><img alt="Build Status" src="https://travis-ci.org/smarie/python-autoclass.svg?branch=master" /></a> <a href="https://smarie.github.io/python-autoclass/junit/report.html"><img alt="Tests Status" src="https://smarie.github.io/python-autoclass/junit/junit-badge.svg?dummy=8484744" /></a> <a href="https://codecov.io/gh/smarie/python-autoclass"><img alt="codecov" src="https://codecov.io/gh/smarie/python-autoclass/branch/master/graph/badge.svg" /></a> <a href="https://smarie.github.io/python-autoclass/"><img alt="Documentation" src="https://img.shields.io/badge/docs-latest-blue.svg" /></a> <a href="https://pypi.python.org/pypi/autoclass/"><img alt="PyPI" src="https://img.shields.io/badge/PyPI-autoclass-blue.svg" /></a><a href="https://kirankoduru.github.io/python/pypi-stats.html"><img alt="downloads" src="https://img.shields.io/badge/downloads%2011%2F17-10k-brightgreen.svg" /></a></p>
-<p><code>autoclass</code> provides tools to automatically generate python 3.5.3+ classes code, such as <strong>constructor body</strong> or <strong>properties getters/setters</strong>, along with optional support of <strong>validation contracts</strong>. It also provides extra goodies such as <strong>a dict view on top of objects</strong> (the opposite of munch), and more.</p>
+<p><code>autoclass</code> provides tools to automatically generate classes code, such as <strong>constructor body</strong> or <strong>properties getters/setters</strong>, along with optional support of <strong>validation contracts</strong>. It also provides extra goodies such as <strong>a dict view on top of objects</strong> (the opposite of munch), and more.</p>
 <p>The objective of this library is to reduce the amount of redundancy by automatically generating parts of the code from the information already available somewhere else (typically, in the constructor signature). The intent is similar to <a href="https://github.com/python-attrs/attrs">attrs</a>: remove boilerplate.</p>
 <h2 id="installing">Installing<a class="headerlink" href="#installing" title="Permanent link">&para;</a></h2>
 <div class="codehilite"><pre><span></span>&gt; pip install autoclass
@@ -407,7 +407,7 @@
 
 <h2 id="example-usage">Example usage<a class="headerlink" href="#example-usage" title="Permanent link">&para;</a></h2>
 <p>The following snippet shows a <code>HouseConfiguration</code> class with four attributes.
-Each attribute is validated against the expected type everytime you try to set it (constructor AND modifications), and the <code>name</code> and <code>surface</code> attribute are further validated (<code>len(name) &gt; 0</code> and <code>surface &gt;= 0</code>). Notice the size of the resulting code !</p>
+Each attribute is validated against the expected type everytime you try to set it (constructor AND modifications), and the <code>name</code> and <code>surface</code> attributes are further validated (<code>len(name) &gt; 0</code> and <code>surface &gt;= 0</code>). Notice the size of the resulting code !</p>
 <div class="codehilite"><pre><span></span><span class="kn">from</span> <span class="nn">autoclass</span> <span class="kn">import</span> <span class="n">autoclass</span><span class="p">,</span> <span class="n">setter_override</span>
 <span class="kn">from</span> <span class="nn">valid8</span> <span class="kn">import</span> <span class="n">Boolean</span><span class="p">,</span> <span class="n">validate</span><span class="p">,</span> <span class="n">minlens</span><span class="p">,</span> <span class="n">gt</span>
 <span class="kn">from</span> <span class="nn">numbers</span> <span class="kn">import</span> <span class="n">Real</span><span class="p">,</span> <span class="n">Integral</span>
@@ -674,7 +674,7 @@ Each attribute is validated against the expected type everytime you try to set i
 </ul>
 </li>
 </ul>
-<p><em>Do you like this library ? You might also like <a href="https://github.com/smarie?utf8=%E2%9C%93&amp;tab=repositories&amp;q=&amp;type=&amp;language=python">these</a></em> </p>
+<p><em>Do you like this library ? You might also like <a href="https://github.com/smarie?utf8=%E2%9C%93&amp;tab=repositories&amp;q=&amp;type=&amp;language=python">my other python libraries</a></em> </p>
 <h2 id="want-to-contribute">Want to contribute ?<a class="headerlink" href="#want-to-contribute" title="Permanent link">&para;</a></h2>
 <p>Details on the github page: <a href="https://github.com/smarie/python-autoclass">https://github.com/smarie/python-autoclass</a></p>
                 

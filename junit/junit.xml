@@ -1,123 +1,13 @@
-<?xml version="1.0" encoding="utf-8"?><testsuite errors="0" failures="1" name="pytest" skips="0" tests="38" time="1.473"><testcase classname="autoclass.tests.test_autoargs" file="autoclass/tests/test_autoargs.py" line="4" name="test_autoargs_simple" time="0.0021915435791015625"></testcase><testcase classname="autoclass.tests.test_autoargs" file="autoclass/tests/test_autoargs.py" line="21" name="test_autoargs_signature_preserving" time="0.0017580986022949219"></testcase><testcase classname="autoclass.tests.test_autoargs" file="autoclass/tests/test_autoargs.py" line="35" name="test_autoargs_varargs" time="0.002026796340942383"></testcase><testcase classname="autoclass.tests.test_autoargs" file="autoclass/tests/test_autoargs.py" line="57" name="test_autoargs_varargs_kwvarargs" time="0.0020875930786132812"></testcase><testcase classname="autoclass.tests.test_autoargs" file="autoclass/tests/test_autoargs.py" line="82" name="test_autoargs_noarg" time="0.0023145675659179688"></testcase><testcase classname="autoclass.tests.test_autoargs" file="autoclass/tests/test_autoargs.py" line="99" name="test_autoargs_include" time="0.002323627471923828"></testcase><testcase classname="autoclass.tests.test_autoargs" file="autoclass/tests/test_autoargs.py" line="119" name="test_autoargs_exclude" time="0.002095460891723633"></testcase><testcase classname="autoclass.tests.test_autoargs" file="autoclass/tests/test_autoargs.py" line="141" name="test_autoargs_include_exclude" time="0.0010466575622558594"></testcase><testcase classname="autoclass.tests.test_autoargs" file="autoclass/tests/test_autoargs.py" line="150" name="test_autoargs_include_exclude_typos" time="0.002683401107788086"></testcase><testcase classname="autoclass.tests.test_autoclass" file="autoclass/tests/test_autoclass.py" line="7" name="test_autoclass_enforce_validate_not_reversed" time="0.02170705795288086"><system-out>Set surface to 12
-</system-out></testcase><testcase classname="autoclass.tests.test_autoclass" file="autoclass/tests/test_autoclass.py" line="30" name="test_autoclass_enforce_validate_reversed" time="0.0034019947052001953"></testcase><testcase classname="autoclass.tests.test_autoclass" file="autoclass/tests/test_autoclass.py" line="54" name="test_readme_pytypes" time="0.03987622261047363"></testcase><testcase classname="autoclass.tests.test_autoclass" file="autoclass/tests/test_autoclass.py" line="93" name="test_readme_enforce" time="0.007003068923950195"></testcase><testcase classname="autoclass.tests.test_autodict" file="autoclass/tests/test_autodict.py" line="6" name="test_autodict[only_constructor_args-only_public]" time="0.003636598587036133"></testcase><testcase classname="autoclass.tests.test_autodict" file="autoclass/tests/test_autodict.py" line="6" name="test_autodict[only_constructor_args-including class-private dunder fields]" time="0.003962278366088867"></testcase><testcase classname="autoclass.tests.test_autodict" file="autoclass/tests/test_autodict.py" line="6" name="test_autodict[all_obj_fields-only_public]" time="0.003693819046020508"></testcase><testcase classname="autoclass.tests.test_autodict" file="autoclass/tests/test_autodict.py" line="6" name="test_autodict[all_obj_fields-including class-private dunder fields]" time="0.0035715103149414062"></testcase><testcase classname="autoclass.tests.test_autoprops" file="autoclass/tests/test_autoprops.py" line="8" name="test_autoprops_no_contract" time="0.0035572052001953125"></testcase><testcase classname="autoclass.tests.test_autoprops" file="autoclass/tests/test_autoprops.py" line="27" name="test_autoprops_pycontracts" time="0.2766711711883545"></testcase><testcase classname="autoclass.tests.test_autoprops" file="autoclass/tests/test_autoprops.py" line="55" name="test_autoprops_include" time="0.004755496978759766"></testcase><testcase classname="autoclass.tests.test_autoprops" file="autoclass/tests/test_autoprops.py" line="78" name="test_autoprops_exclude" time="0.004824161529541016"></testcase><testcase classname="autoclass.tests.test_autoprops" file="autoclass/tests/test_autoprops.py" line="101" name="test_autoprops_include_exclude" time="0.0011022090911865234"></testcase><testcase classname="autoclass.tests.test_autoprops" file="autoclass/tests/test_autoprops.py" line="111" name="test_autoprops_override" time="0.012225151062011719"><system-out>Property &apos;b&apos; was set to &apos;[&apos;pie&apos;, &apos;pie2&apos;]&apos;
+<?xml version="1.0" encoding="utf-8"?><testsuite errors="0" failures="0" name="pytest" skips="1" tests="38" time="1.229"><testcase classname="autoclass.tests.test_autoargs" file="autoclass/tests/test_autoargs.py" line="4" name="test_autoargs_simple" time="0.002142190933227539"></testcase><testcase classname="autoclass.tests.test_autoargs" file="autoclass/tests/test_autoargs.py" line="21" name="test_autoargs_signature_preserving" time="0.0017235279083251953"></testcase><testcase classname="autoclass.tests.test_autoargs" file="autoclass/tests/test_autoargs.py" line="35" name="test_autoargs_varargs" time="0.0011386871337890625"></testcase><testcase classname="autoclass.tests.test_autoargs" file="autoclass/tests/test_autoargs.py" line="57" name="test_autoargs_varargs_kwvarargs" time="0.0011394023895263672"></testcase><testcase classname="autoclass.tests.test_autoargs" file="autoclass/tests/test_autoargs.py" line="82" name="test_autoargs_noarg" time="0.0017771720886230469"></testcase><testcase classname="autoclass.tests.test_autoargs" file="autoclass/tests/test_autoargs.py" line="99" name="test_autoargs_include" time="0.0023040771484375"></testcase><testcase classname="autoclass.tests.test_autoargs" file="autoclass/tests/test_autoargs.py" line="119" name="test_autoargs_exclude" time="0.0028061866760253906"></testcase><testcase classname="autoclass.tests.test_autoargs" file="autoclass/tests/test_autoargs.py" line="141" name="test_autoargs_include_exclude" time="0.0009064674377441406"></testcase><testcase classname="autoclass.tests.test_autoargs" file="autoclass/tests/test_autoargs.py" line="150" name="test_autoargs_include_exclude_typos" time="0.0015892982482910156"></testcase><testcase classname="autoclass.tests.test_autoclass" file="autoclass/tests/test_autoclass.py" line="7" name="test_autoclass_enforce_validate_not_reversed" time="0.027007579803466797"><system-out>Set surface to 12
+</system-out></testcase><testcase classname="autoclass.tests.test_autoclass" file="autoclass/tests/test_autoclass.py" line="30" name="test_autoclass_enforce_validate_reversed" time="0.003408193588256836"></testcase><testcase classname="autoclass.tests.test_autoclass" file="autoclass/tests/test_autoclass.py" line="54" name="test_readme_pytypes" time="0.04041767120361328"></testcase><testcase classname="autoclass.tests.test_autoclass" file="autoclass/tests/test_autoclass.py" line="93" name="test_readme_enforce" time="0.00992727279663086"></testcase><testcase classname="autoclass.tests.test_autodict" file="autoclass/tests/test_autodict.py" line="6" name="test_autodict[only_constructor_args-only_public]" time="0.003568887710571289"></testcase><testcase classname="autoclass.tests.test_autodict" file="autoclass/tests/test_autodict.py" line="6" name="test_autodict[only_constructor_args-including class-private dunder fields]" time="0.005036354064941406"></testcase><testcase classname="autoclass.tests.test_autodict" file="autoclass/tests/test_autodict.py" line="6" name="test_autodict[all_obj_fields-only_public]" time="0.004148006439208984"></testcase><testcase classname="autoclass.tests.test_autodict" file="autoclass/tests/test_autodict.py" line="6" name="test_autodict[all_obj_fields-including class-private dunder fields]" time="0.0038614273071289062"></testcase><testcase classname="autoclass.tests.test_autoprops" file="autoclass/tests/test_autoprops.py" line="8" name="test_autoprops_no_contract" time="0.002794027328491211"></testcase><testcase classname="autoclass.tests.test_autoprops" file="autoclass/tests/test_autoprops.py" line="27" name="test_autoprops_pycontracts" time="0.2731037139892578"></testcase><testcase classname="autoclass.tests.test_autoprops" file="autoclass/tests/test_autoprops.py" line="55" name="test_autoprops_include" time="0.005022764205932617"></testcase><testcase classname="autoclass.tests.test_autoprops" file="autoclass/tests/test_autoprops.py" line="78" name="test_autoprops_exclude" time="0.004750967025756836"></testcase><testcase classname="autoclass.tests.test_autoprops" file="autoclass/tests/test_autoprops.py" line="101" name="test_autoprops_include_exclude" time="0.0011272430419921875"></testcase><testcase classname="autoclass.tests.test_autoprops" file="autoclass/tests/test_autoprops.py" line="111" name="test_autoprops_override" time="0.011535167694091797"><system-out>Property &apos;b&apos; was set to &apos;[&apos;pie&apos;, &apos;pie2&apos;]&apos;
 a is being read. Its value is &apos;rhubarb&apos;
 Property &apos;b&apos; was set to &apos;[&apos;eh&apos;, &apos;oh&apos;]&apos;
-</system-out></testcase><testcase classname="autoclass.tests.test_autoprops" file="autoclass/tests/test_autoprops.py" line="156" name="test_autoprops_override_exceptions" time="0.005698680877685547"></testcase><testcase classname="autoclass.tests.test_autoprops" file="autoclass/tests/test_autoprops.py" line="201" name="test_autoprops_manual" time="0.006502628326416016"></testcase><testcase classname="autoclass.tests.test_autoprops" file="autoclass/tests/test_autoprops.py" line="230" name="test_autoprops_signature_preserving" time="0.0032854080200195312"></testcase><testcase classname="autoclass.tests.test_autoprops" file="autoclass/tests/test_autoprops.py" line="252" name="test_autoprops_enforce_validate" time="0.00948643684387207"><system-out>Set surface to 12
+</system-out></testcase><testcase classname="autoclass.tests.test_autoprops" file="autoclass/tests/test_autoprops.py" line="156" name="test_autoprops_override_exceptions" time="0.0033135414123535156"></testcase><testcase classname="autoclass.tests.test_autoprops" file="autoclass/tests/test_autoprops.py" line="201" name="test_autoprops_manual" time="0.007337093353271484"></testcase><testcase classname="autoclass.tests.test_autoprops" file="autoclass/tests/test_autoprops.py" line="230" name="test_autoprops_signature_preserving" time="0.0017910003662109375"></testcase><testcase classname="autoclass.tests.test_autoprops" file="autoclass/tests/test_autoprops.py" line="252" name="test_autoprops_enforce_validate" time="0.013384819030761719"><system-out>Set surface to 12
 Set surface to 0.1
-</system-out></testcase><testcase classname="autoclass.tests.test_autoprops" file="autoclass/tests/test_autoprops.py" line="303" name="test_autoprops_enforce_default" time="0.005262136459350586"></testcase><testcase classname="autoclass.tests.test_readme" file="autoclass/tests/test_readme.py" line="6" name="test_readme_enforce_validate" time="0.014639139175415039"><system-out>Set surface to 12
+</system-out></testcase><testcase classname="autoclass.tests.test_autoprops" file="autoclass/tests/test_autoprops.py" line="303" name="test_autoprops_enforce_default" time="0.0072994232177734375"></testcase><testcase classname="autoclass.tests.test_readme" file="autoclass/tests/test_readme.py" line="6" name="test_readme_enforce_validate" time="0.018099069595336914"><system-out>Set surface to 12
 name: test
 surface: 12
 nb_floors: None
 with_windows: False
 Set surface to 1
-</system-out></testcase><testcase classname="autoclass.tests.test_readme" file="autoclass/tests/test_readme.py" line="69" name="test_readme_old_way" time="0.002208709716796875"></testcase><testcase classname="autoclass.tests.test_readme" file="autoclass/tests/test_readme.py" line="131" name="test_readme_pycontracts" time="0.033313751220703125"></testcase><testcase classname="autoclass.tests.test_readme" file="autoclass/tests/test_readme.py" line="166" name="test_readme_pytypes_validate" time="0.03481411933898926"><failure message="pytypes.exceptions.InputTypeError: 
-  classmethod autoclass.autodict.test_readme_pytypes_validate.&lt;locals&gt;.HouseConfiguration.from_dict
-  called with incompatible types:
-Expected: Tuple[Dict]
-Received: Tuple[Dict[str, Union[str, int]]]">def test_readme_pytypes_validate():
-        &quot;&quot;&quot; Makes sure that the code in the documentation page is correct for the pytypes + validate example &quot;&quot;&quot;
-    
-        from autoclass import autoclass, setter_override
-        from valid8 import Boolean, validate, minlens, gt
-        from numbers import Real, Integral
-        from typing import Optional
-    
-        # we use pytypes for this example
-        from pytypes import typechecked
-    
-        @typechecked
-        @autoclass
-        class HouseConfiguration(object):
-    
-            @validate(name=minlens(0),
-                      surface=gt(0))
-            def __init__(self,
-                         name: str,
-                         surface: Real,
-                         nb_floors: Optional[Integral] = 1,
-                         with_windows: Boolean = False):
-                pass
-    
-            # -- overriden setter for surface for custom validation or other things
-            @setter_override
-            def surface(self, surface):
-                print(&apos;Set surface to {}&apos;.format(surface))
-                self._surface = surface
-    
-        t = HouseConfiguration(&apos;test&apos;, 12, 2)
-    
-        # &apos;Optional&apos; works
-        t.nb_floors = None
-    
-        # Type validation works
-        from pytypes import InputTypeError
-        with pytest.raises(InputTypeError):
-            t.nb_floors = 2.2
-    
-        # Value validation works
-        with pytest.raises(ValidationError):
-            t.surface = -1
-    
-        # Value validation works in constructor
-        with pytest.raises(ValidationError):
-            HouseConfiguration(&apos;&apos;, 12, 2)
-    
-        # str and repr work
-        assert str(t) == repr(t)
-        # &quot;HouseConfiguration({&apos;nb_floors&apos;: None, &apos;with_windows&apos;: False, &apos;surface&apos;: 12, &apos;name&apos;: &apos;test&apos;})&quot;
-        # assert eval(repr(t)) == t does not work !
-    
-        # dict work
-        assert t == {&apos;name&apos;: &apos;test&apos;, &apos;nb_floors&apos;: None, &apos;surface&apos;: 12, &apos;with_windows&apos;: False}
-        assert t == dict(name=&apos;test&apos;, nb_floors=None, surface=12, with_windows=False)
-        t.keys()
-        for k, v in t.items():
-            print(str(k) + &apos;: &apos; + str(v))
-    
-        # TODO this is an open bug in pytypes https://github.com/Stewori/pytypes/issues/19
-&gt;       HouseConfiguration.from_dict({&apos;name&apos;: &apos;test2&apos;, &apos;surface&apos;: 1})
-
-autoclass/tests/test_readme.py:228: 
-_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
-../../../virtualenv/python3.5.4/lib/python3.5/site-packages/pytypes/typechecker.py:840: in checker_tp
-    prop_getter or auto_prop_getter, specs, bound_typevars=bound_typevars)
-../../../virtualenv/python3.5.4/lib/python3.5/site-packages/pytypes/typechecker.py:679: in _checkfunctype
-    _raise_typecheck_error(msg, False, check_val, tpch, argSig, func)
-_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
-
-msg = &apos;\n  classmethod autoclass.autodict.test_readme_pytypes_validate.&lt;locals&gt;.HouseConfiguration.from_dict\n  called with incompatible types:\nExpected: Tuple[Dict]\nReceived: Tuple[Dict[str, Union[str, int]]]&apos;
-is_return = False, value = ({&apos;name&apos;: &apos;test2&apos;, &apos;surface&apos;: 1},)
-received_type = typing.Tuple[typing.Dict[str, typing.Union[str, int]]]
-expected_type = typing.Tuple[typing.Dict]
-func = &lt;classmethod object at 0x7fa9d5519550&gt;
-
-    def _raise_typecheck_error(msg, is_return=False, value=None, received_type=None,
-                expected_type=None, func=None):
-        if pytypes.warning_mode:
-            import traceback
-            tb = traceback.extract_stack()
-            off = util._calc_traceback_list_offset(tb)
-            cat = pytypes.ReturnTypeWarning if is_return else pytypes.InputTypeWarning
-            warn_explicit(msg, cat, tb[off][0], tb[off][1])
-    # 		if not func is None:
-    # 			warn_explicit(msg, cat, func.__code__.co_filename,
-    # 					func.__code__.co_firstlineno, func.__module__)
-    # 		else:
-    # 			warn(msg, pytypes.ReturnTypeWarning)
-        else:
-            if is_return:
-                raise pytypes.ReturnTypeError(msg)
-            else:
-&gt;               raise pytypes.InputTypeError(msg)
-E               pytypes.exceptions.InputTypeError: 
-E                 classmethod autoclass.autodict.test_readme_pytypes_validate.&lt;locals&gt;.HouseConfiguration.from_dict
-E                 called with incompatible types:
-E               Expected: Tuple[Dict]
-E               Received: Tuple[Dict[str, Union[str, int]]]
-
-../../../virtualenv/python3.5.4/lib/python3.5/site-packages/pytypes/type_util.py:1681: InputTypeError</failure><system-out>Set surface to 12
-name: test
-surface: 12
-nb_floors: None
-with_windows: False
-</system-out></testcase><testcase classname="autoclass.tests.test_readme" file="autoclass/tests/test_readme.py" line="230" name="test_readme_usage_autoprops_validate" time="0.0030090808868408203"></testcase><testcase classname="autoclass.tests.test_readme" file="autoclass/tests/test_readme.py" line="249" name="test_readme_usage_autodict_1" time="0.004110097885131836"></testcase><testcase classname="autoclass.tests.test_readme" file="autoclass/tests/test_readme.py" line="288" name="test_readme_usage_autodict_2" time="0.003286123275756836"></testcase><testcase classname="autoclass.tests.test_readme" file="autoclass/tests/test_readme.py" line="304" name="test_readme_usage_autodict_3" time="0.002706289291381836"></testcase><testcase classname="autoclass.tests.test_readme" file="autoclass/tests/test_readme.py" line="323" name="test_readme_usage_autoclass" time="0.01368856430053711"></testcase><testcase classname="autoclass.tests.test_readme" file="autoclass/tests/test_readme.py" line="358" name="test_readme_usage_autoclass_custom" time="0.00953531265258789"></testcase></testsuite>
+</system-out></testcase><testcase classname="autoclass.tests.test_readme" file="autoclass/tests/test_readme.py" line="69" name="test_readme_old_way" time="0.0023679733276367188"></testcase><testcase classname="autoclass.tests.test_readme" file="autoclass/tests/test_readme.py" line="131" name="test_readme_pycontracts" time="0.03853011131286621"></testcase><testcase classname="autoclass.tests.test_readme" file="autoclass/tests/test_readme.py" line="166" name="test_readme_pytypes_validate" time="0.0009310245513916016"><skipped message="open bug in pytypes https://github.com/Stewori/pytypes/issues/19" type="pytest.skip">autoclass/tests/test_readme.py:166: &lt;py._xmlgen.raw object at 0x7fe0fd113860&gt;</skipped></testcase><testcase classname="autoclass.tests.test_readme" file="autoclass/tests/test_readme.py" line="231" name="test_readme_usage_autoprops_validate" time="0.005660057067871094"></testcase><testcase classname="autoclass.tests.test_readme" file="autoclass/tests/test_readme.py" line="250" name="test_readme_usage_autodict_1" time="0.004995107650756836"></testcase><testcase classname="autoclass.tests.test_readme" file="autoclass/tests/test_readme.py" line="289" name="test_readme_usage_autodict_2" time="0.0029485225677490234"></testcase><testcase classname="autoclass.tests.test_readme" file="autoclass/tests/test_readme.py" line="305" name="test_readme_usage_autodict_3" time="0.002191781997680664"></testcase><testcase classname="autoclass.tests.test_readme" file="autoclass/tests/test_readme.py" line="324" name="test_readme_usage_autoclass" time="0.013353586196899414"></testcase><testcase classname="autoclass.tests.test_readme" file="autoclass/tests/test_readme.py" line="359" name="test_readme_usage_autoclass_custom" time="0.010960102081298828"></testcase></testsuite>
