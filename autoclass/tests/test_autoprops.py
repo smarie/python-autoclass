@@ -299,3 +299,18 @@ def test_autoprops_enforce_validate():
     # Custom validation works
     with pytest.raises(ValidationError):
         t.surface = 0
+
+
+def test_autoprops_enforce_default():
+    """ Tests that the default value is also set in the setters if it is provided in the constructor """
+
+    from enforce import runtime_validation
+
+    @runtime_validation
+    @autoprops
+    class Foo:
+        def __init__(self, mandatory_field: str, optional_field: str = None):
+            pass
+
+    a = Foo('t')
+    a.optional_field = None  # raises RuntimeTypeError: Argument 'val' was not of type <class 'str'>. Actual type was NoneType.

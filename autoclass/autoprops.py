@@ -1,4 +1,4 @@
-from inspect import getmembers, signature
+from inspect import getmembers, signature, Parameter
 from typing import Type, Any, Tuple, Callable, Union, Optional
 from warnings import warn
 
@@ -107,8 +107,7 @@ def _execute_autoprops_on_class(object_type: Type[Any], include: Union[str, Tupl
     for attr_name in s.parameters.keys():
         if _sieve(attr_name, include=include, exclude=exclude):
             added.append(attr_name)
-            attr_type = s.parameters[attr_name]._annotation
-            _add_property(object_type, attr_name, attr_type,
+            _add_property(object_type, s.parameters[attr_name],
                           pycontract=(contracts_dict[attr_name] if attr_name in contracts_dict.keys() else None),
                           validators=(validators_dict[attr_name] if attr_name in validators_dict.keys() else None))
 
@@ -126,28 +125,27 @@ def _execute_autoprops_on_class(object_type: Type[Any], include: Union[str, Tupl
                              + extra_overrides[0][1].__qualname__)
 
 
-def _add_property(object_type: Type[Any], property_name: str, property_type: type, pycontract: Any = None,
-                  validators: Any = None):
+def _add_property(object_type: Type[Any], parameter: Parameter, pycontract: Any = None, validators: Any = None):
     """
     A method to dynamically add a property to a class with the optional given pycontract or validators.
     If the property getter and/or setter have been overridden, it is taken into account too.
 
     :param object_type: the class on which to execute.
-    :param property_name:
-    :param property_type:
+    :param parameter:
     :param pycontract:
     :param validators:
     :return:
     """
+    property_name = parameter.name
 
     # 1. create the private field name , e.g. '_foobar'
     private_property_name = '_' + property_name
 
     # 2. property getter (@property) - create or use overridden
-    getter_fun = _get_getter_fun(object_type, property_name, property_type, private_property_name)
+    getter_fun = _get_getter_fun(object_type, parameter, private_property_name)
 
     # 3. property setter (@property_name.setter) - create or use overridden
-    setter_fun, var_name = _get_setter_fun(object_type, property_name, property_type, private_property_name)
+    setter_fun, var_name = _get_setter_fun(object_type, parameter, private_property_name)
 
     # 4. add the contract to the setter, if any
     setter_fun_with_possible_contract = setter_fun
@@ -183,7 +181,17 @@ def _add_property(object_type: Type[Any], property_name: str, property_type: typ
     return
 
 
-def _get_getter_fun(object_type: Type, property_name: str, property_type: Optional[Type], private_property_name: str):
+def _has_annotation(annotation, value):
+    """ Returns a function that can be used as a predicate in get_members, that  """
+
+    def matches_property_name(fun):
+        """ return true if fun is a callable that has the correct annotation with value """
+        return callable(fun) and hasattr(fun, annotation) \
+               and getattr(fun, annotation) is value
+    return matches_property_name
+
+
+def _get_getter_fun(object_type: Type, parameter: Parameter, private_property_name: str):
     """
     Utility method to find the overridden getter function for a given property, or generate a new one
 
@@ -193,11 +201,11 @@ def _get_getter_fun(object_type: Type, property_name: str, property_type: Option
     :return:
     """
 
+    property_name = parameter.name
+
     # -- check overridden getter for this property name
-    overridden_getters = getmembers(object_type, predicate=(lambda fun: callable(fun)
-                                                                       and hasattr(fun, __GETTER_OVERRIDE_ANNOTATION)
-                                                                       and getattr(fun,
-                                                                                   __GETTER_OVERRIDE_ANNOTATION) is property_name))
+    overridden_getters = getmembers(object_type, predicate=_has_annotation(__GETTER_OVERRIDE_ANNOTATION, property_name))
+
     if len(overridden_getters) > 0:
         if len(overridden_getters) > 1:
             raise DuplicateOverrideError('Getter is overridden more than once for attribute name : ' + property_name)
@@ -228,12 +236,12 @@ def _get_getter_fun(object_type: Type, property_name: str, property_type: Option
         # getter_fun = generated_getter_fun
 
         getter_fun = lambda self: getattr(self, private_property_name)
-        getter_fun.__annotations__['return'] = property_type  # declare that we return a <type>
+        getter_fun.__annotations__['return'] = parameter.annotation  # add type hint to output declaration
 
     return getter_fun
 
 
-def _get_setter_fun(object_type: Type, property_name: str, property_type: Optional[Type], private_property_name: str):
+def _get_setter_fun(object_type: Type, parameter: Parameter, private_property_name: str):
     """
     Utility method to find the overridden setter function for a given property, or generate a new one
 
@@ -244,39 +252,52 @@ def _get_setter_fun(object_type: Type, property_name: str, property_type: Option
     :return:
     """
 
-    overridden_setters = getmembers(object_type, predicate=(lambda fun: callable(fun)
-                                                                       and hasattr(fun, __SETTER_OVERRIDE_ANNOTATION)
-                                                                       and getattr(fun,
-                                                                                   __SETTER_OVERRIDE_ANNOTATION) is property_name))
+    property_name = parameter.name
+
+    overridden_setters = getmembers(object_type, _has_annotation(__SETTER_OVERRIDE_ANNOTATION, property_name))
+
     if len(overridden_setters) > 0:
+        # --check that we only have one
         if len(overridden_setters) > 1:
             raise DuplicateOverrideError('Setter is overridden more than once for attribute name : ' + property_name)
 
         # --use the overridden setter
         setter_fun = overridden_setters[0][1]
+
         # --find the parameter name and check the signature
         s = signature(setter_fun)
         p = [attribute_name for attribute_name, param in s.parameters.items() if attribute_name is not 'self']
         if len(p) != 1:
             raise IllegalSetterSignatureException('overridden setter must have only 1 non-self argument, found ' +
-                                                  str(len(s.parameters.items()) - 1) + ' for function ' + str(
-                setter_fun.__qualname__))
+                                                  str(len(s.parameters.items()) - 1) + ' for function '
+                                                  + str(setter_fun.__qualname__))
         var_name = p[0]
+
     else:
-        # --create the setter :
+        # --create the setter, equivalent of:
         # @foobar.setter
         # def foobar(self, foobar):
         #     self.__foobar = foobar
+
+        # the setter function
         def generated_setter_fun(self, val):
             return setattr(self, private_property_name, val)
-        generated_setter_fun.__annotations__['val'] = property_type  # declare that we need a <type> as input
+
+        # remember the parameter name - we dont need to change it in the signature
+        var_name = 'val'
+
+        # add type hint annotation if provided
+        if parameter.annotation:
+            generated_setter_fun.__annotations__['val'] = parameter.annotation
+
+        # add default value if provided
+        if parameter.default is not Parameter.empty:
+            generated_setter_fun.__defaults__ = (parameter.default,)
 
         # other options (more complex) to fiddle with the signature :
         # http://stackoverflow.com/questions/18625510/how-can-i-programmatically-change-the-argspec-of-a-function-not-in-a-python-de
         # http://stackoverflow.com/questions/10303248/true-dynamic-and-anonymous-functions-possible-in-python
 
-        # remember the parameter name
-        var_name = 'val'
         setter_fun = generated_setter_fun
 
     return setter_fun, var_name
@@ -328,7 +349,7 @@ def _add_validators_to_setter(setter_fun, var_name, validators, property_name):
     # note: this is useless now but maybe one day validate will be another project ?
     try:
         # noinspection PyUnresolvedReferences
-        from valid8 import validate, validate_decorate
+        from valid8 import decorate_with_validators
     except ImportError:
         raise Exception('Use of _add_contract_to_setter requires that validate library is installed. Check that you can'
                         ' \'import validate\'')
@@ -342,7 +363,7 @@ def _add_validators_to_setter(setter_fun, var_name, validators, property_name):
         warn(msg)
 
     # -- add the generated contract
-    setter_fun_with_possible_contract = validate_decorate(setter_fun, **{var_name: validators})
+    setter_fun_with_validation = decorate_with_validators(setter_fun, **{var_name: validators})
 
     # # the only thing we can't do is to replace the function's parameter name dynamically in the validation error
     # #  messages so we wrap the function again to catch the potential pycontracts error :(
@@ -360,7 +381,7 @@ def _add_validators_to_setter(setter_fun, var_name, validators, property_name):
 
     # f = _contracts_parser_interceptor(f)
     # setter_fun_with_possible_contract = decorate(setter_fun_with_possible_contract, _contracts_parser_interceptor)
-    return setter_fun_with_possible_contract
+    return setter_fun_with_validation
 
 
 def getter_override(attribute:str = None):
