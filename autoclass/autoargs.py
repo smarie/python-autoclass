@@ -66,7 +66,7 @@ def autoargs_decorate(func: Callable, include: Union[str, Tuple[str]]=None, excl
     # attrs, varargs, varkw, defaults = getargspec(func)
     signature_attrs, signature_varargs, signature_varkw, signature_defaults, signature_kwonlyargs, \
     signature_kwonlydefaults, signature_annotations = getfullargspec(func)
-    # TODO better use signature(func) ?
+    # TODO better use signature(func) ? see how it's done in valid8
 
     # check that include/exclude dont contain names that are incorrect
     if include is not None:
