@@ -40,6 +40,7 @@ install:
 script:
 #  - coverage run tests.py
   - pip install .
+  - python -c "import os; os.chdir('..'); import autoclass"
 
 after_success:
 # ***tests***
