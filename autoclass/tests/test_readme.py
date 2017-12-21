@@ -164,6 +164,7 @@ def test_readme_pycontracts():
         t.surface = -1
 
 
+@pytest.mark.skip(reason="open bug in pytypes https://github.com/Stewori/pytypes/issues/19")
 def test_readme_pytypes_validate():
     """ Makes sure that the code in the documentation page is correct for the pytypes + validate example """
 
