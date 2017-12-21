@@ -1,3 +1,8 @@
+### 1.9.1 - a few fixes
+
+ * Now compliant with valid8 2.0.0
+ * Fixed #13: now generated setters have default values when it was the case on the constructor.
+
 ### 1.9.0 - valid8 is now an independent project
 
  * `Boolean`, `validate`, `validate_decorate` and all validators have been moved to an independent project, thus decoupling `autoclass` from the choice of validator library.
