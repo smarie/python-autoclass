@@ -228,7 +228,7 @@ function filter_table(elem) {
     not_found_message.hidden = !all_rows_hidden;
 }
 </script>
-    <p>Report generated on 21-Dec-2017 at 15:47:05 by<a href="https://pypi.python.org/pypi/pytest-html"> pytest-html</a> v1.16.0</p>
+    <p>Report generated on 21-Dec-2017 at 15:47:12 by<a href="https://pypi.python.org/pypi/pytest-html"> pytest-html</a> v1.16.0</p>
     <h2>Environment</h2>
     <table id="environment">
       <tr>
@@ -245,19 +245,19 @@ function filter_table(elem) {
         <td>Linux-4.4.0-101-generic-x86_64-with-debian-jessie-sid</td></tr>
       <tr>
         <td>Plugins</td>
-        <td>{&apos;html&apos;: &apos;1.16.0&apos;, &apos;logging&apos;: &apos;2015.11.4&apos;, &apos;metadata&apos;: &apos;1.5.1&apos;, &apos;cov&apos;: &apos;2.5.1&apos;}</td></tr>
+        <td>{&apos;cov&apos;: &apos;2.5.1&apos;, &apos;logging&apos;: &apos;2015.11.4&apos;, &apos;metadata&apos;: &apos;1.5.1&apos;, &apos;html&apos;: &apos;1.16.0&apos;}</td></tr>
       <tr>
         <td>Python</td>
         <td>3.5.4</td></tr>
       <tr>
         <td>TRAVIS_BRANCH</td>
-        <td>master</td></tr>
+        <td>1.9.1</td></tr>
       <tr>
         <td>TRAVIS_BUILD_ID</td>
-        <td>319772300</td></tr>
+        <td>319772140</td></tr>
       <tr>
         <td>TRAVIS_BUILD_NUMBER</td>
-        <td>71</td></tr>
+        <td>70</td></tr>
       <tr>
         <td>TRAVIS_COMMIT</td>
         <td>78be190d26a5a54679d16ab2829e202200dc2c8f</td></tr>
@@ -265,17 +265,14 @@ function filter_table(elem) {
         <td>TRAVIS_COMMIT_MESSAGE</td>
         <td>Updated changelog. Ready to tag 1.9.1</td></tr>
       <tr>
-        <td>TRAVIS_COMMIT_RANGE</td>
-        <td>d670cbd3790a...78be190d26a5</td></tr>
-      <tr>
         <td>TRAVIS_EVENT_TYPE</td>
         <td>push</td></tr>
       <tr>
         <td>TRAVIS_JOB_ID</td>
-        <td>319772301</td></tr>
+        <td>319772141</td></tr>
       <tr>
         <td>TRAVIS_JOB_NUMBER</td>
-        <td>71.1</td></tr>
+        <td>70.1</td></tr>
       <tr>
         <td>TRAVIS_OS_NAME</td>
         <td>linux</td></tr>
@@ -287,9 +284,12 @@ function filter_table(elem) {
         <td>smarie/python-autoclass</td></tr>
       <tr>
         <td>TRAVIS_SUDO</td>
-        <td>true</td></tr></table>
+        <td>true</td></tr>
+      <tr>
+        <td>TRAVIS_TAG</td>
+        <td>1.9.1</td></tr></table>
     <h2>Summary</h2>
-    <p>37 tests ran in 1.23 seconds. </p>
+    <p>37 tests ran in 1.77 seconds. </p>
     <p class="filter" hidden="true">(Un)check the boxes to filter the results.</p><input checked="true" class="filter" data-test-result="passed" hidden="true" name="filter_checkbox" onChange="filter_table(this)" type="checkbox"/><span class="passed">37 passed</span>, <input checked="true" class="filter" data-test-result="skipped" hidden="true" name="filter_checkbox" onChange="filter_table(this)" type="checkbox"/><span class="skipped">1 skipped</span>, <input checked="true" class="filter" data-test-result="failed" disabled="true" hidden="true" name="filter_checkbox" onChange="filter_table(this)" type="checkbox"/><span class="failed">0 failed</span>, <input checked="true" class="filter" data-test-result="error" disabled="true" hidden="true" name="filter_checkbox" onChange="filter_table(this)" type="checkbox"/><span class="error">0 errors</span>, <input checked="true" class="filter" data-test-result="xfailed" disabled="true" hidden="true" name="filter_checkbox" onChange="filter_table(this)" type="checkbox"/><span class="xfailed">0 expected failures</span>, <input checked="true" class="filter" data-test-result="xpassed" disabled="true" hidden="true" name="filter_checkbox" onChange="filter_table(this)" type="checkbox"/><span class="xpassed">0 unexpected passes</span>
     <h2>Results</h2>
     <table id="results-table">
@@ -309,7 +309,7 @@ function filter_table(elem) {
           <th>autoclass/tests/test_readme.py</th>
           <td>test_readme_pytypes_validate</td>
           <td> Makes sure that the code in the documentation page is correct for the pytypes + validate example </td>
-          <td class="col-duration">0.00</td>
+          <td class="col-duration">0.01</td>
           <td><a href="https://codecov.io/gh/smarie/python-autoclass/src/78be190d26a5a54679d16ab2829e202200dc2c8f/autoclass/tests/test_readme.py#L166">source</a></td></tr>
         <tr>
           <td class="extra" colspan="6">
@@ -426,7 +426,7 @@ function filter_table(elem) {
           <th>autoclass/tests/test_autoclass.py</th>
           <td>test_autoclass_enforce_validate_not_reversed</td>
           <td> Tests that if we reverse the annotations orders, it still works. Currently it fails </td>
-          <td class="col-duration">0.03</td>
+          <td class="col-duration">0.04</td>
           <td><a href="https://codecov.io/gh/smarie/python-autoclass/src/78be190d26a5a54679d16ab2829e202200dc2c8f/autoclass/tests/test_autoclass.py#L7">source</a></td></tr>
         <tr>
           <td class="extra" colspan="6">
@@ -449,7 +449,7 @@ function filter_table(elem) {
           <th>autoclass/tests/test_autoclass.py</th>
           <td>test_readme_pytypes</td>
           <td> Makes sure that the code in the documentation page is correct for the pytypes example </td>
-          <td class="col-duration">0.04</td>
+          <td class="col-duration">0.06</td>
           <td><a href="https://codecov.io/gh/smarie/python-autoclass/src/78be190d26a5a54679d16ab2829e202200dc2c8f/autoclass/tests/test_autoclass.py#L54">source</a></td></tr>
         <tr>
           <td class="extra" colspan="6">
@@ -533,7 +533,7 @@ function filter_table(elem) {
     @autopropsBasic functionality with PyContracts - if a `@contract` annotation exist on the `__init__` method,
     mentioning a contract for a given parameter, the parameter contract will be added on the generated setter method
     </td>
-          <td class="col-duration">0.27</td>
+          <td class="col-duration">0.42</td>
           <td><a href="https://codecov.io/gh/smarie/python-autoclass/src/78be190d26a5a54679d16ab2829e202200dc2c8f/autoclass/tests/test_autoprops.py#L27">source</a></td></tr>
         <tr>
           <td class="extra" colspan="6">
@@ -544,7 +544,7 @@ function filter_table(elem) {
           <th>autoclass/tests/test_autoprops.py</th>
           <td>test_autoprops_include</td>
           <td> @autoprops With pycontracts and explicit list of attributes to include </td>
-          <td class="col-duration">0.00</td>
+          <td class="col-duration">0.01</td>
           <td><a href="https://codecov.io/gh/smarie/python-autoclass/src/78be190d26a5a54679d16ab2829e202200dc2c8f/autoclass/tests/test_autoprops.py#L55">source</a></td></tr>
         <tr>
           <td class="extra" colspan="6">
@@ -555,7 +555,7 @@ function filter_table(elem) {
           <th>autoclass/tests/test_autoprops.py</th>
           <td>test_autoprops_exclude</td>
           <td> @autoprops With pycontracts and explicit list of attributes to exclude </td>
-          <td class="col-duration">0.00</td>
+          <td class="col-duration">0.03</td>
           <td><a href="https://codecov.io/gh/smarie/python-autoclass/src/78be190d26a5a54679d16ab2829e202200dc2c8f/autoclass/tests/test_autoprops.py#L78">source</a></td></tr>
         <tr>
           <td class="extra" colspan="6">
@@ -577,7 +577,7 @@ function filter_table(elem) {
           <th>autoclass/tests/test_autoprops.py</th>
           <td>test_autoprops_override</td>
           <td> @autoprops With Pycontracts. Tests that the user may override generated getter and a setter </td>
-          <td class="col-duration">0.01</td>
+          <td class="col-duration">0.02</td>
           <td><a href="https://codecov.io/gh/smarie/python-autoclass/src/78be190d26a5a54679d16ab2829e202200dc2c8f/autoclass/tests/test_autoprops.py#L111">source</a></td></tr>
         <tr>
           <td class="extra" colspan="6">
@@ -603,7 +603,7 @@ Property &#x27;b&#x27; was set to &#x27;[&#x27;eh&#x27;, &#x27;oh&#x27;]&#x27;
           <th>autoclass/tests/test_autoprops.py</th>
           <td>test_autoprops_manual</td>
           <td> @autoprops Tests the manual wrapper autoprops() </td>
-          <td class="col-duration">0.01</td>
+          <td class="col-duration">0.00</td>
           <td><a href="https://codecov.io/gh/smarie/python-autoclass/src/78be190d26a5a54679d16ab2829e202200dc2c8f/autoclass/tests/test_autoprops.py#L201">source</a></td></tr>
         <tr>
           <td class="extra" colspan="6">
@@ -625,7 +625,7 @@ Property &#x27;b&#x27; was set to &#x27;[&#x27;eh&#x27;, &#x27;oh&#x27;]&#x27;
           <th>autoclass/tests/test_autoprops.py</th>
           <td>test_autoprops_enforce_validate</td>
           <td> Makes sure that autoprops works with enforce AND validate </td>
-          <td class="col-duration">0.01</td>
+          <td class="col-duration">0.02</td>
           <td><a href="https://codecov.io/gh/smarie/python-autoclass/src/78be190d26a5a54679d16ab2829e202200dc2c8f/autoclass/tests/test_autoprops.py#L252">source</a></td></tr>
         <tr>
           <td class="extra" colspan="6">
@@ -677,7 +677,7 @@ Set surface to 1
           <th>autoclass/tests/test_readme.py</th>
           <td>test_readme_pycontracts</td>
           <td> Makes sure that the code in the documentation page is correct for the PyContracts example </td>
-          <td class="col-duration">0.04</td>
+          <td class="col-duration">0.05</td>
           <td><a href="https://codecov.io/gh/smarie/python-autoclass/src/78be190d26a5a54679d16ab2829e202200dc2c8f/autoclass/tests/test_readme.py#L131">source</a></td></tr>
         <tr>
           <td class="extra" colspan="6">
@@ -688,7 +688,7 @@ Set surface to 1
           <th>autoclass/tests/test_readme.py</th>
           <td>test_readme_usage_autoprops_validate</td>
           <td>None</td>
-          <td class="col-duration">0.00</td>
+          <td class="col-duration">0.01</td>
           <td><a href="https://codecov.io/gh/smarie/python-autoclass/src/78be190d26a5a54679d16ab2829e202200dc2c8f/autoclass/tests/test_readme.py#L231">source</a></td></tr>
         <tr>
           <td class="extra" colspan="6">
@@ -699,7 +699,7 @@ Set surface to 1
           <th>autoclass/tests/test_readme.py</th>
           <td>test_readme_usage_autodict_1</td>
           <td> basic autodict without and with autoargs </td>
-          <td class="col-duration">0.00</td>
+          <td class="col-duration">0.01</td>
           <td><a href="https://codecov.io/gh/smarie/python-autoclass/src/78be190d26a5a54679d16ab2829e202200dc2c8f/autoclass/tests/test_readme.py#L250">source</a></td></tr>
         <tr>
           <td class="extra" colspan="6">
@@ -732,7 +732,7 @@ Set surface to 1
           <th>autoclass/tests/test_readme.py</th>
           <td>test_readme_usage_autoclass</td>
           <td>None</td>
-          <td class="col-duration">0.01</td>
+          <td class="col-duration">0.02</td>
           <td><a href="https://codecov.io/gh/smarie/python-autoclass/src/78be190d26a5a54679d16ab2829e202200dc2c8f/autoclass/tests/test_readme.py#L324">source</a></td></tr>
         <tr>
           <td class="extra" colspan="6">
