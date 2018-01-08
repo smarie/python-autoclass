@@ -228,7 +228,7 @@ function filter_table(elem) {
     not_found_message.hidden = !all_rows_hidden;
 }
 </script>
-    <p>Report generated on 08-Jan-2018 at 16:45:50 by<a href="https://pypi.python.org/pypi/pytest-html"> pytest-html</a> v1.16.1</p>
+    <p>Report generated on 08-Jan-2018 at 17:55:05 by<a href="https://pypi.python.org/pypi/pytest-html"> pytest-html</a> v1.16.1</p>
     <h2>Environment</h2>
     <table id="environment">
       <tr>
@@ -245,7 +245,7 @@ function filter_table(elem) {
         <td>Linux-4.4.0-101-generic-x86_64-with-debian-jessie-sid</td></tr>
       <tr>
         <td>Plugins</td>
-        <td>{&apos;logging&apos;: &apos;2015.11.4&apos;, &apos;cov&apos;: &apos;2.5.1&apos;, &apos;metadata&apos;: &apos;1.5.1&apos;, &apos;html&apos;: &apos;1.16.1&apos;}</td></tr>
+        <td>{&apos;metadata&apos;: &apos;1.5.1&apos;, &apos;html&apos;: &apos;1.16.1&apos;, &apos;logging&apos;: &apos;2015.11.4&apos;, &apos;cov&apos;: &apos;2.5.1&apos;}</td></tr>
       <tr>
         <td>Python</td>
         <td>3.5.4</td></tr>
@@ -289,7 +289,7 @@ function filter_table(elem) {
         <td>TRAVIS_TAG</td>
         <td>1.9.2</td></tr></table>
     <h2>Summary</h2>
-    <p>43 tests ran in 1.89 seconds. </p>
+    <p>43 tests ran in 1.36 seconds. </p>
     <p class="filter" hidden="true">(Un)check the boxes to filter the results.</p><input checked="true" class="filter" data-test-result="passed" hidden="true" name="filter_checkbox" onChange="filter_table(this)" type="checkbox"/><span class="passed">42 passed</span>, <input checked="true" class="filter" data-test-result="skipped" hidden="true" name="filter_checkbox" onChange="filter_table(this)" type="checkbox"/><span class="skipped">1 skipped</span>, <input checked="true" class="filter" data-test-result="failed" hidden="true" name="filter_checkbox" onChange="filter_table(this)" type="checkbox"/><span class="failed">1 failed</span>, <input checked="true" class="filter" data-test-result="error" disabled="true" hidden="true" name="filter_checkbox" onChange="filter_table(this)" type="checkbox"/><span class="error">0 errors</span>, <input checked="true" class="filter" data-test-result="xfailed" disabled="true" hidden="true" name="filter_checkbox" onChange="filter_table(this)" type="checkbox"/><span class="xfailed">0 expected failures</span>, <input checked="true" class="filter" data-test-result="xpassed" disabled="true" hidden="true" name="filter_checkbox" onChange="filter_table(this)" type="checkbox"/><span class="xpassed">0 unexpected passes</span>
     <h2>Results</h2>
     <table id="results-table">
@@ -313,7 +313,7 @@ function filter_table(elem) {
           <td><a href="https://codecov.io/gh/smarie/python-autoclass/src/6641fa5b635c052bf1e0da0d99599609d0271e63/autoclass/tests/test_readme.py#L324">source</a></td></tr>
         <tr>
           <td class="extra" colspan="6">
-            <div class="log">def test_readme_usage_autohash_1():<br/>        @autohash<br/>        class A(object):<br/>            def __init__(self, a: int, b: str):<br/>                self.a = a<br/>                self.b = b<br/>    <br/>        o = A(1, &#x27;r&#x27;)<br/>        o._test = 2<br/>    <br/>        # o is hashable<br/>&gt;       assert hash(o) == hash((1, &#x27;r&#x27;, 2))<br/><span class="error">E       AssertionError: assert 6388369767849508386 == -5662002483674037364</span><br/><span class="error">E        +  where 6388369767849508386 = hash(&lt;autoclass.tests.test_readme.test_readme_usage_autohash_1.&lt;locals&gt;.A object at 0x7fec10e9fc88&gt;)</span><br/><span class="error">E        +  and   -5662002483674037364 = hash((1, &#x27;r&#x27;, 2))</span><br/><br/>autoclass/tests/test_readme.py:336: AssertionError<br/></div></td></tr></tbody>
+            <div class="log">def test_readme_usage_autohash_1():<br/>        @autohash<br/>        class A(object):<br/>            def __init__(self, a: int, b: str):<br/>                self.a = a<br/>                self.b = b<br/>    <br/>        o = A(1, &#x27;r&#x27;)<br/>        o._test = 2<br/>    <br/>        # o is hashable<br/>&gt;       assert hash(o) == hash((1, &#x27;r&#x27;, 2))<br/><span class="error">E       AssertionError: assert -6893878402920678636 == 4470611587436074644</span><br/><span class="error">E        +  where -6893878402920678636 = hash(&lt;autoclass.tests.test_readme.test_readme_usage_autohash_1.&lt;locals&gt;.A object at 0x7f89e87aa048&gt;)</span><br/><span class="error">E        +  and   4470611587436074644 = hash((1, &#x27;r&#x27;, 2))</span><br/><br/>autoclass/tests/test_readme.py:336: AssertionError<br/></div></td></tr></tbody>
       <tbody class="skipped results-table-row">
         <tr>
           <td class="col-result">Skipped</td>
@@ -437,7 +437,7 @@ function filter_table(elem) {
           <th>autoclass/tests/test_autoclass.py</th>
           <td>test_autoclass_enforce_validate_not_reversed</td>
           <td> Tests that if we reverse the annotations orders, it still works. Currently it fails </td>
-          <td class="col-duration">0.03</td>
+          <td class="col-duration">0.02</td>
           <td><a href="https://codecov.io/gh/smarie/python-autoclass/src/6641fa5b635c052bf1e0da0d99599609d0271e63/autoclass/tests/test_autoclass.py#L7">source</a></td></tr>
         <tr>
           <td class="extra" colspan="6">
@@ -460,7 +460,7 @@ function filter_table(elem) {
           <th>autoclass/tests/test_autoclass.py</th>
           <td>test_readme_pytypes</td>
           <td> Makes sure that the code in the documentation page is correct for the pytypes example </td>
-          <td class="col-duration">0.06</td>
+          <td class="col-duration">0.04</td>
           <td><a href="https://codecov.io/gh/smarie/python-autoclass/src/6641fa5b635c052bf1e0da0d99599609d0271e63/autoclass/tests/test_autoclass.py#L54">source</a></td></tr>
         <tr>
           <td class="extra" colspan="6">
@@ -482,7 +482,7 @@ function filter_table(elem) {
           <th>autoclass/tests/test_autodict.py</th>
           <td>test_autodict[only_constructor_args-only_public]</td>
           <td> @autodict functionality with various customization options for only_constructor_args/only_public_fields </td>
-          <td class="col-duration">0.01</td>
+          <td class="col-duration">0.00</td>
           <td><a href="https://codecov.io/gh/smarie/python-autoclass/src/6641fa5b635c052bf1e0da0d99599609d0271e63/autoclass/tests/test_autodict.py#L6">source</a></td></tr>
         <tr>
           <td class="extra" colspan="6">
@@ -493,7 +493,7 @@ function filter_table(elem) {
           <th>autoclass/tests/test_autodict.py</th>
           <td>test_autodict[only_constructor_args-including class-private dunder fields]</td>
           <td> @autodict functionality with various customization options for only_constructor_args/only_public_fields </td>
-          <td class="col-duration">0.01</td>
+          <td class="col-duration">0.00</td>
           <td><a href="https://codecov.io/gh/smarie/python-autoclass/src/6641fa5b635c052bf1e0da0d99599609d0271e63/autoclass/tests/test_autodict.py#L6">source</a></td></tr>
         <tr>
           <td class="extra" colspan="6">
@@ -584,7 +584,7 @@ function filter_table(elem) {
     @autopropsBasic functionality with PyContracts - if a `@contract` annotation exist on the `__init__` method,
     mentioning a contract for a given parameter, the parameter contract will be added on the generated setter method
     </td>
-          <td class="col-duration">0.42</td>
+          <td class="col-duration">0.31</td>
           <td><a href="https://codecov.io/gh/smarie/python-autoclass/src/6641fa5b635c052bf1e0da0d99599609d0271e63/autoclass/tests/test_autoprops.py#L27">source</a></td></tr>
         <tr>
           <td class="extra" colspan="6">
@@ -606,7 +606,7 @@ function filter_table(elem) {
           <th>autoclass/tests/test_autoprops.py</th>
           <td>test_autoprops_exclude</td>
           <td> @autoprops With pycontracts and explicit list of attributes to exclude </td>
-          <td class="col-duration">0.01</td>
+          <td class="col-duration">0.00</td>
           <td><a href="https://codecov.io/gh/smarie/python-autoclass/src/6641fa5b635c052bf1e0da0d99599609d0271e63/autoclass/tests/test_autoprops.py#L78">source</a></td></tr>
         <tr>
           <td class="extra" colspan="6">
@@ -643,7 +643,7 @@ Property &#x27;b&#x27; was set to &#x27;[&#x27;eh&#x27;, &#x27;oh&#x27;]&#x27;
           <td>test_autoprops_override_exceptions</td>
           <td> @autoprops Asserts that the user can not override a generated method if the overriden method has a wrong
     signature </td>
-          <td class="col-duration">0.01</td>
+          <td class="col-duration">0.00</td>
           <td><a href="https://codecov.io/gh/smarie/python-autoclass/src/6641fa5b635c052bf1e0da0d99599609d0271e63/autoclass/tests/test_autoprops.py#L156">source</a></td></tr>
         <tr>
           <td class="extra" colspan="6">
@@ -654,7 +654,7 @@ Property &#x27;b&#x27; was set to &#x27;[&#x27;eh&#x27;, &#x27;oh&#x27;]&#x27;
           <th>autoclass/tests/test_autoprops.py</th>
           <td>test_autoprops_manual</td>
           <td> @autoprops Tests the manual wrapper autoprops() </td>
-          <td class="col-duration">0.01</td>
+          <td class="col-duration">0.00</td>
           <td><a href="https://codecov.io/gh/smarie/python-autoclass/src/6641fa5b635c052bf1e0da0d99599609d0271e63/autoclass/tests/test_autoprops.py#L201">source</a></td></tr>
         <tr>
           <td class="extra" colspan="6">
@@ -700,7 +700,7 @@ Set surface to 0.1
           <th>autoclass/tests/test_readme.py</th>
           <td>test_readme_enforce_validate</td>
           <td> Makes sure that the code in the documentation page is correct for the enforce + validate example </td>
-          <td class="col-duration">0.02</td>
+          <td class="col-duration">0.01</td>
           <td><a href="https://codecov.io/gh/smarie/python-autoclass/src/6641fa5b635c052bf1e0da0d99599609d0271e63/autoclass/tests/test_readme.py#L6">source</a></td></tr>
         <tr>
           <td class="extra" colspan="6">
@@ -739,7 +739,7 @@ Set surface to 1
           <th>autoclass/tests/test_readme.py</th>
           <td>test_readme_usage_autoprops_validate</td>
           <td>None</td>
-          <td class="col-duration">0.01</td>
+          <td class="col-duration">0.00</td>
           <td><a href="https://codecov.io/gh/smarie/python-autoclass/src/6641fa5b635c052bf1e0da0d99599609d0271e63/autoclass/tests/test_readme.py#L231">source</a></td></tr>
         <tr>
           <td class="extra" colspan="6">
@@ -772,7 +772,7 @@ Set surface to 1
           <th>autoclass/tests/test_readme.py</th>
           <td>test_readme_usage_autodict_3</td>
           <td>None</td>
-          <td class="col-duration">0.00</td>
+          <td class="col-duration">0.01</td>
           <td><a href="https://codecov.io/gh/smarie/python-autoclass/src/6641fa5b635c052bf1e0da0d99599609d0271e63/autoclass/tests/test_readme.py#L305">source</a></td></tr>
         <tr>
           <td class="extra" colspan="6">
