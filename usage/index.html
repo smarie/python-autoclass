@@ -263,6 +263,13 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#autohash" title="@autohash" class="md-nav__link">
+    @autohash
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#autoclass" title="@autoclass" class="md-nav__link">
     @autoclass
   </a>
@@ -334,6 +341,13 @@
         <li class="md-nav__item">
   <a href="#autodict" title="@autodict" class="md-nav__link">
     @autodict
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#autohash" title="@autohash" class="md-nav__link">
+    @autohash
   </a>
   
 </li>
@@ -477,6 +491,7 @@
 </pre></div>
 
 
+<p>Finally note that <code>@autoargs</code> is automatically applied when you decorate the whole class with <code>@autoclass</code>, see below.</p>
 <h2 id="autoprops">@autoprops<a class="headerlink" href="#autoprops" title="Permanent link">&para;</a></h2>
 <p>Automatically generates all properties getters and setters from the class constructor.</p>
 <ul>
@@ -630,13 +645,15 @@ them with <code>@getter_override</code> or <code>@setter_override</code>. Note t
 </pre></div>
 
 
+<p>Finally note that <code>@autoprops</code> is automatically applied when you decorate the whole class with <code>@autoclass</code>, see below.</p>
 <h2 id="autodict">@autodict<a class="headerlink" href="#autodict" title="Permanent link">&para;</a></h2>
-<p>Automatically generates a read-only dictionary view on top of the object.It does three things:</p>
+<p>Automatically generates a read-only dictionary view on top of the object. It does several things:</p>
 <ul>
 <li>it adds <code>collections.Mapping</code> to the list of parent classes (i.e. to the class' <code>__bases__</code>)</li>
 <li>it generates <code>__len__</code>, <code>__iter__</code> and <code>__getitem__</code> in order for the appropriate fields to be exposed in the dict view. Parameters allow to customize the list of fields that will be visible. Note that any methods with the same name will be overridden.</li>
 <li>if <code>only_constructor_args</code> is <code>True</code> (default), it generates a static <code>from_dict</code> method in the class corresponding to a call to the constructor with the unfolded dict. Note that this method may be overridden by the user.</li>
 <li>if <code>__eq__</code> is not implemented on this class, it generates a version that handles the case <code>self == other</code> where other is of the same type. In that case the dictionary equality is used. Other equality tests remain unchanged.</li>
+<li>if <code>__str__</code> is not implemented on this class, it generates it too.</li>
 </ul>
 <p>Examples:</p>
 <ul>
@@ -698,7 +715,7 @@ them with <code>@getter_override</code> or <code>@setter_override</code>. Note t
 
 
 <ul>
-<li>You can decide to open to all object fields, including or excluding (default) the class-private ones. Note that class-private attributes will be visible with their usual scrambled name:</li>
+<li>You can decide to open to all object fields, including or excluding (default) the fields that are not arguments of the constructor, and including or excluding (default) the class-private ones. Note that class-private attributes will be visible with their usual scrambled name:</li>
 </ul>
 <div class="codehilite"><pre><span></span><span class="nd">@autodict</span><span class="p">(</span><span class="n">only_constructor_args</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span> <span class="n">only_public_fields</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>
 <span class="k">class</span> <span class="nc">D</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
@@ -731,11 +748,74 @@ them with <code>@getter_override</code> or <code>@setter_override</code>. Note t
 </pre></div>
 
 
+<p>Finally note that <code>@autodict</code> is automatically applied when you decorate the whole class with <code>@autoclass</code>, see below.</p>
+<h2 id="autohash">@autohash<a class="headerlink" href="#autohash" title="Permanent link">&para;</a></h2>
+<p>A decorator to makes objects of the class implement <strong>hash</strong>, so that they can be used correctly for example in sets. Parameters allow to customize the list of attributes that are taken into account in the hash.</p>
+<p>Examples:</p>
 <ul>
-<li>Note: as for all features in this library, you may also perform the same action without decorator, using <code>autodict_decorate(cls)</code>. See <a href="../alternative-to-decorators-manual-function-wrappers">here</a></li>
+<li>Basic functionality, no customization - all object fields are used in the hash: </li>
 </ul>
+<div class="codehilite"><pre><span></span><span class="nd">@autohash</span>
+<span class="k">class</span> <span class="nc">A</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">a</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">b</span><span class="p">:</span> <span class="nb">str</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">a</span> <span class="o">=</span> <span class="n">a</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">b</span> <span class="o">=</span> <span class="n">b</span>
+
+<span class="n">o</span> <span class="o">=</span> <span class="n">A</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="s1">&#39;r&#39;</span><span class="p">)</span>
+<span class="n">o</span><span class="o">.</span><span class="n">_test</span> <span class="o">=</span> <span class="mi">2</span>
+
+<span class="c1"># o is hashable</span>
+<span class="k">assert</span> <span class="nb">hash</span><span class="p">(</span><span class="n">o</span><span class="p">)</span> <span class="o">==</span> <span class="nb">hash</span><span class="p">((</span><span class="mi">1</span><span class="p">,</span> <span class="s1">&#39;r&#39;</span><span class="p">,</span> <span class="mi">2</span><span class="p">))</span>
+
+<span class="n">p</span> <span class="o">=</span> <span class="n">A</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="s1">&#39;r&#39;</span><span class="p">)</span>
+<span class="n">p</span><span class="o">.</span><span class="n">_test</span> <span class="o">=</span> <span class="mi">2</span>
+<span class="c1"># o and p have identical hash</span>
+<span class="k">assert</span> <span class="nb">hash</span><span class="p">(</span><span class="n">o</span><span class="p">)</span> <span class="o">==</span> <span class="nb">hash</span><span class="p">(</span><span class="n">p</span><span class="p">)</span>
+
+<span class="c1"># dynamic and private fields are taken into account by default</span>
+<span class="n">p</span><span class="o">.</span><span class="n">_test</span> <span class="o">=</span> <span class="mi">3</span>
+<span class="k">assert</span> <span class="nb">hash</span><span class="p">(</span><span class="n">o</span><span class="p">)</span> <span class="o">!=</span> <span class="nb">hash</span><span class="p">(</span><span class="n">p</span><span class="p">)</span>
+</pre></div>
+
+
+<ul>
+<li>You can decide to restrict the hash to only the fields that are constructor arguments, or to only the fields that are public:</li>
+</ul>
+<div class="codehilite"><pre><span></span><span class="kn">from</span> <span class="nn">random</span> <span class="kn">import</span> <span class="n">random</span>
+
+<span class="nd">@autohash</span><span class="p">(</span><span class="n">only_constructor_args</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="n">only_public_fields</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+<span class="k">class</span> <span class="nc">D</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+    <span class="nd">@autoargs</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">a</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">_b</span><span class="p">:</span> <span class="nb">str</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">non_constructor_arg</span> <span class="o">=</span> <span class="n">random</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_private</span> <span class="o">=</span> <span class="n">random</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__class_private</span> <span class="o">=</span> <span class="n">random</span><span class="p">()</span>
+
+<span class="n">o</span> <span class="o">=</span> <span class="n">D</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="s1">&#39;r&#39;</span><span class="p">)</span>
+<span class="n">p</span> <span class="o">=</span> <span class="n">D</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="s1">&#39;r&#39;</span><span class="p">)</span>
+
+<span class="c1"># o and p have the same hash because only the constructor arguments are taken into account</span>
+<span class="k">assert</span> <span class="nb">hash</span><span class="p">(</span><span class="n">o</span><span class="p">)</span> <span class="o">==</span> <span class="nb">hash</span><span class="p">(</span><span class="n">p</span><span class="p">)</span>
+<span class="k">assert</span> <span class="nb">hash</span><span class="p">(</span><span class="n">o</span><span class="p">)</span> <span class="o">==</span> <span class="nb">hash</span><span class="p">((</span><span class="mi">1</span><span class="p">,</span> <span class="s1">&#39;r&#39;</span><span class="p">))</span>
+</pre></div>
+
+
+<ul>
+<li>In addition, you can include or exclude some names in the list of visible fields with one of <code>include</code> or <code>exclude</code>:</li>
+</ul>
+<div class="codehilite"><pre><span></span><span class="nd">@autohash</span><span class="p">(</span><span class="n">include</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;a&#39;</span><span class="p">,</span> <span class="s1">&#39;b&#39;</span><span class="p">],</span> <span class="o">...</span><span class="p">)</span>
+<span class="k">class</span> <span class="nc">Foo</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+    <span class="o">...</span>
+
+<span class="nd">@autohash</span><span class="p">(</span><span class="n">exclude</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;b&#39;</span><span class="p">],</span> <span class="o">...</span><span class="p">)</span>
+<span class="k">class</span> <span class="nc">Bar</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+    <span class="o">...</span>
+</pre></div>
+
+
+<p>Finally note that <code>@autohash</code> is automatically applied when you decorate the whole class with <code>@autoclass</code>, see below.</p>
 <h2 id="autoclass">@autoclass<a class="headerlink" href="#autoclass" title="Permanent link">&para;</a></h2>
-<p>Applies all or part of the above at once. Useful if you want to make the most from this library.</p>
+<p>Applies all or part of the above decorators at once. Useful if you want to make the most from this library.</p>
 <ul>
 <li>Basic functionality, no customization - all constructor arguments become properties that are auto-assigned in constructor, and the object behaves like a dict and can be created from a dict: </li>
 </ul>
