@@ -5,7 +5,7 @@ from autoclass.autoprops import autoprops_decorate
 from autoclass.autodict import autodict_decorate
 from autoclass.utils_reflexion import get_constructor
 from autoclass.utils_decoration import _create_class_decorator__robust_to_args
-from autoclass.autohash import autohash_decorate
+from autohash import autohash_decorate
 
 
 def autoclass(include: Union[str, Tuple[str]]=None, exclude: Union[str, Tuple[str]]=None,
