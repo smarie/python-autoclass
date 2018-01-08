@@ -4,7 +4,10 @@
 
 `autoclass` provides tools to automatically generate classes code, such as **constructor body** or **properties getters/setters**, along with optional support of **validation contracts**. It also provides extra goodies such as **a dict view on top of objects** (the opposite of munch), and more.
 
-The objective of this library is to reduce the amount of redundancy by automatically generating parts of the code from the information already available somewhere else (typically, in the constructor signature). The intent is similar to [attrs](https://github.com/python-attrs/attrs): remove boilerplate.
+The objective of this library is to reduce the amount of redundancy by automatically generating parts of the code from the information already available somewhere else (typically, in the constructor signature). 
+
+The intent is similar to [attrs](https://github.com/python-attrs/attrs): remove boilerplate. However as opposed to `attrs`, this library does not change anything in your coding habits: you still create a `__init__` constructor. `autoclass` simply generates most of the code that you would have written manually. For this reason, it is very compliant with other libraries out there - such as type checking or validation libraries.
+
 
 ## Installing
 
@@ -27,6 +30,12 @@ You may wish to also install
 ```
 
 ## Example usage
+
+### With valid8 for both type and value checking
+
+
+
+### With enforce for type checking and valid8 for value checking
 
 The following snippet shows a `HouseConfiguration` class with four attributes.
 Each attribute is validated against the expected type everytime you try to set it (constructor AND modifications), and the `name` and `surface` attributes are further validated (`len(name) > 0` and `surface >= 0`). Notice the size of the resulting code !
@@ -74,9 +83,11 @@ HouseConfiguration('', 12, 2)  # Value validation: @validate > ValidationError
 
 Note that the `Real` and `Integral` types come from the [`numbers`](https://docs.python.org/3.6/library/numbers.html) built-in module. They provide an easy way to support both python primitives AND e.g. numpy primitives. In this library we provide an additional `Boolean` class to complete the picture.
 
+### Goodies
+
 In addition some goodies are activated by default such as 
 
-* a string representation:
+ * a string representation:
 
 ```python
 str(t)
@@ -92,7 +103,7 @@ HouseConfiguration({'nb_floors': None,
                     'name': 'test'})
 ```
 
-* a dictionary view on top of the object, a `from_dict` class method, and a dict-based equality function:
+ * a dictionary view on top of the object, a `from_dict` class method, and a dict-based equality function:
 
 ```python
 # use objects as dicts
@@ -106,6 +117,9 @@ HouseConfiguration.from_dict({'name': 'test2', 'surface': 1})
 # compare objects as dicts
 assert t == dict(name='test', nb_floors=None, surface=12, with_windows=False)
 ```
+
+ * a hash value based on the tuple of field values
+
 
 Check the [Usage](./usage/) page for more details.
 

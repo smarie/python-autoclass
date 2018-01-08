@@ -105,6 +105,8 @@ print(a.baz)  # raises AttributeError
 print(a.verbose)  # raises AttributeError
 ```
 
+Finally note that `@autoargs` is automatically applied when you decorate the whole class with `@autoclass`, see below.
+
 
 ## @autoprops
 
@@ -256,14 +258,18 @@ t.a = ''  # raises ContractNotRespected
 t.b = ['r','']  # raises ContractNotRespected
 ```
 
+Finally note that `@autoprops` is automatically applied when you decorate the whole class with `@autoclass`, see below.
+
+
 ## @autodict
 
-Automatically generates a read-only dictionary view on top of the object.It does three things:
+Automatically generates a read-only dictionary view on top of the object. It does several things:
 
 * it adds `collections.Mapping` to the list of parent classes (i.e. to the class' `__bases__`)
 * it generates `__len__`, `__iter__` and `__getitem__` in order for the appropriate fields to be exposed in the dict view. Parameters allow to customize the list of fields that will be visible. Note that any methods with the same name will be overridden.
 * if `only_constructor_args` is `True` (default), it generates a static `from_dict` method in the class corresponding to a call to the constructor with the unfolded dict. Note that this method may be overridden by the user.
 * if `__eq__` is not implemented on this class, it generates a version that handles the case `self == other` where other is of the same type. In that case the dictionary equality is used. Other equality tests remain unchanged.
+* if `__str__` is not implemented on this class, it generates it too.
 
 Examples:
 
@@ -322,7 +328,7 @@ o = C(1, 'r')
 assert o == {'a': 1, 'b': 'r'}
 ```
 
-* You can decide to open to all object fields, including or excluding (default) the class-private ones. Note that class-private attributes will be visible with their usual scrambled name:
+* You can decide to open to all object fields, including or excluding (default) the fields that are not arguments of the constructor, and including or excluding (default) the class-private ones. Note that class-private attributes will be visible with their usual scrambled name:
 
 ```python
 @autodict(only_constructor_args=False, only_public_fields=False)
@@ -354,12 +360,79 @@ class Bar(object):
     ...
 ```
 
-* Note: as for all features in this library, you may also perform the same action without decorator, using `autodict_decorate(cls)`. See [here](./alternative-to-decorators-manual-function-wrappers)
+Finally note that `@autodict` is automatically applied when you decorate the whole class with `@autoclass`, see below.
+
+
+## @autohash
+
+A decorator to makes objects of the class implement __hash__, so that they can be used correctly for example in sets. Parameters allow to customize the list of attributes that are taken into account in the hash.
+
+Examples:
+
+* Basic functionality, no customization - all object fields are used in the hash: 
+
+```python
+@autohash
+class A(object):
+    def __init__(self, a: int, b: str):
+        self.a = a
+        self.b = b
+
+o = A(1, 'r')
+o._test = 2
+
+# o is hashable
+assert hash(o) == hash((1, 'r', 2))
+
+p = A(1, 'r')
+p._test = 2
+# o and p have identical hash
+assert hash(o) == hash(p)
+
+# dynamic and private fields are taken into account by default
+p._test = 3
+assert hash(o) != hash(p)
+```
+
+* You can decide to restrict the hash to only the fields that are constructor arguments, or to only the fields that are public:
+
+```python
+from random import random
+
+@autohash(only_constructor_args=True, only_public_fields=True)
+class D(object):
+    @autoargs
+    def __init__(self, a: str, _b: str):
+        self.non_constructor_arg = random()
+        self._private = random()
+        self.__class_private = random()
+
+o = D(1, 'r')
+p = D(1, 'r')
+
+# o and p have the same hash because only the constructor arguments are taken into account
+assert hash(o) == hash(p)
+assert hash(o) == hash((1, 'r'))
+``` 
+
+* In addition, you can include or exclude some names in the list of visible fields with one of `include` or `exclude`:
+
+```python
+@autohash(include=['a', 'b'], ...)
+class Foo(object):
+    ...
+
+@autohash(exclude=['b'], ...)
+class Bar(object):
+    ...
+```
+
+Finally note that `@autohash` is automatically applied when you decorate the whole class with `@autoclass`, see below.
 
 
 ## @autoclass
 
-Applies all or part of the above at once. Useful if you want to make the most from this library.
+Applies all or part of the above decorators at once. Useful if you want to make the most from this library.
 
 * Basic functionality, no customization - all constructor arguments become properties that are auto-assigned in constructor, and the object behaves like a dict and can be created from a dict: 
 

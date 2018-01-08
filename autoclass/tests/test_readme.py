@@ -1,5 +1,5 @@
 import pytest
-from autoclass import autoargs, autoprops, setter_override, autodict, autoclass
+from autoclass import autoargs, autoprops, setter_override, autodict, autoclass, autohash
 from typing import List, Tuple, Dict, Any
 from valid8 import Boolean, minlens, validate, ValidationError, gt, is_in, minlen
 
@@ -320,6 +320,49 @@ def test_readme_usage_autodict_3():
                  'non_constructor_arg': 'b',
                  '_private': 1,
                  '_D__class_private': 't'}  # notice the name
+
+
+def test_readme_usage_autohash_1():
+    @autohash
+    class A(object):
+        def __init__(self, a: int, b: str):
+            self.a = a
+            self.b = b
+
+    o = A(1, 'r')
+    o._test = 2
+
+    # o is hashable
+    assert hash(o) == hash((1, 'r', 2))
+
+    p = A(1, 'r')
+    p._test = 2
+    # o and p have identical hash
+    assert hash(o) == hash(p)
+
+    # dynamic and private fields are taken into account by default
+    p._test = 3
+    assert hash(o) != hash(p)
+
+
+def test_readme_usage_autohash_2():
+
+    from random import random
+
+    @autohash(only_constructor_args=True, only_public_fields=True)
+    class D(object):
+        @autoargs
+        def __init__(self, a: str, _b: str):
+            self.non_constructor_arg = random()
+            self._private = random()
+            self.__class_private = random()
+
+    o = D(1, 'r')
+    p = D(1, 'r')
+
+    # o and p have the same hash because only the constructor arguments are taken into account
+    assert hash(o) == hash(p)
+    assert hash(o) == hash((1, 'r'))
 
 
 def test_readme_usage_autoclass():
