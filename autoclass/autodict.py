@@ -11,9 +11,9 @@ from collections import Mapping
 
 
 def autodict(include: Union[str, Tuple[str]]=None, exclude: Union[str, Tuple[str]]=None,
-             only_constructor_args: bool = True, only_public_fields: bool = False):
+             only_constructor_args: bool = True, only_public_fields: bool = True):
     """
-    A decorator to makes objects of the class behave like a read-only `dict`. It does two things:
+    A decorator to makes objects of the class behave like a read-only `dict`. It does several things:
     * it adds collections.Mapping to the list of parent classes (i.e. to the class' `__bases__`)
     * it generates `__len__`, `__iter__` and `__getitem__` in order for the appropriate fields to be exposed in the dict
     view.
@@ -23,8 +23,8 @@ def autodict(include: Union[str, Tuple[str]]=None, exclude: Union[str, Tuple[str
     
     Parameters allow to customize the list of fields that will be visible.
 
-    :param include: a named tuple of explicit attributes to include (None means all)
-    :param exclude: a named tuple of explicit attributes to exclude. In such case, include should be None.
+    :param include: a tuple of explicit attribute names to include (None means all)
+    :param exclude: a tuple of explicit attribute names to exclude. In such case, include should be None.
     :param only_constructor_args: if True (default), only constructor arguments will be exposed through the dictionary
     view, not any other field that would be created in the constructor or dynamically. This makes it very convenient
     to use in combination with @autoargs. If set to False, the dictionary is a direct view of public object fields.
@@ -39,14 +39,14 @@ def autodict(include: Union[str, Tuple[str]]=None, exclude: Union[str, Tuple[str
 
 def autodict_decorate(cls: Type[Any], include: Union[str, Tuple[str]] = None,
                       exclude: Union[str, Tuple[str]] = None, only_constructor_args: bool = True,
-                      only_public_fields: bool = False) -> Type[Any]:
+                      only_public_fields: bool = True) -> Type[Any]:
     """
     To automatically generate the appropriate methods so that objects of this class behave like a `dict`,
     manually, without using @autodict decorator.
 
     :param cls: the class on which to execute. Note that it won't be wrapped.
-    :param include: a named tuple of explicit attributes to include (None means all)
-    :param exclude: a named tuple of explicit attributes to exclude. In such case, include should be None.
+    :param include: a tuple of explicit attribute names to include (None means all)
+    :param exclude: a tuple of explicit attribute names to exclude. In such case, include should be None.
     :param only_constructor_args: if True (default), only constructor arguments will be exposed through the dictionary
     view, not any other field that would be created in the constructor or dynamically. This makes it very convenient
     to use in combination with @autoargs. If set to False, the dictionary is a direct view of public object fields.
@@ -69,7 +69,7 @@ def _execute_autodict_on_class(object_type: Type[Any], include: Union[str, Tuple
                                exclude: Union[str, Tuple[str]]=None, only_constructor_args: bool = True,
                                only_public_fields: bool = True):
     """
-    This method makes objects of the class behave like a read-only `dict`. It does two things:
+    This method makes objects of the class behave like a read-only `dict`. It does several things:
     * it adds collections.Mapping to the list of parent classes (i.e. to the class' `__bases__`)
     * it generates `__len__`, `__iter__` and `__getitem__` in order for the appropriate fields to be exposed in the dict
     view.
@@ -80,8 +80,8 @@ def _execute_autodict_on_class(object_type: Type[Any], include: Union[str, Tuple
     Parameters allow to customize the list of fields that will be visible.
 
     :param object_type: the class on which to execute.
-    :param include: a named tuple of explicit attributes to include (None means all)
-    :param exclude: a named tuple of explicit attributes to exclude. In such case, include should be None.
+    :param include: a tuple of explicit attribute names to include (None means all)
+    :param exclude: a tuple of explicit attribute names to exclude. In such case, include should be None.
     :param only_constructor_args: if True (default), only constructor arguments will be exposed through the dictionary
     view, not any other field that would be created in the constructor or dynamically. This makes it very convenient
     to use in combination with @autoargs. If set to False, the dictionary is a direct view of public object fields.
