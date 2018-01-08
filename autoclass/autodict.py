@@ -285,9 +285,9 @@ def _execute_autodict_on_class(object_type: Type[Any], include: Union[str, Tuple
             :param other:
             :return:
             """
-            # in the case the other is of the same type, use the dict comparison
+            # in the case the other is of the same type, use the dict comparison, that relies on the appropriate fields
             if isinstance(other, object_type):
-                return dict(self) == other
+                return dict(self) == dict(other)
             else:
                 # else fallback to inherited behaviour, whatever it is
                 return super(object_type, self).__eq__(other)

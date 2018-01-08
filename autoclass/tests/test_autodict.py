@@ -7,8 +7,7 @@ from autoclass import autodict
 @pytest.mark.parametrize('only_public_fields', [True, False], ids=lambda x: 'only_public' if x else 'including class-private dunder fields')
 @pytest.mark.parametrize('only_constructor_args', [True, False], ids=lambda x: 'only_constructor_args' if x else 'all_obj_fields')
 def test_autodict(only_constructor_args, only_public_fields):
-    """ Basic @autodict functionality, no customization - all constructor fields become visible in the resulting
-    dictionary """
+    """ @autodict functionality with various customization options for only_constructor_args/only_public_fields """
 
     @autodict(only_constructor_args=only_constructor_args, only_public_fields=only_public_fields)
     class FooConfigA(object):
@@ -84,6 +83,16 @@ def test_autodict(only_constructor_args, only_public_fields):
 
     # assert that equals works
     assert t == dict(t)
+
+    o = FooConfigA('rhubarb', ['pie', 'pie2'])
+    o.new_field = 0
+    o._new_field_weak_private = 1
+    o.__new_field_class_private_incorrect = 0
+
+    class Dummy:
+        o.__new_field_class_private = 1
+
+    assert t == o
 
     if only_constructor_args:
         # we could use t but we use dict(t) so that the error message in pytest is more readable
