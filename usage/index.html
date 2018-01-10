@@ -386,7 +386,7 @@
                 <h1 id="usage-details">Usage details<a class="headerlink" href="#usage-details" title="Permanent link">&para;</a></h1>
 <h2 id="autoargs">@autoargs<a class="headerlink" href="#autoargs" title="Permanent link">&para;</a></h2>
 <p>Automatically affects the contents of a function to self. Initial code and test examples from <a href="http://stackoverflow.com/questions/3652851/what-is-the-best-way-to-do-automatic-attribute-assignment-in-python-and-is-it-a#answer-3653049">this answer from utnubu</a>.</p>
-<p>A few illustrative examples can be found in the unit tests below.</p>
+<p>A few illustrative examples can be found below.</p>
 <ul>
 <li>Basic functionality, no customization - all constructor arguments are auto-assigned: </li>
 </ul>
@@ -429,7 +429,7 @@
 
 
 <ul>
-<li>Basic functionality, with special case of variable arguments <code>*args</code> and keyword arguments <code>**kw</code>. Note that <code>*args</code> are stored in a single attribute while <code>**kw</code> are stored in several attributes</li>
+<li>Basic functionality, with special case of variable arguments <code>*args</code> and keyword arguments <code>**kw</code>. Note that <code>*args</code> are stored in a single attribute and now <code>**kw</code> are, too (for consistency reasons this changed in 1.10.0).</li>
 </ul>
 <div class="codehilite"><pre><span></span><span class="k">class</span> <span class="nc">C</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
     <span class="nd">@autoargs</span>
@@ -445,17 +445,16 @@
 <span class="k">assert</span> <span class="n">a</span><span class="o">.</span><span class="n">debug</span> <span class="o">==</span> <span class="bp">True</span>
 <span class="c1"># -- *args is in a single attribute</span>
 <span class="k">assert</span> <span class="n">a</span><span class="o">.</span><span class="n">args</span> <span class="o">==</span> <span class="p">(</span><span class="mi">100</span><span class="p">,</span> <span class="mi">101</span><span class="p">)</span>
-<span class="c1"># -- **kw is dispatched in several attributes</span>
-<span class="k">assert</span> <span class="n">a</span><span class="o">.</span><span class="n">verbose</span> <span class="o">==</span> <span class="bp">True</span>
-<span class="k">assert</span> <span class="n">a</span><span class="o">.</span><span class="n">bar</span> <span class="o">==</span> <span class="s1">&#39;bar&#39;</span>
+<span class="c1"># -- **kw is in a single attribute too</span>
+<span class="k">assert</span> <span class="n">a</span><span class="o">.</span><span class="n">kw</span> <span class="o">==</span> <span class="nb">dict</span><span class="p">(</span><span class="n">verbose</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="n">bar</span><span class="o">=</span><span class="s1">&#39;bar&#39;</span><span class="p">)</span>
 </pre></div>
 
 
 <ul>
-<li>Explicit list of names to include:</li>
+<li>Explicit tuple or list of names to include:</li>
 </ul>
 <div class="codehilite"><pre><span></span><span class="k">class</span> <span class="nc">C</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
-    <span class="nd">@autoargs</span><span class="p">(</span><span class="n">include</span><span class="o">=</span><span class="p">(</span><span class="s1">&#39;bar&#39;</span><span class="p">,</span> <span class="s1">&#39;baz&#39;</span><span class="p">,</span> <span class="s1">&#39;verbose&#39;</span><span class="p">))</span>
+    <span class="nd">@autoargs</span><span class="p">(</span><span class="n">include</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;bar&#39;</span><span class="p">,</span> <span class="s1">&#39;baz&#39;</span><span class="p">,</span> <span class="s1">&#39;verbose&#39;</span><span class="p">])</span>
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">foo</span><span class="p">,</span> <span class="n">bar</span><span class="p">,</span> <span class="n">baz</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="bp">False</span><span class="p">):</span>
         <span class="k">pass</span>
 
@@ -472,7 +471,7 @@
 
 
 <ul>
-<li>Explicit list of names to exclude:</li>
+<li>Explicit tuple or list of names to exclude:</li>
 </ul>
 <div class="codehilite"><pre><span></span><span class="k">class</span> <span class="nc">C</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
     <span class="nd">@autoargs</span><span class="p">(</span><span class="n">exclude</span><span class="o">=</span><span class="p">(</span><span class="s1">&#39;bar&#39;</span><span class="p">,</span> <span class="s1">&#39;baz&#39;</span><span class="p">,</span> <span class="s1">&#39;verbose&#39;</span><span class="p">))</span>
@@ -653,7 +652,7 @@ them with <code>@getter_override</code> or <code>@setter_override</code>. Note t
 <li>it generates <code>__len__</code>, <code>__iter__</code> and <code>__getitem__</code> in order for the appropriate fields to be exposed in the dict view. Parameters allow to customize the list of fields that will be visible. Note that any methods with the same name will be overridden.</li>
 <li>if <code>only_constructor_args</code> is <code>True</code> (default), it generates a static <code>from_dict</code> method in the class corresponding to a call to the constructor with the unfolded dict. Note that this method may be overridden by the user.</li>
 <li>if <code>__eq__</code> is not implemented on this class, it generates a version that handles the case <code>self == other</code> where other is of the same type. In that case the dictionary equality is used. Other equality tests remain unchanged.</li>
-<li>if <code>__str__</code> is not implemented on this class, it generates it too.</li>
+<li>if <code>__str__</code> and <code>__repr__</code> are not implemented on this class, it generates them too.</li>
 </ul>
 <p>Examples:</p>
 <ul>
