@@ -2,11 +2,21 @@
 
 [![Build Status](https://travis-ci.org/smarie/python-autoclass.svg?branch=master)](https://travis-ci.org/smarie/python-autoclass) [![Tests Status](https://smarie.github.io/python-autoclass/junit/junit-badge.svg?dummy=8484744)](https://smarie.github.io/python-autoclass/junit/report.html) [![codecov](https://codecov.io/gh/smarie/python-autoclass/branch/master/graph/badge.svg)](https://codecov.io/gh/smarie/python-autoclass) [![Documentation](https://img.shields.io/badge/docs-latest-blue.svg)](https://smarie.github.io/python-autoclass/) [![PyPI](https://img.shields.io/badge/PyPI-autoclass-blue.svg)](https://pypi.python.org/pypi/autoclass/)[![downloads](https://img.shields.io/badge/downloads%2001%2F18-14k-brightgreen.svg)](https://kirankoduru.github.io/python/pypi-stats.html)
 
-`autoclass` provides tools to automatically generate classes code, such as **constructor body** or **properties getters/setters**, along with optional support of **validation contracts**. It also provides extra goodies such as **a dict view on top of objects** (the opposite of munch), and more.
+`autoclass` provides tools to automatically generate python classes code. The objective of this library is to reduce the amount of redundancy by automatically generating parts of the code from the information already available somewhere else (typically, in the constructor signature). It is made of several independent features that can be combined:
 
-The objective of this library is to reduce the amount of redundancy by automatically generating parts of the code from the information already available somewhere else (typically, in the constructor signature). 
+ * with `@autoargs` you don't have to write `self.xxx = xxx` in your constructor
+ * with `@autoprops` all your fields become `properties` and their setter is annotated with the same PEP484 type hints and value validation methods than the corresponding constructor argument
+ * with `@autohash`, your object is hashable based on the tuple of all fields
+ * with `@autodict`, your object behaves like a dictionary, is comparable with dictionaries, and gets a string representation
+ * with `@autoclass`, you get all of the above at once
 
-The intent is similar to [attrs](https://github.com/python-attrs/attrs): remove boilerplate. However as opposed to `attrs`, this library does not change anything in your coding habits: you still create a `__init__` constructor. `autoclass` simply generates most of the code that you would have written manually. For this reason, it is very compliant with other libraries out there - such as type checking or validation libraries.
+The intent is similar to [attrs](https://github.com/python-attrs/attrs): remove boilerplate code. However as opposed to `attrs`, 
+
+ * this library does not change anything in your coding habits: you still create a `__init__` constructor, and everything else is provided with decorators.
+ * all decorators can be used independently, for example if you just need to add a dictionary behaviour to an existing class you can use `@autodict` only. Besides, all decorators can be manually applied to already existing classes.
+ * all created code is not dynamically compiled using `compile`. This obviously leads to poorer performance than `attrs` in highly demanding applications, but for many standard use cases it works well, and provides better debug-ability (you can easily step through the generated functions to understand what's going on)
+
+Finally, `autoclass` simply generates the same code that you *would have written* manually. For this reason, in many cases you can use *other* libraries on top of the resulting classes without hassle. A good example is that you can use any PEP484 type checking library of your choice.
 
 
 ## Installing
@@ -18,7 +28,7 @@ The intent is similar to [attrs](https://github.com/python-attrs/attrs): remove 
 You may wish to also install 
 
  * a PEP484-based type checker: [enforce](https://github.com/RussBaz/enforce) or [pytypes](https://github.com/Stewori/pytypes).
- * a value validator: [valid8](https://github.com/smarie/python-valid8) was originally created in this project and is now independent. It provides the `@validate` annotation (and it also provides the `Boolean` type)
+ * a value validator: [valid8](https://smarie.github.io/python-valid8/) was originally created in this project and is now independent. It provides the `@validate` annotation (and it also provides the `Boolean` type)
  * Alternatively, you may use[PyContracts](https://andreacensi.github.io/contracts/index.html) to perform type and value validation at the same time using `@contract`, but this will not benefit from PEP484 and uses a dedicated syntax. This documentation also shows some examples.
 
 
@@ -29,99 +39,239 @@ You may wish to also install
 > pip install PyContracts
 ```
 
-## Example usage
+## Usage examples
 
-### With valid8 for both type and value checking
+### Basic
 
+The following code shows how you define a `House` with two attributes `name` and `nb_floors`:
 
+```python
+from autoclass import autoclass
 
-### With enforce for type checking and valid8 for value checking
+@autoclass
+class House:    
+    def __init__(self, name, nb_floors = 1):
+        pass
+```
 
-The following snippet shows a `HouseConfiguration` class with four attributes.
-Each attribute is validated against the expected type everytime you try to set it (constructor AND modifications), and the `name` and `surface` attributes are further validated (`len(name) > 0` and `surface >= 0`). Notice the size of the resulting code !
+**That's it !** By default you get that the constructor is filled automatically, a "dictionary" behaviour is added to the class, a string representation of objects is available, and objects are comparable (equality) and hashable:
+
+```bash
+>>> obj = House('my_house', 3)
+
+>>> print(obj)  # string representation
+House({'name': 'my_house', 'nb_floors': 3})
+
+>>> [att for att in obj.keys()]  # dictionary behaviour
+['name', 'nb_floors']
+
+>>> assert {obj, obj} == {obj}  # hashable: can be used in a set or as a dict key
+
+>>> assert obj == House('my_house', 3)  # comparison (equality)
+>>> assert obj == {'name': 'my_house', 'nb_floors': 3}  # comparison with dicts
+```
+
+If you wish to add some behaviour (custom logic, logging...) when attributes are accessed or set, you can easily override the generated getters and setters. For example, below we will print a message everytime `nb_floors` is set:
 
 ```python
 from autoclass import autoclass, setter_override
-from valid8 import Boolean, validate, minlens, gt
-from numbers import Real, Integral
-from typing import Optional
 
-# we use enforce runtime checker for this example
-from enforce import runtime_validation, config
-config(dict(mode='covariant'))  # to accept subclasses in validation
+@autoclass
+class House:    
+    def __init__(self, name, nb_floors = 1):
+        pass
+    
+    @setter_override
+    def nb_floors(self, nb_floors = 1):
+        print('Set nb_floors to {}'.format(nb_floors))
+        self._nb_floors = nb_floors
+```
+
+We can test it:
+
+```bash
+>>> obj = House('my_house')
+Set nb_floors to 1
+
+>>> obj.nb_floors = 3
+Set nb_floors to 3
+```
+
+
+### Type validation with PEP484
+
+#### enforce
+
+PEP484 is the standard for inserting python type hint in function signatures, starting from python 3.5 (a backport is available through the independent `typing` module). Many compliant type checkers are now available such as [enforce](https://github.com/RussBaz/enforce) or [pytypes](https://github.com/Stewori/pytypes).
+
+If you decorate your *class constructor* with PEP484 type hints, then `autoclass` detects it and will automatically decorate the generated property getters and setters. We use `enforce` runtime checker in this example:
+
+```python
+from autoclass import autoclass
+from enforce import runtime_validation
 
 @runtime_validation
 @autoclass
-class HouseConfiguration(object):
-    
-    @validate(name=minlens(0),
-              surface=gt(0))
-    def __init__(self,
-                 name: str,
-                 surface: Real,
-                 nb_floors: Optional[Integral] = 1,
-                 with_windows: Boolean = False):
+class House:
+    # the constructor below is decorated with PEP484 type hints
+    def __init__(self, name: str, nb_floors: int = 1):
         pass
+```
 
-    # -- overriden setter for surface for custom validation or other things
-    @setter_override
-    def surface(self, surface):
-        print('Set surface to {}'.format(surface))
-        self._surface = surface
+We can test it:
+
+```bash
+>>> obj = House('my_house')
+
+>>> obj.nb_floors = 'red'
+enforce.exceptions.RuntimeTypeError: 
+  The following runtime type errors were encountered:
+       Argument 'nb_floors' was not of type <class 'int'>. Actual type was str.
+```
+
+See `enforce` documentation for details.
+
+#### pytypes
+
+Below is the same example, but with `pytypes` instead of `enforce`:
+
+```python
+from autoclass import autoclass
+from pytypes import typechecked
+
+@typechecked
+@autoclass
+class House:
+    # the constructor below is decorated with PEP484 type hints
+    def __init__(self, name: str, nb_floors: int = 1):
+        pass
+```
+
+
+### Simple Type+Value validation
+
+#### valid8
+
+[valid8](https://smarie.github.io/python-valid8/) was originally created in this project and is now independent. It provides mainly value validation, but also basic type validation. With `valid8`, in order to add validation to any function, you simply decorate that function with `@validate_arg`, possibly providing custom error types to raise:
+
+```python
+from valid8 import validate_arg
+
+@validate_arg('foo', <validation functions>, error_type=MyErrorType)
+def my_func(foo):
+    ...
+```
+
+Now if you decorate your *class constructor* with `@validate_arg`, then `autoclass` detects it and will automatically decorate the generated property setters too. 
+
+```python
+from autoclass import autoclass
+from mini_lambda import s, x, Len
+from valid8 import validate_arg, instance_of, is_multiple_of, InputValidationError
+
+# 2 custom validation errors for valid8
+class InvalidName(InputValidationError):
+    help_msg = 'name should be a non-empty string'
+
+class InvalidSurface(InputValidationError):
+    help_msg = 'Surface should be between 0 and 10000 and be a multiple of 100.'
+
+@autoclass
+class House:
+    @validate_arg('name', instance_of(str), Len(s) > 0,
+                  error_type=InvalidName)
+    @validate_arg('surface', (x >= 0) & (x < 10000), is_multiple_of(100),
+                  error_type=InvalidSurface)
+    def __init__(self, name, surface=None):
+        pass
+```
+
+We can test it:
+
+```bash
+>>> obj = House('sweet home', 200)
+
+>>> obj.surface = None   # Valid (surface is nonable by signature)
+
+>>> obj.name = 12  # Type validation
+InvalidName: name should be a non-empty string.
+
+>>> obj.surface = 10000  # Value validation
+InvalidSurface: Surface should be between 0 and 10000 and be a multiple of 100.
+```
+
+See `valid8` documentation for details. Note that other validation libraries relying on the same principles could probably be supported easily, please create an issue to suggest some !
+
+
+#### PyContracts
+
+[PyContracts](https://andreacensi.github.io/contracts/index.html) is also supported:
+
+```python
+from autoclass import autoclass
+from contracts import contract
+
+@autoclass
+class House:
+
+    @contract(name='str[>0]', 
+              surface='None|(int,>=0,<10000)')
+    def __init__(self, name, surface):
+        pass
+```
+
+
+### PEP484 Type+Value validation
+
+#### enforce + valid8
+
+Finally, in real-world applications you might wish to combine both PEP484 type checking and value validation. This works as expected, for example with `enforce` and `valid8`:
+
+```python
+from autoclass import autoclass
+
+# Imports - for type validation
+from numbers import Integral
+from enforce import runtime_validation, config
+config(dict(mode='covariant'))  # type validation will accept subclasses too
+
+# Imports - for value validation
+from mini_lambda import s, x, Len
+from valid8 import validate_arg, is_multiple_of, InputValidationError
+
+# 2 custom validation errors for valid8
+class InvalidName(InputValidationError):
+    help_msg = 'name should be a non-empty string'
+
+class InvalidSurface(InputValidationError):
+    help_msg = 'Surface should be between 0 and 10000 and be a multiple of 100.'
+
+@runtime_validation
+@autoclass
+class House:
+    @validate_arg('name', Len(s) > 0,
+                  error_type=InvalidName)
+    @validate_arg('surface', (x >= 0) & (x < 10000), is_multiple_of(100),
+                  error_type=InvalidSurface)
+    def __init__(self, name: str, surface: Integral=None):
+        pass
 ```
 
 We can test that validation works:
 
-```python
-# Test
-t = HouseConfiguration('test', 12, 2)
-t.nb_floors = None  # Declared 'Optional': no error
-t.nb_floors = 2.2   # Type validation: enforce raises a RuntimeTypeError
-t.surface = -1      # Value validation: @validate raises a ValidationError
-HouseConfiguration('', 12, 2)  # Value validation: @validate > ValidationError
-```
-
-Note that the `Real` and `Integral` types come from the [`numbers`](https://docs.python.org/3.6/library/numbers.html) built-in module. They provide an easy way to support both python primitives AND e.g. numpy primitives. In this library we provide an additional `Boolean` class to complete the picture.
-
-### Goodies
-
-In addition some goodies are activated by default such as 
-
- * a string representation:
-
-```python
-str(t)
-repr(t)
-```
-
-both return
-
 ```bash
-HouseConfiguration({'nb_floors': None, 
-                    'with_windows': False, 
-                    'surface': 12, 
-                    'name': 'test'})
+>>> obj = House('sweet home', 200)
+
+>>> obj.surface = None   # Valid (surface is nonable by signature)
+
+>>> obj.name = 12  # Type validation > PEP484
+enforce.exceptions.RuntimeTypeError: 
+  The following runtime type errors were encountered:
+       Argument 'name' was not of type <class 'str'>. Actual type was int.
+
+>>> obj.surface = 10000  # Value validation > valid8
+InvalidSurface: Surface should be between 0 and 10000 and be a multiple of 100.
 ```
-
- * a dictionary view on top of the object, a `from_dict` class method, and a dict-based equality function:
-
-```python
-# use objects as dicts
-t.keys()
-for k, v in t.items():
-    print(str(k) + ': ' + str(v))
-
-# build objects from dict
-HouseConfiguration.from_dict({'name': 'test2', 'surface': 1})
-
-# compare objects as dicts
-assert t == dict(name='test', nb_floors=None, surface=12, with_windows=False)
-```
-
- * a hash value based on the tuple of field values
-
-
-Check the [Usage](./usage/) page for more details.
 
 
 ## Why autoclass ?
@@ -135,7 +285,7 @@ from autoclass import check_var, Boolean
 from numbers import Real, Integral
 from typing import Optional, Union
 
-class HouseConfiguration(object):
+class House:
 
     def __init__(self,
                  name: str,
@@ -194,72 +344,7 @@ Not to mention extra methods such as `__str__`, `__eq__`, `from_dict`, `to_dict`
 
 Now that's **a lot of code** - and only for 4 attributes ! Not mentioning the code for `check_var` that was not included here for the sake of readability (I include it in the library, for reference). And guess what - it is still highly prone to **human mistakes**. For example I made a mistake in the setter for `nb_floors`, did you spot it ? Also it makes the code **less readable**: did you spot that the setter for the surface property is different from the others?
 
-Really, *"there must be a better way"* : yes there is, and that's what this library provides - it can be used alone, or in combination with [PyContracts](https://andreacensi.github.io/contracts/index.html) and/or any PEP484-based checker such as [enforce](https://github.com/RussBaz/enforce), [pytypes](https://github.com/Stewori/pytypes), [typeguard](https://github.com/agronholm/typeguard), [typecheck-decorator](https://github.com/prechelt/typecheck-decorator), etc. in order to generate all the repetitive code for you. Here is an example with PyContracts:
-
-```python
-from autoclass import Boolean, autoprops, autoargs, setter_override
-from typing import Optional, Union
-from numbers import Real, Integral
-from contracts import contract
-
-@autoprops
-class HouseConfiguration(object):
-
-    @autoargs
-    @contract(name='str[>0]', 
-              surface='(int|float),>=0',
-              nb_floors='None|int',
-              with_windows='bool')
-    def __init__(self, 
-                 name: str, 
-                 surface: Real, 
-                 nb_floors: Optional[Integral] = 1, 
-                 with_windows: Boolean = False):
-        pass
-    
-    # -- overriden setter for surface - no need to repeat the @contract
-    @setter_override
-    def surface(self, surface: Real):
-        assert surface > 0
-        self._surface = surface
-```
-
-As you can see, this is more compact: 
-
-* all object attributes (mandatory and optional with their default value) are declared in the `__init__` signature along with their optional [PEP 484 type hints](https://docs.python.org/3.5/library/typing.html)
-* all attribute validation contracts are declared once in the `@contract` annotation of `__init__`
-* it is still possible to implement custom logic in a getter or a setter, without having to repeat the `@contract`
-
-Note: unfortunately with PyContracts the type information is duplicated. However if you use type checkers relying on PEP484 directly this is not the case - as we saw in the [initial example with enforce and validate](#example_usage). Below is the same example, but with `pytypes` instead of `enforce`:
-
-```python
-from autoclass import autoclass, setter_override
-from valid8 import Boolean, validate, minlens, gt
-from numbers import Real, Integral
-from typing import Optional
-
-# we use pytypes for this example
-from pytypes import typechecked
-
-@typechecked
-@autoclass
-class HouseConfiguration(object):
-    
-    @validate(name=minlens(0),
-              surface=gt(0))
-    def __init__(self,
-                 name: str,
-                 surface: Real,
-                 nb_floors: Optional[Integral] = 1,
-                 with_windows: Boolean = False):
-        pass
-
-    # -- overriden setter for surface for custom validation or other things
-    @setter_override
-    def surface(self, surface):
-        print('Set surface to {}'.format(surface))
-        self._surface = surface
-```
+Really, *"there must be a better way"* : yes there is, and that's what this library provides.
 
 
 ## Main features
@@ -268,15 +353,20 @@ class HouseConfiguration(object):
 
 * **`@autoprops`** is a decorator for a whole class. It automatically generates properties getters and setters for all attributes, with the correct PEP484 type hints. As for `@autoargs`, the default list of attributes is the list of parameters of the `__init__` method, and explicit inclusion and exclusion lists are supported. 
 
-* **`@autoprops`** automatically adds `@contract` (*PyContracts*) or `@validate` (from `valid8`) on the generated setters if a `@contract` or `@validate` exists for that attribute on the `__init__` method.
+    * `@autoprops` automatically adds `@contract` (*PyContracts*) or `@validate_arg` (from `valid8`) on the generated setters if a `@contract` or `@validate_arg` exists for that attribute on the `__init__` method. 
+    * `@autoprops`-generated getters and setters are fully PEP484 decorated so that type checkers like *enforce* automatically apply to generated methods when used to decorate the whole class. No explicit integration needed in autoclass!
+    * You may override the getter or setter generated by `@autoprops` using **`@getter_override`** and **`@setter_override`**. Note that the `@contract` and `@validate` will still be added on your custom setter if present on `__init__`, you don't have to repeat it yourself
 
-* **`@autoprops`**-generated getters and setters are fully PEP484 decorated so that type checkers like *enforce*'s `@runtime_validation` automatically apply to generated methods when used to decorate the whole class. No explicit integration needed in autoclass!
+* **`@autodict`** is a decorator for a whole class. It makes a class behave like a (read-only) dict, with control on which attributes are visible in that dictionary. So this is a 'dict view' on top of an object, basically the opposite of `munch` (that is an 'object view' on top of a dict). It automatically implements `__eq__`, `__str__` and `__repr__` if they are not present already.
 
-* You may override the getter or setter generated by `@autoprops` using **`@getter_override`** and **`@setter_override`**. Note that the `@contract` and `@validate` will still be added on your custom setter if present on `__init__`, you don't have to repeat it yourself
+* **`@autohash`** is a decorator for a whole class. It makes the class hashable by implementing `__hash__` if not already present, where the hash is computed from the tuple of selected fields (all by default, customizable).
 
-* **`@autodict`** is a decorator for a whole class. It makes a class behave like a (read-only) dict, with control on which attributes are visible in that dictionary. So this is a 'dict view' on top of an object, basically the opposite of `munch` (that is an 'object view' on top of a dict)
-
-* Equivalent manual wrapper methods are provided for all decorators in this library: `autoargs_decorate(init_func, include, exclude)`, `autoprops_decorate(cls, include, exclude)`, `autoprops_override_decorate(func, attribute, is_getter)`, `autodict_decorate(cls, include, exclude, only_constructor_args, only_public_fields)`
+* Equivalent manual wrapper methods are provided for all decorators in this library: 
+    - `autoargs_decorate(init_func, include, exclude)`
+    - `autoprops_decorate(cls, include, exclude)`
+    - `autoprops_override_decorate(func, attribute, is_getter)`
+    - `autodict_decorate(cls, include, exclude, only_constructor_args, only_public_fields)`
+    - `autohash_decorate(cls, include, exclude, only_constructor_args, only_public_fields)` 
 
 
 ## See Also
@@ -294,6 +384,8 @@ class HouseConfiguration(object):
     * [typecheck-decorator](https://github.com/prechelt/typecheck-decorator)
 
 * [attrs](https://github.com/python-attrs/attrs) is a library with the same target, but the way to use it is quite different from 'standard' python. It is very powerful and elegant, though.
+
+* There is a new PEP out there, largely inspired by `attrs`: [PEP557](https://www.python.org/dev/peps/pep-0557). Check it out!
 
 * [decorator](http://decorator.readthedocs.io/en/stable/) library, which provides everything one needs to create complex decorators easily (signature and annotations-preserving decorators, decorators with class factory) as well as provides some useful decorators (`@contextmanager`, `@blocking`, `@dispatch_on`). We use it to preserve the signature of class constructors and overriden setter methods.
 

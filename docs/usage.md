@@ -4,7 +4,7 @@
 
 Automatically affects the contents of a function to self. Initial code and test examples from [this answer from utnubu](http://stackoverflow.com/questions/3652851/what-is-the-best-way-to-do-automatic-attribute-assignment-in-python-and-is-it-a#answer-3653049).
 
-A few illustrative examples can be found in the unit tests below.
+A few illustrative examples can be found below.
 
 * Basic functionality, no customization - all constructor arguments are auto-assigned: 
 
@@ -45,7 +45,7 @@ assert a.debug == True
 assert a.args == (100, 101)
 ```
 
-* Basic functionality, with special case of variable arguments `*args` and keyword arguments `**kw`. Note that `*args` are stored in a single attribute while `**kw` are stored in several attributes
+* Basic functionality, with special case of variable arguments `*args` and keyword arguments `**kw`. Note that `*args` are stored in a single attribute and now `**kw` are, too (for consistency reasons this changed in 1.10.0).
 
 ```python
 class C(object):
@@ -62,16 +62,15 @@ assert a.path == 'pie'
 assert a.debug == True
 # -- *args is in a single attribute
 assert a.args == (100, 101)
-# -- **kw is dispatched in several attributes
-assert a.verbose == True
-assert a.bar == 'bar'
+# -- **kw is in a single attribute too
+assert a.kw == dict(verbose=True, bar='bar')
 ```
     
-* Explicit list of names to include:
+* Explicit tuple or list of names to include:
 
 ```python
 class C(object):
-    @autoargs(include=('bar', 'baz', 'verbose'))
+    @autoargs(include=['bar', 'baz', 'verbose'])
     def __init__(self, foo, bar, baz, verbose=False):
         pass
 
@@ -86,7 +85,7 @@ assert a.verbose == False
 print(a.foo)# raises AttributeError
 ```
 
-* Explicit list of names to exclude:
+* Explicit tuple or list of names to exclude:
 
 ```python
 class C(object):
@@ -269,7 +268,7 @@ Automatically generates a read-only dictionary view on top of the object. It doe
 * it generates `__len__`, `__iter__` and `__getitem__` in order for the appropriate fields to be exposed in the dict view. Parameters allow to customize the list of fields that will be visible. Note that any methods with the same name will be overridden.
 * if `only_constructor_args` is `True` (default), it generates a static `from_dict` method in the class corresponding to a call to the constructor with the unfolded dict. Note that this method may be overridden by the user.
 * if `__eq__` is not implemented on this class, it generates a version that handles the case `self == other` where other is of the same type. In that case the dictionary equality is used. Other equality tests remain unchanged.
-* if `__str__` is not implemented on this class, it generates it too.
+* if `__str__` and `__repr__` are not implemented on this class, it generates them too.
 
 Examples:
 

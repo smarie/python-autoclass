@@ -1,3 +1,12 @@
+### 1.10.0 - bugfixes and updated doc
+
+ * Updated documentation main page
+ * `@autoargs` behaviour wrt keyword arguments changed. See usage page for details.
+ * `include` and `exclude` parameters now support any kind of sequence, in all decorators
+ * Bugfix: [Setter is called twice for default values](https://github.com/smarie/python-autoclass/issues/16)
+ * Bugfix: [@autoprops argument name in setter is not correct](https://github.com/smarie/python-autoclass/issues/17)
+ 
+
 ### 1.9.2 - added autohash + fix
 
  * new annotation `@autohash`
