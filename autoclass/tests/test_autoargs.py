@@ -175,3 +175,29 @@ def test_autoargs_include_exclude_typos():
 #     assert a.foo == 'rhubarb')
 #     pytest.raises(AttributeError, getattr, a, 'bar')
 #     pytest.raises(AttributeError, setattr, a, 'newa',0)
+
+
+def test_autoargs_no_double_set_default():
+    """ This test ensures that autoargs does not double-set the arguments with default values once with the default
+    value, and once with the provided value. This was a bug in older versions of autoclass """
+
+    global counter
+    counter = 0
+
+    class Home(object):
+        @autoargs
+        def __init__(self, foo, bar=False):
+            pass
+
+        @property
+        def bar(self):
+            return self._bar
+
+        @bar.setter
+        def bar(self, value):
+            global counter
+            counter += 1
+            self._bar = value
+
+    Home(None, bar=True)
+    assert counter == 1
