@@ -1,4 +1,4 @@
-from inspect import getfullargspec
+from inspect import signature
 from typing import Tuple, Callable, Union
 
 from autoclass.utils_decoration import _create_function_decorator__robust_to_args
@@ -64,22 +64,21 @@ def autoargs_decorate(func: Callable, include: Union[str, Tuple[str]]=None, excl
 
     # (1) then retrieve function signature
     # attrs, varargs, varkw, defaults = getargspec(func)
-    signature_attrs, signature_varargs, signature_varkw, signature_defaults, signature_kwonlyargs, \
-    signature_kwonlydefaults, signature_annotations = getfullargspec(func)
-    # TODO better use signature(func) ? see how it's done in valid8
+    func_sig = signature(func)
 
     # check that include/exclude dont contain names that are incorrect
     if include is not None:
-        incorrect = set(list([include] if isinstance(include, str) else include)) - set(signature_attrs)
+        incorrect = set(list([include] if isinstance(include, str) else include)) - set(func_sig.parameters.keys())
         if len(incorrect) > 0:
             raise ValueError('@autoargs definition exception: include contains \'' + str(incorrect) + '\' that is/are '
                             'not part of signature for ' + str(func))
     if exclude is not None:
-        incorrect = set([exclude] if isinstance(exclude, str) else exclude) - set(signature_attrs)
+        incorrect = set([exclude] if isinstance(exclude, str) else exclude) - set(func_sig.parameters.keys())
         if len(incorrect) > 0:
             raise ValueError('@autoargs definition exception: exclude contains \'' + str(incorrect) + '\' that is/are '
                              'not part of signature for ' + str(func))
 
+    # TODO this should be in @autoslots decorator at class level, not here.
     # (2) Optionally lock the class only for the provided fields
     # Does not work for the moment. Besides locking fields seems to have issues with pickle serialization
     # so we'd rather not propose this option.
@@ -106,54 +105,29 @@ def autoargs_decorate(func: Callable, include: Union[str, Tuple[str]]=None, excl
 
     # (3) Finally, create a wrapper around the function so that all attributes included/not excluded are
     # set to self BEFORE executing the function.
+    # -- NOTE: we used @functools.wraps(func), we now use 'decorate' to have a wrapper that has the same signature
+    def init_wrapper(init_func, self, *args, **kwargs):
 
-    # -- old:
-    # @functools.wraps(func) -> to make the wrapper function look like the wrapped function
-    # def wrapper(self, *args, **kwargs):
+        # match the received arguments with the signature to know who is who, and add default values to get a full list
+        bound_values = func_sig.bind(self, *args, **kwargs)
+        bound_values.apply_defaults()
 
-    # -- new:
-    # we now use 'decorate' at the end of this code to have a wrapper that has the same signature, see below
-    def wrapper(func, self, *args, **kwargs):
+        # Assign to self the ones that needs to
+        for att_name, att_value in bound_values.arguments.items():
+            if _sieve(att_name, include=include, exclude=exclude):
+                # value = a normal value, or cur_kwargs as a whole
+                setattr(self, att_name, att_value)
+            # The behaviour below is removed as it is too complex to explain
+            # else:
+            #     if func_sig.parameters[att_name].kind == Parameter.VAR_KEYWORD:
+            #         # if the attribute is variable-length keyword argument we can try to find a matching key inside it
+            #         # each item is handled independently (if func signature contains the kw args names such as a, b)
+            #         for name, value in att_value.items():
+            #             if _sieve(name, include=include, exclude=exclude):
+            #                 setattr(self, name, value)
 
-        # handle default values and kw arguments
-        for attr, val in zip(reversed(signature_attrs), reversed(signature_defaults or [])):
-            if sieve(attr):
-                # set default or provided value
-                if attr in kwargs.keys():
-                    # provided: we never seem to enter here, why ? maybe depends on the version of python
-                    setattr(self, attr, kwargs[attr])
-                else:
-                    # default
-                    setattr(self, attr, val)
-
-        # handle positional arguments except 'self' (the first)
-        signature_positional_attrs = signature_attrs[1:len(args)+1]
-        for attr,val in zip(signature_positional_attrs,args):
-            if sieve(attr):
-                setattr(self, attr, val)
-
-        # handle varargs : since we dont know their name, store them in a global field named after the vararg name
-        if signature_varargs:
-            remaining_args=args[len(signature_positional_attrs):]
-            if sieve(signature_varargs):
-                setattr(self, signature_varargs, remaining_args)
-
-        # handle varkw : since we know their names, store them directly in independent fields
-        if signature_varkw:
-            for attr, val in kwargs.items():
-                if sieve(signature_varkw) or sieve(attr):
-                    setattr(self, attr, val)
-
-        # finally execute the function
-        return func(self, *args, **kwargs)
-
-    def sieve(attr):
-        """
-        Locally-defined function that we use in the wrapper to check if an attribute shall be included in the processing
-        :param attr: 
-        :return: 
-        """
-        return _sieve(attr, include=include, exclude=exclude)
+        # finally execute the constructor function
+        return init_func(self, *args, **kwargs)
 
     # return wrapper
-    return decorate(func, wrapper)
+    return decorate(func, init_wrapper)

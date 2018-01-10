@@ -75,9 +75,10 @@ def test_autoargs_varargs_kwvarargs():
     assert a.debug == True
     # -- *args is in a single attribute
     assert a.args == (100, 101)
-    # -- **kw is dispatched in several attributes
-    assert a.verbose == True
-    assert a.bar == 'bar'
+    # -- **kw is dispatched in several attributes > NOT ANY MORE
+    # assert a.verbose == True
+    # assert a.bar == 'bar'
+    assert a.kw == dict(verbose=True, bar='bar')
 
 
 def test_autoargs_noarg():
