@@ -1,3 +1,5 @@
+import hashlib
+import linecache
 from inspect import getmembers, signature, Parameter
 from typing import Type, Any, Tuple, Callable, Union, Optional
 from warnings import warn
@@ -279,26 +281,51 @@ def _get_setter_fun(object_type: Type, parameter: Parameter, private_property_na
         # def foobar(self, foobar):
         #     self.__foobar = foobar
 
-        # the setter function
-        def generated_setter_fun(self, val):
+        # the internal / debuggable setter function, where you can put breakpoints
+        def _autoprops_generated_setter(self, val):
             return setattr(self, private_property_name, val)
 
-        # remember the parameter name - we dont need to change it in the signature
-        var_name = 'val'
+        # ** Dynamically compile a wrapper with correct argument name **
+        # Credits: https://stackoverflow.com/questions/1409295/set-function-signature-in-python
+        #      and https://github.com/python-attrs/attrs/blob/master/src/attr/_make.py
+
+        # Generate a unique file name for this generated code so as to enable caching
+        sha1 = hashlib.sha1()
+        sha1.update(repr(object_type).encode("utf-8"))
+        sha1.update(property_name.encode("utf-8"))
+        unique_filename = "<autoprops_generated_setter {}>".format(sha1.hexdigest())
+
+        # the generated wrapper with exact argument name in signature
+        setterfunc_src = "def autoprops_generated_setter(self, {att_name}):\n" \
+                         "    return _autoprops_generated_setter(self, {att_name})\n".format(att_name=property_name)
+
+        setterfunc_code = compile(setterfunc_src, unique_filename, "exec")
+        fakeglobals = {}
+        eval(setterfunc_code, {"_autoprops_generated_setter": _autoprops_generated_setter}, fakeglobals)
+
+        # In order of debuggers like PDB being able to step through the code,
+        # we add a fake linecache entry.
+        linecache.cache[unique_filename] = (
+            len(setterfunc_src),
+            None,
+            setterfunc_src.splitlines(True),
+            unique_filename,
+        )
+
+        # setter_fun = generated_setter_fun
+        setter_fun = fakeglobals['autoprops_generated_setter']
+
+        # remember the parameter name
+        # var_name = 'val'
+        var_name = property_name
 
         # add type hint annotation if provided
         if parameter.annotation:
-            generated_setter_fun.__annotations__['val'] = parameter.annotation
+            setter_fun.__annotations__[var_name] = parameter.annotation
 
         # add default value if provided
         if parameter.default is not Parameter.empty:
-            generated_setter_fun.__defaults__ = (parameter.default,)
-
-        # other options (more complex) to fiddle with the signature :
-        # http://stackoverflow.com/questions/18625510/how-can-i-programmatically-change-the-argspec-of-a-function-not-in-a-python-de
-        # http://stackoverflow.com/questions/10303248/true-dynamic-and-anonymous-functions-possible-in-python
-
-        setter_fun = generated_setter_fun
+            setter_fun.__defaults__ = (parameter.default,)
 
     return setter_fun, var_name
 

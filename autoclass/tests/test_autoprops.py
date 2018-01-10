@@ -241,7 +241,7 @@ def test_autoprops_signature_preserving():
     try:
         getattr(FooConfigD, 'a').fset(t)
     except TypeError as e:
-        assert e.args[0] == "generated_setter_fun() missing 1 required positional argument: 'val'"
+        assert e.args[0] == "autoprops_generated_setter() missing 1 required positional argument: 'a'"
 
     try:
         getattr(FooConfigD, 'a').fget()
