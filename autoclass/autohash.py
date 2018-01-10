@@ -1,3 +1,4 @@
+from collections import Sequence
 from inspect import signature
 from typing import Type, Any, Tuple, Union, Dict
 from warnings import warn
@@ -85,8 +86,8 @@ def _execute_autohash_on_class(object_type: Type[Any], include: Union[str, Tuple
 
     if include is not None and exclude is not None:
         raise ValueError('Only one of \'include\' or \'exclude\' argument should be provided.')
-    check_var(include, var_name='include', var_types=[str, tuple], enforce_not_none=False)
-    check_var(exclude, var_name='exclude', var_types=[str, tuple], enforce_not_none=False)
+    check_var(include, var_name='include', var_types=[str, Sequence], enforce_not_none=False)
+    check_var(exclude, var_name='exclude', var_types=[str, Sequence], enforce_not_none=False)
 
     # Override hash method if not already implemented
     if not hasattr(object_type, '__hash__') or object_type.__hash__ is None or object_type.__hash__ == object.__hash__:

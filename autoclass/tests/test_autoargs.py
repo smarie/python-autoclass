@@ -102,7 +102,7 @@ def test_autoargs_include():
     """ @autoargs With explicit list of names to include """
 
     class C(object):
-        @autoargs(include=('bar', 'baz', 'verbose'))
+        @autoargs(include=['bar', 'baz', 'verbose'])
         def __init__(self, foo, bar, baz, verbose=False):
             pass
 

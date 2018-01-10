@@ -1,4 +1,5 @@
 from inspect import signature
+from collections import Sequence
 from typing import Tuple, Callable, Union
 
 from autoclass.utils_decoration import _create_function_decorator__robust_to_args
@@ -59,8 +60,8 @@ def autoargs_decorate(func: Callable, include: Union[str, Tuple[str]]=None, excl
     # (0) first check parameters
     if include is not None and exclude is not None:
         raise ValueError('Only one of \'include\' or \'exclude\' argument should be provided.')
-    check_var(include, var_name='include', var_types=[str, tuple], enforce_not_none=False)
-    check_var(exclude, var_name='exclude', var_types=[str, tuple], enforce_not_none=False)
+    check_var(include, var_name='include', var_types=[str, Sequence], enforce_not_none=False)
+    check_var(exclude, var_name='exclude', var_types=[str, Sequence], enforce_not_none=False)
 
     # (1) then retrieve function signature
     # attrs, varargs, varkw, defaults = getargspec(func)

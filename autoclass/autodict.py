@@ -7,7 +7,7 @@ from autoclass.utils_include_exclude import _sieve
 from autoclass.utils_reflexion import get_constructor
 from autoclass.utils_decoration import _create_class_decorator__robust_to_args, _check_known_decorators
 
-from collections import Mapping
+from collections import Mapping, Sequence
 
 
 def autodict(include: Union[str, Tuple[str]]=None, exclude: Union[str, Tuple[str]]=None,
@@ -92,8 +92,8 @@ def _execute_autodict_on_class(object_type: Type[Any], include: Union[str, Tuple
 
     if include is not None and exclude is not None:
         raise ValueError('Only one of \'include\' or \'exclude\' argument should be provided.')
-    check_var(include, var_name='include', var_types=[str, tuple], enforce_not_none=False)
-    check_var(exclude, var_name='exclude', var_types=[str, tuple], enforce_not_none=False)
+    check_var(include, var_name='include', var_types=[str, Sequence], enforce_not_none=False)
+    check_var(exclude, var_name='exclude', var_types=[str, Sequence], enforce_not_none=False)
 
     if issubclass(object_type, Mapping):
         raise ValueError('@autodict can not be set on classes that are already subclasses of Mapping, and therefore '
