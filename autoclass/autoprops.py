@@ -2,7 +2,7 @@ import hashlib
 import linecache
 from collections import Sequence
 from inspect import getmembers, signature, Parameter
-from typing import Type, Any, Tuple, Callable, Union, Optional
+from typing import Any, Tuple, Callable, Union, TypeVar  # do not import Type for compatibility with earlier python 3.5
 from warnings import warn
 
 from decorator import decorate
@@ -45,8 +45,11 @@ def autoprops(include: Union[str, Tuple[str]]=None, exclude: Union[str, Tuple[st
     return _create_class_decorator__robust_to_args(autoprops_decorate, include, exclude=exclude)
 
 
-def autoprops_decorate(cls: Type[Any], include: Union[str, Tuple[str]] = None,
-                       exclude: Union[str, Tuple[str]] = None) -> Type[Any]:
+T = TypeVar('T')
+
+
+def autoprops_decorate(cls: 'Type[T]', include: Union[str, Tuple[str]] = None,
+                       exclude: Union[str, Tuple[str]] = None) -> 'Type[T]':
     """
     To automatically generate all properties getters and setters from the class constructor manually, without using
     @autoprops decorator.
@@ -78,7 +81,7 @@ def autoprops_decorate(cls: Type[Any], include: Union[str, Tuple[str]] = None,
     return cls
 
 
-def _execute_autoprops_on_class(object_type: Type[Any], include: Union[str, Tuple[str]]=None,
+def _execute_autoprops_on_class(object_type: 'Type[T]', include: Union[str, Tuple[str]]=None,
                                 exclude: Union[str, Tuple[str]]=None):
     """
     This method will automatically add one getter and one setter for each constructor argument, except for those
@@ -128,7 +131,7 @@ def _execute_autoprops_on_class(object_type: Type[Any], include: Union[str, Tupl
                              + extra_overrides[0][1].__qualname__)
 
 
-def _add_property(object_type: Type[Any], parameter: Parameter, pycontract: Any = None, validators: Any = None):
+def _add_property(object_type: 'Type[T]', parameter: Parameter, pycontract: Any = None, validators: Any = None):
     """
     A method to dynamically add a property to a class with the optional given pycontract or validators.
     If the property getter and/or setter have been overridden, it is taken into account too.
@@ -194,7 +197,7 @@ def _has_annotation(annotation, value):
     return matches_property_name
 
 
-def _get_getter_fun(object_type: Type, parameter: Parameter, private_property_name: str):
+def _get_getter_fun(object_type: 'Type', parameter: Parameter, private_property_name: str):
     """
     Utility method to find the overridden getter function for a given property, or generate a new one
 
@@ -244,7 +247,7 @@ def _get_getter_fun(object_type: Type, parameter: Parameter, private_property_na
     return getter_fun
 
 
-def _get_setter_fun(object_type: Type, parameter: Parameter, private_property_name: str):
+def _get_setter_fun(object_type: 'Type', parameter: Parameter, private_property_name: str):
     """
     Utility method to find the overridden setter function for a given property, or generate a new one
 

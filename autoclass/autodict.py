@@ -1,8 +1,8 @@
 from inspect import signature
-from typing import Type, Any, Tuple, Union, Dict
+from typing import Any, Tuple, Union, Dict, TypeVar  # do not import Type for compatibility with earlier python 3.5
 from warnings import warn
 
-from autoclass import check_var
+from autoclass.var_checker import check_var
 from autoclass.utils_include_exclude import _sieve
 from autoclass.utils_reflexion import get_constructor
 from autoclass.utils_decoration import _create_class_decorator__robust_to_args, _check_known_decorators
@@ -37,9 +37,12 @@ def autodict(include: Union[str, Tuple[str]]=None, exclude: Union[str, Tuple[str
                                                    only_public_fields=only_public_fields)
 
 
-def autodict_decorate(cls: Type[Any], include: Union[str, Tuple[str]] = None,
+T = TypeVar('T')
+
+
+def autodict_decorate(cls: 'Type[T]', include: Union[str, Tuple[str]] = None,
                       exclude: Union[str, Tuple[str]] = None, only_constructor_args: bool = True,
-                      only_public_fields: bool = True) -> Type[Any]:
+                      only_public_fields: bool = True) -> 'Type[T]':
     """
     To automatically generate the appropriate methods so that objects of this class behave like a `dict`,
     manually, without using @autodict decorator.
@@ -65,7 +68,10 @@ def autodict_decorate(cls: Type[Any], include: Union[str, Tuple[str]] = None,
     return cls
 
 
-def _execute_autodict_on_class(object_type: Type[Any], include: Union[str, Tuple[str]]=None,
+T = TypeVar('T')
+
+
+def _execute_autodict_on_class(object_type: 'Type[T]', include: Union[str, Tuple[str]]=None,
                                exclude: Union[str, Tuple[str]]=None, only_constructor_args: bool = True,
                                only_public_fields: bool = True):
     """

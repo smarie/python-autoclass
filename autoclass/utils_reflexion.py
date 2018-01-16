@@ -1,5 +1,5 @@
 from inspect import signature, getmembers, Parameter
-from typing import Type, Any
+from typing import Any  # do not import Type for compatibility with earlier python 3.5
 
 
 # def get_missing_mandatory_parameters(param_names:set, object_type:Type[Any]):

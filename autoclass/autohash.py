@@ -1,7 +1,6 @@
 from collections import Sequence
 from inspect import signature
-from typing import Type, Any, Tuple, Union, Dict
-from warnings import warn
+from typing import Tuple, Union, TypeVar  # do not fail on import Type for compatibility with earlier python 3.5
 
 from autoclass import check_var
 from autoclass.utils_include_exclude import _sieve
@@ -33,8 +32,11 @@ def autohash(include: Union[str, Tuple[str]]=None, exclude: Union[str, Tuple[str
                                                    only_public_fields=only_public_fields)
 
 
-def autohash_decorate(cls: Type[Any], include: Union[str, Tuple[str]] = None, exclude: Union[str, Tuple[str]] = None,
-                      only_constructor_args: bool = False, only_public_fields: bool = False) -> Type[Any]:
+T = TypeVar('T')
+
+
+def autohash_decorate(cls: 'Type[T]', include: Union[str, Tuple[str]] = None, exclude: Union[str, Tuple[str]] = None,
+                      only_constructor_args: bool = False, only_public_fields: bool = False) -> 'Type[T]':
     """
     To automatically generate the appropriate methods so that objects of this class are hashable,
     manually, without using @autohash decorator.
@@ -62,7 +64,7 @@ def autohash_decorate(cls: Type[Any], include: Union[str, Tuple[str]] = None, ex
     return cls
 
 
-def _execute_autohash_on_class(object_type: Type[Any], include: Union[str, Tuple[str]]=None,
+def _execute_autohash_on_class(object_type: 'Type[T]', include: Union[str, Tuple[str]]=None,
                                exclude: Union[str, Tuple[str]]=None, only_constructor_args: bool = False,
                                only_public_fields: bool = False):
     """

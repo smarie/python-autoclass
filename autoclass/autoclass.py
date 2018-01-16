@@ -1,4 +1,4 @@
-from typing import Union, Tuple, Type, Any
+from typing import Any, Union, Tuple, TypeVar  # do not import Type for compatibility with earlier python 3.5
 
 from autoclass.autoargs import autoargs_decorate
 from autoclass.autoprops import autoprops_decorate
@@ -25,9 +25,12 @@ def autoclass(include: Union[str, Tuple[str]]=None, exclude: Union[str, Tuple[st
                                                    autoprops=autoprops, autodict=autodict, autohash=autohash)
 
 
-def autoclass_decorate(cls: Type[Any], include: Union[str, Tuple[str]] = None, exclude: Union[str, Tuple[str]] = None,
+T = TypeVar('T')
+
+
+def autoclass_decorate(cls: 'Type[T]', include: Union[str, Tuple[str]] = None, exclude: Union[str, Tuple[str]] = None,
                        autoargs: bool=True, autoprops: bool=True, autodict: bool=True, autohash: bool=True) \
-        -> Type[Any]:
+        -> 'Type[T]':
     """
 
     :param cls: the class on which to execute. Note that it won't be wrapped.
