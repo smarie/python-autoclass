@@ -10,11 +10,12 @@
  * with `@autodict`, your object behaves like a dictionary, is comparable with dictionaries, and gets a string representation
  * with `@autoclass`, you get all of the above at once
 
-The intent is similar to [attrs](https://github.com/python-attrs/attrs): remove boilerplate code. However as opposed to `attrs`, 
+The intent is similar to [attrs](https://github.com/python-attrs/attrs) and [PEP557](https://www.python.org/dev/peps/pep-0557): remove boilerplate code. However as opposed to these, 
 
  * this library does not change anything in your coding habits: you still create a `__init__` constructor, and everything else is provided with decorators.
  * all decorators can be used independently, for example if you just need to add a dictionary behaviour to an existing class you can use `@autodict` only. Besides, all decorators can be manually applied to already existing classes.
  * all created code is not dynamically compiled using `compile`. This obviously leads to poorer performance than `attrs` in highly demanding applications, but for many standard use cases it works well, and provides better debug-ability (you can easily step through the generated functions to understand what's going on)
+ * as opposed to `attrs`, setters are generated for the fields so validation libraries such as [valid8](https://smarie.github.io/python-valid8/) can wrap them.
 
 Finally, `autoclass` simply generates the same code that you *would have written* manually. For this reason, in many cases you can use *other* libraries on top of the resulting classes without hassle. A good example is that you can use any PEP484 type checking library of your choice.
 
@@ -200,7 +201,7 @@ InvalidName: name should be a non-empty string.
 InvalidSurface: Surface should be between 0 and 10000 and be a multiple of 100.
 ```
 
-See `valid8` documentation for details. Note that other validation libraries relying on the same principles could probably be supported easily, please create an issue to suggest some !
+See `valid8` [documentation](https://smarie.github.io/python-valid8) for details. Note that other validation libraries relying on the same principles could probably be supported easily, please create an issue to suggest some !
 
 
 #### PyContracts
@@ -385,7 +386,7 @@ Really, *"there must be a better way"* : yes there is, and that's what this libr
 
 * [attrs](https://github.com/python-attrs/attrs) is a library with the same target, but the way to use it is quite different from 'standard' python. It is very powerful and elegant, though.
 
-* There is a new PEP out there, largely inspired by `attrs`: [PEP557](https://www.python.org/dev/peps/pep-0557). Check it out!
+* The new PEP out there, largely inspired by `attrs`: [PEP557](https://www.python.org/dev/peps/pep-0557). Check it out! There is also a [discussion on python-ideas](https://groups.google.com/forum/#!topic/python-ideas/8vUm84CCb3c).
 
 * [decorator](http://decorator.readthedocs.io/en/stable/) library, which provides everything one needs to create complex decorators easily (signature and annotations-preserving decorators, decorators with class factory) as well as provides some useful decorators (`@contextmanager`, `@blocking`, `@dispatch_on`). We use it to preserve the signature of class constructors and overriden setter methods.
 
