@@ -28,7 +28,7 @@
         <meta name="lang:search.tokenizer" content="[\s\-]+">
       
       <link rel="shortcut icon" href="./assets/images/favicon.png">
-      <meta name="generator" content="mkdocs-0.17.2, mkdocs-material-2.5.0">
+      <meta name="generator" content="mkdocs-0.17.2, mkdocs-material-2.5.2">
     
     
       
@@ -36,7 +36,7 @@
       
     
     
-      <link rel="stylesheet" href="./assets/stylesheets/application.2a88008a.css">
+      <link rel="stylesheet" href="./assets/stylesheets/application.aa3de92b.css">
       
     
     
@@ -67,6 +67,11 @@
     <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="drawer">
     <input class="md-toggle" data-md-toggle="search" type="checkbox" id="search">
     <label class="md-overlay" data-md-component="overlay" for="drawer"></label>
+    
+      <a href="#python-autoclass" tabindex="1" class="md-skip">
+        Skip to content
+      </a>
+    
     
       <header class="md-header" data-md-component="header">
   <nav class="md-header-nav md-grid">
@@ -570,11 +575,12 @@
 <li>with <code>@autodict</code>, your object behaves like a dictionary, is comparable with dictionaries, and gets a string representation</li>
 <li>with <code>@autoclass</code>, you get all of the above at once</li>
 </ul>
-<p>The intent is similar to <a href="https://github.com/python-attrs/attrs">attrs</a>: remove boilerplate code. However as opposed to <code>attrs</code>, </p>
+<p>The intent is similar to <a href="https://github.com/python-attrs/attrs">attrs</a> and <a href="https://www.python.org/dev/peps/pep-0557">PEP557</a>: remove boilerplate code. However as opposed to these, </p>
 <ul>
 <li>this library does not change anything in your coding habits: you still create a <code>__init__</code> constructor, and everything else is provided with decorators.</li>
 <li>all decorators can be used independently, for example if you just need to add a dictionary behaviour to an existing class you can use <code>@autodict</code> only. Besides, all decorators can be manually applied to already existing classes.</li>
 <li>all created code is not dynamically compiled using <code>compile</code>. This obviously leads to poorer performance than <code>attrs</code> in highly demanding applications, but for many standard use cases it works well, and provides better debug-ability (you can easily step through the generated functions to understand what's going on)</li>
+<li>as opposed to <code>attrs</code>, setters are generated for the fields so validation libraries such as <a href="https://smarie.github.io/python-valid8/">valid8</a> can wrap them.</li>
 </ul>
 <p>Finally, <code>autoclass</code> simply generates the same code that you <em>would have written</em> manually. For this reason, in many cases you can use <em>other</em> libraries on top of the resulting classes without hassle. A good example is that you can use any PEP484 type checking library of your choice.</p>
 <h2 id="installing">Installing<a class="headerlink" href="#installing" title="Permanent link">&para;</a></h2>
@@ -735,7 +741,7 @@ InvalidSurface: Surface should be between <span class="m">0</span> and <span cla
 </pre></div>
 
 
-<p>See <code>valid8</code> documentation for details. Note that other validation libraries relying on the same principles could probably be supported easily, please create an issue to suggest some !</p>
+<p>See <code>valid8</code> <a href="https://smarie.github.io/python-valid8">documentation</a> for details. Note that other validation libraries relying on the same principles could probably be supported easily, please create an issue to suggest some !</p>
 <h4 id="pycontracts">PyContracts<a class="headerlink" href="#pycontracts" title="Permanent link">&para;</a></h4>
 <p><a href="https://andreacensi.github.io/contracts/index.html">PyContracts</a> is also supported:</p>
 <div class="codehilite"><pre><span></span><span class="kn">from</span> <span class="nn">autoclass</span> <span class="kn">import</span> <span class="n">autoclass</span>
@@ -919,7 +925,7 @@ InvalidSurface: Surface should be between <span class="m">0</span> and <span cla
 <p><a href="https://github.com/python-attrs/attrs">attrs</a> is a library with the same target, but the way to use it is quite different from 'standard' python. It is very powerful and elegant, though.</p>
 </li>
 <li>
-<p>There is a new PEP out there, largely inspired by <code>attrs</code>: <a href="https://www.python.org/dev/peps/pep-0557">PEP557</a>. Check it out!</p>
+<p>The new PEP out there, largely inspired by <code>attrs</code>: <a href="https://www.python.org/dev/peps/pep-0557">PEP557</a>. Check it out! There is also a <a href="https://groups.google.com/forum/#!topic/python-ideas/8vUm84CCb3c">discussion on python-ideas</a>.</p>
 </li>
 <li>
 <p><a href="http://decorator.readthedocs.io/en/stable/">decorator</a> library, which provides everything one needs to create complex decorators easily (signature and annotations-preserving decorators, decorators with class factory) as well as provides some useful decorators (<code>@contextmanager</code>, <code>@blocking</code>, <code>@dispatch_on</code>). We use it to preserve the signature of class constructors and overriden setter methods.</p>
@@ -993,7 +999,7 @@ InvalidSurface: Surface should be between <span class="m">0</span> and <span cla
       
     </div>
     
-      <script src="./assets/javascripts/application.ce2ab4bf.js"></script>
+      <script src="./assets/javascripts/application.f041762f.js"></script>
       
       <script>app.initialize({version:"0.17.2",url:{base:"."}})</script>
       
