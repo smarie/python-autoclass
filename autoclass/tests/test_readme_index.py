@@ -291,10 +291,10 @@ def test_readme_pycontracts_complex():
 
 @pytest.mark.skip(reason="open bug in pytypes https://github.com/Stewori/pytypes/issues/19")
 def test_readme_pytypes_validate_complex():
-    """ A more complex pytypes + validate example """
+    """ A more complex pytypes + valid8 example """
 
     from autoclass import autoclass, setter_override
-    from valid8 import Boolean, validate, minlens, gt
+    from valid8 import Boolean, validate_io, minlens, gt
     from numbers import Real, Integral
     from typing import Optional
 
@@ -305,8 +305,8 @@ def test_readme_pytypes_validate_complex():
     @autoclass
     class HouseConfiguration(object):
 
-        @validate(name=minlens(0),
-                  surface=gt(0))
+        @validate_io(name=minlens(0),
+                     surface=gt(0))
         def __init__(self,
                      name: str,
                      surface: Real,

@@ -3,7 +3,7 @@ from typing import List
 import pytest
 from autoclass import autoargs, autoprops, getter_override, setter_override, \
     IllegalSetterSignatureException, DuplicateOverrideError, autoprops_decorate
-from valid8 import Boolean, minlens, gts, between, validate, ValidationError
+from valid8 import Boolean, minlens, gts, between, validate_io, ValidationError
 
 
 def test_autoprops_no_contract():
@@ -251,7 +251,7 @@ def test_autoprops_signature_preserving():
 
 
 def test_autoprops_enforce_validate():
-    """ Makes sure that autoprops works with enforce AND validate """
+    """ Makes sure that autoprops works with enforce AND valid8 """
 
     # from autoclass import autoargs, autoprops, Boolean
     import enforce as en
@@ -265,9 +265,9 @@ def test_autoprops_enforce_validate():
     @autoprops
     class HouseConfiguration(object):
         @autoargs
-        @validate(name=minlens(0),
-                  surface=gts(0),
-                  nb_floors=between(1, 100, open_right=True))
+        @validate_io(name=minlens(0),
+                     surface=gts(0),
+                     nb_floors=between(1, 100, open_right=True))
         def __init__(self,
                      name: str,
                      surface: Real,

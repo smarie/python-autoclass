@@ -1,3 +1,8 @@
+### 1.10.1 - compatibility
+
+ * Now compliant with old versions of `typing` module: `typing.Type` is not imported explicitly anymore.
+ * tests updated with latest version of `valid8`
+
 ### 1.10.0 - bugfixes and updated doc
 
  * Updated documentation main page

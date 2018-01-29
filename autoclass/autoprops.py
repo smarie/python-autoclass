@@ -105,7 +105,7 @@ def _execute_autoprops_on_class(object_type: 'Type[T]', include: Union[str, Tupl
 
     # option a) pycontracts
     contracts_dict = constructor.__contracts__ if hasattr(constructor, '__contracts__') else {}
-    # option b) validate
+    # option b) valid8
     validators_dict = constructor.__validators__ if hasattr(constructor, '__validators__') else {}
 
     # 2. For each attribute that is not 'self' and is included and not excluded, add the property
@@ -376,14 +376,14 @@ def _add_contract_to_setter(setter_fun, var_name, property_contract, property_na
 
 def _add_validators_to_setter(setter_fun, var_name, validators, property_name):
 
-    # 0. check that we can import validate
+    # 0. check that we can import valid8
     # note: this is useless now but maybe one day validate will be another project ?
     try:
         # noinspection PyUnresolvedReferences
         from valid8 import decorate_with_validators
     except ImportError:
-        raise Exception('Use of _add_contract_to_setter requires that validate library is installed. Check that you can'
-                        ' \'import validate\'')
+        raise Exception('Use of _add_contract_to_setter requires that valid8 library is installed. Check that you can'
+                        ' \'import valid8\'')
 
     # -- check if a contract already exists on the function
     if hasattr(setter_fun, '__validators__'):

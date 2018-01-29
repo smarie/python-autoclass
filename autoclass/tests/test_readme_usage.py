@@ -1,14 +1,14 @@
 import pytest
 from autoclass import autoargs, autoprops, autodict, autoclass, autohash
 from typing import List
-from valid8 import Boolean, minlens, validate, ValidationError, gt, minlen
+from valid8 import Boolean, minlens, validate_io, ValidationError, gt, minlen
 
 
 def test_readme_usage_autoprops_validate():
     @autoprops
     class FooConfigA(object):
         @autoargs
-        @validate(a=minlens(0))
+        @validate_io(a=minlens(0))
         def __init__(self, a: str):
             pass
 
@@ -154,7 +154,7 @@ def test_readme_usage_autoclass():
     @runtime_validation
     @autoclass
     class AllOfTheAbove:
-        @validate(a=gt(1), c=minlen(1))
+        @validate_io(a=gt(1), c=minlen(1))
         def __init__(self, a: Integral, b: Boolean, c: Optional[List[str]] = None):
             pass
 
@@ -189,7 +189,7 @@ def test_readme_usage_autoclass_custom():
     @runtime_validation
     @autoclass(autodict=False)
     class PartsOfTheAbove:
-        @validate(a=gt(1), c=minlen(1))
+        @validate_io(a=gt(1), c=minlen(1))
         def __init__(self, a: Integral, b: Boolean, c: Optional[List[str]] = None):
             pass
 
