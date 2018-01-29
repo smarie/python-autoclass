@@ -228,7 +228,7 @@ function filter_table(elem) {
     not_found_message.hidden = !all_rows_hidden;
 }
 </script>
-    <p>Report generated on 29-Jan-2018 at 12:55:25 by<a href="https://pypi.python.org/pypi/pytest-html"> pytest-html</a> v1.16.1</p>
+    <p>Report generated on 29-Jan-2018 at 12:56:21 by<a href="https://pypi.python.org/pypi/pytest-html"> pytest-html</a> v1.16.1</p>
     <h2>Environment</h2>
     <table id="environment">
       <tr>
@@ -239,25 +239,25 @@ function filter_table(elem) {
         <td>/usr/lib/jvm/java-8-oracle</td></tr>
       <tr>
         <td>Packages</td>
-        <td>{&apos;pytest&apos;: &apos;3.2.1&apos;, &apos;pluggy&apos;: &apos;0.4.0&apos;, &apos;py&apos;: &apos;1.4.34&apos;}</td></tr>
+        <td>{&apos;pluggy&apos;: &apos;0.4.0&apos;, &apos;py&apos;: &apos;1.4.34&apos;, &apos;pytest&apos;: &apos;3.2.1&apos;}</td></tr>
       <tr>
         <td>Platform</td>
         <td>Linux-4.4.0-101-generic-x86_64-with-debian-jessie-sid</td></tr>
       <tr>
         <td>Plugins</td>
-        <td>{&apos;cov&apos;: &apos;2.5.1&apos;, &apos;html&apos;: &apos;1.16.1&apos;, &apos;logging&apos;: &apos;2015.11.4&apos;, &apos;metadata&apos;: &apos;1.5.1&apos;}</td></tr>
+        <td>{&apos;html&apos;: &apos;1.16.1&apos;, &apos;metadata&apos;: &apos;1.5.1&apos;, &apos;cov&apos;: &apos;2.5.1&apos;, &apos;logging&apos;: &apos;2015.11.4&apos;}</td></tr>
       <tr>
         <td>Python</td>
         <td>3.5.4</td></tr>
       <tr>
         <td>TRAVIS_BRANCH</td>
-        <td>master</td></tr>
+        <td>1.10.1</td></tr>
       <tr>
         <td>TRAVIS_BUILD_ID</td>
-        <td>334685388</td></tr>
+        <td>334685406</td></tr>
       <tr>
         <td>TRAVIS_BUILD_NUMBER</td>
-        <td>86</td></tr>
+        <td>87</td></tr>
       <tr>
         <td>TRAVIS_COMMIT</td>
         <td>dc4707db382f8308b603fa3cdfcc0d00e84a7bd4</td></tr>
@@ -265,17 +265,14 @@ function filter_table(elem) {
         <td>TRAVIS_COMMIT_MESSAGE</td>
         <td>updated changelog, and updated tests to work with latest valid8</td></tr>
       <tr>
-        <td>TRAVIS_COMMIT_RANGE</td>
-        <td>3d1d1eef53d4...dc4707db382f</td></tr>
-      <tr>
         <td>TRAVIS_EVENT_TYPE</td>
         <td>push</td></tr>
       <tr>
         <td>TRAVIS_JOB_ID</td>
-        <td>334685389</td></tr>
+        <td>334685409</td></tr>
       <tr>
         <td>TRAVIS_JOB_NUMBER</td>
-        <td>86.1</td></tr>
+        <td>87.1</td></tr>
       <tr>
         <td>TRAVIS_OS_NAME</td>
         <td>linux</td></tr>
@@ -287,9 +284,12 @@ function filter_table(elem) {
         <td>smarie/python-autoclass</td></tr>
       <tr>
         <td>TRAVIS_SUDO</td>
-        <td>true</td></tr></table>
+        <td>true</td></tr>
+      <tr>
+        <td>TRAVIS_TAG</td>
+        <td>1.10.1</td></tr></table>
     <h2>Summary</h2>
-    <p>50 tests ran in 1.68 seconds. </p>
+    <p>50 tests ran in 1.49 seconds. </p>
     <p class="filter" hidden="true">(Un)check the boxes to filter the results.</p><input checked="true" class="filter" data-test-result="passed" hidden="true" name="filter_checkbox" onChange="filter_table(this)" type="checkbox"/><span class="passed">47 passed</span>, <input checked="true" class="filter" data-test-result="skipped" hidden="true" name="filter_checkbox" onChange="filter_table(this)" type="checkbox"/><span class="skipped">1 skipped</span>, <input checked="true" class="filter" data-test-result="failed" hidden="true" name="filter_checkbox" onChange="filter_table(this)" type="checkbox"/><span class="failed">3 failed</span>, <input checked="true" class="filter" data-test-result="error" disabled="true" hidden="true" name="filter_checkbox" onChange="filter_table(this)" type="checkbox"/><span class="error">0 errors</span>, <input checked="true" class="filter" data-test-result="xfailed" disabled="true" hidden="true" name="filter_checkbox" onChange="filter_table(this)" type="checkbox"/><span class="xfailed">0 expected failures</span>, <input checked="true" class="filter" data-test-result="xpassed" disabled="true" hidden="true" name="filter_checkbox" onChange="filter_table(this)" type="checkbox"/><span class="xpassed">0 unexpected passes</span>
     <h2>Results</h2>
     <table id="results-table">
@@ -303,6 +303,17 @@ function filter_table(elem) {
           <th>Links</th></tr>
         <tr hidden="true" id="not-found-message">
           <th colspan="6">No results found. Try to check the filters</th></tr></thead>
+      <tbody class="failed results-table-row">
+        <tr>
+          <td class="col-result">Failed</td>
+          <th>autoclass/tests/test_readme_index.py</th>
+          <td>test_readme_index_basic</td>
+          <td> First basic example in the doc </td>
+          <td class="col-duration">0.01</td>
+          <td><a href="https://codecov.io/gh/smarie/python-autoclass/src/dc4707db382f8308b603fa3cdfcc0d00e84a7bd4/autoclass/tests/test_readme_index.py#L5">source</a></td></tr>
+        <tr>
+          <td class="extra" colspan="6">
+            <div class="log">def test_readme_index_basic():<br/>        &quot;&quot;&quot; First basic example in the doc &quot;&quot;&quot;<br/>    <br/>        from autoclass import autoclass<br/>    <br/>        @autoclass<br/>        class House:<br/>            def __init__(self, name, nb_floors=1):<br/>                pass<br/>    <br/>        a = House(&#x27;my_house&#x27;, 3)<br/>&gt;       assert str(a) == &quot;House({&#x27;name&#x27;: &#x27;my_house&#x27;, &#x27;nb_floors&#x27;: 3})&quot;<br/><span class="error">E       assert &quot;House({&#x27;nb_f... &#x27;my_house&#x27;})&quot; == &quot;House({&#x27;name&#x27;..._floors&#x27;: 3})&quot;</span><br/><span class="error">E         - House({&#x27;nb_floors&#x27;: 3, &#x27;name&#x27;: &#x27;my_house&#x27;})</span><br/><span class="error">E         + House({&#x27;name&#x27;: &#x27;my_house&#x27;, &#x27;nb_floors&#x27;: 3})</span><br/><br/>autoclass/tests/test_readme_index.py:17: AssertionError<br/></div></td></tr></tbody>
       <tbody class="failed results-table-row">
         <tr>
           <td class="col-result">Failed</td>
@@ -325,17 +336,6 @@ function filter_table(elem) {
         <tr>
           <td class="extra" colspan="6">
             <div class="log">def test_readme_index_enforce_valid8():<br/>        &quot;&quot;&quot; Makes sure that the code in the documentation page is correct for the enforce + valid8 example &quot;&quot;&quot;<br/>    <br/>        from autoclass import autoclass<br/>    <br/>        # Imports - for type validation<br/>        from numbers import Integral<br/>        from enforce import runtime_validation, config<br/>        config(dict(mode=&#x27;covariant&#x27;))  # type validation will accept subclasses too<br/>    <br/>        # Imports - for value validation<br/>&gt;       from mini_lambda import s, x, Len<br/><span class="error">E       ImportError: No module named &#x27;mini_lambda&#x27;</span><br/><br/>autoclass/tests/test_readme_index.py:143: ImportError<br/></div></td></tr></tbody>
-      <tbody class="failed results-table-row">
-        <tr>
-          <td class="col-result">Failed</td>
-          <th>autoclass/tests/test_readme_usage.py</th>
-          <td>test_readme_usage_autohash_1</td>
-          <td>None</td>
-          <td class="col-duration">0.00</td>
-          <td><a href="https://codecov.io/gh/smarie/python-autoclass/src/dc4707db382f8308b603fa3cdfcc0d00e84a7bd4/autoclass/tests/test_readme_usage.py#L99">source</a></td></tr>
-        <tr>
-          <td class="extra" colspan="6">
-            <div class="log">def test_readme_usage_autohash_1():<br/>        @autohash<br/>        class A(object):<br/>            def __init__(self, a: int, b: str):<br/>                self.a = a<br/>                self.b = b<br/>    <br/>        o = A(1, &#x27;r&#x27;)<br/>        o._test = 2<br/>    <br/>        # o is hashable<br/>&gt;       assert hash(o) == hash((1, &#x27;r&#x27;, 2))<br/><span class="error">E       AssertionError: assert -8789013296310095931 == 215580139830736179</span><br/><span class="error">E        +  where -8789013296310095931 = hash(&lt;autoclass.tests.test_readme_usage.test_readme_usage_autohash_1.&lt;locals&gt;.A object at 0x7f518c0f40b8&gt;)</span><br/><span class="error">E        +  and   215580139830736179 = hash((1, &#x27;r&#x27;, 2))</span><br/><br/>autoclass/tests/test_readme_usage.py:111: AssertionError<br/></div></td></tr></tbody>
       <tbody class="skipped results-table-row">
         <tr>
           <td class="col-result">Skipped</td>
@@ -618,7 +618,7 @@ function filter_table(elem) {
     @autopropsBasic functionality with PyContracts - if a `@contract` annotation exist on the `__init__` method,
     mentioning a contract for a given parameter, the parameter contract will be added on the generated setter method
     </td>
-          <td class="col-duration">0.33</td>
+          <td class="col-duration">0.28</td>
           <td><a href="https://codecov.io/gh/smarie/python-autoclass/src/dc4707db382f8308b603fa3cdfcc0d00e84a7bd4/autoclass/tests/test_autoprops.py#L27">source</a></td></tr>
         <tr>
           <td class="extra" colspan="6">
@@ -629,7 +629,7 @@ function filter_table(elem) {
           <th>autoclass/tests/test_autoprops.py</th>
           <td>test_autoprops_include</td>
           <td> @autoprops With pycontracts and explicit list of attributes to include </td>
-          <td class="col-duration">0.01</td>
+          <td class="col-duration">0.00</td>
           <td><a href="https://codecov.io/gh/smarie/python-autoclass/src/dc4707db382f8308b603fa3cdfcc0d00e84a7bd4/autoclass/tests/test_autoprops.py#L55">source</a></td></tr>
         <tr>
           <td class="extra" colspan="6">
@@ -723,19 +723,8 @@ Set surface to 0.1
           <th>autoclass/tests/test_autoprops.py</th>
           <td>test_autoprops_enforce_default</td>
           <td> Tests that the default value is also set in the setters if it is provided in the constructor </td>
-          <td class="col-duration">0.01</td>
+          <td class="col-duration">0.00</td>
           <td><a href="https://codecov.io/gh/smarie/python-autoclass/src/dc4707db382f8308b603fa3cdfcc0d00e84a7bd4/autoclass/tests/test_autoprops.py#L303">source</a></td></tr>
-        <tr>
-          <td class="extra" colspan="6">
-            <div class="empty log">No log output captured.</div></td></tr></tbody>
-      <tbody class="passed results-table-row">
-        <tr>
-          <td class="col-result">Passed</td>
-          <th>autoclass/tests/test_readme_index.py</th>
-          <td>test_readme_index_basic</td>
-          <td> First basic example in the doc </td>
-          <td class="col-duration">0.01</td>
-          <td><a href="https://codecov.io/gh/smarie/python-autoclass/src/dc4707db382f8308b603fa3cdfcc0d00e84a7bd4/autoclass/tests/test_readme_index.py#L5">source</a></td></tr>
         <tr>
           <td class="extra" colspan="6">
             <div class="empty log">No log output captured.</div></td></tr></tbody>
@@ -778,7 +767,7 @@ Set surface to 0.1
           <th>autoclass/tests/test_readme_index.py</th>
           <td>test_readme_pycontracts_simple</td>
           <td> Simple test with pycontracts </td>
-          <td class="col-duration">0.03</td>
+          <td class="col-duration">0.02</td>
           <td><a href="https://codecov.io/gh/smarie/python-autoclass/src/dc4707db382f8308b603fa3cdfcc0d00e84a7bd4/autoclass/tests/test_readme_index.py#L171">source</a></td></tr>
         <tr>
           <td class="extra" colspan="6">
@@ -800,7 +789,7 @@ Set surface to 0.1
           <th>autoclass/tests/test_readme_index.py</th>
           <td>test_readme_pycontracts_complex</td>
           <td> Makes sure that the code in the documentation page is correct for the PyContracts example </td>
-          <td class="col-duration">0.04</td>
+          <td class="col-duration">0.05</td>
           <td><a href="https://codecov.io/gh/smarie/python-autoclass/src/dc4707db382f8308b603fa3cdfcc0d00e84a7bd4/autoclass/tests/test_readme_index.py#L256">source</a></td></tr>
         <tr>
           <td class="extra" colspan="6">
@@ -822,7 +811,7 @@ Set surface to 0.1
           <th>autoclass/tests/test_readme_usage.py</th>
           <td>test_readme_usage_autodict_1</td>
           <td> basic autodict without and with autoargs </td>
-          <td class="col-duration">0.01</td>
+          <td class="col-duration">0.00</td>
           <td><a href="https://codecov.io/gh/smarie/python-autoclass/src/dc4707db382f8308b603fa3cdfcc0d00e84a7bd4/autoclass/tests/test_readme_usage.py#L25">source</a></td></tr>
         <tr>
           <td class="extra" colspan="6">
@@ -846,6 +835,17 @@ Set surface to 0.1
           <td>None</td>
           <td class="col-duration">0.00</td>
           <td><a href="https://codecov.io/gh/smarie/python-autoclass/src/dc4707db382f8308b603fa3cdfcc0d00e84a7bd4/autoclass/tests/test_readme_usage.py#L80">source</a></td></tr>
+        <tr>
+          <td class="extra" colspan="6">
+            <div class="empty log">No log output captured.</div></td></tr></tbody>
+      <tbody class="passed results-table-row">
+        <tr>
+          <td class="col-result">Passed</td>
+          <th>autoclass/tests/test_readme_usage.py</th>
+          <td>test_readme_usage_autohash_1</td>
+          <td>None</td>
+          <td class="col-duration">0.00</td>
+          <td><a href="https://codecov.io/gh/smarie/python-autoclass/src/dc4707db382f8308b603fa3cdfcc0d00e84a7bd4/autoclass/tests/test_readme_usage.py#L99">source</a></td></tr>
         <tr>
           <td class="extra" colspan="6">
             <div class="empty log">No log output captured.</div></td></tr></tbody>
