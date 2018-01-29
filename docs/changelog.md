@@ -1,3 +1,7 @@
+### 1.10.2 - minor bugfix
+
+ * Fixed [#18](https://github.com/smarie/python-autoclass/issues/18)
+
 ### 1.10.1 - compatibility
 
  * Now compliant with old versions of `typing` module: `typing.Type` is not imported explicitly anymore.
