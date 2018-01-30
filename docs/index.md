@@ -388,7 +388,7 @@ Really, *"there must be a better way"* : yes there is, and that's what this libr
 
 * The new PEP out there, largely inspired by `attrs`: [PEP557](https://www.python.org/dev/peps/pep-0557). Check it out! There is also a [discussion on python-ideas](https://groups.google.com/forum/#!topic/python-ideas/8vUm84CCb3c).
 
-* [decorator](http://decorator.readthedocs.io/en/stable/) library, which provides everything one needs to create complex decorators easily (signature and annotations-preserving decorators, decorators with class factory) as well as provides some useful decorators (`@contextmanager`, `@blocking`, `@dispatch_on`). We use it to preserve the signature of class constructors and overriden setter methods.
+* [decorator](http://decorator.readthedocs.io) library, which provides everything one needs to create complex decorators easily (signature and annotations-preserving decorators, decorators with class factory) as well as provides some useful decorators (`@contextmanager`, `@blocking`, `@dispatch_on`). We use it to preserve the signature of class constructors and overriden setter methods.
 
 * When came the time to find a name for this library I was stuck for a while. In my quest for finding an explicit name that was not already used, I found many interesting libraries on [PyPI](http://pypi.python.org/). I did not test them all but found them 'good to know':
     * [decorator-args](https://pypi.python.org/pypi/decorator-args/1.1)
