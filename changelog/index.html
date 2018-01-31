@@ -68,7 +68,7 @@
     <input class="md-toggle" data-md-toggle="search" type="checkbox" id="search">
     <label class="md-overlay" data-md-component="overlay" for="drawer"></label>
     
-      <a href="#1102-minor-bugfix" tabindex="1" class="md-skip">
+      <a href="#1110-in-progress-autodict-fix" tabindex="1" class="md-skip">
         Skip to content
       </a>
     
@@ -258,6 +258,13 @@
     <ul class="md-nav__list" data-md-scrollfix>
       
         <li class="md-nav__item">
+  <a href="#1110-in-progress-autodict-fix" title="1.11.0 IN PROGRESS- autodict fix" class="md-nav__link">
+    1.11.0 IN PROGRESS- autodict fix
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#1102-minor-bugfix" title="1.10.2 - minor bugfix" class="md-nav__link">
     1.10.2 - minor bugfix
   </a>
@@ -432,6 +439,13 @@
     <ul class="md-nav__list" data-md-scrollfix>
       
         <li class="md-nav__item">
+  <a href="#1110-in-progress-autodict-fix" title="1.11.0 IN PROGRESS- autodict fix" class="md-nav__link">
+    1.11.0 IN PROGRESS- autodict fix
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#1102-minor-bugfix" title="1.10.2 - minor bugfix" class="md-nav__link">
     1.10.2 - minor bugfix
   </a>
@@ -597,7 +611,11 @@
                 
                   <h1>Changelog</h1>
                 
-                <h3 id="1102-minor-bugfix">1.10.2 - minor bugfix<a class="headerlink" href="#1102-minor-bugfix" title="Permanent link">&para;</a></h3>
+                <h3 id="1110-in-progress-autodict-fix">1.11.0 IN PROGRESS- autodict fix<a class="headerlink" href="#1110-in-progress-autodict-fix" title="Permanent link">&para;</a></h3>
+<ul>
+<li><code>@autodict</code> does not add the <code>from_dict</code> class method anymore if this methodalready exists. If it does not already exist however, it is now always created (even if <code>only_constructor_args=False</code>)</li>
+</ul>
+<h3 id="1102-minor-bugfix">1.10.2 - minor bugfix<a class="headerlink" href="#1102-minor-bugfix" title="Permanent link">&para;</a></h3>
 <ul>
 <li>Fixed <a href="https://github.com/smarie/python-autoclass/issues/18">#18</a></li>
 </ul>
