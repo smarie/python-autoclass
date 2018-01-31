@@ -1,3 +1,7 @@
+### 1.11.0 IN PROGRESS- autodict fix 
+
+ * `@autodict` does not add the `from_dict` class method anymore if this methodalready exists. If it does not already exist however, it is now always created (even if `only_constructor_args=False`)
+
 ### 1.10.2 - minor bugfix
 
  * Fixed [#18](https://github.com/smarie/python-autoclass/issues/18)
