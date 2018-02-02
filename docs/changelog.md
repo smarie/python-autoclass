@@ -1,3 +1,8 @@
+### 1.12.0 - autodict fix
+
+ * In case of inheritance, the order of attributes in now better and reproductible. Fixes [#20](https://github.com/smarie/python-autoclass/issues/20)
+ * Printed representation created by @autodict now uses the same order than the generated keys iterator on the dictionary-faceted object.
+
 ### 1.11.0 - autodict fixes
 
  * `@autodict` does not add the `from_dict` class method anymore if this method already exists. If it does not already exist however, it is now always created (even if `only_constructor_args=False`)

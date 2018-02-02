@@ -143,7 +143,7 @@ def _execute_autodict_on_class(object_type: 'Type[T]', include: Union[str, Tuple
             :return:
             """
             if super_is_already_a_mapping:
-                return iter(set(added).union({o for o in super(object_type, self).__iter__()}))
+                return iter(added + [o for o in super(object_type, self).__iter__() if o not in added])
             else:
                 return iter(added)
 
@@ -218,7 +218,8 @@ def _execute_autodict_on_class(object_type: 'Type[T]', include: Union[str, Tuple
                 :return:
                 """
                 if super_is_already_a_mapping:
-                    return iter(vars(self).union({o for o in super(object_type, self).__iter__()}))
+                    return iter(list(vars(self)) + [o for o in super(object_type, self).__iter__()
+                                                    if o not in vars(self)])
                 else:
                     return iter(vars(self))
 
@@ -231,7 +232,8 @@ def _execute_autodict_on_class(object_type: 'Type[T]', include: Union[str, Tuple
                 :return:
                 """
                 if super_is_already_a_mapping:
-                    return len(vars(self).union({o for o in super(object_type, self).__iter__()}))
+                    return len(list(vars(self)) + [o for o in super(object_type, self).__iter__()
+                                                   if o not in vars(self)])
                 else:
                     return len(vars(self))
 
@@ -281,7 +283,8 @@ def _execute_autodict_on_class(object_type: 'Type[T]', include: Union[str, Tuple
                     :param self:
                     :return:
                     """
-                    for att_name in vars(self).union({o for o in super(object_type, self).__iter__()}):
+                    for att_name in (list(vars(self)) + [o for o in super(object_type, self).__iter__()
+                                                         if o not in vars(self)]):
                         if _sieve(att_name, include=include, exclude=exclude):
                             if not only_public_fields \
                                     or (only_public_fields and not att_name.startswith(private_name_prefix)):
@@ -429,7 +432,7 @@ def _execute_autodict_on_class(object_type: 'Type[T]', include: Union[str, Tuple
             :param self:
             :return:
             """
-            return type(self).__name__ + '(' + str(dict(self)) + ')'
+            return type(self).__name__ + '(' + print_ordered_dict(self) + ')'
 
         object_type.__str__ = __str__
 
@@ -443,8 +446,15 @@ def _execute_autodict_on_class(object_type: 'Type[T]', include: Union[str, Tuple
             :param self:
             :return:
             """
-            return type(self).__name__ + '(' + str(dict(self)) + ')'
+            return type(self).__name__ + '(' + print_ordered_dict(self) + ')'
 
         object_type.__repr__ = __repr__
 
     return
+
+
+def print_ordered_dict(obj):
+    # This destroys the order
+    # return str(dict(obj))
+    # This follows the order from __iter__
+    return '{' + ', '.join('{}: {}'.format(repr(k), repr(v)) for k, v in obj.items()) + '}'
