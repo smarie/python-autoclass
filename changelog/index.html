@@ -88,7 +88,7 @@
     <input class="md-toggle" data-md-toggle="search" type="checkbox" id="search">
     <label class="md-overlay" data-md-component="overlay" for="drawer"></label>
     
-      <a href="#1110-autodict-fixes" tabindex="1" class="md-skip">
+      <a href="#1120-autodict-fix" tabindex="1" class="md-skip">
         Skip to content
       </a>
     
@@ -278,6 +278,13 @@
     <ul class="md-nav__list" data-md-scrollfix>
       
         <li class="md-nav__item">
+  <a href="#1120-autodict-fix" title="1.12.0 - autodict fix" class="md-nav__link">
+    1.12.0 - autodict fix
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#1110-autodict-fixes" title="1.11.0 - autodict fixes" class="md-nav__link">
     1.11.0 - autodict fixes
   </a>
@@ -459,6 +466,13 @@
     <ul class="md-nav__list" data-md-scrollfix>
       
         <li class="md-nav__item">
+  <a href="#1120-autodict-fix" title="1.12.0 - autodict fix" class="md-nav__link">
+    1.12.0 - autodict fix
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#1110-autodict-fixes" title="1.11.0 - autodict fixes" class="md-nav__link">
     1.11.0 - autodict fixes
   </a>
@@ -631,7 +645,12 @@
                 
                   <h1>Changelog</h1>
                 
-                <h3 id="1110-autodict-fixes">1.11.0 - autodict fixes<a class="headerlink" href="#1110-autodict-fixes" title="Permanent link">&para;</a></h3>
+                <h3 id="1120-autodict-fix">1.12.0 - autodict fix<a class="headerlink" href="#1120-autodict-fix" title="Permanent link">&para;</a></h3>
+<ul>
+<li>In case of inheritance, the order of attributes in now better and reproductible. Fixes <a href="https://github.com/smarie/python-autoclass/issues/20">#20</a></li>
+<li>Printed representation created by @autodict now uses the same order than the generated keys iterator on the dictionary-faceted object.</li>
+</ul>
+<h3 id="1110-autodict-fixes">1.11.0 - autodict fixes<a class="headerlink" href="#1110-autodict-fixes" title="Permanent link">&para;</a></h3>
 <ul>
 <li><code>@autodict</code> does not add the <code>from_dict</code> class method anymore if this method already exists. If it does not already exist however, it is now always created (even if <code>only_constructor_args=False</code>)</li>
 <li>inheritance is now handled more correctly (not perfect but it seems to handle more cases) with <code>@autodict</code>. Fixes <a href="https://github.com/smarie/python-autoclass/issues/19">#19</a></li>
