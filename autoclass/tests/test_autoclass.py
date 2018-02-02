@@ -132,3 +132,23 @@ def test_readme_enforce():
     # Custom validation works
     with pytest.raises(AssertionError):
         t.surface = 0
+
+
+def test_autoclass_inheritance():
+    from autoclass import autoclass
+
+    @autoclass
+    class Foo:
+        def __init__(self, foo1, foo2=0):
+            pass
+
+    @autoclass
+    class Bar(Foo):
+        def __init__(self, bar, foo1, foo2=0):
+            # this constructor is not actually needed in this case since all fields are already self-assigned here
+            super(Bar, self).__init__(foo1, foo2)
+            # pass
+
+    a = Bar(2, 'th')
+    assert a == {'bar': 2, 'foo1': 'th', 'foo2': 0}
+    assert a['foo1'] == 'th'
