@@ -1,9 +1,10 @@
 from random import random
 
 import pytest
-from typing import List, Tuple
+from typing import List, Tuple, Dict
 
-from autoclass import autohash
+from autoclass import autohash, autoclass
+
 
 @pytest.mark.parametrize('only_public_fields', [True, False], ids=lambda x: 'only_public' if x else 'including class-private dunder fields')
 @pytest.mark.parametrize('only_constructor_args', [True, False], ids=lambda x: 'only_constructor_args' if x else 'all_obj_fields')
@@ -76,3 +77,16 @@ def test_autohash(only_constructor_args, only_public_fields):
 
     assert hash(a) != hash(f)
 
+
+def test_autohash_exclude():
+    """ Tests that exclusion works correctly with autohash """
+
+    # Currently the test does not work, see https://github.com/smarie/python-autoclass/issues/21
+    @autoclass(autohash=False)
+    @autohash(exclude='bar')
+    class Foo:
+        def __init__(self, foo: str, bar: Dict[str, str]):
+            pass
+
+    a = Foo('hello', dict())
+    hash(a)
