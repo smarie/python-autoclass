@@ -88,7 +88,7 @@
     <input class="md-toggle" data-md-toggle="search" type="checkbox" id="search">
     <label class="md-overlay" data-md-component="overlay" for="drawer"></label>
     
-      <a href="#1120-autodict-fix" tabindex="1" class="md-skip">
+      <a href="#1130-autodict_override" tabindex="1" class="md-skip">
         Skip to content
       </a>
     
@@ -276,6 +276,13 @@
   
     <label class="md-nav__title" for="toc">Table of contents</label>
     <ul class="md-nav__list" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#1130-autodict_override" title="1.13.0 - @autodict_override" class="md-nav__link">
+    1.13.0 - @autodict_override
+  </a>
+  
+</li>
       
         <li class="md-nav__item">
   <a href="#1120-autodict-fix" title="1.12.0 - autodict fix" class="md-nav__link">
@@ -466,6 +473,13 @@
     <ul class="md-nav__list" data-md-scrollfix>
       
         <li class="md-nav__item">
+  <a href="#1130-autodict_override" title="1.13.0 - @autodict_override" class="md-nav__link">
+    1.13.0 - @autodict_override
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#1120-autodict-fix" title="1.12.0 - autodict fix" class="md-nav__link">
     1.12.0 - autodict fix
   </a>
@@ -645,7 +659,11 @@
                 
                   <h1>Changelog</h1>
                 
-                <h3 id="1120-autodict-fix">1.12.0 - autodict fix<a class="headerlink" href="#1120-autodict-fix" title="Permanent link">&para;</a></h3>
+                <h3 id="1130-autodict_override">1.13.0 - @autodict_override<a class="headerlink" href="#1130-autodict_override" title="Permanent link">&para;</a></h3>
+<ul>
+<li>New annotation <code>@autodict_override</code> that you can use to override <code>__iter__</code>, <code>__getitem__</code> or <code>__len__</code>. Fixes <a href="https://github.com/smarie/python-autoclass/issues/22">#22</a></li>
+</ul>
+<h3 id="1120-autodict-fix">1.12.0 - autodict fix<a class="headerlink" href="#1120-autodict-fix" title="Permanent link">&para;</a></h3>
 <ul>
 <li>In case of inheritance, the order of attributes in now better and reproductible. Fixes <a href="https://github.com/smarie/python-autoclass/issues/20">#20</a></li>
 <li>Printed representation created by @autodict now uses the same order than the generated keys iterator on the dictionary-faceted object.</li>
