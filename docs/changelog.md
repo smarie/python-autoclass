@@ -1,3 +1,7 @@
+### 1.13.0 - @autodict_override
+
+ * New annotation `@autodict_override` that you can use to override `__iter__`, `__getitem__` or `__len__`. Fixes [#22](https://github.com/smarie/python-autoclass/issues/22)
+
 ### 1.12.0 - autodict fix
 
  * In case of inheritance, the order of attributes in now better and reproductible. Fixes [#20](https://github.com/smarie/python-autoclass/issues/20)

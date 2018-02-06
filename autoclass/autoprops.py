@@ -455,11 +455,13 @@ def autoprops_override_decorate(func: Callable, attribute:str = None, is_getter:
         if hasattr(func, __GETTER_OVERRIDE_ANNOTATION):
             raise DuplicateOverrideError('Getter is overridden twice for attribute name : ' + attr_name)
         else:
-            func.__getter_override__ = attr_name
+            # func.__getter_override__ = attr_name
+            setattr(func, __GETTER_OVERRIDE_ANNOTATION, attr_name)
     else:
         if hasattr(func, __SETTER_OVERRIDE_ANNOTATION):
             raise DuplicateOverrideError('Setter is overridden twice for attribute name : ' + attr_name)
         else:
-            func.__setter_override__ = attr_name
+            # func.__setter_override__ = attr_name
+            setattr(func, __SETTER_OVERRIDE_ANNOTATION, attr_name)
 
     return func

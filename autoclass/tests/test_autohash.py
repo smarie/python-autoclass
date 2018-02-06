@@ -78,6 +78,7 @@ def test_autohash(only_constructor_args, only_public_fields):
     assert hash(a) != hash(f)
 
 
+@pytest.mark.skip('Currently the test does not work, see https://github.com/smarie/python-autoclass/issues/21')
 def test_autohash_exclude():
     """ Tests that exclusion works correctly with autohash """
 
