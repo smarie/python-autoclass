@@ -1,7 +1,7 @@
 ### 1.14.0 - submodule name changes
 
  * The submodule names were conflicting with the variable names: renamed them all
- * The init file has been improved so as not to export symbols from other packages
+ * The init file has been improved so as not to export symbols from other packages. Fixes [#23](https://github.com/smarie/python-autoclass/issues/23)
 
 ### 1.13.0 - @autodict_override
 
