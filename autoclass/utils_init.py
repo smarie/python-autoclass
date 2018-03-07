@@ -28,6 +28,9 @@ def __get_all_submodules_symbols(pkg_name, submodules_to_export):
     All symbols in these submodules that are not private and that are actually defined in there, get in the list.
     The submodules themselves end up in the list.
 
+    Note that this function should only be used if you also actually import those symbols in the init.py, so that they
+    are actually visible at package root level.
+
     :param submodules_to_export: a list of submodule names to export
     :return:
     """
@@ -47,7 +50,7 @@ def __get_all_submodules_symbols(pkg_name, submodules_to_export):
             if not x_name.startswith('_'):
                 if __is_defined_in_submodule(submodule_full_name, symbol):
                     # print('{} is exported'.format(x_name))
-                    all_.append(submodule_full_name + '.' + x_name)
+                    all_.append(x_name)
     return all_
 
 

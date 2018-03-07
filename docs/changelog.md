@@ -1,6 +1,7 @@
 ### 1.14.0 - submodule name changes
 
- * The submodule names were conflicting with the variable names
+ * The submodule names were conflicting with the variable names: renamed them all
+ * The init file has been improved so as not to export symbols from other packages
 
 ### 1.13.0 - @autodict_override
 
