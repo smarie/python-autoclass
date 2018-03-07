@@ -4,6 +4,7 @@ from typing import Callable, Union, List, Set
 This var checker is only provided here as an example of what you'd like to do when you dont use any contract library
 """
 
+
 class MissingMandatoryParameterException(Exception):
     """ This is raised whenever a mandatory parameter is missing or null/None"""
 
