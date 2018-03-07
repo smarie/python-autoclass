@@ -7,7 +7,7 @@ from warnings import warn
 
 from decorator import decorate
 
-from autoclass import check_var
+from autoclass.var_checker import check_var
 from autoclass.utils_include_exclude import _sieve
 from autoclass.utils_reflexion import get_constructor
 from autoclass.utils_decoration import _create_function_decorator__robust_to_args, \

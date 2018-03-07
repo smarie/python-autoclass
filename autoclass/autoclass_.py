@@ -1,11 +1,11 @@
 from typing import Any, Union, Tuple, TypeVar  # do not import Type for compatibility with earlier python 3.5
 
-from autoclass.autoargs import autoargs_decorate
-from autoclass.autoprops import autoprops_decorate
-from autoclass.autodict import autodict_decorate
+from autoclass.autoargs_ import autoargs_decorate
+from autoclass.autoprops_ import autoprops_decorate
+from autoclass.autodict_ import autodict_decorate
 from autoclass.utils_reflexion import get_constructor
 from autoclass.utils_decoration import _create_class_decorator__robust_to_args
-from autoclass.autohash import autohash_decorate
+from autoclass.autohash_ import autohash_decorate
 
 
 def autoclass(include: Union[str, Tuple[str]]=None, exclude: Union[str, Tuple[str]]=None,

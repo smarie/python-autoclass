@@ -2,7 +2,7 @@ from collections import Sequence
 from inspect import signature
 from typing import Tuple, Union, TypeVar  # do not fail on import Type for compatibility with earlier python 3.5
 
-from autoclass import check_var
+from autoclass.var_checker import check_var
 from autoclass.utils_include_exclude import _sieve
 from autoclass.utils_reflexion import get_constructor
 from autoclass.utils_decoration import _create_class_decorator__robust_to_args, _check_known_decorators
