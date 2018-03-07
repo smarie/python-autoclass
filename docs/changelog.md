@@ -1,3 +1,7 @@
+### 1.14.0 - submodule name changes
+
+ * The submodule names were conflicting with the variable names
+
 ### 1.13.0 - @autodict_override
 
  * New annotation `@autodict_override` that you can use to override `__iter__`, `__getitem__` or `__len__`. Fixes [#22](https://github.com/smarie/python-autoclass/issues/22)
