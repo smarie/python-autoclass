@@ -1,3 +1,9 @@
+# Changelog
+
+### 1.15.0 - more tolerance for inherited constructors
+
+ * `autodict`, `autohash` and `autoprops` now tolerate inherited constructors
+
 ### 1.14.0 - submodule name changes
 
  * The submodule names were conflicting with the variable names: renamed them all

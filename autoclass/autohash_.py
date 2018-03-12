@@ -96,7 +96,7 @@ def _execute_autohash_on_class(object_type: 'Type[T]', include: Union[str, Tuple
 
         if only_constructor_args:
             # a. Find the __init__ constructor signature
-            constructor = get_constructor(object_type)
+            constructor = get_constructor(object_type, allow_inheritance=True)
             s = signature(constructor)
 
             # b. Collect all attributes that are not 'self' and are included and not excluded

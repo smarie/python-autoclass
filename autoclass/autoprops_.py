@@ -100,7 +100,7 @@ def _execute_autoprops_on_class(object_type: 'Type[T]', include: Union[str, Tupl
     check_var(exclude, var_name='exclude', var_types=[str, Sequence], enforce_not_none=False)
 
     # 1. Find the __init__ constructor signature and possible pycontracts @contract
-    constructor = get_constructor(object_type)
+    constructor = get_constructor(object_type, allow_inheritance=True)
     s = signature(constructor)
 
     # option a) pycontracts
