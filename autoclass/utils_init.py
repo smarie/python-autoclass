@@ -20,6 +20,23 @@ def __is_defined_in_submodule(submodule_name_prefix, x):
         return False
 
 
+def __get_submodule_symbols(submodule_full_name, submodule):
+
+    from inspect import getmembers, ismodule
+    all_ = []
+
+    for x_name, symbol in getmembers(submodule):
+        if not x_name.startswith('_'):
+            if __is_defined_in_submodule(submodule_full_name, symbol):
+                # print('{} is exported'.format(x_name))
+                if ismodule(symbol):
+                    all_ = all_ + __get_submodule_symbols(submodule_full_name + '.' + x_name, symbol)
+                else:
+                    all_.append(x_name)
+
+    return all_
+
+
 def __get_all_submodules_symbols(pkg_name, submodules_to_export):
     """
     Generates the list of symbol names that can be used in the `__all__` variable in init.py
@@ -34,8 +51,8 @@ def __get_all_submodules_symbols(pkg_name, submodules_to_export):
     :param submodules_to_export: a list of submodule names to export
     :return:
     """
-    from inspect import getmembers
     from copy import copy
+
     from importlib import import_module
 
     # first create a copy of the submodules list
@@ -46,11 +63,8 @@ def __get_all_submodules_symbols(pkg_name, submodules_to_export):
         submodule_full_name = pkg_name + '.' + submodule
         imported_module = import_module(submodule_full_name)
         # print(imported_module.__name__)
-        for x_name, symbol in getmembers(imported_module):
-            if not x_name.startswith('_'):
-                if __is_defined_in_submodule(submodule_full_name, symbol):
-                    # print('{} is exported'.format(x_name))
-                    all_.append(x_name)
+        all_ = all_ + __get_submodule_symbols(submodule_full_name, imported_module)
+
     return all_
 
 
