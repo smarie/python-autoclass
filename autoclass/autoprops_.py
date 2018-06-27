@@ -1,6 +1,7 @@
 import hashlib
 import linecache
 from collections import Sequence
+from copy import copy
 from inspect import getmembers, signature, Parameter
 from typing import Any, Tuple, Callable, Union, TypeVar  # do not import Type for compatibility with earlier python 3.5
 from warnings import warn
@@ -113,9 +114,20 @@ def _execute_autoprops_on_class(object_type: 'Type[T]', include: Union[str, Tupl
     for attr_name in s.parameters.keys():
         if _sieve(attr_name, include=include, exclude=exclude):
             added.append(attr_name)
-            _add_property(object_type, s.parameters[attr_name],
-                          pycontract=(contracts_dict[attr_name] if attr_name in contracts_dict.keys() else None),
-                          validators=(validators_dict[attr_name] if attr_name in validators_dict.keys() else None))
+
+            # pycontract
+            if attr_name in contracts_dict.keys():
+                pycontract = contracts_dict[attr_name]
+            else:
+                pycontract = None
+
+            # valid8 validators: create copies, because we will modify them (changing the validated function ref)
+            if attr_name in validators_dict.keys():
+                validators = [copy(v) for v in validators_dict[attr_name]]
+            else:
+                validators = None
+
+            _add_property(object_type, s.parameters[attr_name], pycontract=pycontract, validators=validators)
 
     # 3. Finally check that there is no overridden setter or getter that does not correspond to an attribute
     extra_overrides = getmembers(object_type, predicate=(lambda fun: callable(fun) and
@@ -395,6 +407,10 @@ def _add_validators_to_setter(setter_fun, var_name, validators, property_name):
 
     # -- add the generated contract
     setter_fun_with_validation = decorate_with_validators(setter_fun, **{var_name: validators})
+
+    # bind the validators to the setter function so that error message is correct
+    for v in validators:
+        v.validated_func = setter_fun_with_validation
 
     # # the only thing we can't do is to replace the function's parameter name dynamically in the validation error
     # #  messages so we wrap the function again to catch the potential pycontracts error :(

@@ -1,5 +1,9 @@
 # Changelog
 
+### 1.15.1 - fixed valid8 exception message
+
+ * Fixed [#24](https://github.com/smarie/python-autoclass/issues/24)
+
 ### 1.15.0 - more tolerance for inherited constructors
 
  * `autodict`, `autohash` and `autoprops` now tolerate inherited constructors
