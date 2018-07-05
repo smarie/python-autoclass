@@ -398,8 +398,7 @@ Really, *"there must be a better way"* : yes there is, and that's what this libr
     * [utils](https://pypi.python.org/pypi/utils/0.9.0)
 
 
-*Do you like this library ? You might also like [my other python libraries](https://github.com/smarie?utf8=%E2%9C%93&tab=repositories&q=&type=&language=python)* 
-
+*Do you like this library ? You might also like [my other python libraries](https://github.com/smarie/OVERVIEW#python)* 
 
 ## Want to contribute ?
 
