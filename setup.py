@@ -3,7 +3,7 @@ See:
 https://packaging.python.org/en/latest/distributing.html
 https://github.com/pypa/sampleproject
 """
-
+from six import raise_from
 from os import path
 
 from setuptools import setup, find_packages
@@ -11,7 +11,7 @@ from setuptools import setup, find_packages
 here = path.abspath(path.dirname(__file__))
 
 # *************** Dependencies *********
-INSTALL_REQUIRES = ['decorator']
+INSTALL_REQUIRES = ['decopatch', 'funcsigs;python_version<"3.3"', 'valid8', 'makefun']
 DEPENDENCY_LINKS = []
 SETUP_REQUIRES = ['pytest-runner', 'setuptools_scm', 'pypandoc', 'pandoc']
 TESTS_REQUIRE = ['pytest', 'pytest-logging', 'pytest-cov', 'PyContracts', 'enforce', 'pytypes', 'valid8>=2.0.0']
@@ -23,15 +23,15 @@ EXTRAS_REQUIRE = {'contracts': ['PyContracts'],
 try:
     from setuptools_scm import get_version
 except Exception as e:
-    raise Exception('Required packages for setup not found. You may wish you execute '
-                    '"pip install -r ci_tools/requirements-setup.txt" to install them or alternatively install them '
-                    'manually using conda or other system. The list is : ' + str(SETUP_REQUIRES)) from e
+    raise_from(Exception('Required packages for setup not found. You may wish you execute '
+                         '"pip install -r ci_tools/requirements-setup.txt" to install them or alternatively install '
+                         'them manually using conda or other system. The list is : ' + str(SETUP_REQUIRES)), e)
 
 # ************** ID card *****************
 DISTNAME = 'autoclass'
 DESCRIPTION = 'Helps you write compact python classes'
-MAINTAINER = 'Sylvain Marié'
-MAINTAINER_EMAIL = 'sylvain.marie@schneider-electric.com'
+MAINTAINER = 'Sylvain MARIE'
+MAINTAINER_EMAIL = 'sylvain.marie@se.com'
 URL = 'https://github.com/smarie/python-autoclass'
 LICENSE = 'BSD 3-Clause'
 LICENSE_LONG = 'License :: OSI Approved :: BSD License'
@@ -54,7 +54,7 @@ except(ImportError):
          'documentation correctly')
     LONG_DESCRIPTION = open('README.md').read()
 
-# ************* VERSION A **************
+# ************* VERSION **************
 # --Get the Version number from VERSION file, see https://packaging.python.org/single_source_version/ option 4.
 # THIS IS DEPRECATED AS WE NOW USE GIT TO MANAGE VERSION
 # with open(path.join(here, 'VERSION')) as version_file:
@@ -69,7 +69,7 @@ setup(
     # Versions should comply with PEP440.  For a discussion on single-sourcing
     # the version across setup.py and the project code, see
     # https://packaging.python.org/en/latest/single_source_version.html
-    #version=VERSION, NOW HANDLED BY GIT
+    # version=VERSION, NOW HANDLED BY GIT
 
     maintainer=MAINTAINER,
     maintainer_email=MAINTAINER_EMAIL,
@@ -97,12 +97,13 @@ setup(
         # that you indicate whether you support Python 2, Python 3 or both.
         # 'Programming Language :: Python :: 2',
         # 'Programming Language :: Python :: 2.6',
-        # 'Programming Language :: Python :: 2.7',
+        'Programming Language :: Python :: 2.7',
         # 'Programming Language :: Python :: 3',
         # 'Programming Language :: Python :: 3.3',
         # 'Programming Language :: Python :: 3.4',
         'Programming Language :: Python :: 3.5',
         'Programming Language :: Python :: 3.6',
+        'Programming Language :: Python :: 3.7',
     ],
 
     # What does your project relate to?

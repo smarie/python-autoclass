@@ -1,24 +1,41 @@
-from inspect import signature
-from itertools import chain
-from typing import Any, Tuple, Union, Dict, TypeVar, \
-    Callable  # do not import Type for compatibility with earlier python 3.5
+from collections import Mapping, Sequence
 from warnings import warn
 
-from autoclass.autoprops_ import DuplicateOverrideError
-from autoclass.var_checker import check_var
-from autoclass.utils_include_exclude import _sieve
-from autoclass.utils_reflexion import get_constructor
-from autoclass.utils_decoration import _create_class_decorator__robust_to_args, _check_known_decorators, \
-    _create_function_decorator__robust_to_args
+from valid8 import validate
 
-from collections import Mapping, Sequence
+try:  # python 3+
+    from inspect import signature
+except ImportError:
+    from funcsigs import signature
+
+try:
+    from typing import Any, Tuple, Union, Dict, TypeVar, Callable
+    try:
+        from typing import Type
+    except ImportError:
+        pass
+    T = TypeVar('T')
+except ImportError:
+    pass
+
+from autoclass.autoprops_ import DuplicateOverrideError
+from autoclass.utils import is_attr_selected
+from autoclass.utils import get_constructor
+from autoclass.utils import _check_known_decorators
+
+from decopatch import class_decorator, DECORATED
 
 
 __AUTODICT_OVERRIDE_ANNOTATION = '__autodict_override__'
 
 
-def autodict(include: Union[str, Tuple[str]]=None, exclude: Union[str, Tuple[str]]=None,
-             only_constructor_args: bool = True, only_public_fields: bool = True):
+@class_decorator
+def autodict(include=None,                # type: Union[str, Tuple[str]]
+             exclude=None,                # type: Union[str, Tuple[str]]
+             only_constructor_args=True,  # type: bool
+             only_public_fields=True,     # type: bool
+             cls=DECORATED
+             ):
     """
     A decorator to makes objects of the class behave like a read-only `dict`. It does several things:
     * it adds collections.Mapping to the list of parent classes (i.e. to the class' `__bases__`)
@@ -33,23 +50,23 @@ def autodict(include: Union[str, Tuple[str]]=None, exclude: Union[str, Tuple[str
     :param include: a tuple of explicit attribute names to include (None means all)
     :param exclude: a tuple of explicit attribute names to exclude. In such case, include should be None.
     :param only_constructor_args: if True (default), only constructor arguments will be exposed through the dictionary
-    view, not any other field that would be created in the constructor or dynamically. This makes it very convenient
-    to use in combination with @autoargs. If set to False, the dictionary is a direct view of public object fields.
+        view, not any other field that would be created in the constructor or dynamically. This makes it very convenient
+        to use in combination with @autoargs. If set to False, the dictionary is a direct view of public object fields.
     :param only_public_fields: this parameter is only used when only_constructor_args is set to False. If
-    only_public_fields is set to False, all fields are visible. Otherwise (default), class-private fields will be hidden
+        only_public_fields is set to False, all fields are visible. Otherwise (default), class-private fields will be
+        hidden
     :return:
     """
-    return _create_class_decorator__robust_to_args(autodict_decorate, include, exclude=exclude,
-                                                   only_constructor_args=only_constructor_args,
-                                                   only_public_fields=only_public_fields)
+    return autodict_decorate(cls, include=include, exclude=exclude, only_constructor_args=only_constructor_args,
+                             only_public_fields=only_public_fields)
 
-
-T = TypeVar('T')
-
-
-def autodict_decorate(cls: 'Type[T]', include: Union[str, Tuple[str]] = None,
-                      exclude: Union[str, Tuple[str]] = None, only_constructor_args: bool = True,
-                      only_public_fields: bool = True) -> 'Type[T]':
+def autodict_decorate(cls,                         # type: Type[T]
+                      include=None,                # type: Union[str, Tuple[str]]
+                      exclude=None,                # type: Union[str, Tuple[str]]
+                      only_constructor_args=True,  # type: bool
+                      only_public_fields=True      # type: bool
+                      ):
+    # type: (...) -> Type[T]
     """
     To automatically generate the appropriate methods so that objects of this class behave like a `dict`,
     manually, without using @autodict decorator.
@@ -75,12 +92,12 @@ def autodict_decorate(cls: 'Type[T]', include: Union[str, Tuple[str]] = None,
     return cls
 
 
-T = TypeVar('T')
-
-
-def _execute_autodict_on_class(object_type: 'Type[T]', include: Union[str, Tuple[str]]=None,
-                               exclude: Union[str, Tuple[str]]=None, only_constructor_args: bool = True,
-                               only_public_fields: bool = True):
+def _execute_autodict_on_class(object_type,                 # type: Type[T]
+                               include=None,                # type: Union[str, Tuple[str]]
+                               exclude=None,                # type: Union[str, Tuple[str]]
+                               only_constructor_args=True,  # type: bool
+                               only_public_fields=True      # type: bool
+                               ):
     """
     This method makes objects of the class behave like a read-only `dict`. It does several things:
     * it adds collections.Mapping to the list of parent classes (i.e. to the class' `__bases__`)
@@ -96,17 +113,18 @@ def _execute_autodict_on_class(object_type: 'Type[T]', include: Union[str, Tuple
     :param include: a tuple of explicit attribute names to include (None means all)
     :param exclude: a tuple of explicit attribute names to exclude. In such case, include should be None.
     :param only_constructor_args: if True (default), only constructor arguments will be exposed through the dictionary
-    view, not any other field that would be created in the constructor or dynamically. This makes it very convenient
-    to use in combination with @autoargs. If set to False, the dictionary is a direct view of public object fields.
+        view, not any other field that would be created in the constructor or dynamically. This makes it very convenient
+        to use in combination with @autoargs. If set to False, the dictionary is a direct view of public object fields.
     :param only_public_fields: this parameter is only used when only_constructor_args is set to False. If
-    only_public_fields is set to False, all fields are visible. Otherwise (default), class-private fields will be hidden
+        only_public_fields is set to False, all fields are visible. Otherwise (default), class-private fields will be
+        hidden
     :return:
     """
 
     if include is not None and exclude is not None:
         raise ValueError('Only one of \'include\' or \'exclude\' argument should be provided.')
-    check_var(include, var_name='include', var_types=[str, Sequence], enforce_not_none=False)
-    check_var(exclude, var_name='exclude', var_types=[str, Sequence], enforce_not_none=False)
+    validate('include', include, instance_of=[str, Sequence], enforce_not_none=False)
+    validate('exclude', exclude, instance_of=[str, Sequence], enforce_not_none=False)
 
     # if issubclass(object_type, Mapping):
     #     raise ValueError('@autodict can not be set on classes that are already subclasses of Mapping, and therefore '
@@ -123,7 +141,7 @@ def _execute_autodict_on_class(object_type: 'Type[T]', include: Union[str, Tuple
         # b. Collect all attributes that are not 'self' and are included and not excluded
         added = []
         for attr_name in s.parameters.keys():
-            if _sieve(attr_name, include=include, exclude=exclude):
+            if is_attr_selected(attr_name, include=include, exclude=exclude):
                 added.append(attr_name)
 
         # c. Finally build the methods
@@ -196,7 +214,7 @@ def _execute_autodict_on_class(object_type: 'Type[T]', include: Union[str, Tuple
                         raise KeyError('@autodict generated dict view - {} is a constructor parameter but is not a '
                                        'field (was the constructor called ?)'.format(key))
                 else:
-                    raise KeyError('@autodict generated dict view - invalid or hidden field name: ' + key)
+                    raise KeyError('@autodict generated dict view - invalid or hidden field name: %s' % key)
 
     else:
         # ** all dynamic fields are allowed
@@ -278,7 +296,7 @@ def _execute_autodict_on_class(object_type: 'Type[T]', include: Union[str, Tuple
                     """
                     for att_name in (list(vars(self)) + [o for o in super(object_type, self).__iter__()
                                                          if o not in vars(self)]):
-                        if _sieve(att_name, include=include, exclude=exclude):
+                        if is_attr_selected(att_name, include=include, exclude=exclude):
                             if not only_public_fields \
                                     or (only_public_fields and not att_name.startswith(private_name_prefix)):
                                 yield att_name
@@ -291,7 +309,7 @@ def _execute_autodict_on_class(object_type: 'Type[T]', include: Union[str, Tuple
                     :return:
                     """
                     for att_name in vars(self):
-                        if _sieve(att_name, include=include, exclude=exclude):
+                        if is_attr_selected(att_name, include=include, exclude=exclude):
                             if not only_public_fields \
                                     or (only_public_fields and not att_name.startswith(private_name_prefix)):
                                 yield att_name
@@ -316,7 +334,7 @@ def _execute_autodict_on_class(object_type: 'Type[T]', include: Union[str, Tuple
                     :return:
                     """
                     if hasattr(self, key):
-                        if _sieve(key, include=include, exclude=exclude) and \
+                        if is_attr_selected(key, include=include, exclude=exclude) and \
                                 (not only_public_fields or
                                  (only_public_fields and not key.startswith(private_name_prefix))):
                             return getattr(self, key)
@@ -345,7 +363,7 @@ def _execute_autodict_on_class(object_type: 'Type[T]', include: Union[str, Tuple
                     :return:
                     """
                     if hasattr(self, key):
-                        if _sieve(key, include=include, exclude=exclude) and \
+                        if is_attr_selected(key, include=include, exclude=exclude) and \
                                 (not only_public_fields or
                                  (only_public_fields and not key.startswith(private_name_prefix))):
                             return getattr(self, key)
@@ -353,7 +371,8 @@ def _execute_autodict_on_class(object_type: 'Type[T]', include: Union[str, Tuple
                             raise KeyError('@autodict generated dict view - hidden field name: ' + key)
                     else:
                         raise KeyError('@autodict generated dict view - {key} is an invalid field name (was the '
-                                       'constructor called?)'.format(key=key))
+                                       'constructor called? are the constructor arg names identical to the field '
+                                       'names ?)'.format(key=key))
 
     def __len__(self):
         """
@@ -397,28 +416,60 @@ def _execute_autodict_on_class(object_type: 'Type[T]', include: Union[str, Tuple
 
     # 2. add the methods from Mapping to the class
     # -- current proposition: add inheritance dynamically
-    if Mapping not in object_type.__bases__:
-        bazz = tuple(t for t in object_type.__bases__ if t is not object)
-        if len(bazz) == len(object_type.__bases__):
+    type_bases = object_type.__bases__
+    if Mapping not in type_bases:
+        bazz = tuple(t for t in type_bases if t is not object)
+        if len(bazz) == len(type_bases):
             # object was not there
-            object_type.__bases__ = bazz + (Mapping,)
+            new_bases = bazz + (Mapping,)
         else:
             # object was there, put it at the end
-            object_type.__bases__ = bazz + (Mapping, object)
+            new_bases = bazz + (Mapping, object)
 
-        # -- alternate way: add methods one by one
-        # meths = getmembers(Mapping, predicate=callable)
-        # for name, func in meths:
-        #     if name != '__getitem__':
-        #         # bind method to this class too (we access 'im_func' to get the original method)
-        #         setattr(object_type, name, func.im_func)
+        try:
+            object_type.__bases__ = new_bases
+        except TypeError:
+            # python 2.x and object type is a new-style class directly inheriting from object
+            # open bug: https://bugs.python.org/issue672115
+
+            # -- alternate way: add methods one by one
+            names = [
+                # no need
+                # '__class__', '__metaclass__', '__subclasshook__', '__init__', '__ne__', '__new__'
+                # no need: object
+                # '__getattribute__','__delattr__','__setattr__','__format__','__reduce__','__reduce_ex__','__sizeof__'
+                # -----
+                # '__getitem__', overridden above
+                # '__iter__', overridden above
+                # '__len__', overridden above
+                # '__eq__', overridden below
+                # '__repr__',  overridden below
+                # '__str__', overridden below
+                '__contains__',
+                'get',
+                'items',
+                'iteritems',
+                'iterkeys',
+                'itervalues',
+                'keys',
+                'values']
+            # from inspect import getmembers
+            # def is_useful(m):
+            #     return m
+            # meths = getmembers(Mapping.get(), predicate=is_useful)
+            # for name, func in meths:
+            for name in names:
+                # bind method to this class too (we access 'im_func' to get the original method)
+                setattr(object_type, name, getattr(Mapping, name).im_func)
 
     # 3. add the static class method to build objects from a dict
     # if only_constructor_args:
 
     # only do it if there is no existing method on the type
     if not hasattr(object_type, 'from_dict'):
-        def from_dict(cls, dct: Dict[str, Any]):
+        def from_dict(cls,
+                      dct  # type: Dict[str, Any]
+                      ):
             """
             Generated by @autodict.
             A class method to construct an object from a dictionary of field values.
@@ -449,7 +500,13 @@ def _execute_autodict_on_class(object_type: 'Type[T]', include: Union[str, Tuple
                 return dict(self) == dict(other)
             else:
                 # else fallback to inherited behaviour, whatever it is
-                return super(object_type, self).__eq__(other)
+                try:
+                    f = super(object_type, self).__eq__
+                except AttributeError:
+                    # can happen in python 2 when adding Mapping inheritance failed
+                    return Mapping.__eq__(dict(self), other)
+                else:
+                    return f(other)
 
         object_type.__eq__ = __eq__
 
@@ -464,7 +521,8 @@ def _execute_autodict_on_class(object_type: 'Type[T]', include: Union[str, Tuple
             :param self:
             :return:
             """
-            return type(self).__name__ + '(' + print_ordered_dict(self) + ')'
+            # python 2 compatibility: use self.__class__ not type()
+            return self.__class__.__name__ + '(' + print_ordered_dict(self) + ')'
 
         object_type.__str__ = __str__
 
@@ -478,7 +536,8 @@ def _execute_autodict_on_class(object_type: 'Type[T]', include: Union[str, Tuple
             :param self:
             :return:
             """
-            return type(self).__name__ + '(' + print_ordered_dict(self) + ')'
+            # python 2 compatibility: use self.__class__ not type()
+            return self.__class__.__name__ + '(' + print_ordered_dict(self) + ')'
 
         object_type.__repr__ = __repr__
 
@@ -492,7 +551,9 @@ def print_ordered_dict(obj):
     return '{' + ', '.join('{}: {}'.format(repr(k), repr(v)) for k, v in obj.items()) + '}'
 
 
-def autodict_override_decorate(func: Callable) -> Callable:
+def autodict_override_decorate(func  # type: Callable
+                               ):
+    # type: (...) -> Callable
     """
     Used to decorate a function as an overridden dictionary method (such as __iter__), without using the
     @autodict_override annotation.

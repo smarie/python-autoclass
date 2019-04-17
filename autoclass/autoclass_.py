@@ -1,15 +1,32 @@
-from typing import Any, Union, Tuple, TypeVar  # do not import Type for compatibility with earlier python 3.5
+try:  # python 3.5+
+    from typing import Union, Tuple, TypeVar
+    try:  # python 3.5.3+
+        from typing import Type
+    except ImportError:
+        pass
+    T = TypeVar('T')
+except ImportError:
+    pass
 
 from autoclass.autoargs_ import autoargs_decorate
 from autoclass.autoprops_ import autoprops_decorate
 from autoclass.autodict_ import autodict_decorate
-from autoclass.utils_reflexion import get_constructor
-from autoclass.utils_decoration import _create_class_decorator__robust_to_args
+from autoclass.utils import get_constructor
 from autoclass.autohash_ import autohash_decorate
 
 
-def autoclass(include: Union[str, Tuple[str]]=None, exclude: Union[str, Tuple[str]]=None,
-              autoargs: bool=True, autoprops: bool=True, autodict: bool=True, autohash: bool=True):
+from decopatch import class_decorator, DECORATED
+
+
+@class_decorator
+def autoclass(include=None,    # type: Union[str, Tuple[str]]
+              exclude=None,    # type: Union[str, Tuple[str]]
+              autoargs=True,   # type: bool
+              autoprops=True,  # type: bool
+              autodict=True,   # type: bool
+              autohash=True,   # type: bool
+              cls=DECORATED
+              ):
     """
     A decorator to perform @autoargs, @autoprops and @autodict all at once with the same include/exclude list.
 
@@ -21,16 +38,19 @@ def autoclass(include: Union[str, Tuple[str]]=None, exclude: Union[str, Tuple[st
     :param autohash: a boolean to enable autohash on the constructor (default: True)
     :return:
     """
-    return _create_class_decorator__robust_to_args(autoclass_decorate, include, exclude=exclude, autoargs=autoargs,
-                                                   autoprops=autoprops, autodict=autodict, autohash=autohash)
+    return autoclass_decorate(cls, include=include, exclude=exclude, autoargs=autoargs, autoprops=autoprops,
+                              autodict=autodict, autohash=autohash)
 
 
-T = TypeVar('T')
-
-
-def autoclass_decorate(cls: 'Type[T]', include: Union[str, Tuple[str]] = None, exclude: Union[str, Tuple[str]] = None,
-                       autoargs: bool=True, autoprops: bool=True, autodict: bool=True, autohash: bool=True) \
-        -> 'Type[T]':
+def autoclass_decorate(cls,             # type: Type[T]
+                       include=None,    # type: Union[str, Tuple[str]]
+                       exclude=None,    # type: Union[str, Tuple[str]]
+                       autoargs=True,   # type: bool
+                       autoprops=True,  # type: bool
+                       autodict=True,   # type: bool
+                       autohash=True    # type: bool
+                       ):
+    # type: (...) -> Type[T]
     """
 
     :param cls: the class on which to execute. Note that it won't be wrapped.

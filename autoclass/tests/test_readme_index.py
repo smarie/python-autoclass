@@ -1,15 +1,23 @@
+import sys
+
 import pytest
-from autoclass import autoargs, autoprops, setter_override
-from valid8 import Boolean, ValidationError
+
+from numbers import Real, Integral
+from valid8 import Boolean, validate, validate_arg, instance_of, is_multiple_of, InputValidationError
+
+try:
+    from typing import Optional
+except ImportError:
+    pass
+
+from autoclass import autoargs, autoprops, setter_override, autoclass
 
 
 def test_readme_index_basic():
     """ First basic example in the doc """
 
-    from autoclass import autoclass
-
     @autoclass
-    class House:
+    class House(object):
         def __init__(self, name, nb_floors=1):
             pass
 
@@ -23,13 +31,11 @@ def test_readme_index_basic():
 def test_readme_index_basic2():
     """ Second basic example in the doc: adding setter override """
 
-    from autoclass import autoclass, setter_override
-
     global t
     t = ''
 
     @autoclass
-    class House:
+    class House(object):
         def __init__(self, name, nb_floors=1):
             pass
 
@@ -48,60 +54,27 @@ def test_readme_index_basic2():
     assert t == 'Set nb_floors to 3'
 
 
+@pytest.mark.skipif(sys.version_info < (3, 0), reason="type hints do not work in python 2")
+@pytest.mark.skipif(sys.version_info >= (3, 7), reason="enforce does not work correctly under python 3.7+")
 def test_readme_enforce_simple():
     """ Example in the doc with enforce """
 
-    from autoclass import autoclass
-
-    # we use enforce runtime checker for this example
-    from enforce import runtime_validation, config
-    config(dict(mode='covariant'))  # to accept subclasses in validation
-
-    @runtime_validation
-    @autoclass
-    class House:
-        def __init__(self, name: str, nb_floors: int = 1):
-            pass
-
-    obj = House('my_house')
-
-    from enforce.exceptions import RuntimeTypeError
-    with pytest.raises(RuntimeTypeError) as exc_info:
-        obj.nb_floors = 'red'
-    assert exc_info.value.args[0] == "\n  The following runtime type errors were encountered:\n" \
-                                     "       Argument 'nb_floors' was not of type <class 'int'>. " \
-                                     "Actual type was str."
+    from ._tests_pep484 import test_readme_enforce_simple
+    test_readme_enforce_simple()
 
 
+@pytest.mark.skipif(sys.version_info < (3, 0), reason="type hints do not work in python 2")
 def test_readme_index_pytypes_simple():
     """ Example in the doc with pytypes """
 
-    from autoclass import autoclass
-    from pytypes import typechecked
-
-    @typechecked
-    @autoclass
-    class House:
-        # the constructor below is decorated with PEP484 type hints
-        def __init__(self, name: str, nb_floors: int = 1):
-            pass
-
-    obj = House('my_house')
-
-    from pytypes import InputTypeError
-    with pytest.raises(InputTypeError) as exc_info:
-        obj.nb_floors = 'red'
-    assert exc_info.value.args[0] == "\n  autoclass.tests.test_readme_index." \
-                                     "test_readme_index_pytypes_simple.<locals>.House.nb_floors/setter" \
-                                     "\n  called with incompatible types:\nExpected: Tuple[int]\nReceived: Tuple[str]"
+    from ._tests_pep484 import test_readme_index_pytypes_simple
+    test_readme_index_pytypes_simple()
 
 
 def test_readme_index_valid8_simple():
     """ Example in the doc with valid8 """
 
-    from autoclass import autoclass
-    from mini_lambda import s, x, l, Len
-    from valid8 import validate_arg, instance_of, is_multiple_of, InputValidationError
+    from mini_lambda import s, x, Len
 
     # Here we define our 2 validation errors
     class InvalidNameError(InputValidationError):
@@ -111,7 +84,7 @@ def test_readme_index_valid8_simple():
         help_msg = 'Surface should be between 0 and 10000 and be a multiple of 100.'
 
     @autoclass
-    class House:
+    class House(object):
 
         @validate_arg('name', instance_of(str), Len(s) > 0,
                       error_type=InvalidNameError)
@@ -129,54 +102,22 @@ def test_readme_index_valid8_simple():
         obj.surface = 10000  # InvalidSurfaceError
 
 
+@pytest.mark.skipif(sys.version_info < (3, 0), reason="type hints do not work in python 2")
+@pytest.mark.skipif(sys.version_info >= (3, 7), reason="enforce does not work correctly under python 3.7+")
 def test_readme_index_enforce_valid8():
     """ Makes sure that the code in the documentation page is correct for the enforce + valid8 example """
 
-    from autoclass import autoclass
-
-    # Imports - for type validation
-    from numbers import Integral
-    from enforce import runtime_validation, config
-    config(dict(mode='covariant'))  # type validation will accept subclasses too
-
-    # Imports - for value validation
-    from mini_lambda import s, x, Len
-    from valid8 import validate_arg, is_multiple_of, InputValidationError
-
-    # 2 custom validation errors for valid8
-    class InvalidName(InputValidationError):
-        help_msg = 'name should be a non-empty string'
-
-    class InvalidSurface(InputValidationError):
-        help_msg = 'Surface should be between 0 and 10000 and be a multiple of 100.'
-
-    @runtime_validation
-    @autoclass
-    class House:
-        @validate_arg('name', Len(s) > 0,
-                      error_type=InvalidName)
-        @validate_arg('surface', (x >= 0) & (x < 10000), is_multiple_of(100),
-                      error_type=InvalidSurface)
-        def __init__(self, name: str, surface: Integral = None):
-            pass
-
-    obj = House('sweet home', 200)
-
-    obj.surface = None  # Valid (surface is nonable by signature)
-    with pytest.raises(InvalidName):
-        obj.name = ''  # InvalidNameError
-    with pytest.raises(InvalidSurface):
-        obj.surface = 10000  # InvalidSurfaceError
+    from ._tests_pep484 import test_readme_index_enforce_valid8
+    test_readme_index_enforce_valid8()
 
 
 def test_readme_pycontracts_simple():
     """ Simple test with pycontracts """
 
-    from autoclass import autoclass
     from contracts import contract, ContractNotRespected
 
     @autoclass
-    class House:
+    class House(object):
 
         @contract(name='str[>0]',
                   surface='None|(int,>=0,<10000)')
@@ -195,17 +136,13 @@ def test_readme_pycontracts_simple():
 def test_readme_old_way():
     """ Makes sure that the code in the documentation page is correct for the 'old way' of writing classes """
 
-    from autoclass import check_var
-    from numbers import Real, Integral
-    from typing import Optional, Union
-    from valid8 import Boolean
-
     class HouseConfiguration(object):
         def __init__(self,
-                     name: str,
-                     surface: Real,
-                     nb_floors: Optional[Integral] = 1,
-                     with_windows: Boolean = False):
+                     name,               # type: str
+                     surface,            # type: Real
+                     nb_floors=1,        # type: Optional[Integral]
+                     with_windows=False  # type: Boolean
+                     ):
             self.name = name
             self.surface = surface
             self.nb_floors = nb_floors
@@ -217,38 +154,49 @@ def test_readme_old_way():
             return self._name
 
         @name.setter
-        def name(self, name: str):
-            check_var(name, var_name='name', var_types=str)
+        def name(self,
+                 name  # type: str
+                 ):
+            validate('name', name, instance_of=str)
             self._name = name
 
         # --surface
         @property
-        def surface(self) -> Real:
+        def surface(self):
+            # type: (...) -> Real
             return self._surface
 
         @surface.setter
-        def surface(self, surface: Real):
-            check_var(surface, var_name='surface', var_types=Real, min_value=0, min_strict=True)
+        def surface(self,
+                    surface  # type: Real
+                    ):
+            validate('surface', surface, instance_of=Real, min_value=0, min_strict=True)
             self._surface = surface
 
         # --nb_floors
         @property
-        def nb_floors(self) -> Optional[Integral]:
+        def nb_floors(self):
+            # type: (...) -> Optional[Integral]
             return self._nb_floors
 
         @nb_floors.setter
-        def nb_floors(self, nb_floors: Optional[Integral]):
-            check_var(nb_floors, var_name='nb_floors', var_types=Integral, enforce_not_none=False)
+        def nb_floors(self,
+                      nb_floors  # type: Optional[Integral]
+                      ):
+            validate('nb_floors', nb_floors, instance_of=Integral, enforce_not_none=False)
             self._surface = nb_floors  # !**
 
         # --with_windows
         @property
-        def with_windows(self) -> Boolean:
+        def with_windows(self):
+            # type: (...) -> Boolean
             return self._with_windows
 
         @with_windows.setter
-        def with_windows(self, with_windows: Boolean):
-            check_var(with_windows, var_name='with_windows', var_types=Boolean)
+        def with_windows(self,
+                         with_windows  # type: Boolean
+                         ):
+            validate('with_windows', with_windows, instance_of=Boolean)
             self._with_windows = with_windows
 
     HouseConfiguration('test', 0.1)
@@ -258,8 +206,6 @@ def test_readme_pycontracts_complex():
     """ Makes sure that the code in the documentation page is correct for the PyContracts example """
 
     from contracts import contract, ContractNotRespected
-    from numbers import Real, Integral
-    from typing import Optional
 
     @autoprops
     class HouseConfiguration(object):
@@ -269,15 +215,18 @@ def test_readme_pycontracts_complex():
                   nb_floors='None|int',
                   with_windows='bool')
         def __init__(self,
-                     name: str,
-                     surface: Real,
-                     nb_floors: Optional[Integral] = 1,
-                     with_windows: Boolean = False):
+                     name,  # type: str
+                     surface,  # type: Real
+                     nb_floors=1,  # type: Optional[Integral]
+                     with_windows=False  # type: Boolean
+                     ):
             pass
 
         # -- overriden setter for surface - no need to repeat the @contract
         @setter_override
-        def surface(self, surface: Real):
+        def surface(self,
+                    surface  # type: Real
+                    ):
             assert surface > 0
             self._surface = surface
 
@@ -289,66 +238,10 @@ def test_readme_pycontracts_complex():
         t.surface = -1
 
 
+@pytest.mark.skipif(sys.version_info < (3, 0), reason="type hints do not work in python 2")
 @pytest.mark.skip(reason="open bug in pytypes https://github.com/Stewori/pytypes/issues/19")
 def test_readme_pytypes_validate_complex():
     """ A more complex pytypes + valid8 example """
 
-    from autoclass import autoclass, setter_override
-    from valid8 import Boolean, validate_io, minlens, gt
-    from numbers import Real, Integral
-    from typing import Optional
-
-    # we use pytypes for this example
-    from pytypes import typechecked
-
-    @typechecked
-    @autoclass
-    class HouseConfiguration(object):
-
-        @validate_io(name=minlens(0),
-                     surface=gt(0))
-        def __init__(self,
-                     name: str,
-                     surface: Real,
-                     nb_floors: Optional[Integral] = 1,
-                     with_windows: Boolean = False):
-            pass
-
-        # -- overriden setter for surface for custom validation or other things
-        @setter_override
-        def surface(self, surface):
-            print('Set surface to {}'.format(surface))
-            self._surface = surface
-
-    t = HouseConfiguration('test', 12, 2)
-
-    # 'Optional' works
-    t.nb_floors = None
-
-    # Type validation works
-    from pytypes import InputTypeError
-    with pytest.raises(InputTypeError):
-        t.nb_floors = 2.2
-
-    # Value validation works
-    with pytest.raises(ValidationError):
-        t.surface = -1
-
-    # Value validation works in constructor
-    with pytest.raises(ValidationError):
-        HouseConfiguration('', 12, 2)
-
-    # str and repr work
-    assert str(t) == repr(t)
-    # "HouseConfiguration({'nb_floors': None, 'with_windows': False, 'surface': 12, 'name': 'test'})"
-    # assert eval(repr(t)) == t does not work !
-
-    # dict work
-    assert t == {'name': 'test', 'nb_floors': None, 'surface': 12, 'with_windows': False}
-    assert t == dict(name='test', nb_floors=None, surface=12, with_windows=False)
-    t.keys()
-    for k, v in t.items():
-        print(str(k) + ': ' + str(v))
-
-    # TODO this is an open bug in pytypes https://github.com/Stewori/pytypes/issues/19
-    HouseConfiguration.from_dict({'name': 'test2', 'surface': 1})
+    from ._tests_pep484 import test_readme_pytypes_validate_complex
+    test_readme_pytypes_validate_complex()

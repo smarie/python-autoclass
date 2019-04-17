@@ -1,3 +1,5 @@
+import sys
+
 import pytest
 from autoclass import autoargs
 
@@ -30,7 +32,10 @@ def test_autoargs_signature_preserving():
     try:
         A()
     except TypeError as e:
-        assert e.args[0] == "__init__() missing 2 required positional arguments: 'foo' and 'path'"
+        if sys.version_info >= (3, 0):
+            assert e.args[0] == "__init__() missing 2 required positional arguments: 'foo' and 'path'"
+        else:
+            assert e.args[0] == "__init__() takes at least 3 arguments (1 given)"
 
 
 def test_autoargs_varargs():

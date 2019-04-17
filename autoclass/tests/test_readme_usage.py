@@ -1,7 +1,15 @@
+import sys
+
 import pytest
-from autoclass import autoargs, autoprops, autodict, autoclass, autohash
-from typing import List
+
+try:
+    from typing import List
+except ImportError:
+    pass
 from valid8 import Boolean, minlens, validate_io, ValidationError, gt, minlen
+
+
+from autoclass import autoargs, autoprops, autodict, autoclass, autohash
 
 
 def test_readme_usage_autoprops_validate():
@@ -9,7 +17,9 @@ def test_readme_usage_autoprops_validate():
     class FooConfigA(object):
         @autoargs
         @validate_io(a=minlens(0))
-        def __init__(self, a: str):
+        def __init__(self,
+                     a  # type: str
+                     ):
             pass
 
     t = FooConfigA('rhubarb')
@@ -29,7 +39,10 @@ def test_readme_usage_autodict_1():
     # ** without autoargs
     @autodict
     class A(object):
-        def __init__(self, a: int, b: str):
+        def __init__(self,
+                     a,  # type: int
+                     b   # type: str
+                     ):
             self.a = a
             self.b = b
 
@@ -50,7 +63,10 @@ def test_readme_usage_autodict_1():
     @autodict
     class B(object):
         @autoargs
-        def __init__(self, a: int, b: str):
+        def __init__(self,
+                     a,  # type: int
+                     b  # type: str
+                     ):
             pass
 
     o = B(1, 'r')
@@ -68,7 +84,10 @@ def test_readme_usage_autodict_2():
     @autodict
     class C(object):
         @autoargs
-        def __init__(self, a: str, b: List[str]):
+        def __init__(self,
+                     a,  # type: str
+                     b   # type: List[str]
+                     ):
             self.non_constructor_arg = 't'
             self._private = 1
             self.__class_private = 't'
@@ -83,7 +102,10 @@ def test_readme_usage_autodict_3():
     @autodict(only_constructor_args=False, only_public_fields=False)
     class D(object):
         @autoargs
-        def __init__(self, a: str, b: List[str]):
+        def __init__(self,
+                     a,  # type: str
+                     b  # type: List[str]
+                     ):
             self.non_constructor_arg = 'b'
             self._private = 1
             self.__class_private = 't'
@@ -100,7 +122,10 @@ def test_readme_usage_autodict_3():
 def test_readme_usage_autohash_1():
     @autohash
     class A(object):
-        def __init__(self, a: int, b: str):
+        def __init__(self,
+                     a,  # type: int
+                     b   # type: str
+                     ):
             self.a = a
             self.b = b
 
@@ -128,7 +153,10 @@ def test_readme_usage_autohash_2():
     @autohash(only_constructor_args=True, only_public_fields=True)
     class D(object):
         @autoargs
-        def __init__(self, a: str, _b: str):
+        def __init__(self,
+                     a,  # type: str
+                     _b  # type: str
+                     ):
             self.non_constructor_arg = random()
             self._private = random()
             self.__class_private = random()
@@ -141,74 +169,17 @@ def test_readme_usage_autohash_2():
     assert hash(o) == hash((1, 'r'))
 
 
+@pytest.mark.skipif(sys.version_info < (3, 0), reason="type hints do not work in python 2")
+@pytest.mark.skipif(sys.version_info >= (3, 7), reason="enforce does not work correctly under python 3.7+")
 def test_readme_usage_autoclass():
 
-    from numbers import Integral
-    from typing import Optional
-
-    # we will use enforce as the runtime checker
-    import enforce as en
-    from enforce import runtime_validation
-    en.config(dict(mode='covariant'))  # allow subclasses when validating types
-
-    # class definition
-    @runtime_validation
-    @autoclass
-    class AllOfTheAbove:
-        @validate_io(a=gt(1), c=minlen(1))
-        def __init__(self, a: Integral, b: Boolean, c: Optional[List[str]] = None):
-            pass
-
-    # instance creation
-    o = AllOfTheAbove(a=2, b=True)
-
-    # @autoargs works
-    assert o.a == 2
-
-    # @autoprops works, in combination with any runtime checker (here demonstrated with enforce)
-    from enforce.exceptions import RuntimeTypeError
-    with pytest.raises(RuntimeTypeError):
-        o.b = 1  # RuntimeTypeError Argument 'b' was not of type Boolean. Actual type was int.
-
-    # @autodict works
-    assert o == {'a': 2, 'b': True, 'c': None}
-    assert AllOfTheAbove.from_dict(o) == o
-    assert dict(**o) == o
+    from ._tests_pep484 import test_readme_usage_autoclass
+    test_readme_usage_autoclass()
 
 
+@pytest.mark.skipif(sys.version_info < (3, 0), reason="type hints do not work in python 2")
+@pytest.mark.skipif(sys.version_info >= (3, 7), reason="enforce does not work correctly under python 3.7+")
 def test_readme_usage_autoclass_custom():
 
-    from numbers import Integral
-    from typing import Optional
-
-    # we will use enforce as the runtime checker
-    import enforce as en
-    from enforce import runtime_validation
-    en.config(dict(mode='covariant'))  # allow subclasses when validating types
-
-    # class definition
-    @runtime_validation
-    @autoclass(autodict=False)
-    class PartsOfTheAbove:
-        @validate_io(a=gt(1), c=minlen(1))
-        def __init__(self, a: Integral, b: Boolean, c: Optional[List[str]] = None):
-            pass
-
-    # instance creation
-    o = PartsOfTheAbove(a=2, b=True)
-
-    # @autoargs works
-    assert o.a == 2
-
-    # @autoprops works, in combination with any runtime checker (here demonstrated with enforce)
-    from enforce.exceptions import RuntimeTypeError
-    with pytest.raises(RuntimeTypeError):
-        o.b = 1  # RuntimeTypeError Argument 'b' was not of type Boolean. Actual type was int.
-
-    # @autodict is disabled
-    with pytest.raises(AssertionError):
-        assert o == {'a': 2, 'b': True, 'c': None}  # AssertionError
-    with pytest.raises(AttributeError):
-        assert PartsOfTheAbove.from_dict(o) == o  # AttributeError: type object 'PartsOfTheAbove' has no attribute 'from_dict'
-    with pytest.raises(TypeError):
-        assert dict(**o) == o  # TypeError: type object argument after ** must be a mapping, not PartsOfTheAbove
+    from ._tests_pep484 import test_readme_usage_autoclass_custom
+    test_readme_usage_autoclass_custom()

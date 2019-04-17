@@ -1,15 +1,35 @@
 from collections import Sequence
-from inspect import signature
-from typing import Tuple, Union, TypeVar  # do not fail on import Type for compatibility with earlier python 3.5
+try:
+    from inspect import signature
+except ImportError:
+    from funcsigs import signature
 
-from autoclass.var_checker import check_var
-from autoclass.utils_include_exclude import _sieve
-from autoclass.utils_reflexion import get_constructor
-from autoclass.utils_decoration import _create_class_decorator__robust_to_args, _check_known_decorators
+try:
+    from typing import Tuple, Union, TypeVar
+    try:
+        from typing import Type
+    except ImportError:
+        pass
+    T = TypeVar('T')
+
+except ImportError:
+    pass
+
+from valid8 import validate
+from decopatch import class_decorator, DECORATED
+
+from autoclass.utils import is_attr_selected
+from autoclass.utils import get_constructor
+from autoclass.utils import _check_known_decorators
 
 
-def autohash(include: Union[str, Tuple[str]]=None, exclude: Union[str, Tuple[str]]=None,
-             only_constructor_args: bool = False, only_public_fields: bool = False):
+@class_decorator
+def autohash(include=None,                # type: Union[str, Tuple[str]]
+             exclude=None,                # type: Union[str, Tuple[str]]
+             only_constructor_args=False,  # type: bool
+             only_public_fields=False,     # type: bool
+             cls=DECORATED
+             ):
     """
     A decorator to makes objects of the class implement __hash__, so that they can be used correctly for example in
     sets.
@@ -19,24 +39,26 @@ def autohash(include: Union[str, Tuple[str]]=None, exclude: Union[str, Tuple[str
     :param include: a tuple of explicit attribute names to include (None means all)
     :param exclude: a tuple of explicit attribute names to exclude. In such case, include should be None.
     :param only_constructor_args: if False (default), all fields will be included in the hash, even if they are defined
-    in the constructor or dynamically. If True, only constructor arguments will be included in the hash, not any other
-    field that would be created in the constructor or dynamically. Please note that this behaviour is the opposite from
-    @autodict.
+        in the constructor or dynamically. If True, only constructor arguments will be included in the hash, not any
+        other field that would be created in the constructor or dynamically. Please note that this behaviour is the
+        opposite from @autodict.
     :param only_public_fields: this parameter is only used when only_constructor_args is set to False. If
-    only_public_fields is set to False (default), all fields are used in the hash. Otherwise, class-private fields will
-    not be taken into account in the hash. Please note that this behaviour is the opposite from @autodict.
+        only_public_fields is set to False (default), all fields are used in the hash. Otherwise, class-private fields
+        will not be taken into account in the hash. Please note that this behaviour is the opposite from @autodict.
     :return:
     """
-    return _create_class_decorator__robust_to_args(autohash_decorate, include, exclude=exclude,
-                                                   only_constructor_args=only_constructor_args,
-                                                   only_public_fields=only_public_fields)
+
+    return autohash_decorate(cls, include=include, exclude=exclude, only_constructor_args=only_constructor_args,
+                             only_public_fields=only_public_fields)
 
 
-T = TypeVar('T')
-
-
-def autohash_decorate(cls: 'Type[T]', include: Union[str, Tuple[str]] = None, exclude: Union[str, Tuple[str]] = None,
-                      only_constructor_args: bool = False, only_public_fields: bool = False) -> 'Type[T]':
+def autohash_decorate(cls,                          # type: Type[T]
+                      include=None,                 # type: Union[str, Tuple[str]]
+                      exclude=None,                 # type: Union[str, Tuple[str]]
+                      only_constructor_args=False,  # type: bool
+                      only_public_fields=False,     # type: bool
+                      ):
+    # type: (...) -> Type[T]
     """
     To automatically generate the appropriate methods so that objects of this class are hashable,
     manually, without using @autohash decorator.
@@ -64,9 +86,12 @@ def autohash_decorate(cls: 'Type[T]', include: Union[str, Tuple[str]] = None, ex
     return cls
 
 
-def _execute_autohash_on_class(object_type: 'Type[T]', include: Union[str, Tuple[str]]=None,
-                               exclude: Union[str, Tuple[str]]=None, only_constructor_args: bool = False,
-                               only_public_fields: bool = False):
+def _execute_autohash_on_class(object_type,                  # type: Type[T]
+                               include=None,                 # type: Union[str, Tuple[str]]
+                               exclude=None,                 # type: Union[str, Tuple[str]]
+                               only_constructor_args=False,  # type: bool
+                               only_public_fields=False,     # type: bool
+                               ):
     """
     A decorator to make objects of the class implement __hash__, so that they can be used correctly for example in
     sets.
@@ -88,8 +113,8 @@ def _execute_autohash_on_class(object_type: 'Type[T]', include: Union[str, Tuple
 
     if include is not None and exclude is not None:
         raise ValueError('Only one of \'include\' or \'exclude\' argument should be provided.')
-    check_var(include, var_name='include', var_types=[str, Sequence], enforce_not_none=False)
-    check_var(exclude, var_name='exclude', var_types=[str, Sequence], enforce_not_none=False)
+    validate('include', include, instance_of=[str, Sequence], enforce_not_none=False)
+    validate('exclude', exclude, instance_of=[str, Sequence], enforce_not_none=False)
 
     # Override hash method if not already implemented
     if not hasattr(object_type, '__hash__') or object_type.__hash__ is None or object_type.__hash__ == object.__hash__:
@@ -103,7 +128,7 @@ def _execute_autohash_on_class(object_type: 'Type[T]', include: Union[str, Tuple
             added = []
             # we assume that the order of attributes will always be the same here....
             for attr_name in s.parameters.keys():
-                if _sieve(attr_name, include=include, exclude=exclude):
+                if is_attr_selected(attr_name, include=include, exclude=exclude):
                     added.append(attr_name)
 
             # c. Finally build the method
@@ -153,7 +178,7 @@ def _execute_autohash_on_class(object_type: 'Type[T]', include: Union[str, Tuple
                     to_hash = []
 
                     for att_name, att_value in vars(self).items():
-                        if _sieve(att_name, include=include, exclude=exclude):
+                        if is_attr_selected(att_name, include=include, exclude=exclude):
                             if not only_public_fields \
                                     or (only_public_fields and not att_name.startswith(private_name_prefix)):
                                 to_hash.append(att_value)

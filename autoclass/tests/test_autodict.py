@@ -1,5 +1,9 @@
+try:
+    from typing import List
+except ImportError:
+    pass
+
 import pytest
-from typing import List
 
 from autoclass import autodict
 
@@ -14,7 +18,10 @@ def test_autodict(only_constructor_args, only_public_fields):
 
         dummy_class_field = 'just to be sure it does not appear'
 
-        def __init__(self, a: str, b: List[str]):
+        def __init__(self,
+                     a,  # type: str,
+                     b   # type: List[str]
+                     ):
             self.a = a
             self.b = b
             self.c = 't'

@@ -1,7 +1,10 @@
 from random import random
 
 import pytest
-from typing import List, Tuple, Dict
+try:
+    from typing import Tuple, Dict
+except ImportError:
+    pass
 
 from autoclass import autohash, autoclass
 
@@ -16,7 +19,10 @@ def test_autohash(only_constructor_args, only_public_fields):
 
         dummy_class_field = 'just to be sure it does not appear'
 
-        def __init__(self, a: str, b: Tuple[str, str]):
+        def __init__(self,
+                     a,  # type: str
+                     b   # type: Tuple[str, str]
+                     ):
             self.a = a
             self.b = b
             self.c = 1
@@ -78,7 +84,7 @@ def test_autohash(only_constructor_args, only_public_fields):
     assert hash(a) != hash(f)
 
 
-@pytest.mark.skip('Currently the test does not work, see https://github.com/smarie/python-autoclass/issues/21')
+@pytest.mark.fail('Currently the test does not work, see https://github.com/smarie/python-autoclass/issues/21')
 def test_autohash_exclude():
     """ Tests that exclusion works correctly with autohash """
 
@@ -86,7 +92,10 @@ def test_autohash_exclude():
     @autoclass(autohash=False)
     @autohash(exclude='bar')
     class Foo:
-        def __init__(self, foo: str, bar: Dict[str, str]):
+        def __init__(self,
+                     foo,  # type: str
+                     bar   # type: Dict[str, str]
+                     ):
             pass
 
     a = Foo('hello', dict())
