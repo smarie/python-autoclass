@@ -1,9 +1,12 @@
 # python-autoclass
 
-[![Build Status](https://travis-ci.org/smarie/python-autoclass.svg?branch=master)](https://travis-ci.org/smarie/python-autoclass) [![Tests Status](https://smarie.github.io/python-autoclass/junit/junit-badge.svg?dummy=8484744)](https://smarie.github.io/python-autoclass/junit/report.html) [![codecov](https://codecov.io/gh/smarie/python-autoclass/branch/master/graph/badge.svg)](https://codecov.io/gh/smarie/python-autoclass) [![Documentation](https://img.shields.io/badge/docs-latest-blue.svg)](https://smarie.github.io/python-autoclass/) [![PyPI](https://img.shields.io/badge/PyPI-autoclass-blue.svg)](https://pypi.python.org/pypi/autoclass/)[![downloads](https://img.shields.io/badge/downloads%2008%2F18-28k-brightgreen.svg)](https://kirankoduru.github.io/python/pypi-stats.html)
+*Write compact python classes*
 
-This is the readme for developers. The documentation for users is available here: [https://smarie.github.io/python-autoclass/](https://smarie.github.io/python-autoclass/)
+[![Python versions](https://img.shields.io/pypi/pyversions/autoclass.svg)](https://pypi.python.org/pypi/autoclass/) [![Build Status](https://travis-ci.org/smarie/python-autoclass.svg?branch=master)](https://travis-ci.org/smarie/python-autoclass) [![Tests Status](https://smarie.github.io/python-autoclass/junit/junit-badge.svg?dummy=8484744)](https://smarie.github.io/python-autoclass/junit/report.html) [![codecov](https://codecov.io/gh/smarie/python-autoclass/branch/master/graph/badge.svg)](https://codecov.io/gh/smarie/python-autoclass)
 
+[![Documentation](https://img.shields.io/badge/doc-latest-blue.svg)](https://smarie.github.io/python-autoclass/) [![PyPI](https://img.shields.io/pypi/v/autoclass.svg)](https://pypi.python.org/pypi/autoclass/) [![Downloads](https://pepy.tech/badge/autoclass)](https://pepy.tech/project/autoclass) [![Downloads per week](https://pepy.tech/badge/autoclass/week)](https://pepy.tech/project/autoclass) [![GitHub stars](https://img.shields.io/github/stars/smarie/python-autoclass.svg)](https://github.com/smarie/python-autoclass/stargazers)
+
+**This is the readme for developers.** The documentation for users is available here: [https://smarie.github.io/python-autoclass/](https://smarie.github.io/python-autoclass/)
 
 ## Want to contribute ?
 
@@ -44,7 +47,7 @@ pip install -r ci_tools/requirements-setup.txt
 This project uses `mkdocs` to generate its documentation page. Therefore building a local copy of the doc page may be done using:
 
 ```bash
-mkdocs build
+mkdocs build -f docs/mkdocs.yml
 ```
 
 You may need to install requirements for doc beforehand, using 
@@ -71,3 +74,20 @@ This project is now automatically deployed to PyPI when a tag is created. Anyway
 twine upload dist/* -r pypitest
 twine upload dist/*
 ```
+
+### Merging pull requests with edits - memo
+
+Ax explained in github ('get commandline instructions'):
+
+```bash
+git checkout -b <git_name>-<feature_branch> master
+git pull https://github.com/<git_name>/python-autoclass.git <feature_branch> --no-commit --ff-only
+```
+
+if the second step does not work, do a normal auto-merge (do not use **rebase**!):
+
+```bash
+git pull https://github.com/<git_name>/python-autoclass.git <feature_branch> --no-commit
+```
+
+Finally review the changes, possibly perform some modifications, and commit.

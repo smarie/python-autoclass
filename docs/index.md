@@ -1,6 +1,10 @@
 # python-autoclass
 
-[![Build Status](https://travis-ci.org/smarie/python-autoclass.svg?branch=master)](https://travis-ci.org/smarie/python-autoclass) [![Tests Status](https://smarie.github.io/python-autoclass/junit/junit-badge.svg?dummy=8484744)](https://smarie.github.io/python-autoclass/junit/report.html) [![codecov](https://codecov.io/gh/smarie/python-autoclass/branch/master/graph/badge.svg)](https://codecov.io/gh/smarie/python-autoclass) [![Documentation](https://img.shields.io/badge/docs-latest-blue.svg)](https://smarie.github.io/python-autoclass/) [![PyPI](https://img.shields.io/badge/PyPI-autoclass-blue.svg)](https://pypi.python.org/pypi/autoclass/)[![downloads](https://img.shields.io/badge/downloads%2008%2F18-28k-brightgreen.svg)](https://kirankoduru.github.io/python/pypi-stats.html)
+*Write compact python classes*
+
+[![Python versions](https://img.shields.io/pypi/pyversions/autoclass.svg)](https://pypi.python.org/pypi/autoclass/) [![Build Status](https://travis-ci.org/smarie/python-autoclass.svg?branch=master)](https://travis-ci.org/smarie/python-autoclass) [![Tests Status](https://smarie.github.io/python-autoclass/junit/junit-badge.svg?dummy=8484744)](https://smarie.github.io/python-autoclass/junit/report.html) [![codecov](https://codecov.io/gh/smarie/python-autoclass/branch/master/graph/badge.svg)](https://codecov.io/gh/smarie/python-autoclass)
+
+[![Documentation](https://img.shields.io/badge/doc-latest-blue.svg)](https://smarie.github.io/python-autoclass/) [![PyPI](https://img.shields.io/pypi/v/autoclass.svg)](https://pypi.python.org/pypi/autoclass/) [![Downloads](https://pepy.tech/badge/autoclass)](https://pepy.tech/project/autoclass) [![Downloads per week](https://pepy.tech/badge/autoclass/week)](https://pepy.tech/project/autoclass) [![GitHub stars](https://img.shields.io/github/stars/smarie/python-autoclass.svg)](https://github.com/smarie/python-autoclass/stargazers)
 
 `autoclass` provides tools to automatically generate python classes code. The objective of this library is to reduce the amount of redundancy by automatically generating parts of the code from the information already available somewhere else (typically, in the constructor signature). It is made of several independent features that can be combined:
 
@@ -282,7 +286,7 @@ Python's primitive types (in particular `dict` and `tuple`) and it's dynamic typ
 However there are certain cases where developers still want to define their own classes, for example to provide strongly-typed APIs to their clients. In such case, *separation of concerns* will typically lead developers to enforce attribute value validation directly in the class, rather than in the code using the object. Eventually developers end up with big classes like this one:
 
 ```python
-from autoclass import check_var, Boolean
+from valid8 import validate, Boolean
 from numbers import Real, Integral
 from typing import Optional, Union
 
@@ -305,7 +309,7 @@ class House:
 
     @name.setter
     def name(self, name: str):
-        check_var(name, var_name='name', var_types=str)
+        validate('name', name, instance_of=str)
         self._name = name
     
     # --surface
@@ -315,8 +319,7 @@ class House:
 
     @surface.setter
     def surface(self, surface: Real):
-        check_var(surface, var_name='surface', var_types=Real, 
-                  min_value=0, min_strict=True)
+        validate('surface', surface, instance_of=Real, min_value=0, min_strict=True)
         self._surface = surface
     
     # --nb_floors
@@ -326,8 +329,7 @@ class House:
 
     @nb_floors.setter
     def nb_floors(self, nb_floors: Optional[Integral]):
-        check_var(nb_floors, var_name='nb_floors', var_types=Integral, 
-                  enforce_not_none=False)
+        validate('nb_floors', nb_floors, instance_of=Integral, enforce_not_none=False)
         self._surface = nb_floors # !**
         
     # --with_windows
@@ -337,13 +339,13 @@ class House:
 
     @with_windows.setter
     def with_windows(self, with_windows: Boolean):
-        check_var(with_windows, var_name='with_windows', var_types=Boolean)
+        validate('with_windows', with_windows, instance_of=Boolean)
         self._with_windows = with_windows
 ```
 
 Not to mention extra methods such as `__str__`, `__eq__`, `from_dict`, `to_dict`... 
 
-Now that's **a lot of code** - and only for 4 attributes ! Not mentioning the code for `check_var` that was not included here for the sake of readability (I include it in the library, for reference). And guess what - it is still highly prone to **human mistakes**. For example I made a mistake in the setter for `nb_floors`, did you spot it ? Also it makes the code **less readable**: did you spot that the setter for the surface property is different from the others?
+Now that's **a lot of code** - and only for 4 attributes ! Not mentioning the code for `validate` that was not included here for the sake of readability. And guess what - it is still highly prone to **human mistakes**. For example I made a mistake in the setter for `nb_floors`, did you spot it ? Also it makes the code **less readable**: did you spot that the setter for the surface property is different from the others?
 
 Really, *"there must be a better way"* : yes there is, and that's what this library provides.
 
