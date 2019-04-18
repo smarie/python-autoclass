@@ -84,7 +84,7 @@ def test_autohash(only_constructor_args, only_public_fields):
     assert hash(a) != hash(f)
 
 
-@pytest.mark.fail('Currently the test does not work, see https://github.com/smarie/python-autoclass/issues/21')
+@pytest.mark.xfail(reason='Currently the test does not work, see https://github.com/smarie/python-autoclass/issues/21')
 def test_autohash_exclude():
     """ Tests that exclusion works correctly with autohash """
 
@@ -99,4 +99,4 @@ def test_autohash_exclude():
             pass
 
     a = Foo('hello', dict())
-    hash(a)
+    hash(a)  # supposed to work since we exclude the dict (unhashable)
