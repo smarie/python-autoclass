@@ -6,6 +6,8 @@
 
 [![Documentation](https://img.shields.io/badge/doc-latest-blue.svg)](https://smarie.github.io/python-autoclass/) [![PyPI](https://img.shields.io/pypi/v/autoclass.svg)](https://pypi.python.org/pypi/autoclass/) [![Downloads](https://pepy.tech/badge/autoclass)](https://pepy.tech/project/autoclass) [![Downloads per week](https://pepy.tech/badge/autoclass/week)](https://pepy.tech/project/autoclass) [![GitHub stars](https://img.shields.io/github/stars/smarie/python-autoclass.svg)](https://github.com/smarie/python-autoclass/stargazers)
 
+!!! warning "`include` and `exclude` have been fixed in `@autodict` and `@autohash`, you do not need to add an underscore anymore when the attribute corresponds to a property. See [#21](https://github.com/smarie/python-autoclass/issues/21)"
+
 `autoclass` provides tools to automatically generate python classes code. The objective of this library is to reduce the amount of redundancy by automatically generating parts of the code from the information already available somewhere else (typically, in the constructor signature). It is made of several independent features that can be combined:
 
  * with `@autoargs` you don't have to write `self.xxx = xxx` in your constructor

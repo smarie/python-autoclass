@@ -297,8 +297,8 @@ def _execute_autodict_on_class(object_type,                 # type: Type[T]
                     :param self:
                     :return:
                     """
-                    for att_name in (list(vars(self)) + [o for o in super(object_type, self).__iter__()
-                                                         if o not in vars(self)]):
+                    myattrs = [possibly_replace_with_property_name(self.__class__, att_name) for att_name in vars(self)]
+                    for att_name in myattrs + [o for o in super(object_type, self).__iter__() if o not in vars(self)]:
                         if is_attr_selected(att_name, include=include, exclude=exclude):
                             if not only_public_fields \
                                     or (only_public_fields and not att_name.startswith(private_name_prefix)):
@@ -311,7 +311,8 @@ def _execute_autodict_on_class(object_type,                 # type: Type[T]
                     :param self:
                     :return:
                     """
-                    for att_name in vars(self):
+                    for att_name in [possibly_replace_with_property_name(self.__class__, att_name)
+                                     for att_name in vars(self)]:
                         if is_attr_selected(att_name, include=include, exclude=exclude):
                             if not only_public_fields \
                                     or (only_public_fields and not att_name.startswith(private_name_prefix)):
@@ -337,6 +338,7 @@ def _execute_autodict_on_class(object_type,                 # type: Type[T]
                     :return:
                     """
                     if hasattr(self, key):
+                        key = possibly_replace_with_property_name(self.__class__, key)
                         if is_attr_selected(key, include=include, exclude=exclude) and \
                                 (not only_public_fields or
                                  (only_public_fields and not key.startswith(private_name_prefix))):
@@ -366,6 +368,7 @@ def _execute_autodict_on_class(object_type,                 # type: Type[T]
                     :return:
                     """
                     if hasattr(self, key):
+                        key = possibly_replace_with_property_name(self.__class__, key)
                         if is_attr_selected(key, include=include, exclude=exclude) and \
                                 (not only_public_fields or
                                  (only_public_fields and not key.startswith(private_name_prefix))):

@@ -177,6 +177,7 @@ def _execute_autohash_on_class(object_type,                  # type: Type[T]
                     to_hash = []
 
                     for att_name, att_value in vars(self).items():
+                        att_name = possibly_replace_with_property_name(self.__class__, att_name)
                         if is_attr_selected(att_name, include=include, exclude=exclude):
                             if not only_public_fields \
                                     or (only_public_fields and not att_name.startswith(private_name_prefix)):

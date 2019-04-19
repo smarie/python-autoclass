@@ -84,14 +84,12 @@ def test_autohash(only_constructor_args, only_public_fields):
     assert hash(a) != hash(f)
 
 
-@pytest.mark.xfail(reason='Currently the test does not work, see https://github.com/smarie/python-autoclass/issues/21')
 def test_autohash_exclude():
     """ Tests that exclusion works correctly with autohash """
 
-    # Currently the test does not work, see https://github.com/smarie/python-autoclass/issues/21
     @autoclass(autohash=False)
-    @autohash(exclude='bar')
-    class Foo:
+    @autohash(exclude='bar')  # we have to put an underscore because that's the property
+    class Foo(object):
         def __init__(self,
                      foo,  # type: str
                      bar   # type: Dict[str, str]
@@ -99,4 +97,27 @@ def test_autohash_exclude():
             pass
 
     a = Foo('hello', dict())
-    hash(a)  # supposed to work since we exclude the dict (unhashable)
+    assert hash(a) == hash((a.foo, ))  # supposed to work since we exclude the dict (unhashable)
+
+    # combined tests (foo is transformed to a property)
+    @autoclass(include='foo')
+    class Foo(object):
+        def __init__(self,
+                     foo,  # type: str
+                     bar  # type: Dict[str, str]
+                     ):
+            pass
+
+    a = Foo('hello', dict())
+    assert hash(a) == hash((a.foo, ))  # supposed to work since we exclude the dict (unhashable)
+
+    @autoclass(exclude='bar')
+    class Foo(object):
+        def __init__(self,
+                     foo,  # type: str
+                     bar  # type: Dict[str, str]
+                     ):
+            pass
+
+    a = Foo('hello', dict())
+    assert hash(a) == hash((a.foo,))  # supposed to work since we exclude the dict (unhashable)
