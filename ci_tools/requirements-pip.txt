@@ -9,6 +9,7 @@ valid8
 pytest  #$PYTEST_VERSION
 pytest-logging  # ==2015.11.4
 PyContracts
+mini_lambda
 # enforce
 # pytypes
 
