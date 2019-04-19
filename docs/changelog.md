@@ -1,5 +1,9 @@
 # Changelog
 
+### 1.16.0 - Python 2 support
+
+ * This library now works on python 2.7, 3.5, 3.6 and 3.7. Fixes [#3](https://github.com/smarie/python-autoclass/issues/3).
+
 ### 1.15.1 - fixed valid8 exception message
 
  * Fixed [#24](https://github.com/smarie/python-autoclass/issues/24)
