@@ -67,3 +67,45 @@ def _check_known_decorators(typ, calling_decorator  # type: str
                                                + str(typ) + '> BEFORE ' + calling_decorator + '. This is not supported '
                                                'as it may lead to counter-intuitive behaviour, please change the order '
                                                'of the decorators on <' + str(typ) + '>')
+
+
+def method_already_there(object_type, method_name, this_class_only=False):
+    """
+    Returns True if method `method_name` is already implemented by object_type, that is, its implementation differs from
+    the one in `object`.
+
+    :param object_type:
+    :param method_name:
+    :param this_class_only:
+    :return:
+    """
+    if this_class_only:
+        return method_name in vars(object_type)  # or object_type.__dict__
+    else:
+        try:
+            method = getattr(object_type, method_name)
+        except AttributeError:
+            return False
+        else:
+            return method is not None and method is not getattr(object, method_name, None)
+
+
+def possibly_replace_with_property_name(object_type, att_name):
+    """
+    Returns the attribute name or the corresponding property name if there is one
+
+    :param object_type:
+    :param att_name:
+    :return:
+    """
+    return att_name[1:] if is_property_related_attr(object_type, att_name) else att_name
+
+
+def is_property_related_attr(object_type, att_name):
+    """
+    Returns True if the attribute name without a leading underscore corresponds to a property name in that class
+    :param object_type:
+    :param att_name:
+    :return:
+    """
+    return att_name[0] == '_' and isinstance(getattr(object_type, att_name[1:], None), property)
