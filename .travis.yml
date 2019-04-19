@@ -31,6 +31,13 @@ install:
   # needs to be installed beforehand
   - pip install setuptools_scm
   - python ci_tools/py_install.py pip ci_tools/requirements-pip.txt
+  - |
+    if [ "${TRAVIS_PYTHON_VERSION}" = "2.7" ]; then
+      echo "No need to install enforce pytypes"
+    else
+      pip install enforce
+      pip install pytypes
+    fi
   # travis-specific installs
   - pip install PyGithub  # for ci_tools/github_release.py
   - pip install codecov  # See https://github.com/codecov/example-python.
