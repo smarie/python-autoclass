@@ -89,13 +89,13 @@ def autoargs_decorate(func,          # type: Callable
     if include is not None:
         incorrect = set(list([include] if isinstance(include, str) else include)) - set(func_sig.parameters.keys())
         if len(incorrect) > 0:
-            raise ValueError('@autoargs definition exception: include contains \'' + str(incorrect) + '\' that is/are '
-                            'not part of signature for ' + str(func))
+            raise ValueError("@autoargs definition exception: include contains '%s' that is/are "
+                             "not part of signature for %s" % (incorrect, func))
     if exclude is not None:
         incorrect = set([exclude] if isinstance(exclude, str) else exclude) - set(func_sig.parameters.keys())
         if len(incorrect) > 0:
-            raise ValueError('@autoargs definition exception: exclude contains \'' + str(incorrect) + '\' that is/are '
-                             'not part of signature for ' + str(func))
+            raise ValueError("@autoargs definition exception: exclude contains '%s' that is/are "
+                             "not part of signature for %s" % (incorrect, func))
 
     # TODO this should be in @autoslots decorator at class level, not here.
     # (2) Optionally lock the class only for the provided fields
