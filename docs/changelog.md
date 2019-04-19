@@ -1,5 +1,9 @@
 # Changelog
 
+### 1.17.0 - Fixed `include`/`exclude` behaviour concerning property attributes
+
+ * Names used in `include` and `exclude` are now correctly taken into account by `autodict` and `autohash` even if the names correspond to property names and therefore the actual attributes names start with an underscore. Fixes [#21](https://github.com/smarie/python-autoclass/issues/21)
+
 ### 1.16.0 - Python 2 support
 
  * This library now works on python 2.7, 3.5, 3.6 and 3.7. Fixes [#3](https://github.com/smarie/python-autoclass/issues/3).
