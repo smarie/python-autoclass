@@ -1,6 +1,8 @@
 from collections import Mapping, Sequence
 from warnings import warn
 
+from six import with_metaclass
+
 from valid8 import validate
 
 try:  # python 3+
@@ -429,38 +431,42 @@ def _execute_autodict_on_class(object_type,                 # type: Type[T]
         try:
             object_type.__bases__ = new_bases
         except TypeError:
-            # python 2.x and object type is a new-style class directly inheriting from object
-            # open bug: https://bugs.python.org/issue672115
+            try:
+                # maybe a metaclass issue, we can try this
+                object_type.__bases__ = with_metaclass(type(object_type), *new_bases)
+            except TypeError:
+                # python 2.x and object type is a new-style class directly inheriting from object
+                # open bug: https://bugs.python.org/issue672115
 
-            # -- alternate way: add methods one by one
-            names = [
-                # no need
-                # '__class__', '__metaclass__', '__subclasshook__', '__init__', '__ne__', '__new__'
-                # no need: object
-                # '__getattribute__','__delattr__','__setattr__','__format__','__reduce__','__reduce_ex__','__sizeof__'
-                # -----
-                # '__getitem__', overridden above
-                # '__iter__', overridden above
-                # '__len__', overridden above
-                # '__eq__', overridden below
-                # '__repr__',  overridden below
-                # '__str__', overridden below
-                '__contains__',
-                'get',
-                'items',
-                'iteritems',
-                'iterkeys',
-                'itervalues',
-                'keys',
-                'values']
-            # from inspect import getmembers
-            # def is_useful(m):
-            #     return m
-            # meths = getmembers(Mapping.get(), predicate=is_useful)
-            # for name, func in meths:
-            for name in names:
-                # bind method to this class too (we access 'im_func' to get the original method)
-                setattr(object_type, name, getattr(Mapping, name).im_func)
+                # -- alternate way: add methods one by one
+                names = [
+                    # no need
+                    # '__class__', '__metaclass__', '__subclasshook__', '__init__', '__ne__', '__new__'
+                    # no need: object
+                    # '__getattribute__','__delattr__','__setattr__','__format__','__reduce__','__reduce_ex__','__sizeof__'
+                    # -----
+                    # '__getitem__', overridden above
+                    # '__iter__', overridden above
+                    # '__len__', overridden above
+                    # '__eq__', overridden below
+                    # '__repr__',  overridden below
+                    # '__str__', overridden below
+                    '__contains__',
+                    'get',
+                    'items',
+                    'iteritems',
+                    'iterkeys',
+                    'itervalues',
+                    'keys',
+                    'values']
+                # from inspect import getmembers
+                # def is_useful(m):
+                #     return m
+                # meths = getmembers(Mapping.get(), predicate=is_useful)
+                # for name, func in meths:
+                for name in names:
+                    # bind method to this class too (we access 'im_func' to get the original method)
+                    setattr(object_type, name, getattr(Mapping, name).im_func)
 
     # 3. add the static class method to build objects from a dict
     # if only_constructor_args:
