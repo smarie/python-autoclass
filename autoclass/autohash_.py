@@ -18,7 +18,7 @@ except ImportError:
 from valid8 import validate
 from decopatch import class_decorator, DECORATED
 
-from autoclass.utils import is_attr_selected
+from autoclass.utils import is_attr_selected, method_already_there, possibly_replace_with_property_name
 from autoclass.utils import get_constructor
 from autoclass.utils import _check_known_decorators
 
@@ -117,8 +117,7 @@ def _execute_autohash_on_class(object_type,                  # type: Type[T]
     validate('exclude', exclude, instance_of=[str, Sequence], enforce_not_none=False)
 
     # Override hash method if not already implemented
-    if not hasattr(object_type, '__hash__') or object_type.__hash__ is None or object_type.__hash__ == object.__hash__:
-
+    if not method_already_there(object_type, '__hash__'):
         if only_constructor_args:
             # a. Find the __init__ constructor signature
             constructor = get_constructor(object_type, allow_inheritance=True)
