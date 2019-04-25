@@ -83,7 +83,7 @@ def autoargs_decorate(func,          # type: Callable
 
     # check that include/exclude dont contain names that are incorrect
     if include is not None:
-        incorrect = set(list([include] if isinstance(include, str) else include)) - set(func_sig.parameters.keys())
+        incorrect = set([include] if isinstance(include, str) else include) - set(func_sig.parameters.keys())
         if len(incorrect) > 0:
             raise ValueError("@autoargs definition exception: include contains '%s' that is/are "
                              "not part of signature for %s" % (incorrect, func))
