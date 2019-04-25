@@ -1,5 +1,9 @@
 # Changelog
 
+### 1.17.1 - Fixed bug with latest `valid8`
+
+ * Fixed `ValidationError` happening in all use cases. Fixed [#25](https://github.com/smarie/python-autoclass/issues/25).
+
 ### 1.17.0 - Fixed `include`/`exclude` behaviour concerning property attributes
 
  * Names used in `include` and `exclude` are now correctly taken into account by `autodict` and `autohash` even if the names correspond to property names and therefore the actual attributes names start with an underscore. Fixes [#21](https://github.com/smarie/python-autoclass/issues/21)
