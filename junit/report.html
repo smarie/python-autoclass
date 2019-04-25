@@ -235,7 +235,7 @@ function filter_table(elem) {
 }
 </script>
     <h1>report.html</h1>
-    <p>Report generated on 25-Apr-2019 at 15:56:36 by <a href="https://pypi.python.org/pypi/pytest-html">pytest-html</a> v1.20.0</p>
+    <p>Report generated on 25-Apr-2019 at 15:59:10 by <a href="https://pypi.python.org/pypi/pytest-html">pytest-html</a> v1.20.0</p>
     <h2>Environment</h2>
     <table id="environment">
       <tr>
@@ -246,7 +246,7 @@ function filter_table(elem) {
         <td>/usr/local/lib/jvm/openjdk11</td></tr>
       <tr>
         <td>Packages</td>
-        <td>{&apos;pytest&apos;: &apos;4.1.0&apos;, &apos;pluggy&apos;: &apos;0.8.0&apos;, &apos;py&apos;: &apos;1.7.0&apos;}</td></tr>
+        <td>{&apos;py&apos;: &apos;1.7.0&apos;, &apos;pluggy&apos;: &apos;0.8.0&apos;, &apos;pytest&apos;: &apos;4.1.0&apos;}</td></tr>
       <tr>
         <td>Platform</td>
         <td>Linux-4.15.0-1028-gcp-x86_64-with-debian-stretch-sid</td></tr>
@@ -258,13 +258,13 @@ function filter_table(elem) {
         <td>3.5.6</td></tr>
       <tr>
         <td>TRAVIS_BRANCH</td>
-        <td>master</td></tr>
+        <td>1.17.1</td></tr>
       <tr>
         <td>TRAVIS_BUILD_ID</td>
-        <td>524543127</td></tr>
+        <td>524544475</td></tr>
       <tr>
         <td>TRAVIS_BUILD_NUMBER</td>
-        <td>123</td></tr>
+        <td>124</td></tr>
       <tr>
         <td>TRAVIS_COMMIT</td>
         <td>097098776c69ebc87bc1aeda6997431b29bd583a</td></tr>
@@ -272,17 +272,14 @@ function filter_table(elem) {
         <td>TRAVIS_COMMIT_MESSAGE</td>
         <td>to use the latest pytest we need also the latest pytest cov</td></tr>
       <tr>
-        <td>TRAVIS_COMMIT_RANGE</td>
-        <td>f69d9de74ce5...097098776c69</td></tr>
-      <tr>
         <td>TRAVIS_EVENT_TYPE</td>
         <td>push</td></tr>
       <tr>
         <td>TRAVIS_JOB_ID</td>
-        <td>524543129</td></tr>
+        <td>524544477</td></tr>
       <tr>
         <td>TRAVIS_JOB_NUMBER</td>
-        <td>123.2</td></tr>
+        <td>124.2</td></tr>
       <tr>
         <td>TRAVIS_OS_NAME</td>
         <td>linux</td></tr>
@@ -294,9 +291,12 @@ function filter_table(elem) {
         <td>smarie/python-autoclass</td></tr>
       <tr>
         <td>TRAVIS_SUDO</td>
-        <td>true</td></tr></table>
+        <td>true</td></tr>
+      <tr>
+        <td>TRAVIS_TAG</td>
+        <td>1.17.1</td></tr></table>
     <h2>Summary</h2>
-    <p>55 tests ran in 1.67 seconds. </p>
+    <p>55 tests ran in 1.75 seconds. </p>
     <p class="filter" hidden="true">(Un)check the boxes to filter the results.</p><input checked="true" class="filter" data-test-result="passed" hidden="true" name="filter_checkbox" onChange="filter_table(this)" type="checkbox"/><span class="passed">55 passed</span>, <input checked="true" class="filter" data-test-result="skipped" hidden="true" name="filter_checkbox" onChange="filter_table(this)" type="checkbox"/><span class="skipped">1 skipped</span>, <input checked="true" class="filter" data-test-result="failed" disabled="true" hidden="true" name="filter_checkbox" onChange="filter_table(this)" type="checkbox"/><span class="failed">0 failed</span>, <input checked="true" class="filter" data-test-result="error" disabled="true" hidden="true" name="filter_checkbox" onChange="filter_table(this)" type="checkbox"/><span class="error">0 errors</span>, <input checked="true" class="filter" data-test-result="xfailed" disabled="true" hidden="true" name="filter_checkbox" onChange="filter_table(this)" type="checkbox"/><span class="xfailed">0 expected failures</span>, <input checked="true" class="filter" data-test-result="xpassed" disabled="true" hidden="true" name="filter_checkbox" onChange="filter_table(this)" type="checkbox"/><span class="xpassed">0 unexpected passes</span>
     <h2>Results</h2>
     <table id="results-table">
@@ -445,7 +445,7 @@ function filter_table(elem) {
           <th>autoclass/tests/test_autoclass.py</th>
           <td>test_autoclass_enforce_validate_not_reversed</td>
           <td> Tests that if we reverse the annotations orders, it still works. Currently it fails </td>
-          <td class="col-duration">0.02</td>
+          <td class="col-duration">0.03</td>
           <td><a href="https://codecov.io/gh/smarie/python-autoclass/src/097098776c69ebc87bc1aeda6997431b29bd583a/autoclass/tests/test_autoclass.py#L6">source</a></td></tr>
         <tr>
           <td class="extra" colspan="6">
@@ -614,7 +614,7 @@ function filter_table(elem) {
     @autopropsBasic functionality with PyContracts - if a `@contract` annotation exist on the `__init__` method,
     mentioning a contract for a given parameter, the parameter contract will be added on the generated setter method
     </td>
-          <td class="col-duration">0.33</td>
+          <td class="col-duration">0.34</td>
           <td><a href="https://codecov.io/gh/smarie/python-autoclass/src/097098776c69ebc87bc1aeda6997431b29bd583a/autoclass/tests/test_autoprops.py#L34">source</a></td></tr>
         <tr>
           <td class="extra" colspan="6">
@@ -636,7 +636,7 @@ function filter_table(elem) {
           <th>autoclass/tests/test_autoprops.py</th>
           <td>test_autoprops_exclude</td>
           <td> @autoprops With pycontracts and explicit list of attributes to exclude </td>
-          <td class="col-duration">0.00</td>
+          <td class="col-duration">0.01</td>
           <td><a href="https://codecov.io/gh/smarie/python-autoclass/src/097098776c69ebc87bc1aeda6997431b29bd583a/autoclass/tests/test_autoprops.py#L91">source</a></td></tr>
         <tr>
           <td class="extra" colspan="6">
@@ -763,7 +763,7 @@ Set surface to 0.1
           <th>autoclass/tests/test_readme_index.py</th>
           <td>test_readme_index_basic</td>
           <td> First basic example in the doc </td>
-          <td class="col-duration">0.00</td>
+          <td class="col-duration">0.01</td>
           <td><a href="https://codecov.io/gh/smarie/python-autoclass/src/097098776c69ebc87bc1aeda6997431b29bd583a/autoclass/tests/test_readme_index.py#L15">source</a></td></tr>
         <tr>
           <td class="extra" colspan="6">
@@ -774,7 +774,7 @@ Set surface to 0.1
           <th>autoclass/tests/test_readme_index.py</th>
           <td>test_readme_index_basic2</td>
           <td> Second basic example in the doc: adding setter override </td>
-          <td class="col-duration">0.01</td>
+          <td class="col-duration">0.00</td>
           <td><a href="https://codecov.io/gh/smarie/python-autoclass/src/097098776c69ebc87bc1aeda6997431b29bd583a/autoclass/tests/test_readme_index.py#L30">source</a></td></tr>
         <tr>
           <td class="extra" colspan="6">
@@ -862,7 +862,7 @@ Set surface to 0.1
           <th>autoclass/tests/test_readme_usage.py</th>
           <td>test_readme_usage_autoprops_validate</td>
           <td>None</td>
-          <td class="col-duration">0.00</td>
+          <td class="col-duration">0.01</td>
           <td><a href="https://codecov.io/gh/smarie/python-autoclass/src/097098776c69ebc87bc1aeda6997431b29bd583a/autoclass/tests/test_readme_usage.py#L14">source</a></td></tr>
         <tr>
           <td class="extra" colspan="6">
