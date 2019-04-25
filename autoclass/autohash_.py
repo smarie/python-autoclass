@@ -1,4 +1,3 @@
-from collections import Sequence
 try:
     from inspect import signature
 except ImportError:
@@ -15,10 +14,10 @@ try:
 except ImportError:
     pass
 
-from valid8 import validate
 from decopatch import class_decorator, DECORATED
 
-from autoclass.utils import is_attr_selected, method_already_there, possibly_replace_with_property_name
+from autoclass.utils import is_attr_selected, method_already_there, possibly_replace_with_property_name, \
+    validate_include_exclude
 from autoclass.utils import get_constructor
 from autoclass.utils import _check_known_decorators
 
@@ -110,11 +109,8 @@ def _execute_autohash_on_class(object_type,                  # type: Type[T]
     not be taken into account in the hash. Please note that this behaviour is the opposite from @autodict.
     :return:
     """
-
-    if include is not None and exclude is not None:
-        raise ValueError('Only one of \'include\' or \'exclude\' argument should be provided.')
-    validate('include', include, instance_of=[str, Sequence], enforce_not_none=False)
-    validate('exclude', exclude, instance_of=[str, Sequence], enforce_not_none=False)
+    # First check parameters
+    validate_include_exclude(include, exclude)
 
     # Override hash method if not already implemented
     if not method_already_there(object_type, '__hash__'):

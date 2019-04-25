@@ -1,4 +1,3 @@
-from collections import Sequence
 from copy import copy
 from inspect import getmembers
 from warnings import warn
@@ -21,9 +20,8 @@ except ImportError:
     pass
 
 from decopatch import DECORATED, function_decorator, class_decorator
-from valid8 import validate
 
-from autoclass.utils import is_attr_selected
+from autoclass.utils import is_attr_selected, validate_include_exclude
 from autoclass.utils import get_constructor
 from autoclass.utils import _check_known_decorators
 
@@ -113,11 +111,8 @@ def _execute_autoprops_on_class(object_type,   # type: Type[T]
     :param exclude: a tuple of explicit attribute names to exclude. In such case, include should be None.
     :return:
     """
-
-    if include is not None and exclude is not None:
-        raise ValueError('Only one of \'include\' or \'exclude\' argument should be provided.')
-    validate('include', include, instance_of=[str, Sequence], enforce_not_none=False)
-    validate('exclude', exclude, instance_of=[str, Sequence], enforce_not_none=False)
+    # 0. first check parameters
+    validate_include_exclude(include, exclude)
 
     # 1. Find the __init__ constructor signature and possible pycontracts @contract
     constructor = get_constructor(object_type, allow_inheritance=True)

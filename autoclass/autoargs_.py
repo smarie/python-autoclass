@@ -1,8 +1,7 @@
 import sys
-from collections import Sequence, OrderedDict
+from collections import OrderedDict
 
 from makefun import wraps
-from valid8 import validate
 
 try:  # python 3+
     from inspect import signature
@@ -16,7 +15,7 @@ except ImportError:
 
 from decopatch import function_decorator, DECORATED
 
-from autoclass.utils import is_attr_selected
+from autoclass.utils import is_attr_selected, validate_include_exclude
 
 
 @function_decorator
@@ -76,10 +75,7 @@ def autoargs_decorate(func,          # type: Callable
     """
 
     # (0) first check parameters
-    if include is not None and exclude is not None:
-        raise ValueError('Only one of \'include\' or \'exclude\' argument should be provided.')
-    validate('include', include, instance_of=[str, Sequence], enforce_not_none=False)
-    validate('exclude', exclude, instance_of=[str, Sequence], enforce_not_none=False)
+    validate_include_exclude(include, exclude)
 
     # (1) then retrieve function signature
     # attrs, varargs, varkw, defaults = getargspec(func)

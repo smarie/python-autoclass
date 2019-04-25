@@ -1,9 +1,7 @@
-from collections import Mapping, Sequence
+from collections import Mapping
 from warnings import warn
 
 from six import with_metaclass
-
-from valid8 import validate
 
 try:  # python 3+
     from inspect import signature
@@ -21,7 +19,8 @@ except ImportError:
     pass
 
 from autoclass.autoprops_ import DuplicateOverrideError
-from autoclass.utils import is_attr_selected, method_already_there, possibly_replace_with_property_name
+from autoclass.utils import is_attr_selected, method_already_there, possibly_replace_with_property_name, \
+    validate_include_exclude
 from autoclass.utils import get_constructor
 from autoclass.utils import _check_known_decorators
 
@@ -123,11 +122,8 @@ def _execute_autodict_on_class(object_type,                 # type: Type[T]
         hidden
     :return:
     """
-
-    if include is not None and exclude is not None:
-        raise ValueError('Only one of \'include\' or \'exclude\' argument should be provided.')
-    validate('include', include, instance_of=[str, Sequence], enforce_not_none=False)
-    validate('exclude', exclude, instance_of=[str, Sequence], enforce_not_none=False)
+    # 0. first check parameters
+    validate_include_exclude(include, exclude)
 
     # if issubclass(object_type, Mapping):
     #     raise ValueError('@autodict can not be set on classes that are already subclasses of Mapping, and therefore '

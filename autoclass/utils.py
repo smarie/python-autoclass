@@ -1,7 +1,23 @@
+from collections import Sequence
+from valid8 import validate
+
 try:  # python 3.5+
     from typing import Union, Tuple
 except ImportError:
     pass
+
+
+def validate_include_exclude(include, exclude):
+    """
+    Common validator for include and exclude arguments
+    :param include:
+    :param exclude:
+    :return:
+    """
+    if include is not None and exclude is not None:
+        raise ValueError("Only one of 'include' or 'exclude' argument should be provided.")
+    validate('include', include, instance_of=(str, Sequence), enforce_not_none=False)
+    validate('exclude', exclude, instance_of=(str, Sequence), enforce_not_none=False)
 
 
 def is_attr_selected(attr_name,     # type: str
