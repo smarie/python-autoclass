@@ -174,7 +174,8 @@ Now if you decorate your *class constructor* with `@validate_arg`, then `autocla
 ```python
 from autoclass import autoclass
 from mini_lambda import s, x, Len
-from valid8 import validate_arg, instance_of, is_multiple_of, InputValidationError
+from valid8 import validate_arg, InputValidationError
+from valid8.validation_lib import instance_of, is_multiple_of
 
 # 2 custom validation errors for valid8
 class InvalidName(InputValidationError):
@@ -244,7 +245,8 @@ config(dict(mode='covariant'))  # type validation will accept subclasses too
 
 # Imports - for value validation
 from mini_lambda import s, x, Len
-from valid8 import validate_arg, is_multiple_of, InputValidationError
+from valid8 import validate_arg, InputValidationError
+from valid8.validation_lib import is_multiple_of
 
 # 2 custom validation errors for valid8
 class InvalidName(InputValidationError):
