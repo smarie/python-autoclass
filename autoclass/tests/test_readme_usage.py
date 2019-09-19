@@ -6,17 +6,18 @@ try:
     from typing import List
 except ImportError:
     pass
-from valid8 import Boolean, minlens, validate_io, ValidationError, gt, minlen
+from valid8 import validate_io, ValidationError
+from valid8.validation_lib import minlen
 
 
-from autoclass import autoargs, autoprops, autodict, autoclass, autohash
+from autoclass import autoargs, autoprops, autodict, autohash
 
 
 def test_readme_usage_autoprops_validate():
     @autoprops
     class FooConfigA(object):
         @autoargs
-        @validate_io(a=minlens(0))
+        @validate_io(a=minlen(1))
         def __init__(self,
                      a  # type: str
                      ):

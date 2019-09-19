@@ -3,7 +3,8 @@ import sys
 import pytest
 
 from numbers import Real, Integral
-from valid8 import Boolean, validate, validate_arg, instance_of, is_multiple_of, InputValidationError
+from valid8 import Boolean, validate, validate_arg, InputValidationError
+from valid8.validation_lib import instance_of, is_multiple_of
 
 try:
     from typing import Optional

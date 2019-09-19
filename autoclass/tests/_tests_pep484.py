@@ -4,7 +4,8 @@ from typing import Optional, List
 import pytest
 
 from autoclass import setter_override, autoclass, AutoclassDecorationException, autoprops, autoargs
-from valid8 import Boolean, ValidationError, validate_io, minlens, gts, between, minlen, gt
+from valid8 import Boolean, ValidationError, validate_io
+from valid8.validation_lib import gts, between, minlen, gt
 
 
 def test_autoclass_enforce_validate_not_reversed():
