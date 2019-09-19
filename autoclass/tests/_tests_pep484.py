@@ -134,7 +134,7 @@ def test_autoprops_enforce_validate():
     @autoprops
     class HouseConfiguration(object):
         @autoargs
-        @validate_io(name=minlens(0),
+        @validate_io(name=minlen(1),
                      surface=gts(0),
                      nb_floors=between(1, 100, open_right=True))
         def __init__(self,
@@ -234,7 +234,8 @@ def test_readme_index_enforce_valid8():
 
     # Imports - for value validation
     from mini_lambda import s, x, Len
-    from valid8 import validate_arg, is_multiple_of, InputValidationError
+    from valid8 import validate_arg, InputValidationError
+    from valid8.validation_lib import is_multiple_of
 
     # 2 custom validation errors for valid8
     class InvalidName(InputValidationError):
