@@ -1,5 +1,9 @@
 # Changelog
 
+### 1.17.2 - Added `__version__` attribute
+
+Added `__version__` attribute at package level.
+
 ### 1.17.1 - Fixed bug with latest `valid8`
 
  * Fixed `ValidationError` happening in all use cases. Fixed [#25](https://github.com/smarie/python-autoclass/issues/25).

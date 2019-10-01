@@ -14,7 +14,7 @@ here = path.abspath(path.dirname(__file__))
 INSTALL_REQUIRES = ['decopatch', 'funcsigs;python_version<"3.3"', 'valid8', 'makefun']
 DEPENDENCY_LINKS = []
 SETUP_REQUIRES = ['pytest-runner', 'setuptools_scm', 'pypandoc', 'pandoc']
-TESTS_REQUIRE = ['pytest', 'pytest-logging', 'pytest-cov', 'PyContracts', 'enforce', 'pytypes', 'valid8>=2.0.0']
+TESTS_REQUIRE = ['pytest', 'pytest-logging', 'PyContracts', 'enforce', 'pytypes', 'valid8>=2.0.0']
 EXTRAS_REQUIRE = {'contracts': ['PyContracts'],
                   'enforce': ['enforce'],
                   'validate': ['valid8']}
@@ -23,9 +23,7 @@ EXTRAS_REQUIRE = {'contracts': ['PyContracts'],
 try:
     from setuptools_scm import get_version
 except Exception as e:
-    raise_from(Exception('Required packages for setup not found. You may wish you execute '
-                         '"pip install -r ci_tools/requirements-setup.txt" to install them or alternatively install '
-                         'them manually using conda or other system. The list is : ' + str(SETUP_REQUIRES)), e)
+    raise_from(Exception('Required packages for setup not found. Please install `setuptools_scm`'), e)
 
 # ************** ID card *****************
 DISTNAME = 'autoclass'
@@ -42,17 +40,9 @@ DOWNLOAD_URL = URL + '/tarball/' + version_for_download_url
 KEYWORDS = 'auto code generator getter setter constructor autoarg autoprops decorator property properties fields ' \
            'attribute attr contract object class enforce valid boilerplate pep484 type-hints runtime-typechecking ' \
            'typechecking'
-# --Get the long description from the README file
-# with open(path.join(here, 'README.md'), encoding='utf-8') as f:
-#    LONG_DESCRIPTION = f.read()
-try:
-    import pypandoc
-    LONG_DESCRIPTION = pypandoc.convert(path.join(here, 'docs', 'long_description.md'), 'rst').replace('\r', '')
-except(ImportError):
-    from warnings import warn
-    warn('WARNING pypandoc could not be imported - we recommend that you install it in order to package the '
-         'documentation correctly')
-    LONG_DESCRIPTION = open('README.md').read()
+
+with open(path.join(here, 'docs', 'long_description.md')) as f:
+    LONG_DESCRIPTION = f.read()
 
 # ************* VERSION **************
 # --Get the Version number from VERSION file, see https://packaging.python.org/single_source_version/ option 4.
@@ -65,6 +55,7 @@ setup(
     name=DISTNAME,
     description=DESCRIPTION,
     long_description=LONG_DESCRIPTION,
+    long_description_content_type='text/markdown',
 
     # Versions should comply with PEP440.  For a discussion on single-sourcing
     # the version across setup.py and the project code, see
@@ -125,7 +116,7 @@ setup(
     dependency_links=DEPENDENCY_LINKS,
 
     # we're using git
-    use_scm_version=True, # this provides the version + adds the date if local non-commited changes.
+    use_scm_version={'write_to': '%s/_version.py' % DISTNAME}, # this provides the version + adds the date if local non-commited changes.
     # use_scm_version={'local_scheme':'dirty-tag'}, # this provides the version + adds '+dirty' if local non-commited changes.
     setup_requires=SETUP_REQUIRES,
 
