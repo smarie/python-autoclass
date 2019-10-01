@@ -22,7 +22,7 @@ trap "cleanup" INT TERM EXIT
 echo -e "\n\n****** Running tests ******\n\n"
 if [ "${TRAVIS_PYTHON_VERSION}" = "3.5" ]; then
    # full
-   coverage run --source autoclass -m pytest --junitxml=reports/junit/junit.xml --html=reports/junit/report.html --cov-report term-missing --cov=./autoclass -v autoclass/tests/
+   coverage run --source autoclass -m pytest --junitxml=reports/junit/junit.xml --html=reports/junit/report.html -v autoclass/tests/
    # buggy
    # python -m pytest --junitxml=reports/junit/junit.xml --html=reports/junit/report.html --cov-report term-missing --cov=./autoclass -v autoclass/tests/
 else
