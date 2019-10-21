@@ -368,7 +368,7 @@ A decorator to makes objects of the class implement __hash__, so that they can b
 
 Examples:
 
-* Basic functionality, no customization - all object fields are used in the hash: 
+ * Basic functionality, no customization - all object fields are used in the hash: 
 
 ```python
 @autohash
@@ -427,6 +427,62 @@ class Bar(object):
 ```
 
 Finally note that `@autohash` is automatically applied when you decorate the whole class with `@autoclass`, see below.
+
+
+## @autoslots
+
+Automatically create slots for each attribute. Parameters allow to customize the list of attributes that are taken into account.
+
+Examples:
+
+ * Basic functionality, no customization - all object fields are used in the slots, and a `__weakref__` is automatically added: 
+
+```python
+from autoclass import autoslots
+
+@autoslots
+class Foo(object):
+    def __init__(self, foo1, foo2=0):
+        self.foo1 = foo1
+        self.foo2 = foo2
+
+f = Foo(1)
+assert not hasattr(f, '__dict__')
+assert f.foo1 == 1
+assert f.foo2 == 0
+```
+
+ * private slot names can be created instead of public ones:
+ 
+```python
+from autoclass import autoslots, autoargs, autoprops
+
+@autoprops
+@autoslots(use_public_names=False)
+class Foo(object):
+    @autoargs
+    def __init__(self, foo1, foo2=0):
+        pass
+
+f = Foo(1)
+assert not hasattr(f, '__dict__')
+assert f.foo1 == 1
+assert f.foo2 == 0
+```
+
+ * In addition, you can include or exclude some names in the list of fields with one of `include` or `exclude`:
+
+```python
+@autoslots(include=['a', 'b'], ...)
+class Foo(object):
+    ...
+
+@autoslots(exclude=['b'], ...)
+class Bar(object):
+    ...
+```
+
+Finally note that `@autoslots` is not automatically applied when you decorate the whole class with `@autoclass`, you have to use `@autoclass(autoslots=True)` see below.
 
 
 ## @autoclass
@@ -490,7 +546,7 @@ assert dict(**o) == o  # TypeError: argument after ** must be a mapping
 
 ## Alternative to decorators: manual function wrappers
 
-Equivalent manual wrapper methods are provided for all decorators in this library: `autoargs_decorate(init_func, include, exclude)`, `autoprops_decorate(cls, include, exclude)`, `autoprops_override_decorate(func, attribute, is_getter)`, `autodict_decorate(cls, include, exclude, only_constructor_args, only_public_fields)`, `autoclass_decorate(cls, include, exclude, autoargs, autoprops, autodict)`
+Equivalent manual wrapper methods are provided for all decorators in this library: `autoargs_decorate(init_func, include, exclude)`, `autoprops_decorate(cls, include, exclude)`, `autoprops_override_decorate(func, attribute, is_getter)`, `autodict_decorate(cls, include, exclude, only_constructor_args, only_public_fields)`, `autoclass_decorate(cls, include, exclude, autoargs, autoprops, autodict)`, `autoslots_decorate(cls, include, exclude, use_public_names, add_weakref_slot)`
 
 Therefore you can do:
 
