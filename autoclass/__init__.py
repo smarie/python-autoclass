@@ -1,5 +1,6 @@
 from autoclass.autoargs_ import autoargs, autoargs_decorate
 from autoclass.autoclass_ import autoclass, autoclass_decorate
+from autoclass.autoslots_ import autoslots, autoslots_decorate
 from autoclass.autodict_ import autodict, autodict_decorate, autodict_override, autodict_override_decorate, \
     print_ordered_dict
 from autoclass.autohash_ import autohash, autohash_decorate
@@ -23,6 +24,7 @@ __all__ = [
     # symbols
     'autoargs', 'autoargs_decorate',
     'autoclass', 'autoclass_decorate',
+    'autoslots', 'autoslots_decorate',
     'autodict', 'autodict_decorate', 'autodict_override', 'autodict_override_decorate', 'print_ordered_dict',
     'autohash', 'autohash_decorate',
     'IllegalGetterSignatureException', 'IllegalSetterSignatureException', 'autoprops', 'autoprops_decorate',

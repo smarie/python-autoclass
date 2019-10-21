@@ -85,3 +85,31 @@ def test_autoclass_pickle_inheritance():
     pik = pickle.dumps(a)
     aa = pickle.loads(pik)
     assert aa == a
+
+
+def test_autoclass_slots():
+    """Tests that autoclass works also when classes have slots """
+
+    @autoclass(autoslots=True)
+    class Foo(object):
+        def __init__(self, foo1, foo2=0):
+            pass
+
+    @autoclass(autoslots=True)
+    class Bar(Foo):
+        def __init__(self, bar, foo1, foo2=0):
+            # this constructor is not actually needed in this case since all fields are already self-assigned here
+            super(Bar, self).__init__(foo1, foo2)
+            # pass
+
+    assert set(Bar.__slots__) == {'_bar'}
+
+    a = Bar(2, 'th')
+    assert a == {'bar': 2, 'foo1': 'th', 'foo2': 0}
+    assert a['foo1'] == 'th'
+
+    # iteration order is fixed
+    assert list(a.keys()) == ['bar', 'foo1', 'foo2']
+
+    # order in prints is fixed
+    assert str(a) == "Bar({'bar': 2, 'foo1': 'th', 'foo2': 0})"
