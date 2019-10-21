@@ -1,5 +1,9 @@
 # Changelog
 
+### 1.18.0 - `@autoslots`
+
+New `@autoslots` feature, that can also be used from `@autoclass` by setting `(autoslots=True)`. Fixes [#9](https://github.com/smarie/python-autoclass/issues/9)
+
 ### 1.17.2 - Added `__version__` attribute
 
 Added `__version__` attribute at package level.
