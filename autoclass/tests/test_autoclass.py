@@ -1,5 +1,6 @@
 import sys
 import pytest
+import pickle
 
 from autoclass import autoclass
 
@@ -40,6 +41,7 @@ def test_readme_enforce():
 
 
 def test_autoclass_inheritance():
+    """Tests that autoclass works also in an inheritance context """
 
     @autoclass
     class Foo(object):
@@ -62,3 +64,24 @@ def test_autoclass_inheritance():
 
     # order in prints is fixed
     assert str(a) == "Bar({'bar': 2, 'foo1': 'th', 'foo2': 0})"
+
+
+def test_autoclass_pickle_inheritance():
+    """Tests that pickle can work with autoclass-ed classes"""
+
+    from ._test_autoclass_pickle import Bar
+
+    a = Bar(2, 'th')
+    assert a == {'bar': 2, 'foo1': 'th', 'foo2': 0}
+    assert a['foo1'] == 'th'
+
+    # iteration order is fixed
+    assert list(a.keys()) == ['bar', 'foo1', 'foo2']
+
+    # order in prints is fixed
+    assert str(a) == "Bar({'bar': 2, 'foo1': 'th', 'foo2': 0})"
+
+    # pickle
+    pik = pickle.dumps(a)
+    aa = pickle.loads(pik)
+    assert aa == a
