@@ -101,12 +101,12 @@ def _execute_autohash_on_class(object_type,                  # type: Type[T]
     :param include: a tuple of explicit attribute names to include (None means all)
     :param exclude: a tuple of explicit attribute names to exclude. In such case, include should be None.
     :param only_constructor_args: if False (default), all fields will be included in the hash, even if they are defined
-    in the constructor or dynamically. If True, only constructor arguments will be included in the hash, not any other
-    field that would be created in the constructor or dynamically. Please note that this behaviour is the opposite from
-    @autodict.
+        in the constructor or dynamically. If True, only constructor arguments will be included in the hash, not any
+        other field that would be created in the constructor or dynamically. Please note that this behaviour is the
+        opposite from @autodict.
     :param only_public_fields: this parameter is only used when only_constructor_args is set to False. If
-    only_public_fields is set to False (default), all fields are used in the hash. Otherwise, class-private fields will
-    not be taken into account in the hash. Please note that this behaviour is the opposite from @autodict.
+        only_public_fields is set to False (default), all fields are used in the hash. Otherwise, class-private fields
+        will not be taken into account in the hash. Please note that this behaviour is the opposite from @autodict.
     :return:
     """
     # First check parameters
