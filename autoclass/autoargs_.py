@@ -4,18 +4,18 @@ from collections import OrderedDict
 from makefun import wraps
 
 try:  # python 3+
-    from inspect import signature
+    from inspect import signature, Signature
 except ImportError:
-    from funcsigs import signature
+    from funcsigs import signature, Signature
 
 try:  # python 3.5+
-    from typing import Tuple, Callable, Union
+    from typing import Tuple, Callable, Union, Iterable
 except ImportError:
     pass
 
 from decopatch import function_decorator, DECORATED
 
-from autoclass.utils import is_attr_selected, validate_include_exclude
+from autoclass.utils import read_fields_from_init
 
 
 @function_decorator
@@ -63,8 +63,7 @@ def autoargs_decorate(func,          # type: Callable
     ```
     myfunc2 = autoargs_decorate(myfunc)
     ```
-    
-    
+
     See autoargs for details.
 
     :param func: the function to wrap
@@ -73,65 +72,51 @@ def autoargs_decorate(func,          # type: Callable
     :param exclude: a tuple of attribute names to exclude from the auto-assignment. In such case, include should be None
     :return:
     """
+    # retrieve and filter the names
+    selected_names, func_sig = read_fields_from_init(func, include=include, exclude=exclude, caller="@autoargs")
 
-    # (0) first check parameters
-    validate_include_exclude(include, exclude)
+    # finally create the new function (a wrapper)
+    return _autoargs_decorate(func, func_sig, selected_names)
 
-    # (1) then retrieve function signature
-    # attrs, varargs, varkw, defaults = getargspec(func)
-    func_sig = signature(func)
 
-    # check that include/exclude dont contain names that are incorrect
-    if include is not None:
-        incorrect = set([include] if isinstance(include, str) else include) - set(func_sig.parameters.keys())
-        if len(incorrect) > 0:
-            raise ValueError("@autoargs definition exception: include contains '%s' that is/are "
-                             "not part of signature for %s" % (incorrect, func))
-    if exclude is not None:
-        incorrect = set([exclude] if isinstance(exclude, str) else exclude) - set(func_sig.parameters.keys())
-        if len(incorrect) > 0:
-            raise ValueError("@autoargs definition exception: exclude contains '%s' that is/are "
-                             "not part of signature for %s" % (incorrect, func))
+def _autoargs_decorate(func,       # type: Callable
+                       func_sig,   # type: Signature
+                       att_names   # type: Iterable[str]
+                       ):
+    """
+    Creates a wrapper around the function `func` so that all attributes in `att_names` are set to `self`
+    BEFORE executing the function. The original function signature may be needed in some edge cases.
 
-    # TODO this should be in @autoslots decorator at class level, not here.
-    # (2) Optionally lock the class only for the provided fields
-    # Does not work for the moment. Besides locking fields seems to have issues with pickle serialization
-    # so we'd rather not propose this option.
-    #
-    # See 'attrs' project for this kind of advanced features https://github.com/python-attrs/attrs
-    #
-    # if lock_class_fields:
-    #     if signature_varkw:
-    #         raise Exception('cant lock field names with variable kwargs')
-    #     else:
-    #         object_type = get_class_that_defined_method(func)
-    #         if include:
-    #             fields = include
-    #         else:
-    #             fields = signature_attrs[1:]
-    #             if signature_varargs:
-    #                 fields.append(signature_varargs)
-    #             if exclude:
-    #                 for a in exclude:
-    #                     fields.remove(a)
-    #
-    #         # right now, doesnot work
-    #         _lock_fieldnames_class(object_type, field_names=tuple(fields))
-
-    # (3) Finally, create a wrapper around the function so that all attributes included/not excluded are
-    # set to self BEFORE executing the function.
+    :param func:
+    :param func_sig:
+    :param att_names:
+    :return:
+    """
     @wraps(func)
     def init_wrapper(self, *args, **kwargs):
 
-        # match the received arguments with the signature to know who is who, and add default values to get a full list
-        bound_values = func_sig.bind(self, *args, **kwargs)
-        apply_defaults(bound_values)
+        # bind arguments with signature: not needed anymore in nominal case since we use `makefun.wraps`
+        # bound_values = func_sig.bind(self, *args, **kwargs)
+        # apply_defaults(bound_values)
 
-        # Assign to self the ones that needs to
-        for att_name, att_value in bound_values.arguments.items():
-            if is_attr_selected(att_name, include=include, exclude=exclude):
-                # value = a normal value, or cur_kwargs as a whole
-                setattr(self, att_name, att_value)
+        # Assign to self each of the attributes
+        need_introspect = False
+        i = -1
+        for i, att_name in enumerate(att_names):
+            try:
+                setattr(self, att_name, kwargs[att_name])
+            except KeyError:
+                # this may happen when the att names are BEFORE a var positional
+                # Switch to introspection mode
+                need_introspect = True
+                break
+        if need_introspect and i >= 0:
+            bound_values = func_sig.bind(self, *args, **kwargs)
+            apply_defaults(bound_values)
+            # noinspection PyUnboundLocalVariable
+            arg_dict = bound_values.arguments
+            for att_name in att_names[i:]:
+                setattr(self, att_name, arg_dict[att_name])
 
         # finally execute the constructor function
         return func(self, *args, **kwargs)

@@ -7,7 +7,7 @@ import sys
 import types
 import warnings
 
-from autoclass.utils import _check_known_decorators, validate_include_exclude, is_attr_selected, get_constructor
+from autoclass.utils import check_known_decorators, read_fields, Source
 from decopatch import class_decorator, DECORATED
 
 try:  # python 3+
@@ -77,21 +77,10 @@ def autoslots_decorate(cls,                    # type: Type[C]
     :return:
     """
     # first check that we do not conflict with other known decorators
-    _check_known_decorators(cls, '@autoslots')
+    check_known_decorators(cls, '@autoslots')
 
-    # First check parameters
-    validate_include_exclude(include, exclude)
-
-    # Analyze the class
-    # a. Find the __init__ constructor signature
-    constructor = get_constructor(cls, allow_inheritance=True)
-    s = signature(constructor)
-
-    # b. Collect all attributes that are not 'self' and are included and not excluded
-    added = []
-    for attr_name in s.parameters.keys():
-        if is_attr_selected(attr_name, include=include, exclude=exclude):
-            added.append(attr_name)
+    # retrieve the list of fields from pyfields or constructor signature
+    selected_names, source = read_fields(cls, include=include, exclude=exclude, caller="@autoslots")
 
     # c. Collect the various items in the namespace of the class
     cd = {k: v for k, v in cls.__dict__.items() if k not in ("__dict__", "__weakref__")}
@@ -106,9 +95,9 @@ def autoslots_decorate(cls,                    # type: Type[C]
             break
 
     if use_public_names:
-        names = added
+        names = selected_names
     else:
-        names = tuple("_%s" % a for a in added)
+        names = tuple("_%s" % a for a in selected_names)
 
     # are there slots already on this class ?
     existing_cls_slots = list(cls.__dict__.get("__slots__", ()))

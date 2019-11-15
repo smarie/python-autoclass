@@ -1,23 +1,158 @@
-from collections import Sequence
-from valid8 import validate
+from enum import Enum
 
 try:  # python 3.5+
-    from typing import Union, Tuple, Type, Callable
+    from typing import Union, Tuple, Type, Callable, Iterable
 except ImportError:
     pass
 
+try:  # python 3+
+    from inspect import signature, Signature
+except ImportError:
+    from funcsigs import signature, Signature
 
-def validate_include_exclude(include, exclude):
+
+class Symbols(Enum):
+    """ A few symbols used in function signatures of the `autoclass` library """
+    AUTO = 0
+
+    def __repr__(self):
+        return self.name
+
+
+AUTO = Symbols.AUTO
+
+
+class Source(Enum):
+    """represents the source used by `read_fields`"""
+    PYFIELDS = 0
+    INIT_ARGS = 1
+
+
+try:
+    from pyfields import get_fields
+    WITH_PYFIELDS = True
+
+    def read_fields(cls,
+                    include=None,  # type: Union[str, Tuple[str]]
+                    exclude=None,  # type: Union[str, Tuple[str]]
+                    caller=""      # type: str
+                    ):
+        # type: (...) -> Tuple[Iterable[str], Source]
+        """
+        Reads and filters the fields from the given class. If that class has pyfields fields, they will be used.
+        Otherwise constructor args will be used.
+
+        :param cls:
+        :param include:
+        :param exclude:
+        :param caller:
+        :return:
+        """
+        # Check for pyfields fields
+        all_pyfields = get_fields(cls)
+        has_pyfields = len(all_pyfields) > 0
+
+        if has_pyfields:
+            # source = pyfields
+            all_names = tuple(f.name for f in all_pyfields)
+            selected_names = filter_names(all_names, include=include, exclude=exclude, caller=caller)
+            return selected_names, Source.PYFIELDS
+        else:
+            # source = init signature
+            selected_names, init_fun_sig = read_fields_from_init(cls.__init__, include=include, exclude=exclude,
+                                                                 caller=caller)
+            return selected_names, Source.INIT_ARGS
+
+except ImportError:
+    WITH_PYFIELDS = False
+
+    def read_fields(cls,
+                    include=None,  # type: Union[str, Tuple[str]]
+                    exclude=None,  # type: Union[str, Tuple[str]]
+                    caller=""      # type: str
+                    ):
+        # type: (...) -> Iterable[str]
+        """
+        Reads and filters the fields from the given class. Since pyfields is not available, only the constructor is
+        used
+
+        :param cls:
+        :param exclude:
+        :param include:
+        :param caller:
+        :return:
+        """
+        selected_names, init_fun_sig = read_fields_from_init(cls.__init__, include=include, exclude=exclude,
+                                                             caller=caller)
+        return selected_names
+
+
+def read_fields_from_init(init_fun,
+                          include=None,  # type: Union[str, Tuple[str]]
+                          exclude=None,  # type: Union[str, Tuple[str]]
+                          caller=""      # type: str
+                          ):
+    # type: (...) -> Tuple[Iterable[str], Signature]
     """
-    Common validator for include and exclude arguments
+    Retrieves init function signature and filters its parameters according to include/exclude
+
+    :param init_fun:
     :param include:
     :param exclude:
+    :param caller:
+    :return: a tuple (selected_names, init_fun_sig)
+    """
+    # get signature and all of its parameters
+    init_fun_sig = signature(init_fun)
+    all_names = tuple(n for n in init_fun_sig.parameters.keys() if n != 'self')
+
+    # filter the names
+    selected_names = filter_names(all_names, include=include, exclude=exclude, caller=caller)
+
+    return selected_names, init_fun_sig
+
+
+def filter_names(all_names,
+                 include=None,  # type: Union[str, Tuple[str]]
+                 exclude=None,  # type: Union[str, Tuple[str]]
+                 caller=""      # type: str
+                 ):
+    # type: (...) -> Iterable[str]
+    """
+    Common validator for include and exclude arguments
+
+    :param all_names:
+    :param include:
+    :param exclude:
+    :param caller:
     :return:
     """
     if include is not None and exclude is not None:
         raise ValueError("Only one of 'include' or 'exclude' argument should be provided.")
-    validate('include', include, instance_of=(str, Sequence), enforce_not_none=False)
-    validate('exclude', exclude, instance_of=(str, Sequence), enforce_not_none=False)
+
+    # check that include/exclude don't contain names that are incorrect
+    selected_names = all_names
+    if include is not None:
+        if exclude is not None:
+            raise ValueError('Only one of \'include\' or \'exclude\' argument should be provided.')
+
+        # get the selected names and check that all names in 'include' are actually valid names
+        included = (include,) if isinstance(include, str) else tuple(include)
+        incorrect = set(included) - set(all_names)
+        if len(incorrect) > 0:
+            raise ValueError("`%s` definition exception: `include` contains %r that is/are "
+                             "not part of %r" % (caller, incorrect, all_names))
+        selected_names = included
+
+    elif exclude is not None:
+        excluded_set = {exclude} if isinstance(exclude, str) else set(exclude)
+        incorrect = excluded_set - set(all_names)
+        if len(incorrect) > 0:
+            raise ValueError("`%s` definition exception: exclude contains %r that is/are "
+                             "not part of %r" % (caller, incorrect, all_names))
+        selected_names = tuple(n for n in all_names if n not in excluded_set)
+
+    return selected_names
 
 
 def is_attr_selected(attr_name,     # type: str
@@ -43,26 +178,22 @@ def is_attr_selected(attr_name,     # type: str
         return False
 
 
-def get_constructor(typ,
-                    allow_inheritance=False  # type: bool
+def get_constructor(cls  # type: Type
                     ):
+    # type: (...) -> Tuple[Callable, bool]
     """
-    Utility method to return the unique constructor (__init__) of a type
 
-    :param typ: a type
-    :param allow_inheritance: if True, the constructor will be returned even if it is not defined in this class
-    (inherited). By default this is set to False: an exception is raised when no constructor is explicitly defined in
-    the class
-    :return: the found constructor
+    :param cls:
+    :return: a tuple
     """
-    if allow_inheritance:
-        return typ.__init__
-    else:
-        # check that the constructor is really defined here
-        if '__init__' in typ.__dict__:
-            return typ.__init__
-        else:
-            raise Exception('No explicit constructor was found for class ' + str(typ))
+    try:
+        init = cls.__dict__['__init__']
+        is_init_inherited = False
+    except KeyError:
+        init = cls.__init__
+        is_init_inherited = True
+
+    return init, is_init_inherited
 
 
 class AutoclassDecorationException(Exception):
@@ -94,20 +225,16 @@ def method_already_there(cls,
     Returns True if method `method_name` is already implemented by object_type, that is, its implementation differs from
     the one in `object`.
 
-    :param object_type:
+    :param cls:
     :param method_name:
     :param this_class_only:
     :return:
     """
     if this_class_only:
-        return method_name in vars(object_type)  # or object_type.__dict__
+        return method_name in vars(cls)  # or cls.__dict__
     else:
-        try:
-            method = getattr(object_type, method_name)
-        except AttributeError:
-            return False
-        else:
-            return method is not None and method is not getattr(object, method_name, None)
+        method = getattr(cls, method_name, None)
+        return method is not None and method is not getattr(object, method_name, None)
 
 
 def possibly_replace_with_property_name(cls,

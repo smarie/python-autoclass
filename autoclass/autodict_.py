@@ -1,4 +1,5 @@
 from collections import Mapping
+from itertools import chain
 from warnings import warn
 
 from six import with_metaclass
@@ -9,7 +10,7 @@ except ImportError:
     from funcsigs import signature
 
 try:
-    from typing import Any, Tuple, Union, Dict, TypeVar, Callable
+    from typing import Any, Tuple, Union, Dict, TypeVar, Callable, Iterable, Sized
     try:
         from typing import Type
     except ImportError:
@@ -20,9 +21,7 @@ except ImportError:
 
 from autoclass.autoprops_ import DuplicateOverrideError
 from autoclass.utils import is_attr_selected, method_already_there, possibly_replace_with_property_name, \
-    validate_include_exclude
-from autoclass.utils import get_constructor
-from autoclass.utils import _check_known_decorators
+    check_known_decorators, AUTO, read_fields
 
 from decopatch import class_decorator, DECORATED
 
@@ -33,8 +32,9 @@ __AUTODICT_OVERRIDE_ANNOTATION = '__autodict_override__'
 @class_decorator
 def autodict(include=None,                # type: Union[str, Tuple[str]]
              exclude=None,                # type: Union[str, Tuple[str]]
-             only_constructor_args=True,  # type: bool
+             only_known_fields=True,      # type: bool
              only_public_fields=True,     # type: bool
+             only_constructor_args=AUTO,  # type: bool
              cls=DECORATED
              ):
     """
@@ -50,23 +50,25 @@ def autodict(include=None,                # type: Union[str, Tuple[str]]
 
     :param include: a tuple of explicit attribute names to include (None means all)
     :param exclude: a tuple of explicit attribute names to exclude. In such case, include should be None.
-    :param only_constructor_args: if True (default), only constructor arguments will be exposed through the dictionary
-        view, not any other field that would be created in the constructor or dynamically. This makes it very convenient
-        to use in combination with @autoargs. If set to False, the dictionary is a direct view of public object fields.
+    :param only_known_fields: if True (default), only known fields (constructor arguments or pyfields fields) will be
+        exposed through the dictionary view, not any other field that would be created in the constructor or
+        dynamically. If set to False, the dictionary is a direct view of *all* public object fields. This view can be
+        filtered with include/exclude and private fields can be made visible by setting only_public_fields to false
     :param only_public_fields: this parameter is only used when only_constructor_args is set to False. If
         only_public_fields is set to False, all fields are visible. Otherwise (default), class-private fields will be
         hidden
     :return:
     """
     return autodict_decorate(cls, include=include, exclude=exclude, only_constructor_args=only_constructor_args,
-                             only_public_fields=only_public_fields)
+                             only_public_fields=only_public_fields, only_known_fields=only_known_fields)
 
 
 def autodict_decorate(cls,                         # type: Type[T]
                       include=None,                # type: Union[str, Tuple[str]]
                       exclude=None,                # type: Union[str, Tuple[str]]
-                      only_constructor_args=True,  # type: bool
-                      only_public_fields=True      # type: bool
+                      only_known_fields=True,      # type: bool
+                      only_public_fields=True,     # type: bool
+                      only_constructor_args=AUTO,  # type: bool
                       ):
     # type: (...) -> Type[T]
     """
@@ -76,348 +78,135 @@ def autodict_decorate(cls,                         # type: Type[T]
     :param cls: the class on which to execute. Note that it won't be wrapped.
     :param include: a tuple of explicit attribute names to include (None means all)
     :param exclude: a tuple of explicit attribute names to exclude. In such case, include should be None.
-    :param only_constructor_args: if True (default), only constructor arguments will be exposed through the dictionary
-    view, not any other field that would be created in the constructor or dynamically. This makes it very convenient
-    to use in combination with @autoargs. If set to False, the dictionary is a direct view of public object fields.
-    :param only_public_fields: this parameter is only used when only_constructor_args is set to False. If
-    only_public_fields is set to False, all fields are visible. Otherwise (default), class-private fields will be hidden
-    :return:
-    """
-
-    # first check that we do not conflict with other known decorators
-    _check_known_decorators(cls, '@autodict')
-
-    # perform the class mod
-    _execute_autodict_on_class(cls, include=include, exclude=exclude, only_constructor_args=only_constructor_args,
-                               only_public_fields=only_public_fields)
-
-    return cls
-
-
-def _execute_autodict_on_class(object_type,                 # type: Type[T]
-                               include=None,                # type: Union[str, Tuple[str]]
-                               exclude=None,                # type: Union[str, Tuple[str]]
-                               only_constructor_args=True,  # type: bool
-                               only_public_fields=True      # type: bool
-                               ):
-    """
-    This method makes objects of the class behave like a read-only `dict`. It does several things:
-    * it adds collections.Mapping to the list of parent classes (i.e. to the class' `__bases__`)
-    * it generates `__len__`, `__iter__` and `__getitem__` in order for the appropriate fields to be exposed in the dict
-    view.
-    * it adds a static from_dict method to build objects from dicts (only if only_constructor_args=True)
-    * it overrides eq method if not already implemented
-    * it overrides str and repr method if not already implemented
-
-    Parameters allow to customize the list of fields that will be visible.
-
-    :param object_type: the class on which to execute.
-    :param include: a tuple of explicit attribute names to include (None means all)
-    :param exclude: a tuple of explicit attribute names to exclude. In such case, include should be None.
-    :param only_constructor_args: if True (default), only constructor arguments will be exposed through the dictionary
-        view, not any other field that would be created in the constructor or dynamically. This makes it very convenient
-        to use in combination with @autoargs. If set to False, the dictionary is a direct view of public object fields.
+    :param only_known_fields: if True (default), only known fields (constructor arguments or pyfields fields) will be
+        exposed through the dictionary view, not any other field that would be created in the constructor or
+        dynamically. If set to False, the dictionary is a direct view of *all* public object fields. This view can be
+        filtered with include/exclude and private fields can be made visible by setting only_public_fields to false
     :param only_public_fields: this parameter is only used when only_constructor_args is set to False. If
         only_public_fields is set to False, all fields are visible. Otherwise (default), class-private fields will be
         hidden
     :return:
     """
-    # 0. first check parameters
-    validate_include_exclude(include, exclude)
+    if only_constructor_args is not AUTO:
+        warn("@autodict: `only_constructor_args` is deprecated and will be removed in a future version, please use "
+             "`only_known_fields` instead")
+        if only_known_fields is not True:
+            raise ValueError("`only_known_fields` is the new name of `only_constructor_args`. Please only set one of "
+                             "the two.")
+        only_known_fields = only_constructor_args
 
-    # if issubclass(object_type, Mapping):
-    #     raise ValueError('@autodict can not be set on classes that are already subclasses of Mapping, and therefore '
-    #                      'already behave like dict')
-    super_is_already_a_mapping = issubclass(object_type, Mapping)
+    # first check that we do not conflict with other known decorators
+    check_known_decorators(cls, '@autodict')
+
+    # perform the class mod
+    if only_known_fields:
+        # retrieve the list of fields from pyfields or constructor signature
+        selected_names, source = read_fields(cls, include=include, exclude=exclude, caller="@autodict")
+
+        # add autohash with explicit list
+        execute_autodict_on_class(cls, selected_names=selected_names)
+    else:
+        # no explicit list
+        execute_autodict_on_class(cls, include=include, exclude=exclude, public_fields_only=only_public_fields)
+
+    return cls
+
+
+def execute_autodict_on_class(cls,                       # type: Type[T]
+                              selected_names=None,       # type: Iterable[str]
+                              include=None,              # type: Union[str, Tuple[str]]
+                              exclude=None,              # type: Union[str, Tuple[str]]
+                              public_fields_only=True,   # type: bool
+                              ):
+    """
+    This method makes objects of the class behave like a read-only `dict`. It does several things:
+
+     * it adds collections.Mapping to the list of parent classes (i.e. to the class' `__bases__`)
+     * it generates `__len__`, `__iter__` and `__getitem__` in order for the appropriate fields to be exposed in the dict
+       view.
+     * it adds a static from_dict method to build objects from dicts (only if only_constructor_args=True)
+     * it overrides eq method if not already implemented
+     * it overrides str and repr method if not already implemented
+
+    Parameters allow to customize the list of fields that will be visible.
+
+    :param cls: the class on which to execute.
+    :param selected_names: an explicit list of attribute names that should be used in the dict. If this is provided,
+        `include`, `exclude` and `public_fields_only` should be left as default as they are not used.
+    :param include: a tuple of explicit attribute names to include (None means all). This parameter is only used when
+        `selected_names` is not provided.
+    :param exclude: a tuple of explicit attribute names to exclude. In such case, include should be None. This
+        parameter is only used when `selected_names` is not provided.
+    :param public_fields_only: this parameter is only used when `selected_names` is not provided. If
+        public_fields_only is set to False, all fields are visible. Otherwise (default), class-private fields will be
+        hidden from the exposed dict view.
+    :return:
+    """
+    # check if the class is already a dict-like
+    super_is_already_a_mapping = issubclass(cls, Mapping)
 
     # 1. implement the abstract method required by Mapping to work, according to the options
-    if only_constructor_args:
-        # ** easy: we know the exact list of fields to make visible in the Mapping
-        # a. Find the __init__ constructor signature
-        constructor = get_constructor(object_type, allow_inheritance=True)
-        s = signature(constructor)
+    if selected_names is not None:
+        # case (a) hardcoded list - easy: we know the exact list of fields to make visible in the Mapping
+        if include is not None or exclude is not None or public_fields_only is not True:
+            raise ValueError("`selected_names` can not be used together with `include`, `exclude` or "
+                             "`public_fields_only`")
 
-        # b. Collect all attributes that are not 'self' and are included and not excluded
-        added = []
-        for attr_name in s.parameters.keys():
-            if is_attr_selected(attr_name, include=include, exclude=exclude):
-                added.append(attr_name)
+        if not super_is_already_a_mapping:
+            # simplest case : use the hardcoded list
+            dict_methods = create_dict_methods_for_hardcoded_list(selected_names)
 
-        # c. Finally build the methods
-        def __iter__(self):
-            """
-            Generated by @autodict.
-            Implements the __iter__ method from collections.Iterable by relying on a hardcoded list of fields
-            PLUS the super dictionary if relevant
-            :param self:
-            :return:
-            """
-            if super_is_already_a_mapping:
-                return iter(added + [o for o in super(object_type, self).__iter__() if o not in added])
-            else:
-                return iter(added)
-
-        # def __len__(self):
-        #     """
-        #     Generated by @autodict.
-        #     Implements the __len__ method from collections.Sized by relying on a hardcoded list of fields
-        #     PLUS the super dictionary if relevant
-        #     :param self:
-        #     :return:
-        #     """
-        #     if super_is_already_a_mapping:
-        #         return len(added) + super(object_type, self).__len__()
-        #     else:
-        #         return len(added)
-
-        if super_is_already_a_mapping:
-            def __getitem__(self, key):
-                """
-                Generated by @autodict.
-                Implements the __getitem__ method from collections.Mapping by relying on a hardcoded list of fields
-                PLUS the parent dictionary when not found in self
-                :param self:
-                :param key:
-                :return:
-                """
-                if key in added:
-                    try:
-                        return getattr(self, key)
-                    except AttributeError:
-                        try:
-                            return super(object_type, self).__getitem__(key)
-                        except Exception as e:
-                            raise KeyError('@autodict generated dict view - {key} is a constructor parameter but is not'
-                                           ' a field (was the constructor called ?). Delegating to super[{key}] raises '
-                                           'an exception: {etyp} {err}'.format(key=key, etyp=type(e).__name__, err=e))
-                else:
-                    try:
-                        return super(object_type, self).__getitem__(key)
-                    except Exception as e:
-                        raise KeyError('@autodict generated dict view - {key} is not a constructor parameter so not '
-                                       ' handled by this dict view. Delegating to super[{key}] raised an exception: '
-                                       '{etyp} {err}'.format(key=key, etyp=type(e).__name__, err=e))
         else:
-            def __getitem__(self, key):
-                """
-                Generated by @autodict.
-                Implements the __getitem__ method from collections.Mapping by relying on a hardcoded list of fields
-                :param self:
-                :param key:
-                :return:
-                """
-                if key in added:
-                    try:
-                        return getattr(self, key)
-                    except AttributeError:
-                        raise KeyError('@autodict generated dict view - {} is a constructor parameter but is not a '
-                                       'field (was the constructor called ?)'.format(key))
-                else:
-                    raise KeyError('@autodict generated dict view - invalid or hidden field name: %s' % key)
+            # super is a mapping: automatically chain the attributes with the ones in super
+            dict_methods = create_dict_methods_for_hardcoded_list_and_super_mapping(cls, selected_names)
 
     else:
-        # ** all dynamic fields are allowed
-        if include is None and exclude is None and not only_public_fields:
-            # easy: all of vars is exposed
-            def __iter__(self):
-                """
-                Generated by @autodict.
-                Implements the __iter__ method from collections.Iterable by relying on vars(self)
-                PLUS the super dictionary if relevant
-                :param self:
-                :return:
-                """
-                if super_is_already_a_mapping:
-                    return iter(list(vars(self)) + [o for o in super(object_type, self).__iter__()
-                                                    if o not in vars(self)])
-                else:
-                    return iter(vars(self))
-
-            # def __len__(self):
-            #     """
-            #     Generated by @autodict.
-            #     Implements the __len__ method from collections.Sized by relying on vars(self)
-            #     PLUS the super dictionary if relevant
-            #     :param self:
-            #     :return:
-            #     """
-            #     if super_is_already_a_mapping:
-            #         return len(list(vars(self)) + [o for o in super(object_type, self).__iter__()
-            #                                        if o not in vars(self)])
-            #     else:
-            #         return len(vars(self))
-
-            if super_is_already_a_mapping:
-                def __getitem__(self, key):
-                    """
-                    Generated by @autodict.
-                    Implements the __getitem__ method from collections.Mapping by relying on getattr(self, key)
-                    PLUS the super dictionary
-                    :param self:
-                    :param key:
-                    :return:
-                    """
-                    try:
-                        return getattr(self, key)
-                    except AttributeError:
-                        try:
-                            return super(object_type, self).__getitem__(key)
-                        except Exception as e:
-                            raise KeyError('@autodict generated dict view - {key} is not a valid field (was the '
-                                           'constructor called?). Delegating to super[{key}] raises an exception: '
-                                           '{etyp} {err}'.format(key=key, etyp=type(e).__name__, err=e))
+        # case (b) the list of fields is not predetermined, it will depend on vars(self)
+        if include is None and exclude is None and not public_fields_only:
+            # easy: all vars() are exposed
+            if not super_is_already_a_mapping:
+                dict_methods = create_dict_facade_for_object_vars()
             else:
-                def __getitem__(self, key):
-                    """
-                    Generated by @autodict.
-                    Implements the __getitem__ method from collections.Mapping by relying on getattr(self, key)
-                    :param self:
-                    :param key:
-                    :return:
-                    """
-                    try:
-                        return getattr(self, key)
-                    except AttributeError:
-                        raise KeyError('@autodict generated dict view - {key} is not a valid field (was the '
-                                       'constructor called?)'.format(key=key))
+                dict_methods = create_dict_facade_for_object_vars_and_mapping(cls)
         else:
             # harder: all fields are allowed, but there are filters on this dynamic list
             # private_name_prefix = '_' + object_type.__name__ + '_'
-            private_name_prefix = '_'
+            private_name_prefix = '_' if public_fields_only else None
 
-            if super_is_already_a_mapping:
-                def __iter__(self):
-                    """
-                    Generated by @autodict.
-                    Implements the __iter__ method from collections.Iterable by relying on a filtered vars(self)
-                    :param self:
-                    :return:
-                    """
-                    myattrs = [possibly_replace_with_property_name(self.__class__, att_name) for att_name in vars(self)]
-                    for att_name in myattrs + [o for o in super(object_type, self).__iter__() if o not in vars(self)]:
-                        if is_attr_selected(att_name, include=include, exclude=exclude):
-                            if not only_public_fields \
-                                    or (only_public_fields and not att_name.startswith(private_name_prefix)):
-                                yield att_name
+            if not super_is_already_a_mapping:
+                dict_methods = create_dict_facade_for_object_vars_with_filters(include, exclude, private_name_prefix)
             else:
-                def __iter__(self):
-                    """
-                    Generated by @autodict.
-                    Implements the __iter__ method from collections.Iterable by relying on a filtered vars(self)
-                    :param self:
-                    :return:
-                    """
-                    for att_name in [possibly_replace_with_property_name(self.__class__, att_name)
-                                     for att_name in vars(self)]:
-                        if is_attr_selected(att_name, include=include, exclude=exclude):
-                            if not only_public_fields \
-                                    or (only_public_fields and not att_name.startswith(private_name_prefix)):
-                                yield att_name
+                dict_methods = create_dict_facade_for_object_vars_and_mapping_with_filters(cls, include, exclude,
+                                                                                           private_name_prefix)
 
-            # def __len__(self):
-            #     """
-            #     Generated by @autodict.
-            #     Implements the __len__ method from collections.Sized by relying on a filtered vars(self)
-            #     :param self:
-            #     :return:
-            #     """
-            #     # rely on iter()
-            #     return sum(1 for e in self)
-
-            if super_is_already_a_mapping:
-                def __getitem__(self, key):
-                    """
-                    Generated by @autodict.
-                    Implements the __getitem__ method from collections.Mapping by relying on a filtered getattr(self, key)
-                    :param self:
-                    :param key:
-                    :return:
-                    """
-                    if hasattr(self, key):
-                        key = possibly_replace_with_property_name(self.__class__, key)
-                        if is_attr_selected(key, include=include, exclude=exclude) and \
-                                (not only_public_fields or
-                                 (only_public_fields and not key.startswith(private_name_prefix))):
-                            return getattr(self, key)
-                        else:
-                            try:
-                                return super(object_type, self).__getitem__(key)
-                            except Exception as e:
-                                raise KeyError('@autodict generated dict view - {key} is a '
-                                               'hidden field and super[{key}] raises an exception: {etyp} {err}'
-                                               ''.format(key=key, etyp=type(e).__name__, err=e))
-                    else:
-                        try:
-                            return super(object_type, self).__getitem__(key)
-                        except Exception as e:
-                            raise KeyError('@autodict generated dict view - {key} is an '
-                                           'invalid field name (was the constructor called?). Delegating to '
-                                           'super[{key}] raises an exception: {etyp} {err}'
-                                           ''.format(key=key, etyp=type(e).__name__, err=e))
-            else:
-                def __getitem__(self, key):
-                    """
-                    Generated by @autodict.
-                    Implements the __getitem__ method from collections.Mapping by relying on a filtered getattr(self, key)
-                    :param self:
-                    :param key:
-                    :return:
-                    """
-                    if hasattr(self, key):
-                        key = possibly_replace_with_property_name(self.__class__, key)
-                        if is_attr_selected(key, include=include, exclude=exclude) and \
-                                (not only_public_fields or
-                                 (only_public_fields and not key.startswith(private_name_prefix))):
-                            return getattr(self, key)
-                        else:
-                            raise KeyError('@autodict generated dict view - hidden field name: ' + key)
-                    else:
-                        raise KeyError('@autodict generated dict view - {key} is an invalid field name (was the '
-                                       'constructor called? are the constructor arg names identical to the field '
-                                       'names ?)'.format(key=key))
-
-    def __len__(self):
-        """
-        Generated by @autodict.
-        Implements the __len__ method from collections.Sized by relying on self.__iter__, so that the length will always
-        match the true length.
-
-        :param self:
-        :return:
-        """
-        return sum(1 for e in self)
-
-    if method_already_there(object_type, '__len__', this_class_only=True):
-        if not hasattr(object_type.__len__, __AUTODICT_OVERRIDE_ANNOTATION):
+    if method_already_there(cls, '__len__', this_class_only=True):
+        if not hasattr(cls.__len__, __AUTODICT_OVERRIDE_ANNOTATION):
             warn('__len__ is already defined on class {}, it will be overridden with the one generated by '
                  '@autodict/@autoclass ! If you want to use your version, annotate it with @autodict_override'
-                 ''.format(str(object_type)))
-            object_type.__len__ = __len__
+                 ''.format(str(cls)))
+            cls.__len__ = dict_methods.len
     else:
-        object_type.__len__ = __len__
+        cls.__len__ = dict_methods.len
 
-    if method_already_there(object_type, '__iter__', this_class_only=True):
-        if not hasattr(object_type.__iter__, __AUTODICT_OVERRIDE_ANNOTATION):
-            warn('__iter__ is already defined on class {}, it will be overridden with the one generated by '
-                 '@autodict/@autoclass ! If you want to use your version, annotate it with @autodict_override'
-                 ''.format(str(object_type)))
-            object_type.__iter__ = __iter__
+    if method_already_there(cls, '__iter__', this_class_only=True):
+        if not hasattr(cls.__iter__, __AUTODICT_OVERRIDE_ANNOTATION):
+            warn('__iter__ is already defined on class %s, it will be overridden with the one generated by '
+                 '@autodict/@autoclass ! If you want to use your version, annotate it with @autodict_override' % cls)
+            cls.__iter__ = dict_methods.iter
     else:
-        object_type.__iter__ = __iter__
+        cls.__iter__ = dict_methods.iter
 
-    if method_already_there(object_type, '__getitem__', this_class_only=True):
-        if not hasattr(object_type.__getitem__, __AUTODICT_OVERRIDE_ANNOTATION):
-            warn('__getitem__ is already defined on class {}, it will be overridden with the one generated by '
-                 '@autodict/@autoclass ! If you want to use your version, annotate it with @autodict_override'
-                 ''.format(str(object_type)))
-        else:
-            object_type.__getitem__ = __getitem__
+    if method_already_there(cls, '__getitem__', this_class_only=True):
+        if not hasattr(cls.__getitem__, __AUTODICT_OVERRIDE_ANNOTATION):
+            warn('__getitem__ is already defined on class %s, it will be overridden with the one generated by '
+                 '@autodict/@autoclass ! If you want to use your version, annotate it with @autodict_override' % cls)
+            cls.__getitem__ = dict_methods.getitem
     else:
-        object_type.__getitem__ = __getitem__
+        cls.__getitem__ = dict_methods.getitem
 
-    # 2. add the methods from Mapping to the class
+    # 2. add all other methods from Mapping to the class
     # -- current proposition: add inheritance dynamically
-    type_bases = object_type.__bases__
+    type_bases = cls.__bases__
     if Mapping not in type_bases:
         bazz = tuple(t for t in type_bases if t is not object)
         if len(bazz) == len(type_bases):
@@ -428,11 +217,11 @@ def _execute_autodict_on_class(object_type,                 # type: Type[T]
             new_bases = bazz + (Mapping, object)
 
         try:
-            object_type.__bases__ = new_bases
+            cls.__bases__ = new_bases
         except TypeError:
             try:
                 # maybe a metaclass issue, we can try this
-                object_type.__bases__ = with_metaclass(type(object_type), *new_bases)
+                cls.__bases__ = with_metaclass(type(cls), *new_bases)
             except TypeError:
                 # python 2.x and object type is a new-style class directly inheriting from object
                 # open bug: https://bugs.python.org/issue672115
@@ -465,13 +254,13 @@ def _execute_autodict_on_class(object_type,                 # type: Type[T]
                 # for name, func in meths:
                 for name in names:
                     # bind method to this class too (we access 'im_func' to get the original method)
-                    setattr(object_type, name, getattr(Mapping, name).im_func)
+                    setattr(cls, name, getattr(Mapping, name).im_func)
 
     # 3. add the static class method to build objects from a dict
     # if only_constructor_args:
 
     # only do it if there is no existing method on the type
-    if not method_already_there(object_type, 'from_dict'):
+    if not method_already_there(cls, 'from_dict'):
         def from_dict(cls,
                       dct  # type: Dict[str, Any]
                       ):
@@ -485,11 +274,11 @@ def _execute_autodict_on_class(object_type,                 # type: Type[T]
             """
             return cls(**dct)
 
-        object_type.from_dict = classmethod(from_dict)
+        cls.from_dict = classmethod(from_dict)
 
     # 4. override equality method if not already implemented LOCALLY (on this type - we dont care about the super
     # since we'll delegate to them when we can't handle)
-    if not method_already_there(object_type, '__eq__', this_class_only=True):
+    if not method_already_there(cls, '__eq__', this_class_only=True):
 
         def __eq__(self, other):
             """
@@ -501,27 +290,26 @@ def _execute_autodict_on_class(object_type,                 # type: Type[T]
             :return:
             """
             # in the case the other is of the same type, use the dict comparison, that relies on the appropriate fields
-            if isinstance(other, object_type):
+            if isinstance(other, cls):
                 return dict(self) == dict(other)
             else:
                 # else fallback to inherited behaviour, whatever it is
                 try:
-                    f = super(object_type, self).__eq__
+                    f = super(cls, self).__eq__
                 except AttributeError:
                     # can happen in python 2 when adding Mapping inheritance failed
                     return Mapping.__eq__(dict(self), other)
                 else:
                     return f(other)
 
-        object_type.__eq__ = __eq__
+        cls.__eq__ = __eq__
 
     # 5. override str and repr method if not already implemented
-    if not method_already_there(object_type, '__str__', this_class_only=True):
+    if not method_already_there(cls, '__str__', this_class_only=True):
 
         def __str__(self):
             """
-            Generated by @autodict.
-            Uses the dict representation and puts the type in front
+            Generated by @autodict. Uses the dict representation and puts the type in front
 
             :param self:
             :return:
@@ -529,14 +317,12 @@ def _execute_autodict_on_class(object_type,                 # type: Type[T]
             # python 2 compatibility: use self.__class__ not type()
             return self.__class__.__name__ + '(' + print_ordered_dict(self) + ')'
 
-        object_type.__str__ = __str__
+        cls.__str__ = __str__
 
-    if not method_already_there(object_type, '__repr__', this_class_only=True):
+    if not method_already_there(cls, '__repr__', this_class_only=True):
         def __repr__(self):
             """
-            Generated by @autodict.
-            Uses the dict representation and puts the type in front
-            maybe?
+            Generated by @autodict. Uses the dict representation and puts the type in front.
 
             :param self:
             :return:
@@ -544,7 +330,7 @@ def _execute_autodict_on_class(object_type,                 # type: Type[T]
             # python 2 compatibility: use self.__class__ not type()
             return self.__class__.__name__ + '(' + print_ordered_dict(self) + ')'
 
-        object_type.__repr__ = __repr__
+        cls.__repr__ = __repr__
 
     return
 
@@ -592,3 +378,294 @@ def autodict_override_decorate(func  # type: Callable
 autodict_override = autodict_override_decorate
 """A decorator to indicate an overridden dictionary method. In this case autodict will not override it and will not 
 generate a warning"""
+
+
+class DictMethods(object):
+    """
+    Container used in @autodict to exchange the various methods created
+    """
+    __slots__ = 'iter', 'getitem', 'len'
+
+    def __init__(self, iter, getitem, len=None):
+        self.iter = iter
+        self.getitem = getitem
+
+        if len is None:
+            # Default implementation for dynamic containers: the only way to get the length is to iterate.
+            def __len__(self):
+                """ Generated by @autodict. Computes the length dynamically based on self.__iter__. """
+                return sum(1 for e in self)
+
+            self.len = __len__
+
+        else:
+            self.len = len
+
+
+def create_dict_methods_for_hardcoded_list(selected_names  # type: Union[Sized, Iterable[str]]
+                                           ):
+    # type: (...) -> DictMethods
+    """
+
+    :param selected_names:
+    :return:
+    """
+    def __iter__(self):
+        """
+        Generated by @autodict. Relies on the hardcoded list of fields to return the iterable of dict keys.
+        """
+        return iter(selected_names)
+
+    def __getitem__(self, key):
+        """
+        Generated by @autodict. Relies on the hardcoded list of fields to make sure the key is allowed,
+        and then maps the "get" (dict) to "getattr" (object).
+        """
+        if key not in selected_names:
+            raise KeyError('@autodict generated dict view - invalid or hidden field name: %s' % key)
+
+        try:
+            # map dict 'get' to object 'getattr'
+            return getattr(self, key)
+        except AttributeError:
+            raise KeyError('@autodict generated dict view - {} is a constructor parameter but is not a '
+                           'field (was the constructor called ?)'.format(key))
+
+    selected_len = len(selected_names)
+
+    def __len__(self):
+        """
+        Generated by @autodict. Relies on hardcoded length of selected_names
+        """
+        return selected_len
+
+    return DictMethods(iter=__iter__, getitem=__getitem__, len=__len__)
+
+
+def create_dict_methods_for_hardcoded_list_and_super_mapping(cls,            # type: Type[Mapping]
+                                                             selected_names  # type: Union[Sized, Iterable[str]]
+                                                             ):
+    # type: (...) -> DictMethods
+    """
+
+    :param cls:
+    :param selected_names:
+    :return:
+    """
+    def __iter__(self):
+        """
+        Generated by @autodict.
+        Relies on the hardcoded list of fields PLUS the super keys to return the iterable of dict keys.
+        """
+        return chain(selected_names,
+                     (o for o in super(cls, self).__iter__() if o not in selected_names))
+
+    def __getitem__(self, key):
+        """
+        Generated by @autodict. Relies on the hardcoded list of fields to make sure the key is allowed,
+        and then maps the "get" (dict) to "getattr" (object) or super "get" (when not found).
+        """
+        if key in selected_names:
+            try:
+                # map dict 'get' to object 'getattr'
+                return getattr(self, key)
+            except AttributeError:
+                try:
+                    # fallback: super get ?
+                    # noinspection PyUnresolvedReferences
+                    return super(cls, self).__getitem__(key)
+                except Exception as e:
+                    raise KeyError('@autodict generated dict view - {key} is a constructor parameter but is not'
+                                   ' a field (was the constructor called ?). Delegating to super[{key}] raises '
+                                   'an exception: {etyp} {err}'.format(key=key, etyp=type(e).__name__, err=e))
+        else:
+            try:
+                # get on super dict
+                # noinspection PyUnresolvedReferences
+                return super(cls, self).__getitem__(key)
+            except Exception as e:
+                raise KeyError('@autodict generated dict view - {key} is not a constructor parameter so not '
+                               ' handled by this dict view. Delegating to super[{key}] raised an exception: '
+                               '{etyp} {err}'.format(key=key, etyp=type(e).__name__, err=e))
+
+    return DictMethods(iter=__iter__, getitem=__getitem__)
+
+
+def create_dict_facade_for_object_vars():
+    # type: (...) -> DictMethods
+    """
+
+    :return:
+    """
+    def __iter__(self):
+        """
+        Generated by @autodict. Relies on vars(self) to return the iterable of dict keys.
+        """
+        return iter(vars(self))
+
+    def __getitem__(self, key):
+        """
+        Generated by @autodict. Relies on getattr(self, key) to return the items.
+        """
+        try:
+            return getattr(self, key)
+        except AttributeError:
+            raise KeyError('@autodict generated dict view - {key} is not a valid field (was the '
+                           'constructor called?)'.format(key=key))
+
+    return DictMethods(iter=__iter__, getitem=__getitem__)
+
+
+def create_dict_facade_for_object_vars_and_mapping(cls  # type: Type[Mapping]
+                                                   ):
+    # type: (...) -> DictMethods
+    """
+
+    :param cls:
+    :return:
+    """
+    def __iter__(self):
+        """
+        Generated by @autodict.
+        Implements the __iter__ method from collections.Iterable by relying on vars(self)
+        PLUS the super dictionary
+        """
+        return chain(vars(self),
+                     (o for o in super(cls, self).__iter__() if o not in vars(self)))
+
+    def __getitem__(self, key):
+        """
+        Generated by @autodict.
+        Implements the __getitem__ method from collections.Mapping by relying on getattr(self, key)
+        PLUS the super dictionary
+        """
+        try:
+            return getattr(self, key)
+        except AttributeError:
+            try:
+                # noinspection PyUnresolvedReferences
+                return super(cls, self).__getitem__(key)
+            except Exception as e:
+                raise KeyError('@autodict generated dict view - {key} is not a valid field (was the '
+                               'constructor called?). Delegating to super[{key}] raises an exception: '
+                               '{etyp} {err}'.format(key=key, etyp=type(e).__name__, err=e))
+
+    return DictMethods(iter=__iter__, getitem=__getitem__)
+
+
+def create_dict_facade_for_object_vars_with_filters(include,                  # type: Union[str, Tuple[str]]
+                                                    exclude,                  # type: Union[str, Tuple[str]]
+                                                    private_name_prefix=None  # type: str
+                                                    ):
+    # type: (...) -> DictMethods
+    """
+
+    :param include:
+    :param exclude:
+    :param private_name_prefix: if provided, only the fields not starting with this prefix will be exposed. Otherwise
+        all will be exposed
+    :return:
+    """
+    public_fields_only = private_name_prefix is not None
+
+    def __iter__(self):
+        """
+        Generated by @autodict. Relying on a filtered vars(self) for the keys iterable
+        """
+        for att_name in vars(self):
+            # replace private names with property names if needed, so that the filter can apply correctly
+            att_name = possibly_replace_with_property_name(self.__class__, att_name)
+
+            # filter based on the name (include/exclude + private/public)
+            if is_attr_selected(att_name, include=include, exclude=exclude) and \
+                    (not public_fields_only or not att_name.startswith(private_name_prefix)):
+                # use that name
+                yield att_name
+
+    def __getitem__(self, key):
+        """
+        Generated by @autodict.
+        Implements the __getitem__ method from collections.Mapping by relying on a filtered getattr(self, key)
+        :param self:
+        :param key:
+        :return:
+        """
+        if hasattr(self, key):
+            key = possibly_replace_with_property_name(self.__class__, key)
+            if is_attr_selected(key, include=include, exclude=exclude) and \
+                    (not public_fields_only or not key.startswith(private_name_prefix)):
+                return getattr(self, key)
+            else:
+                raise KeyError('@autodict generated dict view - hidden field name: ' + key)
+        else:
+            raise KeyError('@autodict generated dict view - {key} is an invalid field name (was the '
+                           'constructor called? are the constructor arg names identical to the field '
+                           'names ?)'.format(key=key))
+
+    return DictMethods(iter=__iter__, getitem=__getitem__)
+
+
+def create_dict_facade_for_object_vars_and_mapping_with_filters(cls,                      # type: Type[Mapping]
+                                                                include,                  # type: Union[str, Tuple[str]]
+                                                                exclude,                  # type: Union[str, Tuple[str]]
+                                                                private_name_prefix=None  # type: str
+                                                                ):
+    # type: (...) -> DictMethods
+    """
+
+    :param cls:
+    :param include:
+    :param exclude:
+    :param private_name_prefix: if provided, only the fields not starting with this prefix will be exposed. Otherwise
+        all will be exposed
+    :return:
+    """
+    public_fields_only = private_name_prefix is not None
+
+    def __iter__(self):
+        """
+        Generated by @autodict.
+        Implements the __iter__ method from collections.Iterable by relying on a filtered vars(self)
+        :param self:
+        :return:
+        """
+        myattrs = (possibly_replace_with_property_name(self.__class__, att_name) for att_name in vars(self))
+        for att_name in chain(myattrs, (o for o in super(cls, self).__iter__() if o not in vars(self))):
+            # replace private names with property names if needed, so that the filter can apply correctly
+            att_name = possibly_replace_with_property_name(self.__class__, att_name)
+
+            # filter based on the name (include/exclude + private/public)
+            if is_attr_selected(att_name, include=include, exclude=exclude) and \
+                    (not public_fields_only or not att_name.startswith(private_name_prefix)):
+                # use that name
+                yield att_name
+
+    def __getitem__(self, key):
+        """
+        Generated by @autodict.
+        Implements the __getitem__ method from collections.Mapping by relying on a filtered getattr(self, key)
+        """
+        if hasattr(self, key):
+            key = possibly_replace_with_property_name(self.__class__, key)
+            if is_attr_selected(key, include=include, exclude=exclude) and \
+                    (not public_fields_only or not key.startswith(private_name_prefix)):
+                return getattr(self, key)
+            else:
+                try:
+                    # noinspection PyUnresolvedReferences
+                    return super(cls, self).__getitem__(key)
+                except Exception as e:
+                    raise KeyError('@autodict generated dict view - {key} is a '
+                                   'hidden field and super[{key}] raises an exception: {etyp} {err}'
+                                   ''.format(key=key, etyp=type(e).__name__, err=e))
+        else:
+            try:
+                # noinspection PyUnresolvedReferences
+                return super(cls, self).__getitem__(key)
+            except Exception as e:
+                raise KeyError('@autodict generated dict view - {key} is an '
+                               'invalid field name (was the constructor called?). Delegating to '
+                               'super[{key}] raises an exception: {etyp} {err}'
+                               ''.format(key=key, etyp=type(e).__name__, err=e))
+
+    return DictMethods(iter=__iter__, getitem=__getitem__)
