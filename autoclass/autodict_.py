@@ -21,7 +21,7 @@ except ImportError:
 
 from autoclass.autoprops_ import DuplicateOverrideError
 from autoclass.utils import is_attr_selected, method_already_there, possibly_replace_with_property_name, \
-    check_known_decorators, AUTO, read_fields
+    check_known_decorators, AUTO, read_fields, iterate_on_vars
 
 from decopatch import class_decorator, DECORATED
 
@@ -34,6 +34,7 @@ def autodict(include=None,                # type: Union[str, Tuple[str]]
              exclude=None,                # type: Union[str, Tuple[str]]
              only_known_fields=True,      # type: bool
              only_public_fields=True,     # type: bool
+             legacy_str_repr=False,       # type: bool
              only_constructor_args=AUTO,  # type: bool
              cls=DECORATED
              ):
@@ -57,10 +58,13 @@ def autodict(include=None,                # type: Union[str, Tuple[str]]
     :param only_public_fields: this parameter is only used when only_constructor_args is set to False. If
         only_public_fields is set to False, all fields are visible. Otherwise (default), class-private fields will be
         hidden
+    :param legacy_str_repr: turn this to `True` to get the legacy string representation `{%r: %r, ...}` instead of
+        the new default one `(%s=%r, ...)`
     :return:
     """
     return autodict_decorate(cls, include=include, exclude=exclude, only_constructor_args=only_constructor_args,
-                             only_public_fields=only_public_fields, only_known_fields=only_known_fields)
+                             only_public_fields=only_public_fields, only_known_fields=only_known_fields,
+                             legacy_str_repr=legacy_str_repr)
 
 
 def autodict_decorate(cls,                         # type: Type[T]
@@ -68,6 +72,7 @@ def autodict_decorate(cls,                         # type: Type[T]
                       exclude=None,                # type: Union[str, Tuple[str]]
                       only_known_fields=True,      # type: bool
                       only_public_fields=True,     # type: bool
+                      legacy_str_repr=False,       # type: bool
                       only_constructor_args=AUTO,  # type: bool
                       ):
     # type: (...) -> Type[T]
@@ -85,6 +90,8 @@ def autodict_decorate(cls,                         # type: Type[T]
     :param only_public_fields: this parameter is only used when only_constructor_args is set to False. If
         only_public_fields is set to False, all fields are visible. Otherwise (default), class-private fields will be
         hidden
+    :param legacy_str_repr: turn this to `True` to get the legacy string representation `{%r: %r, ...}` instead of
+        the new default one `(%s=%r, ...)`
     :return:
     """
     if only_constructor_args is not AUTO:
@@ -104,10 +111,11 @@ def autodict_decorate(cls,                         # type: Type[T]
         selected_names, source = read_fields(cls, include=include, exclude=exclude, caller="@autodict")
 
         # add autohash with explicit list
-        execute_autodict_on_class(cls, selected_names=selected_names)
+        execute_autodict_on_class(cls, selected_names=selected_names, legacy_str_repr=legacy_str_repr)
     else:
         # no explicit list
-        execute_autodict_on_class(cls, include=include, exclude=exclude, public_fields_only=only_public_fields)
+        execute_autodict_on_class(cls, include=include, exclude=exclude, public_fields_only=only_public_fields,
+                                  legacy_str_repr=legacy_str_repr)
 
     return cls
 
@@ -117,6 +125,7 @@ def execute_autodict_on_class(cls,                       # type: Type[T]
                               include=None,              # type: Union[str, Tuple[str]]
                               exclude=None,              # type: Union[str, Tuple[str]]
                               public_fields_only=True,   # type: bool
+                              legacy_str_repr=False,       # type: bool
                               ):
     """
     This method makes objects of the class behave like a read-only `dict`. It does several things:
@@ -140,6 +149,8 @@ def execute_autodict_on_class(cls,                       # type: Type[T]
     :param public_fields_only: this parameter is only used when `selected_names` is not provided. If
         public_fields_only is set to False, all fields are visible. Otherwise (default), class-private fields will be
         hidden from the exposed dict view.
+    :param legacy_str_repr: turn this to `True` to get the legacy string representation `{%r: %r, ...}` instead of
+        the new default one `(%s=%r, ...)`
     :return:
     """
     # check if the class is already a dict-like
@@ -305,6 +316,7 @@ def execute_autodict_on_class(cls,                       # type: Type[T]
         cls.__eq__ = __eq__
 
     # 5. override str and repr method if not already implemented
+    _1, _2 = "()" if legacy_str_repr else ("", "")
     if not method_already_there(cls, '__str__', this_class_only=True):
 
         def __str__(self):
@@ -315,7 +327,7 @@ def execute_autodict_on_class(cls,                       # type: Type[T]
             :return:
             """
             # python 2 compatibility: use self.__class__ not type()
-            return self.__class__.__name__ + '(' + print_ordered_dict(self) + ')'
+            return "%s%s%s%s" % (self.__class__.__name__, _1, print_ordered_dict(self, eq_mode=not legacy_str_repr), _2)
 
         cls.__str__ = __str__
 
@@ -328,27 +340,33 @@ def execute_autodict_on_class(cls,                       # type: Type[T]
             :return:
             """
             # python 2 compatibility: use self.__class__ not type()
-            return self.__class__.__name__ + '(' + print_ordered_dict(self) + ')'
+            return "%s%s%s%s" % (self.__class__.__name__, _1, print_ordered_dict(self, eq_mode=not legacy_str_repr), _2)
 
         cls.__repr__ = __repr__
 
     return
 
 
-def print_ordered_dict(odict  # type: Mapping
+def print_ordered_dict(odict,         # type: Mapping
+                       eq_mode=False  # type: bool
                        ):
     # type: (...) -> str
     """
     Utility method to get a string representation for an ordered mapping.
 
     :param odict: an ordered mapping
+    :param eq_mode: if `False` (default) the representation will be {%r: %r} whereas otherwise it will be
+        `(%s=%r)`
     :return:
     """
     # This destroys the order
     # return str(dict(obj))
 
     # This follows the order from __iter__
-    return '{%s}' % ', '.join('%r: %r' % (k, v) for k, v in odict.items())
+    if eq_mode:
+        return '(%s)' % ', '.join('%s=%r' % (k, v) for k, v in odict.items())
+    else:
+        return '{%s}' % ', '.join('%r: %r' % (k, v) for k, v in odict.items())
 
 
 def autodict_override_decorate(func  # type: Callable
@@ -501,7 +519,7 @@ def create_dict_facade_for_object_vars():
         """
         Generated by @autodict. Relies on vars(self) to return the iterable of dict keys.
         """
-        return iter(vars(self))
+        return iter(iterate_on_vars(self))
 
     def __getitem__(self, key):
         """
@@ -530,8 +548,8 @@ def create_dict_facade_for_object_vars_and_mapping(cls  # type: Type[Mapping]
         Implements the __iter__ method from collections.Iterable by relying on vars(self)
         PLUS the super dictionary
         """
-        return chain(vars(self),
-                     (o for o in super(cls, self).__iter__() if o not in vars(self)))
+        return chain(iterate_on_vars(self),
+                     (o for o in super(cls, self).__iter__() if o not in iterate_on_vars(self)))
 
     def __getitem__(self, key):
         """
@@ -572,10 +590,7 @@ def create_dict_facade_for_object_vars_with_filters(include,                  # 
         """
         Generated by @autodict. Relying on a filtered vars(self) for the keys iterable
         """
-        for att_name in vars(self):
-            # replace private names with property names if needed, so that the filter can apply correctly
-            att_name = possibly_replace_with_property_name(self.__class__, att_name)
-
+        for att_name in iterate_on_vars(self):
             # filter based on the name (include/exclude + private/public)
             if is_attr_selected(att_name, include=include, exclude=exclude) and \
                     (not public_fields_only or not att_name.startswith(private_name_prefix)):
@@ -629,11 +644,8 @@ def create_dict_facade_for_object_vars_and_mapping_with_filters(cls,            
         :param self:
         :return:
         """
-        myattrs = (possibly_replace_with_property_name(self.__class__, att_name) for att_name in vars(self))
-        for att_name in chain(myattrs, (o for o in super(cls, self).__iter__() if o not in vars(self))):
-            # replace private names with property names if needed, so that the filter can apply correctly
-            att_name = possibly_replace_with_property_name(self.__class__, att_name)
-
+        myattrs = tuple(att_name for att_name in iterate_on_vars(self))
+        for att_name in chain(myattrs, (o for o in super(cls, self).__iter__() if o not in myattrs)):
             # filter based on the name (include/exclude + private/public)
             if is_attr_selected(att_name, include=include, exclude=exclude) and \
                     (not public_fields_only or not att_name.startswith(private_name_prefix)):

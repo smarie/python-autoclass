@@ -237,6 +237,12 @@ def method_already_there(cls,
         return method is not None and method is not getattr(object, method_name, None)
 
 
+def iterate_on_vars(self):
+    """ yields all vars names, replacing them with their public property name if it exists """
+    for att_name in vars(self):
+        yield possibly_replace_with_property_name(self.__class__, att_name)
+
+
 def possibly_replace_with_property_name(cls,
                                         att_name  # type: str
                                         ):
@@ -257,6 +263,8 @@ def is_property_related_attr(cls,
     # type: (...) -> bool
     """
     Returns True if the attribute name without a leading underscore corresponds to a property name in that class
+    TODO we should extend this to all descriptors
+
     :param cls:
     :param att_name:
     :return:
