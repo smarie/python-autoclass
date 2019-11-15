@@ -121,3 +121,30 @@ def test_autohash_exclude():
 
     a = Foo('hello', dict())
     assert hash(a) == hash((a.foo,))  # supposed to work since we exclude the dict (unhashable)
+
+
+@pytest.mark.parametrize("only_known_fields", [False, True], ids="only_known_fields={}".format)
+def test_autohash_pyfields(only_known_fields):
+    """tests that @autohash works with pyfields"""
+    from pyfields import field
+
+    class Foo(object):
+        foo1 = field()
+        foo2 = field(default=0)
+
+    @autohash(only_known_fields=only_known_fields)
+    class Bar(Foo):
+        bar = field()
+
+    # create an object manually
+    a = Bar()
+    a.bar = 2
+    a.foo1 = 'th'
+
+    # check that autohash works
+    if only_known_fields:
+        # the tuple of ordered pyfields in correct order
+        assert hash(a) == hash(('th', 0, 2))
+    else:
+        # order depends on vars()
+        assert hash(a) == hash(tuple(vars(a).values()))

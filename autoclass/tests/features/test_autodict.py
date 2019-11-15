@@ -134,3 +134,34 @@ def test_autodict(only_constructor_args, only_public_fields):
     # assert that the generated static method works
     if only_constructor_args:
         assert FooConfigA.from_dict(t) == t
+
+
+def test_autodict_pyfields():
+    """tests that @autodict works with pyfields"""
+    from pyfields import field
+
+    @autodict
+    class Foo(object):
+        foo1 = field()
+        foo2 = field(default=0)
+
+    @autodict
+    class Bar(Foo):
+        bar = field()
+
+    # create an object manually
+    a = Bar()
+    a.bar = 2
+    a.foo1 = 'th'
+
+    # check that autodict works
+    assert a == {'bar': 2, 'foo1': 'th', 'foo2': 0}
+
+    # dict view works
+    assert a['foo1'] == 'th'
+
+    # iteration order is correct
+    assert list(a.keys()) == ['foo1', 'foo2', 'bar']
+
+    # order in prints is correct
+    assert str(a) == "Bar({'foo1': 'th', 'foo2': 0, 'bar': 2})"

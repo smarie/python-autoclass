@@ -100,3 +100,30 @@ def test_autoclass_slots():
 
     # order in prints is fixed
     assert str(a) == "Bar({'bar': 2, 'foo1': 'th', 'foo2': 0})"
+
+
+def test_autoclass_pyfields():
+    """tests that @autoclass works with pyfields"""
+    from pyfields import field
+
+    @autoclass
+    class Foo(object):
+        foo1 = field()
+        foo2 = field(default=0)
+
+    @autoclass
+    class Bar(Foo):
+        bar = field()
+
+    # order in init is ancestor+mandatories first
+    a = Bar('th', 2)
+    assert a == {'bar': 2, 'foo1': 'th', 'foo2': 0}
+
+    # dict view works
+    assert a['foo1'] == 'th'
+
+    # iteration order is the same than in init
+    assert list(a.keys()) == ['foo1', 'foo2', 'bar']
+
+    # order in prints is the same than in init
+    assert str(a) == "Bar({'foo1': 'th', 'foo2': 0, 'bar': 2})"
