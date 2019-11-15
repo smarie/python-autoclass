@@ -170,17 +170,6 @@ def test_autoargs_include_exclude_typos():
             def __init__(self, foo, bar, baz, verbose=False):
                 pass
 
-# def test_autoargs_exclude_lock():
-#     class C(object):
-#         @autoargs(exclude=('bar', 'baz', 'verbose'), lock_class_fields=True)
-#         def __init__(self, foo, bar, baz, verbose=False):
-#             pass
-#
-#     a = C('rhubarb', 'pie', 1)
-#     assert a.foo == 'rhubarb')
-#     pytest.raises(AttributeError, getattr, a, 'bar')
-#     pytest.raises(AttributeError, setattr, a, 'newa',0)
-
 
 def test_autoargs_no_double_set_default():
     """ This test ensures that autoargs does not double-set the arguments with default values once with the default
