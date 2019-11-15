@@ -11,6 +11,32 @@ except ImportError:
     from funcsigs import signature, Signature
 
 
+class DuplicateOverrideError(Exception):
+    """ This is raised whenever a function is declared as overridden twice"""
+
+
+__AUTOCLASS_OVERRIDE_ANNOTATION = '__autoclass_override__'
+
+
+def autoclass_override(func  # type: Callable
+                       ):
+    # type: (...) -> Callable
+    """
+    Used to decorate a function as an explcitly overridden method (such as __iter__, __str__), so as to prevent
+    @autoclass to override it.
+
+    :param func: the function on which to execute. Note that it won't be wrapped but simply annotated.
+    :return:
+    """
+    # Simply annotate the function
+    if hasattr(func, __AUTOCLASS_OVERRIDE_ANNOTATION):
+        raise DuplicateOverrideError('Function is overridden twice : %s' % func.__name__)
+    else:
+        setattr(func, __AUTOCLASS_OVERRIDE_ANNOTATION, True)
+
+    return func
+
+
 class Symbols(Enum):
     """ A few symbols used in function signatures of the `autoclass` library """
     AUTO = 0

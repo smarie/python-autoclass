@@ -21,12 +21,12 @@ except ImportError:
 
 from autoclass.autoprops_ import DuplicateOverrideError
 from autoclass.utils import is_attr_selected, method_already_there, possibly_replace_with_property_name, \
-    check_known_decorators, AUTO, read_fields, iterate_on_vars
+    check_known_decorators, AUTO, read_fields, __AUTOCLASS_OVERRIDE_ANNOTATION, iterate_on_vars
 
 from decopatch import class_decorator, DECORATED
 
 
-__AUTODICT_OVERRIDE_ANNOTATION = '__autodict_override__'
+__AUTODICT_OVERRIDE_ANNOTATION = __AUTOCLASS_OVERRIDE_ANNOTATION
 
 
 @class_decorator

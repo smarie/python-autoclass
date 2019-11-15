@@ -21,7 +21,7 @@ except ImportError:
 
 from decopatch import DECORATED, function_decorator, class_decorator
 
-from autoclass.utils import check_known_decorators, AUTO, read_fields_from_init
+from autoclass.utils import check_known_decorators, AUTO, read_fields_from_init, DuplicateOverrideError
 
 __GETTER_OVERRIDE_ANNOTATION = '__getter_override__'
 __SETTER_OVERRIDE_ANNOTATION = '__setter_override__'
@@ -33,10 +33,6 @@ class IllegalGetterSignatureException(Exception):
 
 class IllegalSetterSignatureException(Exception):
     """ This is raised whenever an overridden setter has an illegal signature"""
-
-
-class DuplicateOverrideError(Exception):
-    """ This is raised whenever a getter or setter is overridden twice for the same attribute"""
 
 
 @class_decorator
