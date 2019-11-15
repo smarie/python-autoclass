@@ -1,5 +1,16 @@
 # Changelog
 
+### 2.0.0 - `pyfields` support + major refactoring
+
+**Features**
+
+ - `pyfields` can now be used as the source for the list of attributes, in `@autohash`, `@autodict`, and `@autoclass`. Fixes [#28](https://github.com/smarie/python-autoclass/issues/28)
+
+**Misc**
+
+ - Major refactoring: more readable and maintainable code.
+
+
 ### 1.18.0 - `@autoslots`
 
 New `@autoslots` feature, that can also be used from `@autoclass` by setting `(autoslots=True)`. Fixes [#9](https://github.com/smarie/python-autoclass/issues/9)
