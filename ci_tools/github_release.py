@@ -7,7 +7,6 @@ import re
 import click
 from click import Path
 from github import Github, UnknownObjectException
-# from valid8 import validate  not compliant with python 2.7
 
 
 @click.command()
