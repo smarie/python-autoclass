@@ -11,10 +11,10 @@ from setuptools import setup, find_packages
 here = path.abspath(path.dirname(__file__))
 
 # *************** Dependencies *********
-INSTALL_REQUIRES = ['decopatch', 'funcsigs;python_version<"3.3"', 'valid8', 'makefun']
+INSTALL_REQUIRES = ['decopatch', 'funcsigs;python_version<"3.3"', 'makefun']
 DEPENDENCY_LINKS = []
 SETUP_REQUIRES = ['pytest-runner', 'setuptools_scm', 'pypandoc', 'pandoc']
-TESTS_REQUIRE = ['pytest', 'pytest-logging', 'PyContracts', 'enforce', 'pytypes', 'valid8>=2.0.0']
+TESTS_REQUIRE = ['pytest', 'pytest-logging', 'PyContracts', 'enforce', 'pytypes', 'pyfields', 'valid8']
 EXTRAS_REQUIRE = {'contracts': ['PyContracts'],
                   'enforce': ['enforce'],
                   'validate': ['valid8']}

@@ -3,7 +3,6 @@ setuptools_scm
 pytest-runner
 pandoc
 pypandoc
-valid8
 
 # --- to run the tests
 pytest  #$PYTEST_VERSION
@@ -12,6 +11,8 @@ PyContracts
 mini_lambda
 # enforce
 # pytypes
+valid8
+pyfields
 
 # --- to generate the reports (see scripts in ci_tools, called by .travis)
 # pytest-cov  # after 2.6.1 it requires pytest 3.6
