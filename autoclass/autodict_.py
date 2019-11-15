@@ -549,12 +549,20 @@ def _execute_autodict_on_class(object_type,                 # type: Type[T]
     return
 
 
-def print_ordered_dict(obj):
+def print_ordered_dict(odict  # type: Mapping
+                       ):
+    # type: (...) -> str
+    """
+    Utility method to get a string representation for an ordered mapping.
+
+    :param odict: an ordered mapping
+    :return:
+    """
     # This destroys the order
     # return str(dict(obj))
 
     # This follows the order from __iter__
-    return '{' + ', '.join('{}: {}'.format(repr(k), repr(v)) for k, v in obj.items()) + '}'
+    return '{%s}' % ', '.join('%r: %r' % (k, v) for k, v in odict.items())
 
 
 def autodict_override_decorate(func  # type: Callable
@@ -568,13 +576,13 @@ def autodict_override_decorate(func  # type: Callable
     :return:
     """
 
-    if func.__name__ not in {Mapping.__iter__.__name__, Mapping.__getitem__.__name__, Mapping.__len__.__name__}:
+    if func.__name__ not in {'__iter__', '__getitem__', '__len__'}:
         raise ValueError('@autodict_override can only be used on one of the three Mapping methods __iter__,'
-                         '__getitem__ and __len__. Found: ' + func.__name__)
+                         '__getitem__ and __len__. Found: %s' % func.__name__)
 
     # Simply annotate the function
     if hasattr(func, __AUTODICT_OVERRIDE_ANNOTATION):
-        raise DuplicateOverrideError('Function is overridden twice : ' + func.__name__)
+        raise DuplicateOverrideError('Function is overridden twice : %s' % func.__name__)
     else:
         setattr(func, __AUTODICT_OVERRIDE_ANNOTATION, True)
 
