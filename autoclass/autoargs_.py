@@ -141,9 +141,11 @@ def autoargs_decorate(func,          # type: Callable
 
 
 if sys.version_info >= (3, 0):
+    # the function exists, use it
     def apply_defaults(bound_values):
         bound_values.apply_defaults()
 else:
+    # the `inspect` backport (`funcsigs`) does not implement the function
     # TODO when funcsigs implements PR https://github.com/aliles/funcsigs/pull/30 remove this
     def apply_defaults(bound_values):
         arguments = bound_values.arguments
@@ -155,11 +157,11 @@ else:
             try:
                 new_arguments.append((name, arguments[name]))
             except KeyError:
-                if param.default is not param._empty:
+                if param.default is not param.empty:
                     val = param.default
-                elif param.kind is param._VAR_POSITIONAL:
+                elif param.kind is param.VAR_POSITIONAL:
                     val = ()
-                elif param.kind is param._VAR_KEYWORD:
+                elif param.kind is param.VAR_KEYWORD:
                     val = {}
                 else:
                     # BoundArguments was likely created by bind_partial
