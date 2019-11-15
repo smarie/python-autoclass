@@ -2,7 +2,7 @@ from collections import Sequence
 from valid8 import validate
 
 try:  # python 3.5+
-    from typing import Union, Tuple
+    from typing import Union, Tuple, Type, Callable
 except ImportError:
     pass
 
@@ -69,23 +69,27 @@ class AutoclassDecorationException(Exception):
     pass
 
 
-def _check_known_decorators(typ, calling_decorator  # type: str
-                            ):
-    # type: (...) -> bool
+def check_known_decorators(cls,
+                           calling_decorator  # type: str
+                           ):
     """
     Checks that a given type is not already decorated by known decorators that may cause trouble.
     If so, it raises an Exception
     :return:
     """
-    for member in typ.__dict__.values():
+    for member in cls.__dict__.values():
         if hasattr(member, '__enforcer__'):
-            raise AutoclassDecorationException('It seems that @runtime_validation decorator was applied to type <'
-                                               + str(typ) + '> BEFORE ' + calling_decorator + '. This is not supported '
-                                               'as it may lead to counter-intuitive behaviour, please change the order '
-                                               'of the decorators on <' + str(typ) + '>')
+            raise AutoclassDecorationException('It seems that @runtime_validation decorator was applied to type <%s> '
+                                               'BEFORE %s. This is not supported as it may lead to counter-intuitive '
+                                               'behaviour, please change the order of the decorators on <%s>'
+                                               % (cls, calling_decorator, cls))
 
 
-def method_already_there(object_type, method_name, this_class_only=False):
+def method_already_there(cls,
+                         method_name,           # type: str
+                         this_class_only=False  # type: bool
+                         ):
+    # type: (...) -> bool
     """
     Returns True if method `method_name` is already implemented by object_type, that is, its implementation differs from
     the one in `object`.
@@ -106,22 +110,28 @@ def method_already_there(object_type, method_name, this_class_only=False):
             return method is not None and method is not getattr(object, method_name, None)
 
 
-def possibly_replace_with_property_name(object_type, att_name):
+def possibly_replace_with_property_name(cls,
+                                        att_name  # type: str
+                                        ):
+    # type: (...) -> str
     """
     Returns the attribute name or the corresponding property name if there is one
 
-    :param object_type:
+    :param cls:
     :param att_name:
     :return:
     """
-    return att_name[1:] if is_property_related_attr(object_type, att_name) else att_name
+    return att_name[1:] if is_property_related_attr(cls, att_name) else att_name
 
 
-def is_property_related_attr(object_type, att_name):
+def is_property_related_attr(cls,
+                             att_name  # type: str
+                             ):
+    # type: (...) -> bool
     """
     Returns True if the attribute name without a leading underscore corresponds to a property name in that class
-    :param object_type:
+    :param cls:
     :param att_name:
     :return:
     """
-    return att_name[0] == '_' and isinstance(getattr(object_type, att_name[1:], None), property)
+    return att_name[0] == '_' and isinstance(getattr(cls, att_name[1:], None), property)
