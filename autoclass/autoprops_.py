@@ -339,6 +339,15 @@ def _get_setter_fun(object_type,           # type: Type
 
 
 def _add_contract_to_setter(setter_fun, var_name, property_contract, property_name):
+    """
+    Utility function to add a pycontract contract to a setter
+
+    :param setter_fun:
+    :param var_name:
+    :param property_contract:
+    :param property_name:
+    :return:
+    """
 
     # 0. check that we can import contracts
     try:
@@ -383,9 +392,17 @@ def _add_contract_to_setter(setter_fun, var_name, property_contract, property_na
 
 
 def _add_validators_to_setter(setter_fun, var_name, validators, property_name):
+    """
+    Utility function to add valid8 validators to a setter
+
+    :param setter_fun:
+    :param var_name:
+    :param validators:
+    :param property_name:
+    :return:
+    """
 
     # 0. check that we can import valid8
-    # note: this is useless now but maybe one day validate will be another project ?
     try:
         # noinspection PyUnresolvedReferences
         from valid8 import decorate_with_validators
@@ -470,20 +487,31 @@ def autoprops_override_decorate(func,            # type: Callable
     :param is_getter: True for a getter override, False for a setter override.
     :return:
     """
+    # default attribute name is getter/setter function name
+    if attribute is None:
+        attribute = func.__name__
 
-    # Simply annotate the fact that this is a function
-    attr_name = attribute or func.__name__
     if is_getter:
+        # Simply annotate the fact that this is a getter function for this attribute
+        # (a) check that there is no annotation yet
         if hasattr(func, __GETTER_OVERRIDE_ANNOTATION):
-            raise DuplicateOverrideError('Getter is overridden twice for attribute name : ' + attr_name)
-        else:
-            # func.__getter_override__ = attr_name
-            setattr(func, __GETTER_OVERRIDE_ANNOTATION, attr_name)
+            already_name = getattr(func, __GETTER_OVERRIDE_ANNOTATION)
+            raise DuplicateOverrideError('Function %s is already an overridden getter for attribute %s'
+                                         % (func, already_name))
+
+        # (b) set it
+        # func.__getter_override__ = attribute
+        setattr(func, __GETTER_OVERRIDE_ANNOTATION, attribute)
     else:
+        # Simply annotate the fact that this is a getter function for this attribute
+        # (a) check that there is no annotation yet
         if hasattr(func, __SETTER_OVERRIDE_ANNOTATION):
-            raise DuplicateOverrideError('Setter is overridden twice for attribute name : ' + attr_name)
-        else:
-            # func.__setter_override__ = attr_name
-            setattr(func, __SETTER_OVERRIDE_ANNOTATION, attr_name)
+            already_name = getattr(func, __SETTER_OVERRIDE_ANNOTATION)
+            raise DuplicateOverrideError('Function %s is already an overridden setter for attribute %s'
+                                         % (func, already_name))
+
+        # (b) set it
+        # func.__getter_override__ = attribute
+        setattr(func, __SETTER_OVERRIDE_ANNOTATION, attribute)
 
     return func
