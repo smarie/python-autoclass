@@ -14,6 +14,23 @@ except ImportError:
 from autoclass import autoargs, autoprops, setter_override, autoclass
 
 
+def test_readme_index_pyfields():
+    """ """
+    from pyfields import field
+
+    @autoclass
+    class House(object):
+        name = field(check_type=True, type_hint=str, doc="the name of your house")
+        nb_floors = field(default=100, check_type=True, type_hint=int, doc="the nb floors",
+                          validators={"should be positive": lambda x: x >= 0,
+                                      "should be a multiple of 100": lambda x: x % 100 == 0})
+
+    h = House(name="mine")
+    with pytest.raises(ValueError):
+        h.nb_floors = 101
+    assert str(h) == "House(name='mine', nb_floors=100)"
+
+
 def test_readme_index_basic():
     """ First basic example in the doc """
 
@@ -23,7 +40,7 @@ def test_readme_index_basic():
             pass
 
     a = House('my_house', 3)
-    assert str(a) == "House({'name': 'my_house', 'nb_floors': 3})"
+    assert str(a) == "House(name='my_house', nb_floors=3)"
     assert [att for att in a.keys()] == ['name', 'nb_floors']
     assert {a, a} == {a}
     assert a == {'name': 'my_house', 'nb_floors': 3}

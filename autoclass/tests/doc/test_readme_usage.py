@@ -120,6 +120,29 @@ def test_readme_usage_autodict_3():
                  '_D__class_private': 't'}  # notice the name
 
 
+def test_readme_usage_autodict_4():
+
+    @autodict(only_constructor_args=False, only_public_fields=False)
+    @autoprops
+    class D(object):
+        @autoargs
+        def __init__(self,
+                     a,  # type: str
+                     b  # type: List[str]
+                     ):
+            self.non_constructor_arg = 'b'
+            self._private = 1
+            self.__class_private = 't'
+
+    o = D(1, 'r')
+    # o behaves like a read-only dict, all fields are now visible
+    assert o == dict(o)
+    assert o == {'a': 1, 'b': 'r',
+                 'non_constructor_arg': 'b',
+                 '_private': 1,
+                 '_D__class_private': 't'}  # notice the name
+
+
 def test_readme_usage_autohash_1():
     @autohash
     class A(object):

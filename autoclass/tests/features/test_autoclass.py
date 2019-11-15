@@ -50,7 +50,7 @@ def test_autoclass_inheritance():
     assert list(a.keys()) == ['bar', 'foo1', 'foo2']
 
     # order in prints is same than in init
-    assert str(a) == "Bar({'bar': 2, 'foo1': 'th', 'foo2': 0})"
+    assert str(a) == "Bar(bar=2, foo1='th', foo2=0)"
 
 
 def test_autoclass_pickle_inheritance():
@@ -66,7 +66,7 @@ def test_autoclass_pickle_inheritance():
     assert list(a.keys()) == ['bar', 'foo1', 'foo2']
 
     # order in prints is fixed
-    assert str(a) == "Bar({'bar': 2, 'foo1': 'th', 'foo2': 0})"
+    assert str(a) == "Bar(bar=2, foo1='th', foo2=0)"
 
     # pickle
     pik = pickle.dumps(a)
@@ -99,7 +99,7 @@ def test_autoclass_slots():
     assert list(a.keys()) == ['bar', 'foo1', 'foo2']
 
     # order in prints is fixed
-    assert str(a) == "Bar({'bar': 2, 'foo1': 'th', 'foo2': 0})"
+    assert str(a) == "Bar(bar=2, foo1='th', foo2=0)"
 
 
 def test_autoclass_pyfields():
@@ -126,4 +126,4 @@ def test_autoclass_pyfields():
     assert list(a.keys()) == ['foo1', 'foo2', 'bar']
 
     # order in prints is the same than in init
-    assert str(a) == "Bar({'foo1': 'th', 'foo2': 0, 'bar': 2})"
+    assert str(a) == "Bar(foo1='th', foo2=0, bar=2)"

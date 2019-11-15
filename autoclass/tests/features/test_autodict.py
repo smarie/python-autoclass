@@ -145,7 +145,7 @@ def test_autodict_pyfields():
         foo1 = field()
         foo2 = field(default=0)
 
-    @autodict
+    @autodict(legacy_str_repr=True)
     class Bar(Foo):
         bar = field()
 
@@ -163,5 +163,5 @@ def test_autodict_pyfields():
     # iteration order is correct
     assert list(a.keys()) == ['foo1', 'foo2', 'bar']
 
-    # order in prints is correct
+    # order in prints is correct in legacy str mode
     assert str(a) == "Bar({'foo1': 'th', 'foo2': 0, 'bar': 2})"
