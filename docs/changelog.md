@@ -4,12 +4,17 @@
 
 **Features**
 
+ - default string representation in `@autodict` is now more readable. Legacy representation is still available through a parameter. Fixed [#29](https://github.com/smarie/python-autoclass/issues/29).
+ 
  - `pyfields` can now be used as the source for the list of attributes, in `@autohash`, `@autodict`, and `@autoclass`. Fixes [#28](https://github.com/smarie/python-autoclass/issues/28)
+ 
+ - new `@autorepr` decorator. Previously this feature was only available through `@autodict`, it can now be used without it. `autorepr` is supported in `@autoclass`, and if users set `autodict=False` by default it will be enabled. Fixed  Fixed [#30](https://github.com/smarie/python-autoclass/issues/30) and [#31](https://github.com/smarie/python-autoclass/issues/31).
 
-**Misc**
+**Misc / bugfixes**
 
  - Major refactoring: more readable and maintainable code.
-
+ 
+ - Fixed `@autodict` behaviour when the list was `vars(self)` and used together with `@autoprops`: with some options the private names were appearing and with others the public property names were appearing. Now the public property names always appear if they exist.
 
 ### 1.18.0 - `@autoslots`
 
