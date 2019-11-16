@@ -106,7 +106,7 @@ def test_autoclass_pyfields():
     """tests that @autoclass works with pyfields"""
     from pyfields import field
 
-    @autoclass
+    @autoclass(autodict=False)
     class Foo(object):
         foo1 = field()
         foo2 = field(default=0)
@@ -127,3 +127,11 @@ def test_autoclass_pyfields():
 
     # order in prints is the same than in init
     assert str(a) == "Bar(foo1='th', foo2=0, bar=2)"
+
+    # test autorepr
+    f = Foo('a')
+    assert str(f) == "Foo(foo1='a', foo2=0)"
+
+    # autodict was really disabled
+    with pytest.raises(AttributeError):
+        f.items()
