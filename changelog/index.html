@@ -780,11 +780,24 @@
 <h3 id="200-pyfields-support-major-refactoring">2.0.0 - <code>pyfields</code> support + major refactoring<a class="headerlink" href="#200-pyfields-support-major-refactoring" title="Permanent link">&para;</a></h3>
 <p><strong>Features</strong></p>
 <ul>
-<li><code>pyfields</code> can now be used as the source for the list of attributes, in <code>@autohash</code>, <code>@autodict</code>, and <code>@autoclass</code>. Fixes <a href="https://github.com/smarie/python-autoclass/issues/28">#28</a></li>
+<li>
+<p>default string representation in <code>@autodict</code> is now more readable. Legacy representation is still available through a parameter. Fixed <a href="https://github.com/smarie/python-autoclass/issues/29">#29</a>.</p>
+</li>
+<li>
+<p><code>pyfields</code> can now be used as the source for the list of attributes, in <code>@autohash</code>, <code>@autodict</code>, and <code>@autoclass</code>. Fixes <a href="https://github.com/smarie/python-autoclass/issues/28">#28</a></p>
+</li>
+<li>
+<p>new <code>@autorepr</code> decorator. Previously this feature was only available through <code>@autodict</code>, it can now be used without it. <code>autorepr</code> is supported in <code>@autoclass</code>, and if users set <code>autodict=False</code> by default it will be enabled. Fixed  Fixed <a href="https://github.com/smarie/python-autoclass/issues/30">#30</a> and <a href="https://github.com/smarie/python-autoclass/issues/31">#31</a>.</p>
+</li>
 </ul>
-<p><strong>Misc</strong></p>
+<p><strong>Misc / bugfixes</strong></p>
 <ul>
-<li>Major refactoring: more readable and maintainable code.</li>
+<li>
+<p>Major refactoring: more readable and maintainable code.</p>
+</li>
+<li>
+<p>Fixed <code>@autodict</code> behaviour when the list was <code>vars(self)</code> and used together with <code>@autoprops</code>: with some options the private names were appearing and with others the public property names were appearing. Now the public property names always appear if they exist.</p>
+</li>
 </ul>
 <h3 id="1180-autoslots">1.18.0 - <code>@autoslots</code><a class="headerlink" href="#1180-autoslots" title="Permanent link">&para;</a></h3>
 <p>New <code>@autoslots</code> feature, that can also be used from <code>@autoclass</code> by setting <code>(autoslots=True)</code>. Fixes <a href="https://github.com/smarie/python-autoclass/issues/9">#9</a></p>
