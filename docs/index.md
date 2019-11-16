@@ -6,24 +6,26 @@
 
 [![Documentation](https://img.shields.io/badge/doc-latest-blue.svg)](https://smarie.github.io/python-autoclass/) [![PyPI](https://img.shields.io/pypi/v/autoclass.svg)](https://pypi.python.org/pypi/autoclass/) [![Downloads](https://pepy.tech/badge/autoclass)](https://pepy.tech/project/autoclass) [![Downloads per week](https://pepy.tech/badge/autoclass/week)](https://pepy.tech/project/autoclass) [![GitHub stars](https://img.shields.io/github/stars/smarie/python-autoclass.svg)](https://github.com/smarie/python-autoclass/stargazers)
 
-!!! warning "`include` and `exclude` have been fixed in `@autodict` and `@autohash`, you do not need to add an underscore anymore when the attribute corresponds to a property. See [#21](https://github.com/smarie/python-autoclass/issues/21)"
+!!! success "`autoclass` is now fully compliant with [`pyfields`](https://smarie.github.io/python-pyfields/) ! Check out how you can create very compact classes [here](#pyfields-combo)"
 
-`autoclass` provides tools to automatically generate python classes code. The objective of this library is to reduce the amount of redundancy by automatically generating parts of the code from the information already available somewhere else (typically, in the constructor signature). It is made of several independent features that can be combined:
+`autoclass` provides tools to automatically generate python classes code. The objective of this library is to reduce the amount of redundancy by automatically generating parts of the code from the information already available somewhere else (in the constructor signature or in the `pyfields` fields for example). It is made of several independent features that can be combined:
 
  * with `@autoargs` you don't have to write `self.xxx = xxx` in your constructor
- * with `@autoprops` all your fields become `properties` and their setter is annotated with the same PEP484 type hints and value validation methods than the corresponding constructor argument
- * with `@autohash`, your object is hashable based on the tuple of all fields
+ * with `@autoprops` all or part your constructor arguments become `properties` and their setter is annotated with the same PEP484 type hints and value validation methods
+ * with `@autohash`, your object is hashable based on the tuple of all fields (so it can be used as a dictionary key or put in a set)
  * with `@autodict`, your object behaves like a dictionary, is comparable with dictionaries, and gets a string representation
- * with `@autoclass`, you get all of the above at once
+ * with `@autorepr`, your object gets a string representation (use either this or `@autodict`, not both at the same time)
+ * with `@autoclass`, you get all of the above at once (but you can still disable some of them)
 
-The intent is similar to [attrs](https://github.com/python-attrs/attrs) and [PEP557](https://www.python.org/dev/peps/pep-0557): remove boilerplate code. However as opposed to these, 
+The intent is similar to [attrs](https://github.com/python-attrs/attrs) and [PEP557 dataclasses](https://www.python.org/dev/peps/pep-0557): remove boilerplate code. However as opposed to these, 
 
- * this library does not change anything in your coding habits: you still create a `__init__` constructor, and everything else is provided with decorators.
- * all decorators can be used independently, for example if you just need to add a dictionary behaviour to an existing class you can use `@autodict` only. Besides, all decorators can be manually applied to already existing classes.
- * all created code is not dynamically compiled using `compile`. This obviously leads to poorer performance than `attrs` in highly demanding applications, but for many standard use cases it works well, and provides better debug-ability (you can easily step through the generated functions to understand what's going on)
- * as opposed to `attrs`, setters are generated for the fields so validation libraries such as [valid8](https://smarie.github.io/python-valid8/) can wrap them.
+ * this library can be applied on *any* class. It does not change anything in your coding habits: you can still create a `__init__` constructor, and everything else is provided with decorators. 
+ * if information about fields is available from another library, `autoclass` can easily leverage it : for example you can now use [`pyfields`](https://smarie.github.io/python-pyfields/) to declare the fields, `autoclass` will support it.
+ * all decorators above can be used independently, for example if you just need to add a dictionary behaviour to an existing class you can use `@autodict` only.
+ * all created code is simple and readable. You can easily step through the generated functions in debug mode to understand what's going on
+ * as opposed to `attrs`, setters are generated for the fields so validation libraries such as [valid8](https://smarie.github.io/python-valid8/) can wrap them. Alternatively if you use `pyfields`, it directly provides this feature.
 
-Finally, `autoclass` simply generates the same code that you *would have written* manually. For this reason, in many cases you can use *other* libraries on top of the resulting classes without hassle. A good example is that you can use any PEP484 type checking library of your choice.
+In other words, `autoclass` simply generates the same code that you *would have written* manually. For this reason, in many cases you can use *other* libraries on top of the resulting classes without hassle. A good example is that you can use any PEP484 type checking library of your choice.
 
 
 ## Installing
@@ -34,21 +36,21 @@ Finally, `autoclass` simply generates the same code that you *would have written
 
 You may wish to also install 
 
- * a PEP484-based type checker: [enforce](https://github.com/RussBaz/enforce) or [pytypes](https://github.com/Stewori/pytypes).
- * a value validator: [valid8](https://smarie.github.io/python-valid8/) was originally created in this project and is now independent. It provides the `@validate` annotation (and it also provides the `Boolean` type)
- * Alternatively, you may use[PyContracts](https://andreacensi.github.io/contracts/index.html) to perform type and value validation at the same time using `@contract`, but this will not benefit from PEP484 and uses a dedicated syntax. This documentation also shows some examples.
+ * [`pyfields`](https://smarie.github.io/python-pyfields/) to create compact classes.
+ * a PEP484-based type checker: [typeguard](https://github.com/agronholm/typeguard) , [pytypes](https://github.com/Stewori/pytypes) or [enforce](https://github.com/RussBaz/enforce).
+ * a value validator: [valid8](https://smarie.github.io/python-valid8/) was originally created in this project and is now independent.
+
+Alternatively, you may use [PyContracts](https://andreacensi.github.io/contracts/index.html) to perform type and value validation at the same time using `@contract`, but this will not benefit from PEP484 and uses a dedicated syntax. This documentation also shows some examples.
 
 
 ```bash
-> pip install enforce
+> pip install pyfields
 > pip install pytypes
 > pip install valid8
 > pip install PyContracts
 ```
 
-## Usage examples
-
-### Basic
+## 1. Basic usage
 
 The following code shows how you define a `House` with two attributes `name` and `nb_floors`:
 
@@ -67,7 +69,7 @@ class House:
 >>> obj = House('my_house', 3)
 
 >>> print(obj)  # string representation
-House({'name': 'my_house', 'nb_floors': 3})
+House(name='my_house', nb_floors=3)
 
 >>> [att for att in obj.keys()]  # dictionary behaviour
 ['name', 'nb_floors']
@@ -104,8 +106,50 @@ Set nb_floors to 1
 Set nb_floors to 3
 ```
 
+### `pyfields` combo
 
-### Type validation with PEP484
+If you already use [`pyfields`](https://smarie.github.io/python-pyfields/) to define mandatory/optional fields with type/value validation, simply decorate your class with `@autoclass` and you'll get all of the above (dict view, hashability, string representation, equality...) too:
+
+```python
+from pyfields import field
+from autoclass import autoclass
+from mini_lambda import x
+
+@autoclass
+class House:
+    name: str = field(check_type=True, doc="the name of your house")
+    nb_floors: int = field(default=1, check_type=True, doc="the nb floors",
+                           validators={
+                               "should be positive": x >= 0,
+                               "should be a multiple of 100": x % 100 == 0
+                           })
+
+```
+
+Indeed behind the scenes, if `autoclass` detects that your class uses `pyfields`, it will automatically use the fields rather than the constructor signature to get the list of fields. You can check that all the features are there:
+
+```bash
+>>> obj = House('my_house', 200)
+
+>>> print(obj)  # string representation
+House(name='my_house', nb_floors=200)
+
+>>> [att for att in obj.keys()]  # dictionary behaviour
+['name', 'nb_floors']
+
+>>> assert {obj, obj} == {obj}  # hashable: can be used in a set or as a dict key
+
+>>> assert obj == House('my_house', 200)  # comparison (equality)
+>>> assert obj == {'name': 'my_house', 'nb_floors': 200}  # comparison with dicts
+```
+
+Note: this works with python 2.7, and 3.5+. See [`pyfields` documentation ](https://smarie.github.io/python-pyfields/) for details.
+
+## 2. Type and Value validation
+
+If you do not use `pyfields`, then you might be interested to add type and value validation to your fields through another means.
+
+### a- PEP484 Type validation
 
 #### enforce
 
@@ -154,8 +198,12 @@ class House:
         pass
 ```
 
+#### `typeguard`
 
-### Simple Type+Value validation
+TODO
+
+
+### b- Simple Type+Value validation
 
 #### valid8
 
@@ -229,9 +277,7 @@ class House:
 ```
 
 
-### PEP484 Type+Value validation
-
-#### enforce + valid8
+### c- PEP484 Type+Value validation
 
 Finally, in real-world applications you might wish to combine both PEP484 type checking and value validation. This works as expected, for example with `enforce` and `valid8`:
 
@@ -368,12 +414,15 @@ Really, *"there must be a better way"* : yes there is, and that's what this libr
 
 * **`@autohash`** is a decorator for a whole class. It makes the class hashable by implementing `__hash__` if not already present, where the hash is computed from the tuple of selected fields (all by default, customizable).
 
+* **`@autorepr`** is a decorator for a whole class. It adds a string representation by implementing `__str__` and `__repr__` if not already present.
+
 * Equivalent manual wrapper methods are provided for all decorators in this library: 
     - `autoargs_decorate(init_func, include, exclude)`
     - `autoprops_decorate(cls, include, exclude)`
     - `autoprops_override_decorate(func, attribute, is_getter)`
-    - `autodict_decorate(cls, include, exclude, only_constructor_args, only_public_fields)`
-    - `autohash_decorate(cls, include, exclude, only_constructor_args, only_public_fields)` 
+    - `autodict_decorate(cls, include, exclude, only_known_fields, only_public_fields)`
+    - `autohash_decorate(cls, include, exclude, only_known_fields, only_public_fields)`
+    - `autorepr_decorate(cls, include, exclude, only_known_fields, only_public_fields)` 
 
 
 ## See Also
@@ -394,7 +443,7 @@ Really, *"there must be a better way"* : yes there is, and that's what this libr
 
 * The new PEP out there, largely inspired by `attrs`: [PEP557](https://www.python.org/dev/peps/pep-0557). Check it out! There is also a [discussion on python-ideas](https://groups.google.com/forum/#!topic/python-ideas/8vUm84CCb3c).
 
-* [decorator](http://decorator.readthedocs.io) library, which provides everything one needs to create complex decorators easily (signature and annotations-preserving decorators, decorators with class factory) as well as provides some useful decorators (`@contextmanager`, `@blocking`, `@dispatch_on`). We use it to preserve the signature of class constructors and overriden setter methods.
+* [decorator](http://decorator.readthedocs.io) library, which provides everything one needs to create complex decorators easily (signature and annotations-preserving decorators, decorators with class factory) as well as provides some useful decorators (`@contextmanager`, `@blocking`, `@dispatch_on`). We used it to preserve the signature of class constructors and overriden setter methods. Now we use [`makefun`](https://smarie.github.io/python-makefun/) instead, which was inspired by it.
 
 * When came the time to find a name for this library I was stuck for a while. In my quest for finding an explicit name that was not already used, I found many interesting libraries on [PyPI](http://pypi.python.org/). I did not test them all but found them 'good to know':
     * [decorator-args](https://pypi.python.org/pypi/decorator-args/1.1)

@@ -30,6 +30,12 @@ def test_readme_index_pyfields():
         h.nb_floors = 101
     assert str(h) == "House(name='mine', nb_floors=100)"
 
+    a = House('my_house', 200)
+    assert str(a) == "House(name='my_house', nb_floors=200)"
+    assert [att for att in a.keys()] == ['name', 'nb_floors']
+    assert {a, a} == {a}
+    assert a == {'name': 'my_house', 'nb_floors': 200}
+
 
 def test_readme_index_basic():
     """ First basic example in the doc """
