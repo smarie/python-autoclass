@@ -24,6 +24,7 @@ from autoclass.autoargs_ import _autoargs_decorate
 from autoclass.autoprops_ import execute_autoprops_on_class
 from autoclass.autodict_ import execute_autodict_on_class
 from autoclass.autorepr_ import execute_autorepr_on_class
+from autoclass.autoeq_ import execute_autoeq_on_class
 from autoclass.autohash_ import execute_autohash_on_class
 from autoclass.autoslots_ import autoslots_decorate
 
@@ -37,6 +38,7 @@ def autoclass(include=None,     # type: Union[str, Tuple[str]]
               autoprops=AUTO,   # type: bool
               autodict=True,    # type: bool
               autorepr=AUTO,    # type: bool
+              autoeq=AUTO,      # type: bool
               autohash=True,    # type: bool
               autoslots=False,  # type: bool
               autoinit=AUTO,    # type: bool
@@ -60,6 +62,8 @@ def autoclass(include=None,     # type: Union[str, Tuple[str]]
         `only_known_fields=True`.
     :param autorepr: a boolean to enable autorepr on the class. By default it is `AUTO` and means "automatic
         configuration". In that case, it will be defined as `not autodict`.
+    :param autoeq: a boolean to enable autoeq on the class. By default it is `AUTO` and means "automatic
+        configuration". In that case, it will be defined as `not autodict`.
     :param autohash: a boolean to enable autohash on the class (default: True). By default it will be executed with
         `only_known_fields=True`.
     :param autoslots: a boolean to enable autoslots on the class (default: False).
@@ -67,7 +71,7 @@ def autoclass(include=None,     # type: Union[str, Tuple[str]]
     """
     return autoclass_decorate(cls, include=include, exclude=exclude, autoargs=autoargs, autoprops=autoprops,
                               autodict=autodict, autohash=autohash, autoslots=autoslots, autoinit=autoinit,
-                              autorepr=autorepr)
+                              autorepr=autorepr, autoeq=autoeq)
 
 
 class NoCustomInitError(Exception):
@@ -92,6 +96,7 @@ def autoclass_decorate(cls,              # type: Type[T]
                        autoinit=AUTO,    # type: bool
                        autodict=True,    # type: bool
                        autorepr=AUTO,    # type: bool
+                       autoeq=AUTO,      # type: bool
                        autohash=True,    # type: bool
                        autoslots=False,  # type: bool
                        ):
@@ -113,6 +118,8 @@ def autoclass_decorate(cls,              # type: Type[T]
     :param autodict: a boolean to enable autodict on the class (default: True). By default it will be executed with
         `only_known_fields=True`.
     :param autorepr: a boolean to enable autorepr on the class. By default it is `AUTO` and means "automatic
+        configuration". In that case, it will be defined as `not autodict`.
+    :param autoeq: a boolean to enable autoeq on the class. By default it is `AUTO` and means "automatic
         configuration". In that case, it will be defined as `not autodict`.
     :param autohash: a boolean to enable autohash on the class (default: True). By default it will be executed with
         `only_known_fields=True`.
@@ -194,11 +201,18 @@ def autoclass_decorate(cls,              # type: Type[T]
         if autorepr is not AUTO and autorepr:
             raise ValueError("`autorepr` can not be set to `True` simultaneously with `autodict`. Please set "
                              "`autodict=False`.")
+        if autoeq is not AUTO and autoeq:
+            raise ValueError("`autoeq` can not be set to `True` simultaneously with `autodict`. Please set "
+                             "`autodict=False`.")
         # By default execute with the known list of fields, so equivalent of `only_known_fields=True`.
         execute_autodict_on_class(cls, selected_names=selected_names)
-    elif autorepr is AUTO or autorepr:
-        # By default execute with the known list of fields, so equivalent of `only_known_fields=True`.
-        execute_autorepr_on_class(cls, selected_names=selected_names)
+    else:
+        if autorepr is AUTO or autorepr:
+            # By default execute with the known list of fields, so equivalent of `only_known_fields=True`.
+            execute_autorepr_on_class(cls, selected_names=selected_names)
+        if autoeq is AUTO or autoeq:
+            # By default execute with the known list of fields, so equivalent of `only_known_fields=True`.
+            execute_autoeq_on_class(cls, selected_names=selected_names)
 
     # @autohash
     if autohash:
