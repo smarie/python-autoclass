@@ -303,6 +303,8 @@ def execute_autodict_on_class(cls,                       # type: Type[T]
             # in the case the other is of the same type, use the dict comparison, that relies on the appropriate fields
             if isinstance(other, cls):
                 return dict(self) == dict(other)
+            elif isinstance(other, Mapping):
+                return dict(self) == other
             else:
                 # else fallback to inherited behaviour, whatever it is
                 try:
