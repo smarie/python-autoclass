@@ -1,6 +1,10 @@
 # Usage details
 
-## @autoargs
+## 1. Fields
+
+If you use another library to define your class fields (`pyfields` is the only one supported as of 2.1.0), you can skip this section and jump directly to [section 2.](#2-facets). Otherwise, these two decorators can be useful to do something equivalent.
+
+### @autoargs
 
 Automatically affects the contents of a function to self. Initial code and test examples from [this answer from utnubu](http://stackoverflow.com/questions/3652851/what-is-the-best-way-to-do-automatic-attribute-assignment-in-python-and-is-it-a#answer-3653049).
 
@@ -107,7 +111,7 @@ print(a.verbose)  # raises AttributeError
 Finally note that `@autoargs` is automatically applied when you decorate the whole class with `@autoclass`, see below.
 
 
-## @autoprops
+### @autoprops
 
 Automatically generates all properties getters and setters from the class constructor.
 
@@ -260,13 +264,20 @@ t.b = ['r','']  # raises ContractNotRespected
 Finally note that `@autoprops` is automatically applied when you decorate the whole class with `@autoclass`, see below.
 
 
-## @autodict
+## 2. Facets
+
+These facets all support two ways of defining the fields:
+ 
+ - from `pyfields` 
+ - or from the constructor signature (just like `@autoprops` does)
+
+### @autodict
 
 Automatically generates a read-only dictionary view on top of the object. It does several things:
 
 * it adds `collections.Mapping` to the list of parent classes (i.e. to the class' `__bases__`)
 * it generates `__len__`, `__iter__` and `__getitem__` in order for the appropriate fields to be exposed in the dict view. Parameters allow to customize the list of fields that will be visible. Note that any methods with the same name will be overridden.
-* if `only_constructor_args` is `True` (default), it generates a static `from_dict` method in the class corresponding to a call to the constructor with the unfolded dict. Note that this method may be overridden by the user.
+* if `only_known_fields` is `True` (default), it generates a static `from_dict` method in the class corresponding to a call to the constructor with the unfolded dict. Note that this method may be overridden by the user.
 * if `__eq__` is not implemented on this class, it generates a version that handles the case `self == other` where other is of the same type. In that case the dictionary equality is used. Other equality tests remain unchanged.
 * if `__str__` and `__repr__` are not implemented on this class, it generates them too.
 
@@ -330,7 +341,7 @@ assert o == {'a': 1, 'b': 'r'}
 * You can decide to open to all object fields, including or excluding (default) the fields that are not arguments of the constructor, and including or excluding (default) the class-private ones. Note that class-private attributes will be visible with their usual scrambled name:
 
 ```python
-@autodict(only_constructor_args=False, only_public_fields=False)
+@autodict(only_known_fields=False, only_public_fields=False)
 class D(object):
     @autoargs
     def __init__(self, a: str, b: List[str]):
@@ -362,7 +373,7 @@ class Bar(object):
 Finally note that `@autodict` is automatically applied when you decorate the whole class with `@autoclass`, see below.
 
 
-## @autohash
+### @autohash
 
 A decorator to makes objects of the class implement __hash__, so that they can be used correctly for example in sets. Parameters allow to customize the list of attributes that are taken into account in the hash.
 
@@ -398,7 +409,7 @@ assert hash(o) != hash(p)
 ```python
 from random import random
 
-@autohash(only_constructor_args=True, only_public_fields=True)
+@autohash(only_known_fields=True, only_public_fields=True)
 class D(object):
     @autoargs
     def __init__(self, a: str, _b: str):
@@ -428,8 +439,15 @@ class Bar(object):
 
 Finally note that `@autohash` is automatically applied when you decorate the whole class with `@autoclass`, see below.
 
+### @autorepr
 
-## @autoslots
+This decorator is useful if you wish to add a string representation to your class but you do not wish to use the entire `@autodict`. It just creates the `__str__` and `__repr__` methods.
+
+### @autoeq
+
+This decorator is useful if you wish to add an equality method to your class but you do not wish to use the entire `@autodict`. It just creates the `__eq__` method.
+
+### @autoslots
 
 Automatically create slots for each attribute. Parameters allow to customize the list of attributes that are taken into account.
 
@@ -485,7 +503,7 @@ class Bar(object):
 Finally note that `@autoslots` is not automatically applied when you decorate the whole class with `@autoclass`, you have to use `@autoclass(autoslots=True)` see below.
 
 
-## @autoclass
+### @autoclass
 
 Applies all or part of the above decorators at once. Useful if you want to make the most from this library.
 
@@ -537,8 +555,10 @@ class PartsOfTheAbove:
 
 # instance creation
 o = PartsOfTheAbove(a=2, b=True)
+print(o)  # works: autorepr is automatically enabled when autodict=False
 
 assert o == {'a': 2, 'b': True, 'c': None}  # AssertionError
+assert o == PartsOfTheAbove(a=2, b=True)  # works: autoeq is automatically enabled 
 assert PartsOfTheAbove.from_dict(o) == o  # AttributeError: 'PartsOfTheAbove' has no attribute 'from_dict'
 assert dict(**o) == o  # TypeError: argument after ** must be a mapping
 ```
@@ -546,7 +566,7 @@ assert dict(**o) == o  # TypeError: argument after ** must be a mapping
 
 ## Alternative to decorators: manual function wrappers
 
-Equivalent manual wrapper methods are provided for all decorators in this library: `autoargs_decorate(init_func, include, exclude)`, `autoprops_decorate(cls, include, exclude)`, `autoprops_override_decorate(func, attribute, is_getter)`, `autodict_decorate(cls, include, exclude, only_constructor_args, only_public_fields)`, `autoclass_decorate(cls, include, exclude, autoargs, autoprops, autodict)`, `autoslots_decorate(cls, include, exclude, use_public_names, add_weakref_slot)`
+Equivalent manual wrapper methods are provided for all decorators in this library: `autoargs_decorate(init_func, include, exclude)`, `autoprops_decorate(cls, include, exclude)`, `autoprops_override_decorate(func, attribute, is_getter)`, `autodict_decorate(cls, include, exclude, only_known_fields, only_public_fields)`, `autoclass_decorate(cls, include, exclude, autoargs, autoprops, autodict)`, `autoslots_decorate(cls, include, exclude, use_public_names, add_weakref_slot)`
 
 Therefore you can do:
 
