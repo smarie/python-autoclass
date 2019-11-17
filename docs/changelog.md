@@ -1,5 +1,17 @@
 # Changelog
 
+### 2.1.0 - `@autoeq`
+
+**Features**
+
+ - Added independent `@autoeq`, supported in `@autoclass` and automatically activated when `autodict=False`. Fixed [#32](https://github.com/smarie/python-autoclass/issues/32).
+
+**Bugfixes**
+
+ - Fixed `@autorepr` when `only_known_fields` is `False`: now property names are correctly used instead of the private names.
+
+ - Fixed `@autodict`'s generated `__eq__` method: when the other object is a dictionary a direct comparison is now done before trying super.
+
 ### 2.0.0 - `pyfields` support + major refactoring
 
 **Features**
