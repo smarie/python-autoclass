@@ -132,6 +132,9 @@ def test_autoclass_pyfields():
     f = Foo('a')
     assert str(f) == "Foo(foo1='a', foo2=0)"
 
+    # test autoeq
+    assert f == Foo('a', foo2=0)
+
     # autodict was really disabled
     with pytest.raises(AttributeError):
         f.items()
