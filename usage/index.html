@@ -32,7 +32,7 @@
         <meta name="lang:search.tokenizer" content="[\s\-]+">
       
       <link rel="shortcut icon" href="../assets/images/favicon.png">
-      <meta name="generator" content="mkdocs-1.0.4, mkdocs-material-4.4.3">
+      <meta name="generator" content="mkdocs-1.0.4, mkdocs-material-4.5.0">
     
     
       
@@ -40,12 +40,12 @@
       
     
     
-      <link rel="stylesheet" href="../assets/stylesheets/application.30686662.css">
+      <link rel="stylesheet" href="../assets/stylesheets/application.1b62728e.css">
       
       
     
     
-      <script src="../assets/javascripts/modernizr.74668098.js"></script>
+      <script src="../assets/javascripts/modernizr.268332fc.js"></script>
     
     
       
@@ -253,44 +253,84 @@
     <ul class="md-nav__list" data-md-scrollfix>
       
         <li class="md-nav__item">
+  <a href="#1-fields" class="md-nav__link">
+    1. Fields
+  </a>
+  
+    <nav class="md-nav">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
   <a href="#autoargs" class="md-nav__link">
     @autoargs
   </a>
   
 </li>
-      
-        <li class="md-nav__item">
+        
+          <li class="md-nav__item">
   <a href="#autoprops" class="md-nav__link">
     @autoprops
   </a>
   
 </li>
+        
+      </ul>
+    </nav>
+  
+</li>
       
         <li class="md-nav__item">
+  <a href="#2-facets" class="md-nav__link">
+    2. Facets
+  </a>
+  
+    <nav class="md-nav">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
   <a href="#autodict" class="md-nav__link">
     @autodict
   </a>
   
 </li>
-      
-        <li class="md-nav__item">
+        
+          <li class="md-nav__item">
   <a href="#autohash" class="md-nav__link">
     @autohash
   </a>
   
 </li>
-      
-        <li class="md-nav__item">
+        
+          <li class="md-nav__item">
+  <a href="#autorepr" class="md-nav__link">
+    @autorepr
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#autoeq" class="md-nav__link">
+    @autoeq
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
   <a href="#autoslots" class="md-nav__link">
     @autoslots
   </a>
   
 </li>
-      
-        <li class="md-nav__item">
+        
+          <li class="md-nav__item">
   <a href="#autoclass" class="md-nav__link">
     @autoclass
   </a>
+  
+</li>
+        
+      </ul>
+    </nav>
   
 </li>
       
@@ -345,44 +385,84 @@
     <ul class="md-nav__list" data-md-scrollfix>
       
         <li class="md-nav__item">
+  <a href="#1-fields" class="md-nav__link">
+    1. Fields
+  </a>
+  
+    <nav class="md-nav">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
   <a href="#autoargs" class="md-nav__link">
     @autoargs
   </a>
   
 </li>
-      
-        <li class="md-nav__item">
+        
+          <li class="md-nav__item">
   <a href="#autoprops" class="md-nav__link">
     @autoprops
   </a>
   
 </li>
+        
+      </ul>
+    </nav>
+  
+</li>
       
         <li class="md-nav__item">
+  <a href="#2-facets" class="md-nav__link">
+    2. Facets
+  </a>
+  
+    <nav class="md-nav">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
   <a href="#autodict" class="md-nav__link">
     @autodict
   </a>
   
 </li>
-      
-        <li class="md-nav__item">
+        
+          <li class="md-nav__item">
   <a href="#autohash" class="md-nav__link">
     @autohash
   </a>
   
 </li>
-      
-        <li class="md-nav__item">
+        
+          <li class="md-nav__item">
+  <a href="#autorepr" class="md-nav__link">
+    @autorepr
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#autoeq" class="md-nav__link">
+    @autoeq
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
   <a href="#autoslots" class="md-nav__link">
     @autoslots
   </a>
   
 </li>
-      
-        <li class="md-nav__item">
+        
+          <li class="md-nav__item">
   <a href="#autoclass" class="md-nav__link">
     @autoclass
   </a>
+  
+</li>
+        
+      </ul>
+    </nav>
   
 </li>
       
@@ -413,7 +493,9 @@
                 
                 
                 <h1 id="usage-details">Usage details<a class="headerlink" href="#usage-details" title="Permanent link">&para;</a></h1>
-<h2 id="autoargs">@autoargs<a class="headerlink" href="#autoargs" title="Permanent link">&para;</a></h2>
+<h2 id="1-fields">1. Fields<a class="headerlink" href="#1-fields" title="Permanent link">&para;</a></h2>
+<p>If you use another library to define your class fields (<code>pyfields</code> is the only one supported as of 2.1.0), you can skip this section and jump directly to <a href="#2-facets">section 2.</a>. Otherwise, these two decorators can be useful to do something equivalent.</p>
+<h3 id="autoargs">@autoargs<a class="headerlink" href="#autoargs" title="Permanent link">&para;</a></h3>
 <p>Automatically affects the contents of a function to self. Initial code and test examples from <a href="http://stackoverflow.com/questions/3652851/what-is-the-best-way-to-do-automatic-attribute-assignment-in-python-and-is-it-a#answer-3653049">this answer from utnubu</a>.</p>
 <p>A few illustrative examples can be found below.</p>
 <ul>
@@ -520,7 +602,7 @@
 
 
 <p>Finally note that <code>@autoargs</code> is automatically applied when you decorate the whole class with <code>@autoclass</code>, see below.</p>
-<h2 id="autoprops">@autoprops<a class="headerlink" href="#autoprops" title="Permanent link">&para;</a></h2>
+<h3 id="autoprops">@autoprops<a class="headerlink" href="#autoprops" title="Permanent link">&para;</a></h3>
 <p>Automatically generates all properties getters and setters from the class constructor.</p>
 <ul>
 <li>Basic functionality, no customization - all constructor arguments become properties: </li>
@@ -674,12 +756,18 @@ them with <code>@getter_override</code> or <code>@setter_override</code>. Note t
 
 
 <p>Finally note that <code>@autoprops</code> is automatically applied when you decorate the whole class with <code>@autoclass</code>, see below.</p>
-<h2 id="autodict">@autodict<a class="headerlink" href="#autodict" title="Permanent link">&para;</a></h2>
+<h2 id="2-facets">2. Facets<a class="headerlink" href="#2-facets" title="Permanent link">&para;</a></h2>
+<p>These facets all support two ways of defining the fields:</p>
+<ul>
+<li>from <code>pyfields</code> </li>
+<li>or from the constructor signature (just like <code>@autoprops</code> does)</li>
+</ul>
+<h3 id="autodict">@autodict<a class="headerlink" href="#autodict" title="Permanent link">&para;</a></h3>
 <p>Automatically generates a read-only dictionary view on top of the object. It does several things:</p>
 <ul>
 <li>it adds <code>collections.Mapping</code> to the list of parent classes (i.e. to the class' <code>__bases__</code>)</li>
 <li>it generates <code>__len__</code>, <code>__iter__</code> and <code>__getitem__</code> in order for the appropriate fields to be exposed in the dict view. Parameters allow to customize the list of fields that will be visible. Note that any methods with the same name will be overridden.</li>
-<li>if <code>only_constructor_args</code> is <code>True</code> (default), it generates a static <code>from_dict</code> method in the class corresponding to a call to the constructor with the unfolded dict. Note that this method may be overridden by the user.</li>
+<li>if <code>only_known_fields</code> is <code>True</code> (default), it generates a static <code>from_dict</code> method in the class corresponding to a call to the constructor with the unfolded dict. Note that this method may be overridden by the user.</li>
 <li>if <code>__eq__</code> is not implemented on this class, it generates a version that handles the case <code>self == other</code> where other is of the same type. In that case the dictionary equality is used. Other equality tests remain unchanged.</li>
 <li>if <code>__str__</code> and <code>__repr__</code> are not implemented on this class, it generates them too.</li>
 </ul>
@@ -745,7 +833,7 @@ them with <code>@getter_override</code> or <code>@setter_override</code>. Note t
 <ul>
 <li>You can decide to open to all object fields, including or excluding (default) the fields that are not arguments of the constructor, and including or excluding (default) the class-private ones. Note that class-private attributes will be visible with their usual scrambled name:</li>
 </ul>
-<div class="codehilite"><pre><span></span><span class="nd">@autodict</span><span class="p">(</span><span class="n">only_constructor_args</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span> <span class="n">only_public_fields</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>
+<div class="codehilite"><pre><span></span><span class="nd">@autodict</span><span class="p">(</span><span class="n">only_known_fields</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span> <span class="n">only_public_fields</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>
 <span class="k">class</span> <span class="nc">D</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
     <span class="nd">@autoargs</span>
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">a</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">b</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]):</span>
@@ -777,7 +865,7 @@ them with <code>@getter_override</code> or <code>@setter_override</code>. Note t
 
 
 <p>Finally note that <code>@autodict</code> is automatically applied when you decorate the whole class with <code>@autoclass</code>, see below.</p>
-<h2 id="autohash">@autohash<a class="headerlink" href="#autohash" title="Permanent link">&para;</a></h2>
+<h3 id="autohash">@autohash<a class="headerlink" href="#autohash" title="Permanent link">&para;</a></h3>
 <p>A decorator to makes objects of the class implement <strong>hash</strong>, so that they can be used correctly for example in sets. Parameters allow to customize the list of attributes that are taken into account in the hash.</p>
 <p>Examples:</p>
 <ul>
@@ -811,7 +899,7 @@ them with <code>@getter_override</code> or <code>@setter_override</code>. Note t
 </ul>
 <div class="codehilite"><pre><span></span><span class="kn">from</span> <span class="nn">random</span> <span class="kn">import</span> <span class="n">random</span>
 
-<span class="nd">@autohash</span><span class="p">(</span><span class="n">only_constructor_args</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="n">only_public_fields</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+<span class="nd">@autohash</span><span class="p">(</span><span class="n">only_known_fields</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="n">only_public_fields</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
 <span class="k">class</span> <span class="nc">D</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
     <span class="nd">@autoargs</span>
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">a</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">_b</span><span class="p">:</span> <span class="nb">str</span><span class="p">):</span>
@@ -842,7 +930,11 @@ them with <code>@getter_override</code> or <code>@setter_override</code>. Note t
 
 
 <p>Finally note that <code>@autohash</code> is automatically applied when you decorate the whole class with <code>@autoclass</code>, see below.</p>
-<h2 id="autoslots">@autoslots<a class="headerlink" href="#autoslots" title="Permanent link">&para;</a></h2>
+<h3 id="autorepr">@autorepr<a class="headerlink" href="#autorepr" title="Permanent link">&para;</a></h3>
+<p>This decorator is useful if you wish to add a string representation to your class but you do not wish to use the entire <code>@autodict</code>. It just creates the <code>__str__</code> and <code>__repr__</code> methods.</p>
+<h3 id="autoeq">@autoeq<a class="headerlink" href="#autoeq" title="Permanent link">&para;</a></h3>
+<p>This decorator is useful if you wish to add an equality method to your class but you do not wish to use the entire <code>@autodict</code>. It just creates the <code>__eq__</code> method.</p>
+<h3 id="autoslots">@autoslots<a class="headerlink" href="#autoslots" title="Permanent link">&para;</a></h3>
 <p>Automatically create slots for each attribute. Parameters allow to customize the list of attributes that are taken into account.</p>
 <p>Examples:</p>
 <ul>
@@ -896,7 +988,7 @@ them with <code>@getter_override</code> or <code>@setter_override</code>. Note t
 
 
 <p>Finally note that <code>@autoslots</code> is not automatically applied when you decorate the whole class with <code>@autoclass</code>, you have to use <code>@autoclass(autoslots=True)</code> see below.</p>
-<h2 id="autoclass">@autoclass<a class="headerlink" href="#autoclass" title="Permanent link">&para;</a></h2>
+<h3 id="autoclass">@autoclass<a class="headerlink" href="#autoclass" title="Permanent link">&para;</a></h3>
 <p>Applies all or part of the above decorators at once. Useful if you want to make the most from this library.</p>
 <ul>
 <li>Basic functionality, no customization - all constructor arguments become properties that are auto-assigned in constructor, and the object behaves like a dict and can be created from a dict: </li>
@@ -947,15 +1039,17 @@ them with <code>@getter_override</code> or <code>@setter_override</code>. Note t
 
 <span class="c1"># instance creation</span>
 <span class="n">o</span> <span class="o">=</span> <span class="n">PartsOfTheAbove</span><span class="p">(</span><span class="n">a</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">b</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+<span class="k">print</span><span class="p">(</span><span class="n">o</span><span class="p">)</span>  <span class="c1"># works: autorepr is automatically enabled when autodict=False</span>
 
 <span class="k">assert</span> <span class="n">o</span> <span class="o">==</span> <span class="p">{</span><span class="s1">&#39;a&#39;</span><span class="p">:</span> <span class="mi">2</span><span class="p">,</span> <span class="s1">&#39;b&#39;</span><span class="p">:</span> <span class="bp">True</span><span class="p">,</span> <span class="s1">&#39;c&#39;</span><span class="p">:</span> <span class="bp">None</span><span class="p">}</span>  <span class="c1"># AssertionError</span>
+<span class="k">assert</span> <span class="n">o</span> <span class="o">==</span> <span class="n">PartsOfTheAbove</span><span class="p">(</span><span class="n">a</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">b</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>  <span class="c1"># works: autoeq is automatically enabled </span>
 <span class="k">assert</span> <span class="n">PartsOfTheAbove</span><span class="o">.</span><span class="n">from_dict</span><span class="p">(</span><span class="n">o</span><span class="p">)</span> <span class="o">==</span> <span class="n">o</span>  <span class="c1"># AttributeError: &#39;PartsOfTheAbove&#39; has no attribute &#39;from_dict&#39;</span>
 <span class="k">assert</span> <span class="nb">dict</span><span class="p">(</span><span class="o">**</span><span class="n">o</span><span class="p">)</span> <span class="o">==</span> <span class="n">o</span>  <span class="c1"># TypeError: argument after ** must be a mapping</span>
 </pre></div>
 
 
 <h2 id="alternative-to-decorators-manual-function-wrappers">Alternative to decorators: manual function wrappers<a class="headerlink" href="#alternative-to-decorators-manual-function-wrappers" title="Permanent link">&para;</a></h2>
-<p>Equivalent manual wrapper methods are provided for all decorators in this library: <code>autoargs_decorate(init_func, include, exclude)</code>, <code>autoprops_decorate(cls, include, exclude)</code>, <code>autoprops_override_decorate(func, attribute, is_getter)</code>, <code>autodict_decorate(cls, include, exclude, only_constructor_args, only_public_fields)</code>, <code>autoclass_decorate(cls, include, exclude, autoargs, autoprops, autodict)</code>, <code>autoslots_decorate(cls, include, exclude, use_public_names, add_weakref_slot)</code></p>
+<p>Equivalent manual wrapper methods are provided for all decorators in this library: <code>autoargs_decorate(init_func, include, exclude)</code>, <code>autoprops_decorate(cls, include, exclude)</code>, <code>autoprops_override_decorate(func, attribute, is_getter)</code>, <code>autodict_decorate(cls, include, exclude, only_known_fields, only_public_fields)</code>, <code>autoclass_decorate(cls, include, exclude, autoargs, autoprops, autodict)</code>, <code>autoslots_decorate(cls, include, exclude, use_public_names, add_weakref_slot)</code></p>
 <p>Therefore you can do:</p>
 <div class="codehilite"><pre><span></span><span class="kn">from</span> <span class="nn">autoclass</span> <span class="kn">import</span> <span class="n">autoclass_decorate</span>
 
@@ -1033,7 +1127,7 @@ them with <code>@getter_override</code> or <code>@setter_override</code>. Note t
       
     </div>
     
-      <script src="../assets/javascripts/application.ac79c3b0.js"></script>
+      <script src="../assets/javascripts/application.a8b5e56f.js"></script>
       
       <script>app.initialize({version:"1.0.4",url:{base:".."}})</script>
       

@@ -32,7 +32,7 @@
         <meta name="lang:search.tokenizer" content="[\s\-]+">
       
       <link rel="shortcut icon" href="../assets/images/favicon.png">
-      <meta name="generator" content="mkdocs-1.0.4, mkdocs-material-4.4.3">
+      <meta name="generator" content="mkdocs-1.0.4, mkdocs-material-4.5.0">
     
     
       
@@ -40,12 +40,12 @@
       
     
     
-      <link rel="stylesheet" href="../assets/stylesheets/application.30686662.css">
+      <link rel="stylesheet" href="../assets/stylesheets/application.1b62728e.css">
       
       
     
     
-      <script src="../assets/javascripts/modernizr.74668098.js"></script>
+      <script src="../assets/javascripts/modernizr.268332fc.js"></script>
     
     
       
@@ -263,6 +263,13 @@
   
     <label class="md-nav__title" for="__toc">Table of contents</label>
     <ul class="md-nav__list" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#210-autoeq" class="md-nav__link">
+    2.1.0 - @autoeq
+  </a>
+  
+</li>
       
         <li class="md-nav__item">
   <a href="#200-pyfields-support-major-refactoring" class="md-nav__link">
@@ -527,6 +534,13 @@
     <ul class="md-nav__list" data-md-scrollfix>
       
         <li class="md-nav__item">
+  <a href="#210-autoeq" class="md-nav__link">
+    2.1.0 - @autoeq
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#200-pyfields-support-major-refactoring" class="md-nav__link">
     2.0.0 - pyfields support + major refactoring
   </a>
@@ -777,6 +791,20 @@
                 
                 
                 <h1 id="changelog">Changelog<a class="headerlink" href="#changelog" title="Permanent link">&para;</a></h1>
+<h3 id="210-autoeq">2.1.0 - <code>@autoeq</code><a class="headerlink" href="#210-autoeq" title="Permanent link">&para;</a></h3>
+<p><strong>Features</strong></p>
+<ul>
+<li>Added independent <code>@autoeq</code>, supported in <code>@autoclass</code> and automatically activated when <code>autodict=False</code>. Fixed <a href="https://github.com/smarie/python-autoclass/issues/32">#32</a>.</li>
+</ul>
+<p><strong>Bugfixes</strong></p>
+<ul>
+<li>
+<p>Fixed <code>@autorepr</code> when <code>only_known_fields</code> is <code>False</code>: now property names are correctly used instead of the private names.</p>
+</li>
+<li>
+<p>Fixed <code>@autodict</code>'s generated <code>__eq__</code> method: when the other object is a dictionary a direct comparison is now done before trying super.</p>
+</li>
+</ul>
 <h3 id="200-pyfields-support-major-refactoring">2.0.0 - <code>pyfields</code> support + major refactoring<a class="headerlink" href="#200-pyfields-support-major-refactoring" title="Permanent link">&para;</a></h3>
 <p><strong>Features</strong></p>
 <ul>
@@ -1003,7 +1031,7 @@
       
     </div>
     
-      <script src="../assets/javascripts/application.ac79c3b0.js"></script>
+      <script src="../assets/javascripts/application.a8b5e56f.js"></script>
       
       <script>app.initialize({version:"1.0.4",url:{base:".."}})</script>
       
