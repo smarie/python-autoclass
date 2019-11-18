@@ -1,5 +1,9 @@
 # Changelog
 
+### 2.1.1 - `pyproject.toml`
+
+Added `pyproject.toml`.
+
 ### 2.1.0 - `@autoeq`
 
 **Features**
