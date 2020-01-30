@@ -32,7 +32,7 @@
         <meta name="lang:search.tokenizer" content="[\s\-]+">
       
       <link rel="shortcut icon" href="assets/images/favicon.png">
-      <meta name="generator" content="mkdocs-1.0.4, mkdocs-material-4.5.0">
+      <meta name="generator" content="mkdocs-1.0.4, mkdocs-material-4.6.0">
     
     
       
@@ -50,7 +50,7 @@
     
       
         <link href="https://fonts.gstatic.com" rel="preconnect" crossorigin>
-        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,400i,700|Roboto+Mono&display=fallback">
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,400i,700%7CRoboto+Mono&display=fallback">
         <style>body,input{font-family:"Roboto","Helvetica Neue",Helvetica,Arial,sans-serif}code,kbd,pre{font-family:"Roboto Mono","Courier New",Courier,monospace}</style>
       
     
@@ -667,7 +667,7 @@ House<span class="o">(</span><span class="nv">name</span><span class="o">=</span
 
     <span class="nd">@setter_override</span>
     <span class="k">def</span> <span class="nf">nb_floors</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">nb_floors</span> <span class="o">=</span> <span class="mi">1</span><span class="p">):</span>
-        <span class="k">print</span><span class="p">(</span><span class="s1">&#39;Set nb_floors to {}&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">nb_floors</span><span class="p">))</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Set nb_floors to </span><span class="si">{}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">nb_floors</span><span class="p">))</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_nb_floors</span> <span class="o">=</span> <span class="n">nb_floors</span>
 </pre></div>
 
@@ -689,8 +689,8 @@ Set nb_floors to <span class="m">3</span>
 
 <span class="nd">@autoclass</span>
 <span class="k">class</span> <span class="nc">House</span><span class="p">:</span>
-    <span class="n">name</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span><span class="n">check_type</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="n">doc</span><span class="o">=</span><span class="s2">&quot;the name of your house&quot;</span><span class="p">)</span>
-    <span class="n">nb_floors</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span><span class="n">default</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">check_type</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="n">doc</span><span class="o">=</span><span class="s2">&quot;the nb floors&quot;</span><span class="p">,</span>
+    <span class="n">name</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span><span class="n">check_type</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">doc</span><span class="o">=</span><span class="s2">&quot;the name of your house&quot;</span><span class="p">)</span>
+    <span class="n">nb_floors</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span><span class="n">default</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">check_type</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">doc</span><span class="o">=</span><span class="s2">&quot;the nb floors&quot;</span><span class="p">,</span>
                            <span class="n">validators</span><span class="o">=</span><span class="p">{</span>
                                <span class="s2">&quot;should be positive&quot;</span><span class="p">:</span> <span class="n">x</span> <span class="o">&gt;=</span> <span class="mi">0</span><span class="p">,</span>
                                <span class="s2">&quot;should be a multiple of 100&quot;</span><span class="p">:</span> <span class="n">x</span> <span class="o">%</span> <span class="mi">100</span> <span class="o">==</span> <span class="mi">0</span>
@@ -790,7 +790,7 @@ enforce.exceptions.RuntimeTypeError:
                   <span class="n">error_type</span><span class="o">=</span><span class="n">InvalidName</span><span class="p">)</span>
     <span class="nd">@validate_arg</span><span class="p">(</span><span class="s1">&#39;surface&#39;</span><span class="p">,</span> <span class="p">(</span><span class="n">x</span> <span class="o">&gt;=</span> <span class="mi">0</span><span class="p">)</span> <span class="o">&amp;</span> <span class="p">(</span><span class="n">x</span> <span class="o">&lt;</span> <span class="mi">10000</span><span class="p">),</span> <span class="n">is_multiple_of</span><span class="p">(</span><span class="mi">100</span><span class="p">),</span>
                   <span class="n">error_type</span><span class="o">=</span><span class="n">InvalidSurface</span><span class="p">)</span>
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">surface</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">surface</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
         <span class="k">pass</span>
 </pre></div>
 
@@ -852,7 +852,7 @@ InvalidSurface: Surface should be between <span class="m">0</span> and <span cla
                   <span class="n">error_type</span><span class="o">=</span><span class="n">InvalidName</span><span class="p">)</span>
     <span class="nd">@validate_arg</span><span class="p">(</span><span class="s1">&#39;surface&#39;</span><span class="p">,</span> <span class="p">(</span><span class="n">x</span> <span class="o">&gt;=</span> <span class="mi">0</span><span class="p">)</span> <span class="o">&amp;</span> <span class="p">(</span><span class="n">x</span> <span class="o">&lt;</span> <span class="mi">10000</span><span class="p">),</span> <span class="n">is_multiple_of</span><span class="p">(</span><span class="mi">100</span><span class="p">),</span>
                   <span class="n">error_type</span><span class="o">=</span><span class="n">InvalidSurface</span><span class="p">)</span>
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">surface</span><span class="p">:</span> <span class="n">Integral</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">surface</span><span class="p">:</span> <span class="n">Integral</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
         <span class="k">pass</span>
 </pre></div>
 
@@ -885,7 +885,7 @@ InvalidSurface: Surface should be between <span class="m">0</span> and <span cla
                  <span class="n">name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
                  <span class="n">surface</span><span class="p">:</span> <span class="n">Real</span><span class="p">,</span>
                  <span class="n">nb_floors</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Integral</span><span class="p">]</span> <span class="o">=</span> <span class="mi">1</span><span class="p">,</span>
-                 <span class="n">with_windows</span><span class="p">:</span> <span class="n">Boolean</span> <span class="o">=</span> <span class="bp">False</span><span class="p">):</span>
+                 <span class="n">with_windows</span><span class="p">:</span> <span class="n">Boolean</span> <span class="o">=</span> <span class="kc">False</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="n">name</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">surface</span> <span class="o">=</span> <span class="n">surface</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">nb_floors</span> <span class="o">=</span> <span class="n">nb_floors</span>
@@ -896,7 +896,7 @@ InvalidSurface: Surface should be between <span class="m">0</span> and <span cla
     <span class="k">def</span> <span class="nf">name</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_name</span>
 
-    <span class="nd">@name.setter</span>
+    <span class="nd">@name</span><span class="o">.</span><span class="n">setter</span>
     <span class="k">def</span> <span class="nf">name</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">:</span> <span class="nb">str</span><span class="p">):</span>
         <span class="n">validate</span><span class="p">(</span><span class="s1">&#39;name&#39;</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">instance_of</span><span class="o">=</span><span class="nb">str</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_name</span> <span class="o">=</span> <span class="n">name</span>
@@ -906,9 +906,9 @@ InvalidSurface: Surface should be between <span class="m">0</span> and <span cla
     <span class="k">def</span> <span class="nf">surface</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Real</span><span class="p">:</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_surface</span>
 
-    <span class="nd">@surface.setter</span>
+    <span class="nd">@surface</span><span class="o">.</span><span class="n">setter</span>
     <span class="k">def</span> <span class="nf">surface</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">surface</span><span class="p">:</span> <span class="n">Real</span><span class="p">):</span>
-        <span class="n">validate</span><span class="p">(</span><span class="s1">&#39;surface&#39;</span><span class="p">,</span> <span class="n">surface</span><span class="p">,</span> <span class="n">instance_of</span><span class="o">=</span><span class="n">Real</span><span class="p">,</span> <span class="n">min_value</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">min_strict</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+        <span class="n">validate</span><span class="p">(</span><span class="s1">&#39;surface&#39;</span><span class="p">,</span> <span class="n">surface</span><span class="p">,</span> <span class="n">instance_of</span><span class="o">=</span><span class="n">Real</span><span class="p">,</span> <span class="n">min_value</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">min_strict</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_surface</span> <span class="o">=</span> <span class="n">surface</span>
 
     <span class="c1"># --nb_floors</span>
@@ -916,9 +916,9 @@ InvalidSurface: Surface should be between <span class="m">0</span> and <span cla
     <span class="k">def</span> <span class="nf">nb_floors</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Integral</span><span class="p">]:</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_nb_floors</span>
 
-    <span class="nd">@nb_floors.setter</span>
+    <span class="nd">@nb_floors</span><span class="o">.</span><span class="n">setter</span>
     <span class="k">def</span> <span class="nf">nb_floors</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">nb_floors</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Integral</span><span class="p">]):</span>
-        <span class="n">validate</span><span class="p">(</span><span class="s1">&#39;nb_floors&#39;</span><span class="p">,</span> <span class="n">nb_floors</span><span class="p">,</span> <span class="n">instance_of</span><span class="o">=</span><span class="n">Integral</span><span class="p">,</span> <span class="n">enforce_not_none</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>
+        <span class="n">validate</span><span class="p">(</span><span class="s1">&#39;nb_floors&#39;</span><span class="p">,</span> <span class="n">nb_floors</span><span class="p">,</span> <span class="n">instance_of</span><span class="o">=</span><span class="n">Integral</span><span class="p">,</span> <span class="n">enforce_not_none</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_surface</span> <span class="o">=</span> <span class="n">nb_floors</span> <span class="c1"># !**</span>
 
     <span class="c1"># --with_windows</span>
@@ -926,7 +926,7 @@ InvalidSurface: Surface should be between <span class="m">0</span> and <span cla
     <span class="k">def</span> <span class="nf">with_windows</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Boolean</span><span class="p">:</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_with_windows</span>
 
-    <span class="nd">@with_windows.setter</span>
+    <span class="nd">@with_windows</span><span class="o">.</span><span class="n">setter</span>
     <span class="k">def</span> <span class="nf">with_windows</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">with_windows</span><span class="p">:</span> <span class="n">Boolean</span><span class="p">):</span>
         <span class="n">validate</span><span class="p">(</span><span class="s1">&#39;with_windows&#39;</span><span class="p">,</span> <span class="n">with_windows</span><span class="p">,</span> <span class="n">instance_of</span><span class="o">=</span><span class="n">Boolean</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_with_windows</span> <span class="o">=</span> <span class="n">with_windows</span>
@@ -1016,6 +1016,7 @@ InvalidSurface: Surface should be between <span class="m">0</span> and <span cla
                 
                   
                 
+                
               
               
                 
@@ -1068,7 +1069,7 @@ InvalidSurface: Surface should be between <span class="m">0</span> and <span cla
       
     </div>
     
-      <script src="assets/javascripts/application.a8b5e56f.js"></script>
+      <script src="assets/javascripts/application.808e90bb.js"></script>
       
       <script>app.initialize({version:"1.0.4",url:{base:"."}})</script>
       

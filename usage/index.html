@@ -32,7 +32,7 @@
         <meta name="lang:search.tokenizer" content="[\s\-]+">
       
       <link rel="shortcut icon" href="../assets/images/favicon.png">
-      <meta name="generator" content="mkdocs-1.0.4, mkdocs-material-4.5.0">
+      <meta name="generator" content="mkdocs-1.0.4, mkdocs-material-4.6.0">
     
     
       
@@ -50,7 +50,7 @@
     
       
         <link href="https://fonts.gstatic.com" rel="preconnect" crossorigin>
-        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,400i,700|Roboto+Mono&display=fallback">
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,400i,700%7CRoboto+Mono&display=fallback">
         <style>body,input{font-family:"Roboto","Helvetica Neue",Helvetica,Arial,sans-serif}code,kbd,pre{font-family:"Roboto Mono","Courier New",Courier,monospace}</style>
       
     
@@ -505,17 +505,17 @@
 
 <span class="k">class</span> <span class="nc">A</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
     <span class="nd">@autoargs</span>
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">foo</span><span class="p">,</span> <span class="n">path</span><span class="p">,</span> <span class="n">debug</span><span class="o">=</span><span class="bp">False</span><span class="p">):</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">foo</span><span class="p">,</span> <span class="n">path</span><span class="p">,</span> <span class="n">debug</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
         <span class="k">pass</span>
 
 <span class="c1"># Test : </span>
 <span class="c1"># -- create an instance</span>
-<span class="n">a</span> <span class="o">=</span> <span class="n">A</span><span class="p">(</span><span class="s1">&#39;rhubarb&#39;</span><span class="p">,</span> <span class="s1">&#39;pie&#39;</span><span class="p">,</span> <span class="n">debug</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+<span class="n">a</span> <span class="o">=</span> <span class="n">A</span><span class="p">(</span><span class="s1">&#39;rhubarb&#39;</span><span class="p">,</span> <span class="s1">&#39;pie&#39;</span><span class="p">,</span> <span class="n">debug</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 
 <span class="c1"># -- check that the fields exist and have the correct value</span>
 <span class="k">assert</span> <span class="n">a</span><span class="o">.</span><span class="n">foo</span> <span class="o">==</span> <span class="s1">&#39;rhubarb&#39;</span>
 <span class="k">assert</span> <span class="n">a</span><span class="o">.</span><span class="n">path</span> <span class="o">==</span> <span class="s1">&#39;pie&#39;</span>
-<span class="k">assert</span> <span class="n">a</span><span class="o">.</span><span class="n">debug</span> <span class="o">==</span> <span class="bp">True</span>
+<span class="k">assert</span> <span class="n">a</span><span class="o">.</span><span class="n">debug</span> <span class="o">==</span> <span class="kc">True</span>
 </pre></div>
 
 
@@ -524,16 +524,16 @@
 </ul>
 <div class="codehilite"><pre><span></span><span class="k">class</span> <span class="nc">B</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
     <span class="nd">@autoargs</span>
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">foo</span><span class="p">,</span> <span class="n">path</span><span class="p">,</span> <span class="n">debug</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">):</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">foo</span><span class="p">,</span> <span class="n">path</span><span class="p">,</span> <span class="n">debug</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">):</span>
         <span class="k">pass</span>
 
 <span class="c1"># Test : </span>
 <span class="c1"># -- create an instance</span>
-<span class="n">a</span> <span class="o">=</span> <span class="n">B</span><span class="p">(</span><span class="s1">&#39;rhubarb&#39;</span><span class="p">,</span> <span class="s1">&#39;pie&#39;</span><span class="p">,</span> <span class="bp">True</span><span class="p">,</span> <span class="mi">100</span><span class="p">,</span> <span class="mi">101</span><span class="p">)</span>
+<span class="n">a</span> <span class="o">=</span> <span class="n">B</span><span class="p">(</span><span class="s1">&#39;rhubarb&#39;</span><span class="p">,</span> <span class="s1">&#39;pie&#39;</span><span class="p">,</span> <span class="kc">True</span><span class="p">,</span> <span class="mi">100</span><span class="p">,</span> <span class="mi">101</span><span class="p">)</span>
 <span class="c1"># -- check that the fields exist and have the correct value</span>
 <span class="k">assert</span> <span class="n">a</span><span class="o">.</span><span class="n">foo</span> <span class="o">==</span> <span class="s1">&#39;rhubarb&#39;</span>
 <span class="k">assert</span> <span class="n">a</span><span class="o">.</span><span class="n">path</span> <span class="o">==</span> <span class="s1">&#39;pie&#39;</span>
-<span class="k">assert</span> <span class="n">a</span><span class="o">.</span><span class="n">debug</span> <span class="o">==</span> <span class="bp">True</span>
+<span class="k">assert</span> <span class="n">a</span><span class="o">.</span><span class="n">debug</span> <span class="o">==</span> <span class="kc">True</span>
 <span class="c1"># -- *args is in a single attribute</span>
 <span class="k">assert</span> <span class="n">a</span><span class="o">.</span><span class="n">args</span> <span class="o">==</span> <span class="p">(</span><span class="mi">100</span><span class="p">,</span> <span class="mi">101</span><span class="p">)</span>
 </pre></div>
@@ -544,20 +544,20 @@
 </ul>
 <div class="codehilite"><pre><span></span><span class="k">class</span> <span class="nc">C</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
     <span class="nd">@autoargs</span>
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">foo</span><span class="p">,</span> <span class="n">path</span><span class="p">,</span> <span class="n">debug</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kw</span><span class="p">):</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">foo</span><span class="p">,</span> <span class="n">path</span><span class="p">,</span> <span class="n">debug</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kw</span><span class="p">):</span>
         <span class="k">pass</span>
 
 <span class="c1"># Test : </span>
 <span class="c1"># -- create an instance</span>
-<span class="n">a</span> <span class="o">=</span> <span class="n">C</span><span class="p">(</span><span class="s1">&#39;rhubarb&#39;</span><span class="p">,</span> <span class="s1">&#39;pie&#39;</span><span class="p">,</span> <span class="bp">True</span><span class="p">,</span> <span class="mi">100</span><span class="p">,</span> <span class="mi">101</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="n">bar</span><span class="o">=</span><span class="s1">&#39;bar&#39;</span><span class="p">)</span>
+<span class="n">a</span> <span class="o">=</span> <span class="n">C</span><span class="p">(</span><span class="s1">&#39;rhubarb&#39;</span><span class="p">,</span> <span class="s1">&#39;pie&#39;</span><span class="p">,</span> <span class="kc">True</span><span class="p">,</span> <span class="mi">100</span><span class="p">,</span> <span class="mi">101</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">bar</span><span class="o">=</span><span class="s1">&#39;bar&#39;</span><span class="p">)</span>
 <span class="c1"># -- check that the fields exist and have the correct value</span>
 <span class="k">assert</span> <span class="n">a</span><span class="o">.</span><span class="n">foo</span> <span class="o">==</span> <span class="s1">&#39;rhubarb&#39;</span>
 <span class="k">assert</span> <span class="n">a</span><span class="o">.</span><span class="n">path</span> <span class="o">==</span> <span class="s1">&#39;pie&#39;</span>
-<span class="k">assert</span> <span class="n">a</span><span class="o">.</span><span class="n">debug</span> <span class="o">==</span> <span class="bp">True</span>
+<span class="k">assert</span> <span class="n">a</span><span class="o">.</span><span class="n">debug</span> <span class="o">==</span> <span class="kc">True</span>
 <span class="c1"># -- *args is in a single attribute</span>
 <span class="k">assert</span> <span class="n">a</span><span class="o">.</span><span class="n">args</span> <span class="o">==</span> <span class="p">(</span><span class="mi">100</span><span class="p">,</span> <span class="mi">101</span><span class="p">)</span>
 <span class="c1"># -- **kw is in a single attribute too</span>
-<span class="k">assert</span> <span class="n">a</span><span class="o">.</span><span class="n">kw</span> <span class="o">==</span> <span class="nb">dict</span><span class="p">(</span><span class="n">verbose</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="n">bar</span><span class="o">=</span><span class="s1">&#39;bar&#39;</span><span class="p">)</span>
+<span class="k">assert</span> <span class="n">a</span><span class="o">.</span><span class="n">kw</span> <span class="o">==</span> <span class="nb">dict</span><span class="p">(</span><span class="n">verbose</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">bar</span><span class="o">=</span><span class="s1">&#39;bar&#39;</span><span class="p">)</span>
 </pre></div>
 
 
@@ -566,7 +566,7 @@
 </ul>
 <div class="codehilite"><pre><span></span><span class="k">class</span> <span class="nc">C</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
     <span class="nd">@autoargs</span><span class="p">(</span><span class="n">include</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;bar&#39;</span><span class="p">,</span> <span class="s1">&#39;baz&#39;</span><span class="p">,</span> <span class="s1">&#39;verbose&#39;</span><span class="p">])</span>
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">foo</span><span class="p">,</span> <span class="n">bar</span><span class="p">,</span> <span class="n">baz</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="bp">False</span><span class="p">):</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">foo</span><span class="p">,</span> <span class="n">bar</span><span class="p">,</span> <span class="n">baz</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
         <span class="k">pass</span>
 
 <span class="c1"># Test : </span>
@@ -575,9 +575,9 @@
 <span class="c1"># -- check that the fields exist and have the correct value</span>
 <span class="k">assert</span> <span class="n">a</span><span class="o">.</span><span class="n">bar</span> <span class="o">==</span> <span class="s1">&#39;pie&#39;</span>
 <span class="k">assert</span> <span class="n">a</span><span class="o">.</span><span class="n">baz</span> <span class="o">==</span> <span class="mi">1</span>
-<span class="k">assert</span> <span class="n">a</span><span class="o">.</span><span class="n">verbose</span> <span class="o">==</span> <span class="bp">False</span>
+<span class="k">assert</span> <span class="n">a</span><span class="o">.</span><span class="n">verbose</span> <span class="o">==</span> <span class="kc">False</span>
 <span class="c1"># -- check that a non-included field does not exist</span>
-<span class="k">print</span><span class="p">(</span><span class="n">a</span><span class="o">.</span><span class="n">foo</span><span class="p">)</span><span class="c1"># raises AttributeError</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">a</span><span class="o">.</span><span class="n">foo</span><span class="p">)</span><span class="c1"># raises AttributeError</span>
 </pre></div>
 
 
@@ -586,7 +586,7 @@
 </ul>
 <div class="codehilite"><pre><span></span><span class="k">class</span> <span class="nc">C</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
     <span class="nd">@autoargs</span><span class="p">(</span><span class="n">exclude</span><span class="o">=</span><span class="p">(</span><span class="s1">&#39;bar&#39;</span><span class="p">,</span> <span class="s1">&#39;baz&#39;</span><span class="p">,</span> <span class="s1">&#39;verbose&#39;</span><span class="p">))</span>
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">foo</span><span class="p">,</span> <span class="n">bar</span><span class="p">,</span> <span class="n">baz</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="bp">False</span><span class="p">):</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">foo</span><span class="p">,</span> <span class="n">bar</span><span class="p">,</span> <span class="n">baz</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
         <span class="k">pass</span>
 
 <span class="c1"># Test : </span>
@@ -595,9 +595,9 @@
 <span class="c1"># -- check that the fields exist and have the correct value</span>
 <span class="k">assert</span> <span class="n">a</span><span class="o">.</span><span class="n">foo</span> <span class="o">==</span> <span class="s1">&#39;rhubarb&#39;</span>
 <span class="c1"># -- check that the non-included fields do not exist</span>
-<span class="k">print</span><span class="p">(</span><span class="n">a</span><span class="o">.</span><span class="n">bar</span><span class="p">)</span>  <span class="c1"># raises AttributeError</span>
-<span class="k">print</span><span class="p">(</span><span class="n">a</span><span class="o">.</span><span class="n">baz</span><span class="p">)</span>  <span class="c1"># raises AttributeError</span>
-<span class="k">print</span><span class="p">(</span><span class="n">a</span><span class="o">.</span><span class="n">verbose</span><span class="p">)</span>  <span class="c1"># raises AttributeError</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">a</span><span class="o">.</span><span class="n">bar</span><span class="p">)</span>  <span class="c1"># raises AttributeError</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">a</span><span class="o">.</span><span class="n">baz</span><span class="p">)</span>  <span class="c1"># raises AttributeError</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">a</span><span class="o">.</span><span class="n">verbose</span><span class="p">)</span>  <span class="c1"># raises AttributeError</span>
 </pre></div>
 
 
@@ -704,13 +704,13 @@ them with <code>@getter_override</code> or <code>@setter_override</code>. Note t
     <span class="nd">@getter_override</span>
     <span class="k">def</span> <span class="nf">a</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="c1"># in addition to getting the fields we&#39;d like to print something</span>
-        <span class="k">print</span><span class="p">(</span><span class="s1">&#39;a is being read. Its value is </span><span class="se">\&#39;</span><span class="s1">&#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_a</span><span class="p">)</span> <span class="o">+</span> <span class="s1">&#39;</span><span class="se">\&#39;</span><span class="s1">&#39;</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;a is being read. Its value is </span><span class="se">\&#39;</span><span class="s1">&#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_a</span><span class="p">)</span> <span class="o">+</span> <span class="s1">&#39;</span><span class="se">\&#39;</span><span class="s1">&#39;</span><span class="p">)</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_a</span>
 
     <span class="nd">@setter_override</span><span class="p">(</span><span class="n">attribute</span><span class="o">=</span><span class="s1">&#39;b&#39;</span><span class="p">)</span>
     <span class="k">def</span> <span class="nf">another_name</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">toto</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]):</span>
         <span class="c1"># in addition to setting the fields we&#39;d like to print something</span>
-        <span class="k">print</span><span class="p">(</span><span class="s1">&#39;Property </span><span class="se">\&#39;</span><span class="s1">b</span><span class="se">\&#39;</span><span class="s1"> was set to </span><span class="se">\&#39;</span><span class="s1">&#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">toto</span><span class="p">)</span> <span class="o">+</span> <span class="s1">&#39;</span><span class="se">\&#39;</span><span class="s1">&#39;</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Property </span><span class="se">\&#39;</span><span class="s1">b</span><span class="se">\&#39;</span><span class="s1"> was set to </span><span class="se">\&#39;</span><span class="s1">&#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">toto</span><span class="p">)</span> <span class="o">+</span> <span class="s1">&#39;</span><span class="se">\&#39;</span><span class="s1">&#39;</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_b</span> <span class="o">=</span> <span class="n">toto</span>
 
 <span class="n">t</span> <span class="o">=</span> <span class="n">FooConfigD</span><span class="p">(</span><span class="s1">&#39;rhubarb&#39;</span><span class="p">,</span> <span class="p">[</span><span class="s1">&#39;pie&#39;</span><span class="p">,</span> <span class="s1">&#39;pie2&#39;</span><span class="p">])</span>
@@ -833,7 +833,7 @@ them with <code>@getter_override</code> or <code>@setter_override</code>. Note t
 <ul>
 <li>You can decide to open to all object fields, including or excluding (default) the fields that are not arguments of the constructor, and including or excluding (default) the class-private ones. Note that class-private attributes will be visible with their usual scrambled name:</li>
 </ul>
-<div class="codehilite"><pre><span></span><span class="nd">@autodict</span><span class="p">(</span><span class="n">only_known_fields</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span> <span class="n">only_public_fields</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>
+<div class="codehilite"><pre><span></span><span class="nd">@autodict</span><span class="p">(</span><span class="n">only_known_fields</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">only_public_fields</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
 <span class="k">class</span> <span class="nc">D</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
     <span class="nd">@autoargs</span>
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">a</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">b</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]):</span>
@@ -899,7 +899,7 @@ them with <code>@getter_override</code> or <code>@setter_override</code>. Note t
 </ul>
 <div class="codehilite"><pre><span></span><span class="kn">from</span> <span class="nn">random</span> <span class="kn">import</span> <span class="n">random</span>
 
-<span class="nd">@autohash</span><span class="p">(</span><span class="n">only_known_fields</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="n">only_public_fields</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+<span class="nd">@autohash</span><span class="p">(</span><span class="n">only_known_fields</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">only_public_fields</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 <span class="k">class</span> <span class="nc">D</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
     <span class="nd">@autoargs</span>
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">a</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">_b</span><span class="p">:</span> <span class="nb">str</span><span class="p">):</span>
@@ -961,7 +961,7 @@ them with <code>@getter_override</code> or <code>@setter_override</code>. Note t
 <div class="codehilite"><pre><span></span><span class="kn">from</span> <span class="nn">autoclass</span> <span class="kn">import</span> <span class="n">autoslots</span><span class="p">,</span> <span class="n">autoargs</span><span class="p">,</span> <span class="n">autoprops</span>
 
 <span class="nd">@autoprops</span>
-<span class="nd">@autoslots</span><span class="p">(</span><span class="n">use_public_names</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>
+<span class="nd">@autoslots</span><span class="p">(</span><span class="n">use_public_names</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
 <span class="k">class</span> <span class="nc">Foo</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
     <span class="nd">@autoargs</span>
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">foo1</span><span class="p">,</span> <span class="n">foo2</span><span class="o">=</span><span class="mi">0</span><span class="p">):</span>
@@ -997,7 +997,7 @@ them with <code>@getter_override</code> or <code>@setter_override</code>. Note t
 <span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Optional</span>
 
 <span class="c1"># we will use enforce as the runtime checker</span>
-<span class="kn">import</span> <span class="nn">enforce</span> <span class="kn">as</span> <span class="nn">en</span>
+<span class="kn">import</span> <span class="nn">enforce</span> <span class="k">as</span> <span class="nn">en</span>
 <span class="kn">from</span> <span class="nn">enforce</span> <span class="kn">import</span> <span class="n">runtime_validation</span>
 <span class="n">en</span><span class="o">.</span><span class="n">config</span><span class="p">(</span><span class="nb">dict</span><span class="p">(</span><span class="n">mode</span><span class="o">=</span><span class="s1">&#39;covariant&#39;</span><span class="p">))</span>  <span class="c1"># allow subclasses when validating types</span>
 
@@ -1009,11 +1009,11 @@ them with <code>@getter_override</code> or <code>@setter_override</code>. Note t
 <span class="nd">@autoclass</span>
 <span class="k">class</span> <span class="nc">AllOfTheAbove</span><span class="p">:</span>
     <span class="nd">@validate</span><span class="p">(</span><span class="n">a</span><span class="o">=</span><span class="n">gt</span><span class="p">(</span><span class="mi">1</span><span class="p">),</span> <span class="n">c</span><span class="o">=</span><span class="n">minlen</span><span class="p">(</span><span class="mi">1</span><span class="p">))</span>
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">a</span><span class="p">:</span> <span class="n">Integral</span><span class="p">,</span> <span class="n">b</span><span class="p">:</span> <span class="n">Boolean</span><span class="p">,</span> <span class="n">c</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]]</span> <span class="o">=</span> <span class="bp">None</span><span class="p">):</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">a</span><span class="p">:</span> <span class="n">Integral</span><span class="p">,</span> <span class="n">b</span><span class="p">:</span> <span class="n">Boolean</span><span class="p">,</span> <span class="n">c</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">):</span>
         <span class="k">pass</span>
 
 <span class="c1"># instance creation</span>
-<span class="n">o</span> <span class="o">=</span> <span class="n">AllOfTheAbove</span><span class="p">(</span><span class="n">a</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">b</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+<span class="n">o</span> <span class="o">=</span> <span class="n">AllOfTheAbove</span><span class="p">(</span><span class="n">a</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">b</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 
 <span class="c1"># @autoargs works</span>
 <span class="k">assert</span> <span class="n">o</span><span class="o">.</span><span class="n">a</span> <span class="o">==</span> <span class="mi">2</span>
@@ -1022,7 +1022,7 @@ them with <code>@getter_override</code> or <code>@setter_override</code>. Note t
 <span class="n">o</span><span class="o">.</span><span class="n">b</span> <span class="o">=</span> <span class="mi">1</span>  <span class="c1"># !RuntimeTypeError Argument &#39;b&#39; was not of type Boolean. Actual type was int.</span>
 
 <span class="c1"># @autodict works</span>
-<span class="k">assert</span> <span class="n">o</span> <span class="o">==</span> <span class="p">{</span><span class="s1">&#39;a&#39;</span><span class="p">:</span> <span class="mi">2</span><span class="p">,</span> <span class="s1">&#39;b&#39;</span><span class="p">:</span> <span class="bp">True</span><span class="p">,</span> <span class="s1">&#39;c&#39;</span><span class="p">:</span> <span class="bp">None</span><span class="p">}</span>
+<span class="k">assert</span> <span class="n">o</span> <span class="o">==</span> <span class="p">{</span><span class="s1">&#39;a&#39;</span><span class="p">:</span> <span class="mi">2</span><span class="p">,</span> <span class="s1">&#39;b&#39;</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span> <span class="s1">&#39;c&#39;</span><span class="p">:</span> <span class="kc">None</span><span class="p">}</span>
 <span class="k">assert</span> <span class="n">AllOfTheAbove</span><span class="o">.</span><span class="n">from_dict</span><span class="p">(</span><span class="n">o</span><span class="p">)</span> <span class="o">==</span> <span class="n">o</span>
 <span class="k">assert</span> <span class="nb">dict</span><span class="p">(</span><span class="o">**</span><span class="n">o</span><span class="p">)</span> <span class="o">==</span> <span class="n">o</span>
 </pre></div>
@@ -1031,18 +1031,18 @@ them with <code>@getter_override</code> or <code>@setter_override</code>. Note t
 <ul>
 <li>you can also disable part of the features :</li>
 </ul>
-<div class="codehilite"><pre><span></span><span class="nd">@autoclass</span><span class="p">(</span><span class="n">autodict</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>
+<div class="codehilite"><pre><span></span><span class="nd">@autoclass</span><span class="p">(</span><span class="n">autodict</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
 <span class="k">class</span> <span class="nc">PartsOfTheAbove</span><span class="p">:</span>
     <span class="nd">@validate</span><span class="p">(</span><span class="n">a</span><span class="o">=</span><span class="n">gt</span><span class="p">(</span><span class="mi">1</span><span class="p">),</span> <span class="n">c</span><span class="o">=</span><span class="n">minlen</span><span class="p">(</span><span class="mi">1</span><span class="p">))</span>
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">a</span><span class="p">:</span> <span class="n">Integral</span><span class="p">,</span> <span class="n">b</span><span class="p">:</span> <span class="n">Boolean</span><span class="p">,</span> <span class="n">c</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]]</span> <span class="o">=</span> <span class="bp">None</span><span class="p">):</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">a</span><span class="p">:</span> <span class="n">Integral</span><span class="p">,</span> <span class="n">b</span><span class="p">:</span> <span class="n">Boolean</span><span class="p">,</span> <span class="n">c</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">):</span>
         <span class="k">pass</span>
 
 <span class="c1"># instance creation</span>
-<span class="n">o</span> <span class="o">=</span> <span class="n">PartsOfTheAbove</span><span class="p">(</span><span class="n">a</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">b</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
-<span class="k">print</span><span class="p">(</span><span class="n">o</span><span class="p">)</span>  <span class="c1"># works: autorepr is automatically enabled when autodict=False</span>
+<span class="n">o</span> <span class="o">=</span> <span class="n">PartsOfTheAbove</span><span class="p">(</span><span class="n">a</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">b</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">o</span><span class="p">)</span>  <span class="c1"># works: autorepr is automatically enabled when autodict=False</span>
 
-<span class="k">assert</span> <span class="n">o</span> <span class="o">==</span> <span class="p">{</span><span class="s1">&#39;a&#39;</span><span class="p">:</span> <span class="mi">2</span><span class="p">,</span> <span class="s1">&#39;b&#39;</span><span class="p">:</span> <span class="bp">True</span><span class="p">,</span> <span class="s1">&#39;c&#39;</span><span class="p">:</span> <span class="bp">None</span><span class="p">}</span>  <span class="c1"># AssertionError</span>
-<span class="k">assert</span> <span class="n">o</span> <span class="o">==</span> <span class="n">PartsOfTheAbove</span><span class="p">(</span><span class="n">a</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">b</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>  <span class="c1"># works: autoeq is automatically enabled </span>
+<span class="k">assert</span> <span class="n">o</span> <span class="o">==</span> <span class="p">{</span><span class="s1">&#39;a&#39;</span><span class="p">:</span> <span class="mi">2</span><span class="p">,</span> <span class="s1">&#39;b&#39;</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span> <span class="s1">&#39;c&#39;</span><span class="p">:</span> <span class="kc">None</span><span class="p">}</span>  <span class="c1"># AssertionError</span>
+<span class="k">assert</span> <span class="n">o</span> <span class="o">==</span> <span class="n">PartsOfTheAbove</span><span class="p">(</span><span class="n">a</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">b</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>  <span class="c1"># works: autoeq is automatically enabled </span>
 <span class="k">assert</span> <span class="n">PartsOfTheAbove</span><span class="o">.</span><span class="n">from_dict</span><span class="p">(</span><span class="n">o</span><span class="p">)</span> <span class="o">==</span> <span class="n">o</span>  <span class="c1"># AttributeError: &#39;PartsOfTheAbove&#39; has no attribute &#39;from_dict&#39;</span>
 <span class="k">assert</span> <span class="nb">dict</span><span class="p">(</span><span class="o">**</span><span class="n">o</span><span class="p">)</span> <span class="o">==</span> <span class="n">o</span>  <span class="c1"># TypeError: argument after ** must be a mapping</span>
 </pre></div>
@@ -1060,6 +1060,7 @@ them with <code>@getter_override</code> or <code>@setter_override</code>. Note t
 </pre></div>
                 
                   
+                
                 
               
               
@@ -1127,7 +1128,7 @@ them with <code>@getter_override</code> or <code>@setter_override</code>. Note t
       
     </div>
     
-      <script src="../assets/javascripts/application.a8b5e56f.js"></script>
+      <script src="../assets/javascripts/application.808e90bb.js"></script>
       
       <script>app.initialize({version:"1.0.4",url:{base:".."}})</script>
       
