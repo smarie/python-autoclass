@@ -110,7 +110,7 @@ except ImportError:
         """
         selected_names, init_fun_sig = read_fields_from_init(cls.__init__, include=include, exclude=exclude,
                                                              caller=caller)
-        return selected_names
+        return selected_names, Source.INIT_ARGS
 
 
 def read_fields_from_init(init_fun,
