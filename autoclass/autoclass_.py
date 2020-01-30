@@ -185,14 +185,14 @@ def autoclass_decorate(cls,              # type: Type[T]
         selected_names, init_fun_sig = read_fields_from_init(init_fun, include=include, exclude=exclude,
                                                              caller="@autoclass")
 
-    # @autoinit
+    # autoinit
     if autoinit is AUTO:
         # apply if no init is defined in the class AND if there are pyfields
         autoinit = is_init_inherited and has_pyfields
 
     if autoinit:
         if not has_pyfields:
-            raise ValueError("`@autoinit` is only available if you class contains `pyfields` fields.")
+            raise ValueError("`autoinit` is only available if you class contains `pyfields` fields.")
         # noinspection PyUnboundLocalVariable
         cls.__init__ = make_init(*selected_fields)
 
