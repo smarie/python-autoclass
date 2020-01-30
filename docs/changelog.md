@@ -1,5 +1,9 @@
 # Changelog
 
+### 2.1.2 - bugfix
+
+Fixed bug happening when `pyfields` is not installed. Fixed [#33](https://github.com/smarie/python-autoclass/issues/33).
+
 ### 2.1.1 - `pyproject.toml`
 
 Added `pyproject.toml`.
