@@ -1,8 +1,12 @@
 # Changelog
 
+### 2.1.4 - Packaging improvements
+
+ - `setup.py` improvements: now including `py.typed`, excluding `tests` folder, and using `zip_safe=False`
+
 ### 2.1.3 - Fixed DeprecationWarning
 
-Fixed DeprecationWarning. Fixed [#35](https://github.com/smarie/python-autoclass/issues/35)
+ - Fixed DeprecationWarning. Fixed [#35](https://github.com/smarie/python-autoclass/issues/35)
 
 ### 2.1.2 - bugfix
 
