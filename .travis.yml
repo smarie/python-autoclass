@@ -22,15 +22,15 @@ env:
 
 before_install:
   # (a) linux dependencies
-  - sudo apt-get install pandoc
   - sudo apt-get install ant
-  - sudo apt-get install ant-optional
+  - sudo apt-get install ant-optional  # for junitreports
 
 install:
   - pip list
-  # needs to be installed beforehand
-  - pip install setuptools_scm
+  - pip install six setuptools_scm  # apparently python 2 requires this
   - python ci_tools/py_install.py pip ci_tools/requirements-pip.txt
+  # this does not work anymore on python 2 so lets only do it when needed
+  - if [ "${TRAVIS_PYTHON_VERSION}" = "3.5" ]; then pip install mkdocs-material mkdocs; fi;
   - |
     if [ "${TRAVIS_PYTHON_VERSION}" = "2.7" ]; then
       echo "No need to install enforce pytypes"
