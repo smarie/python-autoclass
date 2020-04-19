@@ -1,5 +1,9 @@
 # Changelog
 
+### 2.1.3 - Fixed DeprecationWarning
+
+Fixed DeprecationWarning. Fixed [#35](https://github.com/smarie/python-autoclass/issues/35)
+
 ### 2.1.2 - bugfix
 
 Fixed bug happening when `pyfields` is not installed. Fixed [#33](https://github.com/smarie/python-autoclass/issues/33).
