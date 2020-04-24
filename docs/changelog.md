@@ -1,5 +1,9 @@
 # Changelog
 
+### 2.1.5 - python 2 packaging improvements
+
+ - setup improvements: set the universal wheel flag to 1, and cleaned up the setup.py. Fixes [#36](https://github.com/smarie/python-autoclass/issues/36)
+
 ### 2.1.4 - Packaging improvements
 
  - `setup.py` improvements: now including `py.typed`, excluding `tests` folder, and using `zip_safe=False`
