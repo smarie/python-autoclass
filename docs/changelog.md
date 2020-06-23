@@ -1,5 +1,10 @@
 # Changelog
 
+### 2.2.0 - autoclass enhancements
+
+ - `@autoclass` now provides an `autofields` argument to apply `pyfields.autofields` automatically before applying autoclass. Fixes [#38](https://github.com/smarie/python-autoclass/issues/38)
+ - `@autoclass` now removes private fields from the generated autodict representation by default. Fixes [#37](https://github.com/smarie/python-autoclass/issues/37)
+
 ### 2.1.5 - python 2 packaging improvements
 
  - setup improvements: set the universal wheel flag to 1, and cleaned up the setup.py. Fixes [#36](https://github.com/smarie/python-autoclass/issues/36)

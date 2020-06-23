@@ -102,6 +102,19 @@ def test_autoclass_slots():
     assert str(a) == "Bar(bar=2, foo1='th', foo2=0)"
 
 
+def test_autoclass_private():
+    from pyfields import autofields
+
+    @autoclass
+    @autofields
+    class Example(object):
+        _priv = None
+        pub = 0
+
+    o = Example()
+    assert o == dict(pub=0)
+
+
 def test_autoclass_pyfields():
     """tests that @autoclass works with pyfields"""
     from pyfields import field
@@ -138,3 +151,33 @@ def test_autoclass_pyfields():
     # autodict was really disabled
     with pytest.raises(AttributeError):
         f.items()
+
+
+def test_autoclass_autopyfields():
+    """tests that @autoclass works with pyfields in auto mode"""
+
+    @autoclass(autofields=True)
+    class Foo(object):
+        foo1 = None
+        foo2 = 0
+
+    f = Foo(foo2=1)
+    assert f == dict(foo1=None, foo2=1)
+
+
+def test_autoclass_autopyfields_inherited():
+    """tests that @autoclass works with pyfields in auto mode"""
+
+    from pyfields import autofields
+
+    @autofields(make_init=False)
+    class Bar(object):
+        foo1 = None
+        foo2 = 0
+
+    @autoclass(autofields=True)
+    class Foo(Bar):
+        pass
+
+    f = Foo(foo2=1)
+    assert f == dict(foo1=None, foo2=1)
