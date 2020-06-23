@@ -14,7 +14,7 @@ except ImportError:
     from funcsigs import signature
 
 try:
-    from pyfields import get_fields, make_init
+    from pyfields import get_fields, make_init, autofields as apply_autofields
     WITH_PYFIELDS = True
 except ImportError:
     WITH_PYFIELDS = False
@@ -32,16 +32,17 @@ from decopatch import class_decorator, DECORATED
 
 
 @class_decorator
-def autoclass(include=None,     # type: Union[str, Tuple[str]]
-              exclude=None,     # type: Union[str, Tuple[str]]
-              autoargs=AUTO,    # type: bool
-              autoprops=AUTO,   # type: bool
-              autodict=True,    # type: bool
-              autorepr=AUTO,    # type: bool
-              autoeq=AUTO,      # type: bool
-              autohash=True,    # type: bool
-              autoslots=False,  # type: bool
-              autoinit=AUTO,    # type: bool
+def autoclass(include=None,      # type: Union[str, Tuple[str]]
+              exclude=None,      # type: Union[str, Tuple[str]]
+              autoargs=AUTO,     # type: bool
+              autoprops=AUTO,    # type: bool
+              autodict=True,     # type: bool
+              autorepr=AUTO,     # type: bool
+              autoeq=AUTO,       # type: bool
+              autohash=True,     # type: bool
+              autoslots=False,   # type: bool
+              autoinit=AUTO,     # type: bool
+              autofields=False,  # type: bool
               cls=DECORATED
               ):
     """
@@ -67,11 +68,13 @@ def autoclass(include=None,     # type: Union[str, Tuple[str]]
     :param autohash: a boolean to enable autohash on the class (default: True). By default it will be executed with
         `only_known_fields=True`.
     :param autoslots: a boolean to enable autoslots on the class (default: False).
+    :param autofields: a boolean (default: False) to apply autofields automatically on the class before applying
+        `autoclass` (see `pyfields` documentation for details)
     :return:
     """
     return autoclass_decorate(cls, include=include, exclude=exclude, autoargs=autoargs, autoprops=autoprops,
                               autodict=autodict, autohash=autohash, autoslots=autoslots, autoinit=autoinit,
-                              autorepr=autorepr, autoeq=autoeq)
+                              autorepr=autorepr, autoeq=autoeq, autofields=autofields)
 
 
 class NoCustomInitError(Exception):
@@ -88,17 +91,18 @@ class NoCustomInitError(Exception):
                "custom `__init__`"
 
 
-def autoclass_decorate(cls,              # type: Type[T]
-                       include=None,     # type: Union[str, Tuple[str]]
-                       exclude=None,     # type: Union[str, Tuple[str]]
-                       autoargs=AUTO,    # type: bool
-                       autoprops=AUTO,   # type: bool
-                       autoinit=AUTO,    # type: bool
-                       autodict=True,    # type: bool
-                       autorepr=AUTO,    # type: bool
-                       autoeq=AUTO,      # type: bool
-                       autohash=True,    # type: bool
-                       autoslots=False,  # type: bool
+def autoclass_decorate(cls,               # type: Type[T]
+                       include=None,      # type: Union[str, Tuple[str]]
+                       exclude=None,      # type: Union[str, Tuple[str]]
+                       autoargs=AUTO,     # type: bool
+                       autoprops=AUTO,    # type: bool
+                       autoinit=AUTO,     # type: bool
+                       autodict=True,     # type: bool
+                       autorepr=AUTO,     # type: bool
+                       autoeq=AUTO,       # type: bool
+                       autohash=True,     # type: bool
+                       autoslots=False,   # type: bool
+                       autofields=False,  # type: bool
                        ):
     # type: (...) -> Type[T]
     """
@@ -124,10 +128,19 @@ def autoclass_decorate(cls,              # type: Type[T]
     :param autohash: a boolean to enable autohash on the class (default: True). By default it will be executed with
         `only_known_fields=True`.
     :param autoslots: a boolean to enable autoslots on the class (default: False).
+    :param autofields: a boolean (default: False) to apply autofields automatically on the class before applying
+        `autoclass` (see `pyfields` documentation for details)
     :return:
     """
     # first check that we do not conflict with other known decorators
     check_known_decorators(cls, '@autoclass')
+
+    if autofields:
+        if WITH_PYFIELDS:
+            cls = apply_autofields(cls)
+        else:
+            raise ValueError("`autofields=True` can only be used when `pyfields` is installed. Please `pip install "
+                             "pyfields`")
 
     # Get constructor
     init_fun, is_init_inherited = get_constructor(cls)
@@ -135,7 +148,7 @@ def autoclass_decorate(cls,              # type: Type[T]
     # Check for pyfields fields
     if WITH_PYFIELDS:
         all_pyfields = get_fields(cls)
-        has_pyfields = len(all_pyfields) > 0
+        has_pyfields = len(all_pyfields) > 0  # 'or autofields' ?: cant' find a use case where it would be needed.
     else:
         has_pyfields = False
 
