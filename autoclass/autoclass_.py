@@ -205,7 +205,9 @@ def autoclass_decorate(cls,              # type: Type[T]
             raise ValueError("`autoeq` can not be set to `True` simultaneously with `autodict`. Please set "
                              "`autodict=False`.")
         # By default execute with the known list of fields, so equivalent of `only_known_fields=True`.
-        execute_autodict_on_class(cls, selected_names=selected_names)
+        # Exclude private fields by default to have a consistent behaviour with autodict
+        public_names = tuple(n for n in selected_names if not n.startswith('_'))
+        execute_autodict_on_class(cls, selected_names=public_names)
     else:
         if autorepr is AUTO or autorepr:
             # By default execute with the known list of fields, so equivalent of `only_known_fields=True`.
