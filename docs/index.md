@@ -143,7 +143,9 @@ House(name='my_house', nb_floors=200)
 >>> assert obj == {'name': 'my_house', 'nb_floors': 200}  # comparison with dicts
 ```
 
-Note: this works with python 2.7, and 3.5+. See [`pyfields` documentation ](https://smarie.github.io/python-pyfields/) for details.
+Also, `@autoclass` now provides the possibility to set `autofields=True` to apply `pyfields.autofields` automatically before applying autoclass.
+
+Note: all of this works with python 2.7, and 3.5+. See [`pyfields` documentation ](https://smarie.github.io/python-pyfields/) for details.
 
 ## 2. Type and Value validation
 
