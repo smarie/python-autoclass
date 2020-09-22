@@ -108,7 +108,11 @@ Set nb_floors to 3
 
 ### `pyfields` combo
 
-If you already use [`pyfields`](https://smarie.github.io/python-pyfields/) to define mandatory/optional fields with type/value validation, simply decorate your class with `@autoclass` and you'll get all of the above (dict view, hashability, string representation, equality...) too:
+If you already use [`pyfields`](https://smarie.github.io/python-pyfields/) to define mandatory/optional fields with type/value validation, simply decorate your class with `@autoclass` and you'll get all of the above (dict view, hashability, string representation, equality...) too.
+
+Even better, `pyfields` now provide its own version of `@autoclass`, that has more relevant options for pyfields users. It is therefore **highly recommended**. See [`pyfields` documentation](https://smarie.github.io/python-pyfields/#b-autoclass). 
+
+You can do the same manually as shown below, but it is recommended to use the one in `pyfields`:
 
 ```python
 from pyfields import field
@@ -126,7 +130,7 @@ class House:
 
 ```
 
-Indeed behind the scenes, if `autoclass` detects that your class uses `pyfields`, it will automatically use the fields rather than the constructor signature to get the list of fields. You can check that all the features are there:
+The above example works because behind the scenes, if `autoclass` detects that your class uses `pyfields`, it will automatically use the fields rather than the constructor signature to get the list of fields. You can check that all the features are there:
 
 ```bash
 >>> obj = House('my_house', 200)
