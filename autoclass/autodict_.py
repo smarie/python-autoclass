@@ -50,7 +50,7 @@ def autodict(include=None,                # type: Union[str, Tuple[str]]
     * it adds a static from_dict method to build objects from dicts (only if only_constructor_args=True)
     * it overrides eq method if not already implemented
     * it overrides str and repr method if not already implemented
-    
+
     Parameters allow to customize the list of fields that will be visible.
 
     :param include: a tuple of explicit attribute names to include (None means all)
@@ -257,9 +257,6 @@ def execute_autodict_on_class(cls,                       # type: Type[T]
                     '__contains__',
                     'get',
                     'items',
-                    'iteritems',
-                    'iterkeys',
-                    'itervalues',
                     'keys',
                     'values']
                 # from inspect import getmembers
@@ -268,8 +265,8 @@ def execute_autodict_on_class(cls,                       # type: Type[T]
                 # meths = getmembers(Mapping.get(), predicate=is_useful)
                 # for name, func in meths:
                 for name in names:
-                    # bind method to this class too (we access 'im_func' to get the original method)
-                    setattr(cls, name, getattr(Mapping, name).im_func)
+                    # bind method to this class too
+                    setattr(cls, name, getattr(Mapping, name))
 
     # 3. add the static class method to build objects from a dict
     # if only_constructor_args:
@@ -400,7 +397,7 @@ def autodict_override_decorate(func  # type: Callable
 
 
 autodict_override = autodict_override_decorate
-"""A decorator to indicate an overridden dictionary method. In this case autodict will not override it and will not 
+"""A decorator to indicate an overridden dictionary method. In this case autodict will not override it and will not
 generate a warning"""
 
 
